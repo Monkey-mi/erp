@@ -1,0 +1,34 @@
+Ext.define('erp.user.store.RoleConfig',{
+	extend:'Ext.data.Store',
+	model:'erp.user.model.RoleConfig',
+	requires:['erp.user.model.RoleConfig'],
+	proxy:{
+		type:'ajax',
+		actionMethods : {create : 'POST',read : 'POST',update : 'POST',destroy : 'POST'},
+		api:{
+			create:"main/Users.do?method=addRoleCfg",
+			update:"main/Users.do?method=updateRoleCfg",
+			read:"main/Users.do?method=getRoleCfgList",
+			destroy:"main/Users.do?method=deleteRoleCfg"
+		},
+		reader:{
+			type:"json",
+			rootProperty:'data',
+			successProperty:'success',
+			messageProperty:'message'
+		},
+		writer:{
+			type:'json',
+			rootProperty:'data',
+			encode:true,
+			allowSingle:false,
+			writeAllFields:true
+		}
+	},
+	sorters:[
+	         {
+	        	 property:'role_id',
+	        	 direction:"ASC"
+	         }
+	         ]
+});

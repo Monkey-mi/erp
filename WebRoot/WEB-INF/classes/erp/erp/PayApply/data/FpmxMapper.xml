@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.FpmxMapper">
+
+
+<select id="getFpmxList" parameterType="map" resultType="erp.erp.PayApply.model.Fpmx">
+	  SELECT gyfpb.fplx,   
+         gyfpb.fplb,   
+         gyfpb.fphm,   
+         gyfpb.kprq,   
+         gyfpb.jzrq,   
+         gyfpb.fpsl,   
+         gyfpb.fpje, 
+			isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm),0) + isnull((select sum(gyfpfyyfb.yfje) from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm),0) as yfkje,
+			isnull((select sum(fksqspmxb.sqje) from fksqspmxb left outer join fksqspb on fksqspb.sqbh=fksqspmxb.sqbh where  fksqspb.spbj=1 and fksqspmxb.fplb=gyfpb.fplb and fksqspmxb.fphm=gyfpb.fphm),0) as sqje,
+         csxxb.yhbh,  
+         isnull(gyfpb.fpje,0) - isnull((select sum(fksqspmxb.sqje) from fksqspmxb left outer join fksqspb on fksqspb.sqbh=fksqspmxb.sqbh where  fksqspb.spbj=1 and fksqspmxb.fplb=gyfpb.fplb and fksqspmxb.fphm=gyfpb.fphm),0)
+			- isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm),0) - isnull((select sum(gyfpfyyfb.yfje) from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm),0) as wsqe
+    FROM gyfpb   
+	 left outer join csxxb on gyfpb.csbh = csxxb.csbh
+ where  (ltrim(rtrim(gyfpb.fplb))+'-'+ltrim(rtrim(gyfpb.fphm)) in (select ltrim(rtrim(fksqspmxb.fplb))+'-'+ltrim(rtrim(fksqspmxb.fphm)) from fksqspmxb
+ where fksqspmxb.sqbh=#{sqbh}))
+
+union all
+
+SELECT gyfpb.fplx,   
+         gyfpb.fplb,   
+         gyfpb.fphm,   
+         gyfpb.kprq,   
+         gyfpb.jzrq,   
+         gyfpb.fpsl,   
+         gyfpb.fpje,   
+			isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm),0) + isnull((select sum(gyfpfyyfb.yfje) from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm),0) as yfkje,
+			isnull((select sum(fksqspmxb.sqje) from fksqspmxb left outer join fksqspb on fksqspb.sqbh=fksqspmxb.sqbh where  fksqspb.spbj=1 and fksqspmxb.fplb=gyfpb.fplb and fksqspmxb.fphm=gyfpb.fphm),0) as sqje,
+         csxxb.yhbh,  
+         isnull(gyfpb.fpje,0) - isnull((select sum(fksqspmxb.sqje) from fksqspmxb left outer join fksqspb on fksqspb.sqbh=fksqspmxb.sqbh where  fksqspb.spbj=1 and fksqspmxb.fplb=gyfpb.fplb and fksqspmxb.fphm=gyfpb.fphm),0)
+			- isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm),0) - isnull((select sum(gyfpfyyfb.yfje) from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm),0) as wsqe
+    FROM gyfpb   
+	 left outer join csxxb on gyfpb.csbh = csxxb.csbh
+where (ltrim(rtrim(gyfpb.fplb))+'-'+ltrim(rtrim(gyfpb.fphm)) in (select ltrim(rtrim(rkdb_yl.fplb))+'-'+ltrim(rtrim(rkdb_yl.fphm)) from rkdb_yl
+where rkdb_yl.htbh in (select htbh from fksqsphtb where fksqsphtb.sqbh=#{sqbh})))
+
+union all
+
+SELECT gyfpb.fplx,   
+         gyfpb.fplb,   
+         gyfpb.fphm,   
+         gyfpb.kprq,   
+         gyfpb.jzrq,   
+         gyfpb.fpsl,   
+         gyfpb.fpje,   
+			isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm),0) + isnull((select sum(gyfpfyyfb.yfje) from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm),0) as yfkje,
+			isnull((select sum(fksqspmxb.sqje) from fksqspmxb left outer join fksqspb on fksqspb.sqbh=fksqspmxb.sqbh where  fksqspb.spbj=1 and fksqspmxb.fplb=gyfpb.fplb and fksqspmxb.fphm=gyfpb.fphm),0) as sqje,
+         csxxb.yhbh,  
+         isnull(gyfpb.fpje,0) - isnull((select sum(fksqspmxb.sqje) from fksqspmxb left outer join fksqspb on fksqspb.sqbh=fksqspmxb.sqbh where  fksqspb.spbj=1 and fksqspmxb.fplb=gyfpb.fplb and fksqspmxb.fphm=gyfpb.fphm),0)
+			- isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm),0) - isnull((select sum(gyfpfyyfb.yfje) from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm),0) as wsqe
+    FROM gyfpb   
+	 left outer join csxxb on gyfpb.csbh = csxxb.csbh
+where (ltrim(rtrim(gyfpb.fplb))+'-'+ltrim(rtrim(gyfpb.fphm)) in (select ltrim(rtrim(cgfyb.fplb))+'-'+ltrim(rtrim(cgfyb.fphm)) from cgfyb
+where ltrim(rtrim(str(cgfyb.fydh)))+'-'+ltrim(rtrim(str(cgfyb.fyxh))) in (select ltrim(rtrim(str(fksqspfyb.fydh)))+'-'+ltrim(rtrim(str(fksqspfyb.fyxh))) from fksqspfyb where fksqspfyb.sqbh=#{sqbh})))
+</select>
+<insert id="addFpmx" parameterType="erp.erp.PayApply.model.Fpmx" keyProperty="" useGeneratedKeys="true">
+	insert into Fpmx
+	(
+		fplx,
+		fplb,
+		fphm,
+		kprq,
+		jzrq,
+		fpsl,
+		fpje,
+		yfkje,
+		sqje,
+		yhbh,
+		wsqe
+	)
+	values
+	(
+		#{fplx},
+		#{fplb},
+		#{fphm},
+		#{kprq},
+		#{jzrq},
+		#{fpsl},
+		#{fpje},
+		#{yfkje},
+		#{sqje},
+		#{yhbh},
+		#{wsqe}
+	)
+</insert>
+<update id="updateFpmx" parameterType="erp.erp.PayApply.model.Fpmx">
+	update Fpmx
+		set
+			fplx = #{fplx},
+			fplb = #{fplb},
+			fphm = #{fphm},
+			kprq = #{kprq},
+			jzrq = #{jzrq},
+			fpsl = #{fpsl},
+			fpje = #{fpje},
+			yfkje = #{yfkje},
+			sqje = #{sqje},
+			yhbh = #{yhbh},
+			wsqe = #{wsqe}
+		where  = #{}
+</update>
+<delete id="deleteFpmx" parameterType="erp.erp.PayApply.model.Fpmx">
+	delete from Fpmx
+	where  = #{}
+</delete>
+</mapper>

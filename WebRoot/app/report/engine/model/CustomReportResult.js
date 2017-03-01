@@ -1,0 +1,25 @@
+Ext.define('erp.report.engine.model.CustomReportResult',{
+	extend:'Ext.data.Model',
+	/*idProperty :'list_id',*/
+	fields:[
+		{name:'list_id',type:'int'},
+		{name:'name'},
+		{name:'description'},
+		{name:'creater',type:'int'},
+		{name:'userName'},
+		{name:'creatTime'},
+		{name:'orgunit'},
+		{name:'report_type'},
+		{name:'ope'},
+		{name:'default_style'},
+		{name:'present_style'},
+		{name:'level'},
+		{name:'freg_id'},
+		{name:'docId',type:'int'},
+		{name:'dsId',type:'int'},
+		{name:'tpl_type'},
+		{name:'tpl_xml'},
+		{name:'is_active'},
+		{name:'cycle'}
+	]
+});

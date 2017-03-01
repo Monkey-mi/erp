@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="srm.basicdata.mianUnit.data.MianUnitMapper">
+
+
+<select id="getMianUnitList" parameterType="map" resultType="srm.basicdata.mianUnit.model.MianUnit">
+	select
+		dbo.ztdwb.ztbh,
+		dbo.ztdwb.ztmc
+	from
+		dbo.ztdwb
+    where 
+       gdbj=0	
+   <if test="ztbh!=null">
+			and ztdwb.ztbh like '%${ztbh}%'  or  ztdwb.ztmc like '%${ztbh}'
+    </if>	    
+</select>
+<insert id="addMianUnit" parameterType="srm.basicdata.mianUnit.model.MianUnit" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.ztdwb
+	(
+		ztbh,
+		ztjc,
+		ztmc,
+		dhhm,
+		czhm,
+		hgdm,
+		jnhyd,
+		wtlx,
+		ofad,
+		mrbj,
+		gdbj
+	)
+	values
+	(
+		#{ztbh},
+		#{ztjc},
+		#{ztmc},
+		#{dhhm},
+		#{czhm},
+		#{hgdm},
+		#{jnhyd},
+		#{wtlx},
+		#{ofad},
+		#{mrbj},
+		#{gdbj}
+	)
+</insert>
+<update id="updateMianUnit" parameterType="srm.basicdata.mianUnit.model.MianUnit">
+	update dbo.ztdwb
+		set
+			ztbh = #{ztbh},
+			ztjc = #{ztjc},
+			ztmc = #{ztmc},
+			dhhm = #{dhhm},
+			czhm = #{czhm},
+			hgdm = #{hgdm},
+			jnhyd = #{jnhyd},
+			wtlx = #{wtlx},
+			ofad = #{ofad},
+			mrbj = #{mrbj},
+			gdbj = #{gdbj}
+		where  = #{}
+</update>
+<delete id="deleteMianUnit" parameterType="srm.basicdata.mianUnit.model.MianUnit">
+	delete from dbo.ztdwb
+	where  = #{}
+</delete>
+</mapper>

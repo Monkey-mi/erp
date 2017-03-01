@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseInspectionManage.data.PurchaseInspectionManagerMapper">
+
+
+<select id="getPurchaseInspectionManagerList" parameterType="map" resultType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager">
+	select  
+	cpcgyhlcb.yhno,
+	cpcgyhlcb.yhxh,
+	ltrim(rtrim(cpcgyhlcb.yhno))+'-'+rtrim(rtrim(cpcgyhlcb.yhxh)) as yhh,
+	cpcgyhlcb.fpbj,
+	cpcgyhlcb.yhcs,	
+	cpcgyhlcb.yhjl,	
+	cpcgyhlcb.shjg, 
+	cpcgyhlcb.hth,
+	cpcgyhlcb.ddh,
+	cpcgyhlcb.scdh,
+	cpcgyhlcb.wxh,
+	cpcgyhlcb.pono,
+	cpcgyhlcb.cgsl,
+	cpcgyhlcb.tzsl, 
+	cpcgyhlcb.khmc,
+	cpcgyhlcb.khxh,
+	cpcgyhlcb.cpmc,
+	cpcgyhlcb.cpbh,
+	cpcgyhlcb.jldw,
+	cpcgyhlcb.xgg,  
+	cpcgyhlcb.xc,
+	cpcgyhlcb.xk,
+	cpcgyhlcb.xg,
+	cpcgyhlcb.xtj,
+	cpcgyhlcb.xzs,
+	cpcgyhlcb.xmz, 
+	cpcgyhlcb.xjz,
+	cpcgyhlcb.gysmc,
+	cpcgyhlcb.ywy,
+	cpcgyhlcb.yhrq,
+	cpcgyhlcb.yhdd,
+	cpcgyhlcb.chdd,
+	cpcgyhlcb.bzzl,
+	cpcgyhlcb.bzsm,
+	cpcgyhlcb.tjrm,
+	cpcgyhlcb.tjsj,
+	cpcgyhlcb.fpdx,
+	cpcgyhlcb.fpsj,
+	cpcgyhlcb.cfh,
+	cpcgyhlcb.ywms,
+	cpcgyhlcb.ddbh,
+	cpcgyhlcb.ddxh,
+	cpcgyhlcb.htbh,
+	cpcgyhlcb.htxh,
+	cpcgyhlcb.wxbh,
+	cpcgyhlcb.wxxh,
+	cpcgyhlcb.cfbh,
+	cpcgyhlcb.cfxh
+	from cpcgyhlcb
+	<where>
+		<if test="cyhg!=null">
+			 cpcgyhlcb.yhjl='合格' or cpcgyhlcb.shjg='让步接收'
+		</if>
+	</where>
+</select>
+<insert id="addPurchaseInspectionManager" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager" >
+	insert into cpcgyhlcb
+	(
+		yhno,
+		yhxh,
+		yhh,
+		fpbj,
+		yhcs,
+		yhjl,
+		shjg,
+		hth,
+		ddh,
+		scdh,
+		wxh,
+		pono,
+		cgsl,
+		tzsl,
+		khmc,
+		khxh,
+		cpmc,
+		cpbh,
+		jldw,
+		xgg,
+		xc,
+		xk,
+		xg,
+		xtj,
+		xzs,
+		xmz,
+		xjz,
+		gysmc,
+		ywy,
+		yhrq,
+		yhdd,
+		chdd,
+		bzzl,
+		bzsm,
+		tjrm,
+		tjsj,
+		fpdx,
+		fpsj,
+		cfh,
+		ywms,
+		ddbh,
+		ddxh,
+		htbh,
+		htxh,
+		wxbh,
+		wxxh,
+		cfbh,
+		cfxh
+	)
+	values
+	(
+		#{yhno},
+		#{yhxh},
+		#{yhh},
+		#{fpbj},
+		#{yhcs},
+		#{yhjl},
+		#{shjg},
+		#{hth},
+		#{ddh},
+		#{scdh},
+		#{wxh},
+		#{pono},
+		#{cgsl},
+		#{tzsl},
+		#{khmc},
+		#{khxh},
+		#{cpmc},
+		#{cpbh},
+		#{jldw},
+		#{xgg},
+		#{xc},
+		#{xk},
+		#{xg},
+		#{xtj},
+		#{xzs},
+		#{xmz},
+		#{xjz},
+		#{gysmc},
+		#{ywy},
+		#{yhrq},
+		#{yhdd},
+		#{chdd},
+		#{bzzl},
+		#{bzsm},
+		#{tjrm},
+		#{tjsj},
+		#{fpdx},
+		#{fpsj},
+		#{cfh},
+		#{ywms},
+		#{ddbh},
+		#{ddxh},
+		#{htbh},
+		#{htxh},
+		#{wxbh},
+		#{wxxh},
+		#{cfbh},
+		#{cfxh}
+	)
+</insert>
+<update id="updatePurchaseInspectionManager" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager">
+	update cpcgyhlcb
+		set
+			yhno = #{yhno},
+			yhxh = #{yhxh},
+			yhh = #{yhh},
+			fpbj = #{fpbj},
+			yhcs = #{yhcs},
+			yhjl = #{yhjl},
+			shjg = #{shjg},
+			hth = #{hth},
+			ddh = #{ddh},
+			scdh = #{scdh},
+			wxh = #{wxh},
+			pono = #{pono},
+			cgsl = #{cgsl},
+			tzsl = #{tzsl},
+			khmc = #{khmc},
+			khxh = #{khxh},
+			cpmc = #{cpmc},
+			cpbh = #{cpbh},
+			jldw = #{jldw},
+			xgg = #{xgg},
+			xc = #{xc},
+			xk = #{xk},
+			xg = #{xg},
+			xtj = #{xtj},
+			xzs = #{xzs},
+			xmz = #{xmz},
+			xjz = #{xjz},
+			gysmc = #{gysmc},
+			ywy = #{ywy},
+			yhrq = #{yhrq},
+			yhdd = #{yhdd},
+			chdd = #{chdd},
+			bzzl = #{bzzl},
+			bzsm = #{bzsm},
+			tjrm = #{tjrm},
+			tjsj = #{tjsj},
+			fpdx = #{fpdx},
+			fpsj = #{fpsj},
+			cfh = #{cfh},
+			ywms = #{ywms},
+			ddbh = #{ddbh},
+			ddxh = #{ddxh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			wxbh = #{wxbh},
+			wxxh = #{wxxh},
+			cfbh = #{cfbh},
+			cfxh = #{cfxh}
+		where  yhno = #{yhno} and yhxh = #{yhxh}
+</update>
+<delete id="deletePurchaseInspectionManager" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager">
+	delete from cpcgyhlcb
+	where  yhno = #{yhno} and yhxh = #{yhxh}
+</delete>
+<update id="updatePurchaseInspectionFpbj" parameterType="map">
+	update cpcgyhlcb set 
+	fpbj =#{fpbj} ,
+	fpsj = #{fpsj},
+	fpdx=#{fpdx}
+	where  yhno = #{yhno} and yhxh = #{yhxh}
+</update>
+<select id="getDistributeObjectList" parameterType="map" resultType="erp.erp.PayApply.model.SubmitObject">
+	SELECT fpdxwhb.ssbm, 
+	        czybmlbb.lbmc as ssbmc,  
+         fpdxwhb.czy_gh,   
+         fpdxwhb.czy_xm,
+		 czyb.gzgw  
+    FROM fpdxwhb  
+    left outer join czyb on czyb.czy_gh = fpdxwhb.czy_gh
+    left outer join czybmlbb on czybmlbb.lbbh=fpdxwhb.ssbm
+    where 1=1
+ <if test="ssbm!=null">
+ 	and left(fpdxwhb.ssbm,len(#{ssbm}))=#{ssbm}
+ </if>
+ <if test="submitobject!=null">
+ 	and fpdxwhb.czy_gh like '%${submitobject}%' or fpdxwhb.czy_xm like '%${submitobject}%' 
+ </if>
+</select>
+<select id="getLl_id" parameterType="map" resultType="int">
+	select (isnull(max(id),0)+1) from t_inf_cpcgyhlcb
+</select>
+<select id="getLlf_id" parameterType="map" resultType="int">
+	select (isnull(max(requestid),0)) from t_inf_cpcgyhlcb where yhno = #{yhno} and yhxh=#{yhxh}
+</select>
+<select id="getLs_gzgw_fp" parameterType="map" resultType="String">
+	select gzgw from czyb where czy_gh = #{sys_user_gh}
+</select>
+<select id="getLs_gzgw_fpdx" parameterType="map" resultType="String">
+	select gzgw from czyb where czy_gh = #{fpdx};
+</select>
+<insert id="addT_inf_cpcgyhlcb" parameterType="map">
+	insert into 
+	t_inf_cpcgyhlcb(id,requestid,ftriggerflag,stateflag,tjrm,tjsj,fpdx,
+	yhno,yhxh,yhcs,hth,ddh,scdh,wxh,pono,cgsl,tzsl,khmc,khxh,cpmc,cpbh,
+	jldw,xgg,xc,xk,xg,xtj,xmz,xjz,gysmc,ywy,yhrq,yhdd,chdd,bzzl,bzsm)  
+     select #{ll_id},0,0,-1,#{ls_gzgw_fp},cpcgyhlcb.tjsj,#{ls_gzgw_fpdx},yhno,yhxh,yhcs,hth,ddh,scdh,
+     wxh,pono,cgsl,tzsl,khmc,khxh,cpmc,cpbh,jldw,xgg,xc,xk,xg,xtj,xmz,xjz,gysmc,ywy,yhrq,yhdd,chdd,
+     bzzl,bzsm
+   	FROM cpcgyhlcb
+	where yhno = #{yhno} and yhxh=#{yhxh}
+</insert>
+<delete id="deleteT_inf_cpcgyhlcb" parameterType="map">
+	delete from t_inf_cpcgyhlcb where yhno = #{yhno} and yhxh=#{yhxh} and spbj is null
+</delete>
+<insert id="addDistributeObject" parameterType="map">
+	insert into fpdxwhb (ssbm,czy_gh,czy_xm) values(#{ssbm},#{czy_gh},#{czy_xm}) 
+</insert>
+<delete id="deleteDistributeObject" parameterType="map">
+	delete from fpdxwhb where ssbm=#{ssbm} and czy_gh=#{czy_gh}
+</delete>
+
+<select id="getEditPurchaseInspectionList" parameterType="map" resultType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager">
+	select  
+	cpcgyhlcb.yhno,
+	cpcgyhlcb.yhxh,
+	ltrim(rtrim(cpcgyhlcb.yhno))+'-'+rtrim(rtrim(cpcgyhlcb.yhxh)) as yhh,
+	cpcgyhlcb.yhcs,	
+	cpcgyhlcb.yhjl,	 
+	cpcgyhlcb.hth,
+	cpcgyhlcb.ddh,
+	cpcgyhlcb.scdh,
+	cpcgyhlcb.wxh,
+	cpcgyhlcb.pono,
+	cpcgyhlcb.cgsl,
+	cpcgyhlcb.tzsl, 
+	cpcgyhlcb.khmc,
+	cpcgyhlcb.khxh,
+	cpcgyhlcb.cpmc,
+	cpcgyhlcb.cpbh,
+	cpcgyhlcb.jldw,
+	cpcgyhlcb.xgg,  
+	cpcgyhlcb.xc,
+	cpcgyhlcb.xk,
+	cpcgyhlcb.xg,
+	cpcgyhlcb.xtj,
+	cpcgyhlcb.xzs,
+	cpcgyhlcb.xmz,
+	cpcgyhlcb.xjz, 
+	cpcgyhlcb.gysmc,
+	cpcgyhlcb.ywy,
+	cpcgyhlcb.yhrq,
+	cpcgyhlcb.yhdd,
+	cpcgyhlcb.chdd,
+	cpcgyhlcb.bzzl,
+	cpcgyhlcb.bzsm,
+	cpcgyhlcb.tjrm,
+	cpcgyhlcb.tjsj,
+	cpcgyhlcb.fpdx,
+	cpcgyhlcb.fpsj,
+	cpcgyhlcb.cfh,
+	cpcgyhlcb.ywms,
+	cpcgyhlcb.ddbh,
+	cpcgyhlcb.ddxh,
+	cpcgyhlcb.htbh,
+	cpcgyhlcb.htxh,
+	cpcgyhlcb.wxbh,
+	cpcgyhlcb.wxxh,
+	cpcgyhlcb.cfbh,
+	cpcgyhlcb.cfxh,
+	0 as xzbj
+	from cpcgyhlcb
+where yhno=#{yhno} and yhxh=#{yhxh}
+</select>
+<insert id="addEditPurchaseInspection" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager" >
+	insert into cpcgyhlcb
+	(
+		yhno,
+		yhxh,
+		fpbj,
+		yhcs,
+		yhjl,
+		shjg,
+		hth,
+		ddh,
+		scdh,
+		wxh,
+		pono,
+		cgsl,
+		tzsl,
+		khmc,
+		khxh,
+		cpmc,
+		cpbh,
+		jldw,
+		xgg,
+		xc,
+		xk,
+		xg,
+		xtj,
+		xzs,
+		xmz,
+		xjz,
+		gysmc,
+		ywy,
+		yhrq,
+		yhdd,
+		chdd,
+		bzzl,
+		bzsm,
+		tjrm,
+		tjsj,
+		fpdx,
+		fpsj,
+		cfh,
+		ywms,
+		ddbh,
+		ddxh,
+		htbh,
+		htxh,
+		wxbh,
+		wxxh,
+		cfbh,
+		cfxh
+	)
+	values
+	(
+		#{yhno},
+		#{yhxh},
+		#{fpbj},
+		#{yhcs},
+		#{yhjl},
+		#{shjg},
+		#{hth},
+		#{ddh},
+		#{scdh},
+		#{wxh},
+		#{pono},
+		#{cgsl},
+		#{tzsl},
+		#{khmc},
+		#{khxh},
+		#{cpmc},
+		#{cpbh},
+		#{jldw},
+		#{xgg},
+		#{xc},
+		#{xk},
+		#{xg},
+		#{xtj},
+		#{xzs},
+		#{xmz},
+		#{xjz},
+		#{gysmc},
+		#{ywy},
+		#{yhrq},
+		#{yhdd},
+		#{chdd},
+		#{bzzl},
+		#{bzsm},
+		#{tjrm},
+		#{tjsj},
+		#{fpdx},
+		#{fpsj},
+		#{cfh},
+		#{ywms},
+		#{ddbh},
+		#{ddxh},
+		#{htbh},
+		#{htxh},
+		#{wxbh},
+		#{wxxh},
+		#{cfbh},
+		#{cfxh}
+	)
+</insert>
+<update id="updateEditPurchaseInspection" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager">
+	update cpcgyhlcb
+		set
+			yhno = #{yhno},
+			yhxh = #{yhxh},
+			fpbj = #{fpbj},
+			yhcs = #{yhcs},
+			yhjl = #{yhjl},
+			shjg = #{shjg},
+			hth = #{hth},
+			ddh = #{ddh},
+			scdh = #{scdh},
+			wxh = #{wxh},
+			pono = #{pono},
+			cgsl = #{cgsl},
+			tzsl = #{tzsl},
+			khmc = #{khmc},
+			khxh = #{khxh},
+			cpmc = #{cpmc},
+			cpbh = #{cpbh},
+			jldw = #{jldw},
+			xgg = #{xgg},
+			xc = #{xc},
+			xk = #{xk},
+			xg = #{xg},
+			xtj = #{xtj},
+			xzs = #{xzs},
+			xmz = #{xmz},
+			xjz = #{xjz},
+			gysmc = #{gysmc},
+			ywy = #{ywy},
+			yhrq = #{yhrq},
+			yhdd = #{yhdd},
+			chdd = #{chdd},
+			bzzl = #{bzzl},
+			bzsm = #{bzsm},
+			tjrm = #{tjrm},
+			tjsj = #{tjsj},
+			fpdx = #{fpdx},
+			fpsj = #{fpsj},
+			cfh = #{cfh},
+			ywms = #{ywms},
+			ddbh = #{ddbh},
+			ddxh = #{ddxh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			wxbh = #{wxbh},
+			wxxh = #{wxxh},
+			cfbh = #{cfbh},
+			cfxh = #{cfxh}
+		where  yhno = #{yhno} and yhxh = #{yhxh}
+</update>
+<delete id="deleteEditPurchaseInspection" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionManager">
+	delete from cpcgyhlcb
+	where  yhno = #{yhno} and yhxh = #{yhxh}
+</delete>
+<select id="getMaxYhno" parameterType="map" resultType="int">
+	select max(yhno)+1 from cpcgyhlcb
+</select>
+</mapper>

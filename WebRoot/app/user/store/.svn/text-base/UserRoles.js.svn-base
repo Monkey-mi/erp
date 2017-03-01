@@ -1,0 +1,27 @@
+Ext.define('erp.user.store.UserRoles',{
+    extend:'Ext.data.Store',
+    model:'erp.user.model.UserRole',
+    proxy:{
+		type:'ajax',
+		actionMethods : {create : 'POST',read : 'POST',update : 'POST',destroy : 'POST'},
+		api:{
+			create:"main/Users.do?method=addUserRole",
+			update:"",
+			read:"main/Users.do?method=getUserRoleList",
+			destroy:"main/Users.do?method=deleteUserRole"
+		},
+		reader:{
+			type:"json",
+			rootProperty:'data',
+			successProperty:'success',
+			messageProperty:'message'
+		},
+		writer:{
+			type:'json',
+			rootProperty:'data',
+			encode:true,
+			writeAllFields:true,
+			allowSingle:false
+		}
+	} 
+});

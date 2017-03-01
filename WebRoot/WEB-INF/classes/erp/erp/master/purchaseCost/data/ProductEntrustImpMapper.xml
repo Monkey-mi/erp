@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.ProductEntrustImpMapper">
+
+
+<select id="getProductEntrustImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.ProductEntrustImp">
+	 select aa.* from (select 
+		wtjycssqb_cp.wtdh,
+		wtjycssqb_cp.wtlb,		
+		wtjycssqb_cp.wtbm,		
+		wtjycssqb_cp.wtrm,		
+		wtjycssqb_cp.wtrq,		
+		wtjycssqb_cp.khbh,
+		wtjycssqb_cp.cslx,
+		wtjycssqb_cp.csjg,   			
+		wtjycssqb_cp.csmd,
+      wtjycssqb_cp.bzsm,
+		wtjycssqclmxb_cp.wtxh,
+		case when wtjycssqclmxb_cp.wtdh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb_cp.wtdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb_cp.wtxh))) else '' end as wth,				
+		wtjycssqclmxb_cp.cpbh,		
+		wtjycssqclmxb_cp.ddbh,    
+		wtjycssqclmxb_cp.ddxh,
+		case when wtjycssqclmxb_cp.ddbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb_cp.ddbh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb_cp.ddxh))) else '' end as ddh,   		
+		wtjycssqclmxb_cp.sjsl,
+		isnull((select sum(csjg) from wtjycssqmxb_cp where wtjycssqmxb_cp.wtdh=wtjycssqclmxb_cp.wtdh and wtjycssqmxb_cp.wtxh=wtjycssqclmxb_cp.wtxh),0) as wtdj,
+			round(wtjycssqclmxb_cp.sjsl*isnull((select sum(csjg) from wtjycssqmxb_cp where wtjycssqmxb_cp.wtdh=wtjycssqclmxb_cp.wtdh and wtjycssqmxb_cp.wtxh=wtjycssqclmxb_cp.wtxh),0),2) as wtje,
+		wtjycssqclmxb_cp.sjdh,
+		wtjycssqclmxb_cp.sjxh,
+		case when wtjycssqclmxb_cp.ddbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb_cp.sjdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb_cp.sjxh))) else '' end as sjh, 
+		wtjycssqclmxb_cp.jldw,
+		wtjycssqclmxb_cp.llrq,
+		wtjycssqclmxb_cp.ckbh,
+		cpbmb.cpmc,
+		0 as xzbj,
+		cpbmb.plmth,
+		cpbmb.plmtx,
+		khxxb.khmc 
+from wtjycssqclmxb_cp
+left outer join wtjycssqb_cp with(nolock) on wtjycssqb_cp.wtdh=wtjycssqclmxb_cp.wtdh
+left outer join khxxb with(nolock) on khxxb.khbh = wtjycssqb_cp.khbh
+left outer join cpbmb with(nolock) on cpbmb.cpbh=wtjycssqclmxb_cp.cpbh
+where wtjycssqb_cp.qfbj=1 and wtjycssqb_cp.cslx='委外测试' 
+<if test="qsrq!=null and qsrq!=''">
+and wtjycssqb_cp.wtrq&gt;=#{qsrq}
+</if>
+<if test = "jzrq!=null and jzrq!=''">
+ and wtjycssqb_cp.wtrq&lt;=#{jzrq}
+</if> 
+and not exists (select cpwtdh,cpwtxh from cgfyb with (nolock) where cgfyb.cpwtdh=wtjycssqclmxb_cp.wtdh and cgfyb.cpwtxh=wtjycssqclmxb_cp.wtxh)
+  <if test="cpmc!=null and cpmc!=''">
+ 	and cpbmb.cpmc like '%${cpmc}%'
+  </if>
+  <if test="s1!=null and s1!=''">
+ 	 ${s1}
+  </if>
+)aa
+</select>
+
+</mapper>

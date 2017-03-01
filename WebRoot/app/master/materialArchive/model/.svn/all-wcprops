@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model
+END
+Material.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/Material.js
+END
+HisPrice.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/HisPrice.js
+END
+Jldw.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/Jldw.js
+END
+PriceParameter.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/PriceParameter.js
+END
+Product.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/Product.js
+END
+CtrlPrice.js
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/CtrlPrice.js
+END
+QueryParams.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/QueryParams.js
+END
+BtnEditParams.js
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/BtnEditParams.js
+END
+Rule.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/Rule.js
+END
+Plan.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/materialArchive/model/Plan.js
+END

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view
+END
+PrepayAdjustmentQuery.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/PrepayAdjustmentQuery.js
+END
+InvoiceChoose.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/InvoiceChoose.js
+END
+TimeChoose.js
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/TimeChoose.js
+END
+AgreementChoose.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/AgreementChoose.js
+END
+FeeChoose.js
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/FeeChoose.js
+END
+EditPrepayAdjustment.js
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/EditPrepayAdjustment.js
+END
+PrepayAdjustmentManger.js
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/PrepayAdjustmentManger.js
+END
+PrepayAgreementChoose.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/PrepayAgreementChoose.js
+END
+PrepayAdjustmentImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/PrepayAdjustmentImp.js
+END
+PrepayFeeChoose.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/prepayAdjustment/view/PrepayFeeChoose.js
+END

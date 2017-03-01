@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.enumType.data.EnumTypeMapper">
+
+
+<select id="getEnumTypeList" parameterType="map" resultType="erp.erp.master.enumType.model.EnumType">
+	select
+		sysmjb.mjbh,
+		sysmjb.mjms,
+		sysmjb.mjxl,
+		sysmjb.mjbz,
+		sysmjb.ckbt,
+		sysmjb.zzid
+	from
+		sysmjb
+	<where>
+		<if test="mjbh!=null">
+		 sysmjb.mjbh = #{mjbh}   and   sysmjb.mjxl  &lt;&gt; '0' 
+		</if>
+		<if test="search!=null">
+		and (sysmjb.mjxl like '%${search}%' or sysmjb.mjms like '${search}%')
+		</if>  
+		<if test="condition!=null and mjbh!='0812'">
+			and (sysmjb.mjxl like '%${condition}%' or sysmjb.mjms like '%${condition}%')
+		</if>  
+		<if test="condition!=null and mjbh=='0812'">
+			and (sysmjb.mjxl like '%${condition}%' or sysmjb.mjms like '${condition}%')
+		</if> 
+		<if test="mjms!=null">
+		and sysmjb.mjms=#{mjms}
+		</if>  
+	</where>
+</select>
+<insert id="addEnumType" parameterType="erp.erp.master.enumType.model.EnumType" keyProperty="zzid" useGeneratedKeys="true">
+<selectKey keyProperty="mjxl" resultType="string" order="BEFORE">
+	select max ( convert ( numeric ( 6 ) , mjxl ) )+1 from sysmjb where sysmjb.mjbh =#{mjbh} 
+</selectKey>
+	insert into sysmjb
+	(
+		mjbh,
+		mjms,
+		mjxl,
+		mjbz,
+		ckbt
+	)
+	values
+	(
+		#{mjbh},
+		#{mjms},
+		#{mjxl},
+		#{mjbz},
+		#{ckbt}
+	)
+</insert>
+<update id="updateEnumType" parameterType="erp.erp.master.enumType.model.EnumType">
+	update sysmjb
+		set
+			mjms = #{mjms},
+			mjbz = #{mjbz},
+			ckbt = #{ckbt}
+		where mjbh = #{mjbh} AND mjxl = #{mjxl}
+</update>
+<delete id="deleteEnumType" parameterType="erp.erp.master.enumType.model.EnumType">
+	delete from sysmjb
+	where mjbh = #{mjbh} AND mjxl = #{mjxl}
+</delete>
+</mapper>

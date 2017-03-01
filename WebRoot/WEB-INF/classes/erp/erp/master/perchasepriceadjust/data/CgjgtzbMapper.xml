@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.perchasepriceadjust.data.CgjgtzbMapper">
+
+<!-- 核算类别权限 -->
+<select id="getAccountAuthorityList" parameterType="map" resultType="String">
+SELECT bmbh
+    	FROM hsbm_qxb
+		where czy_gh=#{czy_gh};
+</select>
+<select id="getCgjgtzbList" parameterType="map" resultType="erp.erp.master.perchasepriceadjust.model.Cgjgtzb">
+	 select
+        distinct
+        cgjgtzb.tjdh,
+        cgjgtzb.tjzt,
+        cgjgtzb.czym,   
+        cgjgtzb.czsj, 
+        cgjgtzb.gdbj,
+		cgjgtzb.hsbm,
+		cgjgtzb.tjbj,
+		cgjgtzb.tjrm,
+		cgjgtzb.tjsj,
+        cgjgtzb.qfbj,
+        cgjgtzb.qfrm,
+        cgjgtzb.qfsj,
+        cgjgtzb.sdbj,
+        cgjgtzb.sdsj,
+        cgjgtzb.sdrm,
+        cgjgtzb.spbj,
+        cgjgtzb.tjdx,
+        hsbmb.bmmc as hsbmmc ,
+		case when (czyb.czy_xm !=null or czyb.czy_xm != '') then czyb.czy_xm else cgjgtzb.tjdx end as czy_xm
+    from
+        cgjgtzb
+left outer join hsbmb with (nolock) on hsbmb.bmbh=cgjgtzb.hsbm
+left outer join czyb with (nolock) on czyb.czy_gh =cgjgtzb.tjdx and cgjgtzb.tjdx is not null and cgjgtzb.tjdx!=''
+<where>
+    <if test="gdbj==null">
+       and  cgjgtzb.gdbj=0
+    </if>
+    <if test="gdbj!=null">
+      and  cgjgtzb.gdbj=#{gdbj}
+    </if>
+    <if test="hsbm!=null">
+        and left(cgjgtzb.hsbm,len(#{hsbm}))=#{hsbm}
+    </if>
+    <if test="lbqx!=null">
+    	${lbqx}
+    </if>
+    <if test="search!=null">
+		  ${search}
+    </if>
+    <if test="czym!=null">
+        and cgjgtzb.czym like '%${czym}%'
+    </if>
+</where>
+order by tjdh desc
+</select>
+<insert id="addCgjgtzb" parameterType="erp.erp.master.perchasepriceadjust.model.Cgjgtzb" keyProperty="tjdh" useGeneratedKeys="true">
+	<selectKey keyProperty="tjdh" resultType="int" order="BEFORE">
+		select isnull ( max ( tjdh ) , 0 ) + 1 from cgjgtzb 
+	</selectKey>
+	insert into cgjgtzb
+	(
+		tjdh,
+		tjzt,
+		czym,
+		czsj,
+		gdbj,
+		hsbm,
+		tjbj,
+		tjrm,
+		tjsj,
+		tjdx,
+		qfbj,
+		qfrm,
+		qfsj,
+		sdbj,
+		sdsj,
+		sdrm,
+		spbj
+	)
+	values
+	(
+		#{tjdh},
+		#{tjzt},
+		#{czym},
+		#{czsj},
+		#{gdbj},
+		#{hsbm},
+		#{tjbj},
+		#{tjrm},
+		#{tjsj},
+		#{tjdx},
+		#{qfbj},
+		#{qfrm},
+		#{qfsj},
+		#{sdbj},
+		#{sdsj},
+		#{sdrm},
+		#{spbj}
+	)
+</insert>
+<update id="updateCgjgtzb" parameterType="erp.erp.master.perchasepriceadjust.model.Cgjgtzb">
+	update cgjgtzb
+		set
+			tjdh = #{tjdh},
+			tjzt = #{tjzt},
+			czym = #{czym},
+			czsj = #{czsj},
+			gdbj = #{gdbj},
+			hsbm = #{hsbm},
+			tjbj = #{tjbj},
+			tjrm = #{tjrm},
+			tjsj = #{tjsj},
+			tjdx = #{tjdx},
+			qfbj = #{qfbj},
+			qfrm = #{qfrm},
+			qfsj = #{qfsj},
+			sdbj = #{sdbj},
+			sdsj = #{sdsj},
+			sdrm = #{sdrm},
+			spbj = #{spbj}
+		where tjdh = #{tjdh}
+</update>
+<delete id="deleteCgjgtzb" parameterType="erp.erp.master.perchasepriceadjust.model.Cgjgtzb">
+	delete from cgjgtzb
+	where tjdh = #{tjdh}
+</delete>
+<!-- 获取全部树 -->
+<select id="getAllAccountdeptList" parameterType="map" resultType="erp.erp.master.perchasepriceadjust.model.Accountdept">
+	select
+		a.bmbh,
+		a.bmmc,
+		a.bzsm,
+		a.czym,
+		a.czsj,
+		a.scbj,
+		case a.qybj when 1 then 'true' else 'false' end as qybj,
+		case a.hsbj when 1 then 'true' else 'false' end as hsbj,
+		a.bmjc,		
+		case a.mjbz when 1 then 'true' else 'false' end as mjbz,
+		a.ghbmbh,
+		c.bmmc as ghbmmc,
+		case a.ysyfbj when 1 then 'true' else 'false' end as ysyfbj
+	from
+		hsbmb a
+	left  join hsbmb c on c.bmbh=a.ghbmbh	
+	where 1=1 
+	<if test = "ysyfbj==1">
+	    and (a.ysyfbj = 1 or a.bmbh='21')
+	</if>
+	<if test="node!=null and node!=0">
+	 	 and left(a.bmbh,len(#{node}))=#{node} and a.bmbh!=#{node}
+	</if>
+	<if test="czy_gh!=null and czy_gh!=''">
+			and  exists(
+				select 1 from hsbm_qxb where hsbm_qxb.czy_gh=#{czy_gh} and a.bmbh like hsbm_qxb.bmbh+'%' 
+				<if test="node!=null and node==0">
+					and  a.bmbh = hsbm_qxb.bmbh
+				</if>
+			)
+	</if>
+</select>
+
+<select id="check_hdr_spbj" parameterType="erp.erp.master.perchasepriceadjust.model.Cgjgtzb" resultType="int">
+	select ISNULL(
+		(select spbj   from   t_inf_cgjgtzd_hdr
+			where exists
+			(
+				select max(a.id) from t_inf_cgjgtzd_hdr a
+				where a.tjdh =#{tjdh}
+				having
+				max(a.id)=t_inf_cgjgtzd_hdr.id
+			))
+	,0)
+</select>
+
+<select id="check_bj" parameterType="erp.erp.master.perchasepriceadjust.model.Cgjgtzb" resultType="int">
+	select ISNULL((select count(*) from cgjgtzb 
+		where tjdh =#{tjdh} and qfbj=#{qfbj} and tjbj = #{tjbj} and sdbj=#{sdbj} and gdbj=#{gdbj}),0)
+</select>
+
+<update id="update_qfbj" parameterType="map">
+	update cgjgtzb
+		set
+			qfbj = #{qfbj}
+			<if test="qfrm!=null">
+			,qfrm = #{qfrm}
+			</if>
+			<if test="qfsj!=null">
+			,qfsj = #{qfsj}
+			</if>
+		where tjdh = #{tjdh}
+</update>
+<update id="update_sdbj" parameterType="map">
+	update cgjgtzb
+		set
+			sdbj = #{sdbj}
+			<if test="sdrm!=null">
+			,sdrm = #{sdrm}
+			</if>
+			<if test="sdsj!=null">
+			,sdsj = #{sdsj}
+			</if>
+		where tjdh = #{tjdh}
+</update>
+<update id="update_tjbj" parameterType="map">
+	update cgjgtzb
+		set
+			tjbj = #{tjbj}
+			<if test="tjrm!=null">
+			,tjrm = #{tjrm}
+			</if>
+			<if test="tjsj!=null">
+			,tjsj = #{tjsj}
+			</if>
+			<if test="tjdx!=null">
+			,tjdx = #{tjdx}
+			</if>
+		where tjdh = #{tjdh}
+</update>
+<update id="update_gdbj" parameterType="map">
+	update cgjgtzb
+		set
+			gdbj = #{gdbj}
+		where tjdh = #{tjdh}
+</update>
+</mapper>

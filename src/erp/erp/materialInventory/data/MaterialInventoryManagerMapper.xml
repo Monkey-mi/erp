@@ -1,0 +1,873 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialInventory.data.MaterialInventoryManagerMapper">
+ 
+
+<select id="getMaterialInventory" parameterType="map" resultType="erp.erp.materialInventory.model.MaterialInventoryManager">
+			select aa.* from  (
+			SELECT rkdb_yl.ckbh,
+			ckmcb_yl.ckmc,
+			rkdb_yl.rkdh,
+			rkdb_yl.rkxh,
+			rkdb_yl.rkrq,
+			rkdb_yl.pjrq,
+			rkdb_yl.csbh,
+			rkdb_yl.clhh,
+			rkdb_yl.cltx1,
+			rkdb_yl.cltx2,
+			rkdb_yl.cltx3,
+			rkdb_yl.jldw,
+			rkdb_yl.hwbh,
+			rkdb_yl.pcbh,
+			rkdb_yl.ghpc,
+			rkdb_yl.rksl,
+			rkdb_yl.rkdj,
+			rkdb_yl.rkje,
+			rkdb_yl.zzsl,
+			rkdb_yl.csdj,
+			rkdb_yl.csje,
+			isnull(rkdb_yl.rkje,0) - isnull(rkdb_yl.csje,0) as zzse,
+			rkdb_yl.wbbh,
+			rkdb_yl.wbhl,
+			rkdb_yl.wbdj,
+			rkdb_yl.wbje,
+			rkdb_yl.rklb,
+			rkdb_yl.wxbj,
+			rkdb_yl.htbh,
+			rkdb_yl.htxh,
+			case when rkdb_yl.wxdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.wxdh)))+'-'+ltrim(rtrim(str(rkdb_yl.wxxh))) else null end as wxh,
+			case when rkdb_yl.jhbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.jhbh)))+'-'+ltrim(rtrim(str(rkdb_yl.jhxh))) else null end as jhh,
+			case when rkdb_yl.HTBH&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,
+			case when rkdb_yl.dhdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.dhdh)))+'-'+ltrim(rtrim(str(rkdb_yl.dhxh))) else null end as dhh,
+			case when rkdb_yl.sqbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.sqbh)))+'-'+ltrim(rtrim(str(rkdb_yl.sqxh))) else null end as sqh,
+			rkdb_yl.sdbj,
+			rkdb_yl.sdsj,
+			rkdb_yl.sdrm,
+			rkdb_yl.czym,
+			rkdb_yl.czsj,
+			rkdb_yl.dybj,
+			rkdb_yl.dysj,
+			rkdb_yl.jkrm,
+			rkdb_yl.zzrq,
+			rkdb_yl.tzdh,
+			rkdb_yl.bzsm,
+			rkdb_yl.hxbj,
+			rkdb_yl.hcbj,
+			rkdb_yl.wgbj,
+			rkdb_yl.shdh,
+			rkdb_yl.fzsl,
+			rkdb_yl.fzdw,
+			rkdb_yl.shsj,
+			clbmb.clth,
+			clbmb.clmc,
+			clbmb.fzzbj,
+			csxxb.yhbh,
+			csxxb.cglb,
+			csxxb.csmc,
+			case when glrkb.lldh&lt;&gt;0 then 1 else 0 end as glrk,
+			case when gltkb.lldh&lt;&gt;0 then 1 else 0 end as gltk,
+			case when glrkb.lldh&lt;&gt;0 then ltrim(glrkb.lldh) + '-' + ltrim(glrkb.llxh) else '' end as glllh,
+			case when gltkb.lldh&lt;&gt;0 then ltrim(gltkb.lldh) + '-' + ltrim(gltkb.llxh) else '' end as gltlh,
+			0.00 as dgyl,
+			0.00 as kyms,
+			rkdb_yl.xdzl,
+			rkdb_yl.cbdj,
+			rkdb_yl.zsbj,
+			rkdb_yl.gjbj,
+			rkdb_yl.fgjh,
+			rkdb_yl.fgxh,
+			case when fgjh&lt;&gt;0 then ltrim(rtrim(str(fgjh)))+'-'+ltrim(rtrim(str(fgxh))) else null end as fgh,
+			rkdb_yl.fgcp,
+			rkdb_yl.cgbh,
+			rkdb_yl.cgxh,
+			rkdb_yl.glht,
+			rkdb_yl.bzbh,
+			case when rkdb_yl.cgbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.cgbh)))+'-'+ltrim(rtrim(str(rkdb_yl.cgxh))) else '' end as cgh,
+			htmxb.wkjq,
+			htmxb.jhrq,
+			htmxb.kzdj,
+			cghtb.cglx,
+			cghtb.cgym,	
+			cgyb.cgyxm,				
+			rkdb_yl.sxdy09,
+			clbmb.plmth,
+			clbmb.plmtx,
+			cllbb.lbmc,<!-- 2083 1.材料入库单中，增加材料类别字段，取一级类别！放在材料号之前! -->
+			dbo.f_cght_yfbj(cghtb.htbh) as yfbj
+			from rkdb_yl with (nolock)
+	left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=rkdb_yl.ckbh
+	left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	left outer join cllbb with (nolock) on cllbb.lbbh = left(clbmb.lbbh,2)
+	left outer join csxxb with (nolock) on  csxxb.csbh=rkdb_yl.csbh
+	left outer join glrkb with (nolock) on  glrkb.ckbh=rkdb_yl.ckbh and glrkb.rkdh=rkdb_yl.rkdh and glrkb.rkxh=rkdb_yl.rkxh
+	left outer join gltkb with (nolock) on  gltkb.ckbh=rkdb_yl.ckbh and gltkb.rkdh=rkdb_yl.rkdh and gltkb.rkxh=rkdb_yl.rkxh
+	left outer join htmxb with (nolock) on  htmxb.HTBH=rkdb_yl.HTBH and htmxb.HTXH=rkdb_yl.HTXH
+	left outer join cghtb with (nolock) on  cghtb.HTBH=htmxb.htbh
+	left outer join cgyb with (nolock) on  cghtb.cgym=cgyb.cgybh
+	WHERE rkdb_yl.rkrq &gt;= #{qsrq}
+		AND rkdb_yl.rkrq &lt;= #{jzrq}
+	 <if test="v_condition !=null and v_condition !=''">
+	 	${v_condition}
+	 </if>
+	 <if test="hxbj != null and hxbj !='' and hxbj != 3">
+	 and rkdb_yl.hxbj=#{hxbj}
+	 </if>
+	 <if test="cgym !=null and cgym !=''">
+	 and cghtb.cgym = #{cgym}
+	 </if>
+	 <if test="rkdh != null and rkdh != ''">
+	 and rkdb_yl.rkdh=#{rkdh}
+	 </if>
+	 
+	 <if test="sf_condition != null and sf_condition != ''">
+	 ${sf_condition}
+	 </if>
+	 ) aa
+	<if test="sort==null">
+		order by rkdh,rkxh desc 
+	</if>
+	<if test="sort!=null">
+		order by ${sort}
+	</if>
+</select>
+<select id="getAP_MaterialInventory" parameterType="map" resultType="erp.erp.materialInventory.model.MaterialInventoryManager">
+	  SELECT rkdb_yl.ckbh,
+			rkdb_yl.rkdh,
+			rkdb_yl.rkxh,
+			rkdb_yl.rkrq,
+			rkdb_yl.pjrq,
+			rkdb_yl.csbh,
+			rkdb_yl.clhh,
+			rkdb_yl.cltx1,
+			rkdb_yl.cltx2,
+			rkdb_yl.cltx3,
+			rkdb_yl.jldw,
+			rkdb_yl.hwbh,
+			rkdb_yl.pcbh,
+			rkdb_yl.ghpc,
+			rkdb_yl.rksl,
+			rkdb_yl.rkdj,
+			rkdb_yl.rkje,
+			rkdb_yl.zzsl,
+			rkdb_yl.csdj,
+			rkdb_yl.csje,
+			isnull(rkdb_yl.rkje,0) - isnull(rkdb_yl.csje,0) as zzse,
+			rkdb_yl.wbbh,
+			rkdb_yl.wbhl,
+			rkdb_yl.wbdj,
+			rkdb_yl.wbje,
+			rkdb_yl.rklb,
+			rkdb_yl.wxbj,
+			rkdb_yl.htbh,
+			rkdb_yl.htxh,
+			case when rkdb_yl.wxdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.wxdh)))+'-'+ltrim(rtrim(str(rkdb_yl.wxxh))) else null end as wxh,
+			case when rkdb_yl.jhbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.jhbh)))+'-'+ltrim(rtrim(str(rkdb_yl.jhxh))) else null end as jhh,
+			case when rkdb_yl.HTBH&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,
+			case when rkdb_yl.dhdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.dhdh)))+'-'+ltrim(rtrim(str(rkdb_yl.dhxh))) else null end as dhh,
+			case when rkdb_yl.sqbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.sqbh)))+'-'+ltrim(rtrim(str(rkdb_yl.sqxh))) else null end as sqh,
+			rkdb_yl.sdbj,
+			rkdb_yl.sdsj,
+			rkdb_yl.sdrm,
+			rkdb_yl.czym,
+			rkdb_yl.czsj,
+			rkdb_yl.dybj,
+			rkdb_yl.dysj,
+			rkdb_yl.jkrm,
+			rkdb_yl.zzrq,
+			rkdb_yl.tzdh,
+			rkdb_yl.bzsm,
+			rkdb_yl.hxbj,
+			rkdb_yl.hcbj,
+			rkdb_yl.wgbj,
+			rkdb_yl.shdh,
+			rkdb_yl.fzsl,
+			rkdb_yl.fzdw,
+			rkdb_yl.shsj,
+			clbmb.clth,
+			clbmb.clmc,
+			clbmb.fzzbj,
+			csxxb.yhbh,
+			csxxb.cglb,
+			csxxb.csmc,
+			case when glrkb.lldh&lt;&gt;0 then 1 else 0 end as glrk,
+			case when gltkb.lldh&lt;&gt;0 then 1 else 0 end as gltk,
+			case when glrkb.lldh&lt;&gt;0 then ltrim(glrkb.lldh) + '-' + ltrim(glrkb.llxh) else '' end as glllh,
+			case when gltkb.lldh&lt;&gt;0 then ltrim(gltkb.lldh) + '-' + ltrim(gltkb.llxh) else '' end as gltlh,
+			0.00 as dgyl,
+			0.00 as kyms,
+			rkdb_yl.xdzl,
+			rkdb_yl.cbdj,
+			rkdb_yl.zsbj,
+			rkdb_yl.gjbj,
+			rkdb_yl.fgjh,
+			rkdb_yl.fgxh,
+			case when fgjh&lt;&gt;0 then ltrim(rtrim(str(fgjh)))+'-'+ltrim(rtrim(str(fgxh))) else null end as fgh,
+			rkdb_yl.fgcp,
+			rkdb_yl.cgbh,
+			rkdb_yl.cgxh,
+			rkdb_yl.glht,
+			rkdb_yl.bzbh,
+			case when rkdb_yl.cgbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.cgbh)))+'-'+ltrim(rtrim(str(rkdb_yl.cgxh))) else '' end as cgh,
+			htmxb.wkjq,
+			htmxb.jhrq,
+			cghtb.cglx,
+			cghtb.cgym,	
+			cgyb.cgyxm,	
+			case when k.dhrq is not null then datediff(day,k.dhrq,rkdb_yl.rkrq) else 0 end as ycrk,				
+			rkdb_yl.sxdy09,
+			clbmb.plmth,
+			clbmb.plmtx,
+			cllbb.lbmc<!-- 2083 1.材料入库单中，增加材料类别字段，取一级类别！放在材料号之前! -->
+			from rkdb_yl with (nolock)
+	left outer join clbmb with (nolock) on  clbmb.clhh=rkdb_yl.clhh
+	left outer join cllbb with (nolock) on cllbb.lbbh = left(clbmb.lbbh,2)
+	left outer join csxxb with (nolock) on  csxxb.csbh=rkdb_yl.csbh
+	left outer join glrkb with (nolock) on  glrkb.ckbh=rkdb_yl.ckbh and glrkb.rkdh=rkdb_yl.rkdh and glrkb.rkxh=rkdb_yl.rkxh
+	left outer join gltkb with (nolock) on  gltkb.ckbh=rkdb_yl.ckbh and gltkb.rkdh=rkdb_yl.rkdh and gltkb.rkxh=rkdb_yl.rkxh
+	left outer join htmxb with (nolock) on  htmxb.HTBH=rkdb_yl.HTBH and htmxb.HTXH=rkdb_yl.HTXH
+	left outer join cghtb with (nolock) on  cghtb.HTBH=htmxb.htbh
+	left outer join cgyb with (nolock) on  cghtb.cgym=cgyb.cgybh
+	left outer join (
+	 select l.ckbh,l.dhdh,l.dhxh,l.dhrq from dhdjb_yl l
+	 where exists (select * from rkdb_yl with (nolock) where l.ckbh=rkdb_yl.ckbh and l.dhdh=rkdb_yl.dhdh and l.dhxh=rkdb_yl.dhxh 
+	 <if test="v_condition !=null and v_condition !=''">
+                     	${v_condition}
+     </if>	 
+	 and rkdb_yl.rkrq  &gt;= #{qsrq} and rkdb_yl.rkrq &lt;= #{jzrq} and rkdb_yl.ckbh &lt;&gt; '')	 
+	 ) k on  k.ckbh=rkdb_yl.ckbh and k.dhdh=rkdb_yl.dhdh and k.dhxh=rkdb_yl.dhxh
+	WHERE rkdb_yl.rkrq &gt;= #{qsrq}
+		AND rkdb_yl.rkrq &lt;= #{jzrq}
+	 <if test="v_condition !=null and v_condition !=''">
+	 	${v_condition}
+	 </if>
+	 <if test="hxbj != null and hxbj !='' and hxbj != 3">
+	 and rkdb_yl.hxbj=#{hxbj}
+	 </if>
+	 <if test="cgym !=null and cgym !=''">
+	 and cghtb.cgym = #{cgym}
+	 </if>
+	 <if test="rkdh != null and rkdh != ''">
+	 and rkdb_yl.rkdh=#{rkdh}
+	 </if>
+	 
+	 <if test="sf_condition != null and sf_condition != ''">
+	 ${sf_condition}
+	 </if>
+	<if test="sort==null">
+		order by rkdh,rkxh desc 
+	</if>
+	<if test="sort!=null">
+		order by ${sort}
+	</if>
+</select>
+<select id="getBP_MaterialInventory" parameterType="map" resultType="erp.erp.materialInventory.model.MaterialInventoryManager">
+	  SELECT rkdb_yl.ckbh,
+			rkdb_yl.rkdh,
+			rkdb_yl.rkxh,
+			rkdb_yl.rkrq,
+			rkdb_yl.pjrq,
+			rkdb_yl.csbh,
+			rkdb_yl.clhh,
+			rkdb_yl.cltx1,
+			rkdb_yl.cltx2,
+			rkdb_yl.cltx3,
+			rkdb_yl.jldw,
+			rkdb_yl.hwbh,
+			rkdb_yl.pcbh,
+			rkdb_yl.ghpc,
+			rkdb_yl.rksl,
+			rkdb_yl.rkdj,
+			rkdb_yl.rkje,
+			rkdb_yl.zzsl,
+			rkdb_yl.csdj,
+			rkdb_yl.csje,
+			isnull(rkdb_yl.rkje,0) - isnull(rkdb_yl.csje,0) as zzse,
+			rkdb_yl.wbbh,
+			rkdb_yl.wbhl,
+			rkdb_yl.wbdj,
+			rkdb_yl.wbje,
+			rkdb_yl.rklb,
+			rkdb_yl.wxbj,
+			rkdb_yl.htbh,
+			rkdb_yl.htxh,
+			case when rkdb_yl.wxdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.wxdh)))+'-'+ltrim(rtrim(str(rkdb_yl.wxxh))) else null end as wxh,
+			case when rkdb_yl.jhbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.jhbh)))+'-'+ltrim(rtrim(str(rkdb_yl.jhxh))) else null end as jhh,
+			case when rkdb_yl.HTBH&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,
+			case when rkdb_yl.dhdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.dhdh)))+'-'+ltrim(rtrim(str(rkdb_yl.dhxh))) else null end as dhh,
+			case when rkdb_yl.sqbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.sqbh)))+'-'+ltrim(rtrim(str(rkdb_yl.sqxh))) else null end as sqh,
+			rkdb_yl.sdbj,
+			rkdb_yl.sdsj,
+			rkdb_yl.sdrm,
+			rkdb_yl.czym,
+			rkdb_yl.czsj,
+			rkdb_yl.dybj,
+			rkdb_yl.dysj,
+			rkdb_yl.jkrm,
+			rkdb_yl.zzrq,
+			rkdb_yl.tzdh,
+			rkdb_yl.bzsm,
+			rkdb_yl.hxbj,
+			rkdb_yl.hcbj,
+			rkdb_yl.wgbj,
+			rkdb_yl.shdh,
+			rkdb_yl.fzsl,
+			rkdb_yl.fzdw,
+			rkdb_yl.shsj,
+			clbmb.clth,
+			clbmb.clmc,
+			clbmb.fzzbj,
+			csxxb.yhbh,
+			csxxb.cglb,
+			csxxb.csmc,
+			case when glrkb.lldh&lt;&gt;0 then 1 else 0 end as glrk,
+			case when gltkb.lldh&lt;&gt;0 then 1 else 0 end as gltk,
+			case when glrkb.lldh&lt;&gt;0 then ltrim(glrkb.lldh) + '-' + ltrim(glrkb.llxh) else '' end as glllh,
+			case when gltkb.lldh&lt;&gt;0 then ltrim(gltkb.lldh) + '-' + ltrim(gltkb.llxh) else '' end as gltlh,
+			0.00 as dgyl,
+			0.00 as kyms,
+			rkdb_yl.xdzl,
+			rkdb_yl.cbdj,
+			rkdb_yl.zsbj,
+			rkdb_yl.gjbj,
+			rkdb_yl.fgjh,
+			rkdb_yl.fgxh,
+			case when fgjh&lt;&gt;0 then ltrim(rtrim(str(fgjh)))+'-'+ltrim(rtrim(str(fgxh))) else null end as fgh,
+			rkdb_yl.fgcp,
+			rkdb_yl.cgbh,
+			rkdb_yl.cgxh,
+			rkdb_yl.glht,
+			rkdb_yl.bzbh,
+			case when rkdb_yl.cgbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.cgbh)))+'-'+ltrim(rtrim(str(rkdb_yl.cgxh))) else '' end as cgh,
+			htmxb.wkjq,
+			htmxb.jhrq,
+			cghtb.cglx,
+			cghtb.cgym,	
+			cgyb.cgyxm,					
+			rkdb_yl.sxdy09,
+			clbmb.plmth,
+			clbmb.plmtx,
+			cllbb.lbmc<!-- 2083 1.材料入库单中，增加材料类别字段，取一级类别！放在材料号之前! -->
+			from rkdb_yl with (nolock)
+	left outer join clbmb with (nolock) on  clbmb.clhh=rkdb_yl.clhh
+	left outer join cllbb with (nolock) on cllbb.lbbh = left(clbmb.lbbh,2)
+	left outer join csxxb with (nolock) on  csxxb.csbh=rkdb_yl.csbh
+	left outer join glrkb with (nolock) on  glrkb.ckbh=rkdb_yl.ckbh and glrkb.rkdh=rkdb_yl.rkdh and glrkb.rkxh=rkdb_yl.rkxh
+	left outer join gltkb with (nolock) on  gltkb.ckbh=rkdb_yl.ckbh and gltkb.rkdh=rkdb_yl.rkdh and gltkb.rkxh=rkdb_yl.rkxh
+	left outer join htmxb with (nolock) on  htmxb.HTBH=rkdb_yl.HTBH and htmxb.HTXH=rkdb_yl.HTXH
+	left outer join cghtb with (nolock) on  cghtb.HTBH=htmxb.htbh
+	left outer join cgyb with (nolock) on  cghtb.cgym=cgyb.cgybh
+	WHERE rkdb_yl.rkrq &gt;= #{qsrq}
+		AND rkdb_yl.rkrq &lt;= #{jzrq}
+	 <if test="v_condition !=null and v_condition !=''">
+	 	${v_condition}
+	 </if>
+	 <if test="hxbj != null and hxbj !='' and hxbj != 3">
+	 and rkdb_yl.hxbj=#{hxbj}
+	 </if>
+	 <if test="cgym !=null and cgym !=''">
+	 and cghtb.cgym = #{cgym}
+	 </if>
+	 <if test="rkdh != null and rkdh != ''">
+	 and rkdb_yl.rkdh=#{rkdh}
+	 </if>
+	 
+	 <if test="sf_condition != null and sf_condition != ''">
+	 ${sf_condition}
+	 </if>
+	<if test="sort==null">
+		order by rkdh,rkxh desc 
+	</if>
+	<if test="sort!=null">
+		order by ${sort}
+	</if>
+</select>
+<select id="getCP_MaterialInventory" parameterType="map" resultType="erp.erp.materialInventory.model.MaterialInventoryManager">
+	    SELECT rkdb_yl.ckbh,
+			rkdb_yl.rkdh,
+			rkdb_yl.rkxh,
+			rkdb_yl.rkrq,
+			rkdb_yl.pjrq,
+			rkdb_yl.csbh,
+			rkdb_yl.clhh,
+			rkdb_yl.cltx1,
+			rkdb_yl.cltx2,
+			rkdb_yl.cltx3,
+			rkdb_yl.jldw,
+			rkdb_yl.hwbh,
+			rkdb_yl.pcbh,
+			rkdb_yl.ghpc,
+			rkdb_yl.rksl,
+			rkdb_yl.rkdj,
+			rkdb_yl.rkje,
+			rkdb_yl.zzsl,
+			rkdb_yl.csdj,
+			rkdb_yl.csje,
+			isnull(rkdb_yl.rkje,0) - isnull(rkdb_yl.csje,0) as zzse,
+			rkdb_yl.wbbh,
+			rkdb_yl.wbhl,
+			rkdb_yl.wbdj,
+			rkdb_yl.wbje,
+			rkdb_yl.rklb,
+			rkdb_yl.wxbj,
+			rkdb_yl.htbh,
+			rkdb_yl.htxh,
+			case when rkdb_yl.wxdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.wxdh)))+'-'+ltrim(rtrim(str(rkdb_yl.wxxh))) else null end as wxh,
+			case when rkdb_yl.jhbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.jhbh)))+'-'+ltrim(rtrim(str(rkdb_yl.jhxh))) else null end as jhh,
+			case when rkdb_yl.HTBH&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,
+			case when rkdb_yl.dhdh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.dhdh)))+'-'+ltrim(rtrim(str(rkdb_yl.dhxh))) else null end as dhh,
+			case when rkdb_yl.sqbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.sqbh)))+'-'+ltrim(rtrim(str(rkdb_yl.sqxh))) else null end as sqh,
+			rkdb_yl.sdbj,
+			rkdb_yl.sdsj,
+			rkdb_yl.sdrm,
+			rkdb_yl.czym,
+			rkdb_yl.czsj,
+			rkdb_yl.dybj,
+			rkdb_yl.dysj,
+			rkdb_yl.jkrm,
+			rkdb_yl.zzrq,
+			rkdb_yl.tzdh,
+			rkdb_yl.bzsm,
+			rkdb_yl.hxbj,
+			rkdb_yl.hcbj,
+			rkdb_yl.wgbj,
+			rkdb_yl.shdh,
+			rkdb_yl.fzsl,
+			rkdb_yl.fzdw,
+			rkdb_yl.shsj,
+			clbmb.clth,
+			clbmb.clmc,
+			clbmb.fzzbj,
+			csxxb.yhbh,
+			csxxb.cglb,
+			csxxb.csmc,
+			case when glrkb.lldh&lt;&gt;0 then 1 else 0 end as glrk,
+			case when gltkb.lldh&lt;&gt;0 then 1 else 0 end as gltk,
+			case when glrkb.lldh&lt;&gt;0 then ltrim(glrkb.lldh) + '-' + ltrim(glrkb.llxh) else '' end as glllh,
+			case when gltkb.lldh&lt;&gt;0 then ltrim(gltkb.lldh) + '-' + ltrim(gltkb.llxh) else '' end as gltlh,
+			0.00 as dgyl,
+			0.00 as kyms,
+			rkdb_yl.xdzl,
+			rkdb_yl.cbdj,
+			rkdb_yl.zsbj,
+			rkdb_yl.gjbj,
+			rkdb_yl.fgjh,
+			rkdb_yl.fgxh,
+			case when fgjh&lt;&gt;0 then ltrim(rtrim(str(fgjh)))+'-'+ltrim(rtrim(str(fgxh))) else null end as fgh,
+			rkdb_yl.fgcp,
+			rkdb_yl.cgbh,
+			rkdb_yl.cgxh,
+			rkdb_yl.glht,
+			rkdb_yl.bzbh,
+			case when rkdb_yl.cgbh&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.cgbh)))+'-'+ltrim(rtrim(str(rkdb_yl.cgxh))) else '' end as cgh,
+			htmxb.wkjq,
+			htmxb.jhrq,
+			cghtb.cglx,
+			cghtb.cgym,		
+			cgyb.cgyxm,				
+			rkdb_yl.sxdy09,
+			clbmb.plmth,
+			clbmb.plmtx,
+			c.zjhh,
+			c.cpbh,
+			c.khxh,
+			c.cpmc,
+			c.zcpmc,
+			c.jhbz,
+			cllbb.lbmc<!-- 2083 1.材料入库单中，增加材料类别字段，取一级类别！放在材料号之前! -->
+			from rkdb_yl with (nolock)
+	left outer join clbmb with (nolock) on  clbmb.clhh=rkdb_yl.clhh
+	left outer join cllbb with (nolock) on cllbb.lbbh = left(clbmb.lbbh,2)
+	left outer join csxxb with (nolock) on  csxxb.csbh=rkdb_yl.csbh
+	left outer join glrkb with (nolock) on  glrkb.ckbh=rkdb_yl.ckbh and glrkb.rkdh=rkdb_yl.rkdh and glrkb.rkxh=rkdb_yl.rkxh
+	left outer join gltkb with (nolock) on  gltkb.ckbh=rkdb_yl.ckbh and gltkb.rkdh=rkdb_yl.rkdh and gltkb.rkxh=rkdb_yl.rkxh
+	left outer join htmxb with (nolock) on  htmxb.HTBH=rkdb_yl.HTBH and htmxb.HTXH=rkdb_yl.HTXH
+	left outer join cghtb with (nolock) on  cghtb.HTBH=htmxb.htbh
+	left outer join cgyb with (nolock) on  cghtb.cgym=cgyb.cgybh
+	left outer join  (
+    select jhmxb.jhbh,jhmxb.jhxh,jhmxb.cpbh,
+	case when jhmxb.zjbh=0 then jhmxb.khxh else x.khxh end as khxh,cpbmb.cpmc,
+	jhmxb.jhbz,z.cpmc as zcpmc , 
+	case when jhmxb.zjbh &lt;&gt;0 then ltrim(rtrim(jhmxb.zjbh))+'-'+ltrim(rtrim(jhmxb.zjxh)) else null end as zjhh
+	from jhmxb 
+	left outer join cpbmb with (nolock) on cpbmb.cpbh=jhmxb.cpbh
+	left outer join jhmx_ddxxb with (nolock) on jhmx_ddxxb.jhbh=jhmxb.jhbh and jhmx_ddxxb.jhxh=jhmxb.jhxh
+	left outer join cpbmb z with (nolock) on z.cpbh=jhmxb.zcpbh
+	left outer join jhmx_ddxxb x with (nolock) on x.jhbh=jhmxb.zjbh and x.jhxh=jhmxb.zjxh
+	 where exists (select * from rkdb_yl with (nolock) where jhmxb.jhbh=rkdb_yl.jhbh 
+	 and jhmxb.jhxh=rkdb_yl.jhxh 
+	 <if test="v_condition !=null and v_condition !=''">
+        	${v_condition}
+     </if>	 
+	 and rkdb_yl.rkrq &gt;= #{qsrq} and rkdb_yl.rkrq &lt;= #{jzrq} and rkdb_yl.jhbh &lt;&gt; 0)
+    ) c on  c.jhbh=rkdb_yl.jhbh and c.jhxh=rkdb_yl.jhxh
+	WHERE rkdb_yl.rkrq &gt;= #{qsrq}
+		AND rkdb_yl.rkrq &lt;= #{jzrq}
+	 <if test="v_condition !=null and v_condition !=''">
+	 	${v_condition}
+	 </if>
+	 <if test="hxbj != null and hxbj !='' and hxbj != 3">
+	 and rkdb_yl.hxbj=#{hxbj}
+	 </if>
+	 <if test="cgym !=null and cgym !=''">
+	 and cghtb.cgym = #{cgym}
+	 </if>
+	 <if test="rkdh != null and rkdh != ''">
+	 and rkdb_yl.rkdh=#{rkdh}
+	 </if>
+	 
+	 <if test="sf_condition != null and sf_condition != ''">
+	 ${sf_condition}
+	 </if>
+	<if test="sort==null">
+		order by rkdh,rkxh desc 
+	</if>
+	<if test="sort!=null">
+		order by ${sort}
+	</if>
+</select>
+<select id="ifRoot" parameterType="map" resultType="String">
+select jzzt from jzztb_yl where nd=#{year} and yd=#{month}
+<if test="ckbh != null and ckbh != ''">
+ and ckbh=#{ckbh}
+</if>
+</select>
+<select id="getMaxWgbj" parameterType="map" resultType="int">
+ select max(wgbj) from rkdb_yl where ckbh=#{ckbh} and rkdh=#{rkdh}
+</select>
+<select id="getWgcprkdb" parameterType="map" resultType="erp.erp.materialInventory.model.Wgcprkdb">
+ select ckbh_cp,rkdh_cp,ckbh_cl,lldh_cl,sjdh_cp from wgcprkdb where ckbh_cl=#{ckbh} and rkdh_cl=#{rkdh}
+</select>
+<select id="getWmsqy" parameterType="map" resultType="erp.erp.materialInventory.model.MaterialInventoryManager">
+select wmsqy from ckmcb_cp where ckbh=#{ckbh}
+</select>
+<select id="getCountWG" parameterType="map" resultType="int">
+select count(*) from wgcprkdb with (nolock) where ckbh_cl=#{ckbh} and rkdh_cl=#{rkdh}
+</select>
+<select id="getCountLL" parameterType="map" resultType="int">
+select count(*) from cgjgtzmxb with (nolock) where cgjgtzmxb.ckbh=#{ckbh} and cgjgtzmxb.rkdh=#{rkdh}
+<if test="rkxh != null and rkxh != ''">
+ and cgjgtzmxb.rkxh = #{rkxh}
+</if>
+</select>
+<select id="getStringFromSql" parameterType="map" resultType="String">
+  ${sql}
+</select>
+<select id="getSCount" parameterType="map" resultType="int">
+select count(*) from rkdb_yl where ckbh_cl=#{ckbh} and rkdh_cl=#{rkdh} and rkdj=0
+</select>
+<select id="getCountLL3" parameterType="map" resultType="int">
+select count(*) from rkdb_yl where ckbh=#{ckbh} and rkdh=#{rkdh} and rkxh=#{rkxh} and hxbj=1
+</select>
+<select id="getCountLL4" parameterType="map" resultType="int">
+select count(*) from wms_cprktzdmxb where sjdh=#{sjdh} and sjxh= #{rkxh}
+</select>
+<select id="getLDKzdj" parameterType="map" resultType="double">
+select top 1 kzdj from csjjxxb where csbh=#{csbh} and clhh=#{clhh} and xgsj &lt;=#{pjrq} order by xgsj DESC
+</select>
+<select id="getLDKzdj2" parameterType="map" resultType="double">
+select top 1 kzdj from clkzdjjlb where clhh=#{clhh} and jlrq &lt;=#{pjrq} order by jlrq DESC
+</select>
+<select id="getCgkdja" parameterType="map" resultType="erp.erp.materialInventory.model.Htmxb">
+select kzdj,wbdj from htmxb with (nolock) where htbh=#{htbh} and htxh=#{htxh}
+</select>
+<select id="getCgkdjb" parameterType="map" resultType="erp.erp.materialInventory.model.Htmxb">
+select kzdj,cgdj from htmxb with (nolock) where htbh=#{htbh} and htxh=#{htxh}
+</select>
+<select id="getMjbz" parameterType="map" resultType="int">
+select mjbz from cllbb where cllbb.lbbh = #{lbbh}
+</select>
+<select id="getRelateBusinessCount" parameterType="map" resultType="int">
+select count(*) from fhjyjlb where ckbh_cl=#{ckbh} and rkdh_cl=#{rkdh}
+</select>
+<select id="getRelateInventoryCount" parameterType="map" resultType="int">
+select count(*) from glrkb where ckbh=#{ckbh} and rkdh=#{rkdh}
+</select>
+<select id="getWMSCount" parameterType="map" resultType="long">
+select count(*) from rkdb_yl where ckbh=#{ckbh} and rkdh=#{rkdh} and rkdh_wms&lt;&gt;0
+</select>
+<select id="getDelete1Result" parameterType="map" resultType="erp.erp.materialInventory.model.Lldbyl">
+select ckbh_cp,rkdh_cp,ckbh_cl,lldh_cl,sjdh_cp,ztdh_cp
+	   from wgcprkdb with (nolock) where ckbh_cl=#{ckbh} and rkdh_cl=#{rkdh}
+</select>
+<select id="getS_clllsd" parameterType="map" resultType="long">
+select count(*) from lldb_yl  with (nolock)  where ckbh=#{ckbh} and lldh=#{lldh} and sdbj=1;
+</select>
+<select id="getLs_wmsqy" parameterType="map" resultType="int">
+select wmsqy from ckmcb_cp where ckbh=#{ckbh};
+</select>
+<select id="getS_cpsjsd" parameterType="map" resultType="int">
+select count(*) from wms_zttzdb with (nolock) where tzdh=#{tzdh} and sdbj=1
+</select>
+<select id="getS_cprksd" parameterType="map" resultType="int">
+select count(*) from rkdb_cp with (nolock)  where ckbh=#{ckbh} and rkdh=#{rkdh} and sdbj=1
+</select>
+<!-- 此处有新建临时表 rkdb_yl_sc-->
+<select id="getRkdb_yl_sc" parameterType="map" resultType="erp.erp.materialInventory.model.Rkdb_yl">
+select clhh,cltx1,cltx2,cltx3,rksl,rklb,hwbh,pcbh,ghpc from rkdb_yl_sc
+where ckbh=#{ckbh} and rkdh=#{rkdh} 
+</select>
+<select id="getSum_rksl" parameterType="map" resultType="Double">
+select sum(rksl) as rksl from rkdb_yl_sc where ckbh=#{ckbh} and rkdh=#{rkdh} 
+       and clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3} and hwbh=#{hwbh} and pcbh=#{pcbh} and ghpc=#{ghpc}
+</select>
+<select id="getSum_kcsl" parameterType="map" resultType="Double">
+select sum(kcsl) from view_clhwpckchz where ckbh=#{ckbh} and clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3} and hwbh=#{hwbh} and pcbh=#{pcbh} and ghpc=#{ghpc}
+</select>
+<select id="getSum_rksl2" parameterType="map" resultType="Double">
+select sum(rksl) as rksl from rkdb_yl_sc where ckbh=#{ckbh} and rkdh=#{rkdh} 
+       and clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3} 
+</select>
+<select id="getSum_kcsl2" parameterType="map" resultType="Double">
+select sum(kcsl) from view_kchz where ckbh=#{ckbh} and clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3} 
+</select>
+<insert id="addMaterialInventory" parameterType="erp.erp.materialInventory.model.MaterialInventoryManager">
+	insert into rkdb_yl
+	(
+		hxbj,
+		sdbj,
+		wxbj,
+		wgbj,
+		glrk,
+		gltk,
+		zsbj,
+		gjbj,
+		dybj,
+		hcbj,
+		rkdh,
+		rkxh,
+		rkrq,
+		pjrq,
+		csbh,
+		yhbh,
+		csmc,
+		clhh,
+		clth,
+		clmc,
+		cltx1,
+		cltx2,
+		cltx3,
+		khxh,
+		cpmc,
+		zcpmc,
+		jhbz,
+		jldw,
+		hwbh,
+		pcbh,
+		ghpc,
+		rksl,
+		cbdj,
+		rkdj,
+		rkje,
+		zzsl,
+		csdj,
+		csje,
+		zzse,
+		wbbh,
+		wbhl,
+		wbdj,
+		wbje,
+		fzdw,
+		fzsl,
+		xdzl,
+		rklb,
+		wkjq,
+		jhrq,
+		shsj,
+		zzrq,
+		pjrq,
+		czsj,
+		sdsj,
+		dysj,
+		dhh,
+		hth,
+		bzbh,
+		cgym,
+		cglx,
+		cgh,
+		glht,
+		zjhh,
+		jhh,
+		wxh,
+		sqh,
+		shdh,
+		fgh,
+		fgcp,
+		bzsm,
+		sxdy09,
+		jkrm,
+		czym,
+		sdrm,
+		glllh,
+		gltlh,
+		ycrk
+	)
+	values
+	(
+		#{hxbj},
+		#{sdbj},
+		#{wxbj},
+		#{wgbj},
+		#{glrk},
+		#{gltk},
+		#{zsbj},
+		#{gjbj},
+		#{dybj},
+		#{hcbj},
+		#{rkdh},
+		#{rkxh},
+		#{rkrq},
+		#{pjrq},
+		#{csbh},
+		#{yhbh},
+		#{csmc},
+		#{clhh},
+		#{clth},
+		#{clmc},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{khxh},
+		#{cpmc},
+		#{zcpmc},
+		#{jhbz},
+		#{jldw},
+		#{hwbh},
+		#{pcbh},
+		#{ghpc},
+		#{rksl},
+		#{cbdj},
+		#{rkdj},
+		#{rkje},
+		#{zzsl},
+		#{csdj},
+		#{csje},
+		#{zzse},
+		#{wbbh},
+		#{wbhl},
+		#{wbdj},
+		#{wbje},
+		#{fzdw},
+		#{fzsl},
+		#{xdzl},
+		#{rklb},
+		#{wkjq},
+		#{jhrq},
+		#{shsj},
+		#{zzrq},
+		#{pjrq},
+		#{czsj},
+		#{sdsj},
+		#{dysj},
+		#{dhh},
+		#{hth},
+		#{bzbh},
+		#{cgym},
+		#{cglx},
+		#{cgh},
+		#{glht},
+		#{zjhh},
+		#{jhh},
+		#{wxh},
+		#{sqh},
+		#{shdh},
+		#{fgh},
+		#{fgcp},
+		#{bzsm},
+		#{sxdy09},
+		#{jkrm},
+		#{czym},
+		#{sdrm},
+		#{glllh},
+		#{gltlh},
+		#{ycrk}
+	)
+</insert>
+<update id="updateMaterialInventory" parameterType="erp.erp.materialInventory.model.MaterialInventoryManager">
+	update rkdb_yl
+		set
+			hxbj = #{hxbj},
+			sdbj = #{sdbj},
+			wxbj = #{wxbj},
+			wgbj = #{wgbj},
+			glrk = #{glrk},
+			gltk = #{gltk},
+			zsbj = #{zsbj},
+			gjbj = #{gjbj},
+			dybj = #{dybj},
+			hcbj = #{hcbj},
+			rkdh = #{rkdh},
+			rkxh = #{rkxh},
+			rkrq = #{rkrq},
+			pjrq = #{pjrq},
+			csbh = #{csbh},
+			yhbh = #{yhbh},
+			csmc = #{csmc},
+			clhh = #{clhh},
+			clth = #{clth},
+			clmc = #{clmc},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			khxh = #{khxh},
+			cpmc = #{cpmc},
+			zcpmc = #{zcpmc},
+			jhbz = #{jhbz},
+			jldw = #{jldw},
+			hwbh = #{hwbh},
+			pcbh = #{pcbh},
+			ghpc = #{ghpc},
+			rksl = #{rksl},
+			cbdj = #{cbdj},
+			rkdj = #{rkdj},
+			rkje = #{rkje},
+			zzsl = #{zzsl},
+			csdj = #{csdj},
+			csje = #{csje},
+			zzse = #{zzse},
+			wbbh = #{wbbh},
+			wbhl = #{wbhl},
+			wbdj = #{wbdj},
+			wbje = #{wbje},
+			fzdw = #{fzdw},
+			fzsl = #{fzsl},
+			xdzl = #{xdzl},
+			rklb = #{rklb},
+			wkjq = #{wkjq},
+			jhrq = #{jhrq},
+			shsj = #{shsj},
+			zzrq = #{zzrq},
+			pjrq = #{pjrq},
+			czsj = #{czsj},
+			sdsj = #{sdsj},
+			dysj = #{dysj},
+			dhh = #{dhh},
+			hth = #{hth},
+			bzbh = #{bzbh},
+			cgym = #{cgym},
+			cglx = #{cglx},
+			cgh = #{cgh},
+			glht = #{glht},
+			zjhh = #{zjhh},
+			jhh = #{jhh},
+			wxh = #{wxh},
+			sqh = #{sqh},
+			shdh = #{shdh},
+			fgh = #{fgh},
+			fgcp = #{fgcp},
+			bzsm = #{bzsm},
+			sxdy09 = #{sxdy09},
+			jkrm = #{jkrm},
+			czym = #{czym},
+			sdrm = #{sdrm},
+			glllh = #{glllh},
+			gltlh = #{gltlh},
+			ycrk = #{ycrk}
+		where  = #{}
+</update>
+<delete id="deleteMaterialInventory" parameterType="erp.erp.materialInventory.model.MaterialInventoryManager">
+	delete from rkdb_yl
+	where  = #{}
+</delete>
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.SupplyInvoice.data.SupplyInvoiceMapper">
+
+
+<select id="getSupplyInvoiceList" parameterType="map" resultType="erp.erp.SupplyInvoice.model.SupplyInvoice">
+	 SELECT fplxb.fplx,   
+         gyfpb.fplb,   
+         gyfpb.fphm,   
+         gyfpb.kprq,   
+         gyfpb.csbh,     
+         gyfpb.csmc,   
+         gyfpb.yfbj,   
+         gyfpb.shbj,   
+         gyfpb.shrm,       
+         gyfpb.shsj,   
+         gyfpb.jzrq,   
+         gyfpb.fpsl,   
+         gyfpb.fpje,   
+         gyfpb.csje,  
+         isnull(gyfpb.fpje,0) - isnull(gyfpb.csje,0) as zzse,
+         gyfpb.bzsm,   
+         gyfpb.kprm,   
+         gyfpb.kpsj,   
+         gyfpb.pzbj,   
+         gyfpb.pzbh,   
+         gyfpb.ztbh,   
+         gyfpb.dfdm,   
+         gyfpb.kmdm,
+			gyfpb.wbhl,   
+         gyfpb.wbje, 
+         gyfpb.pzh, 
+			ztdwb.ztmc as ztdw,
+			gyfpb.djbj,
+			gyfpb.djrm, 
+			gyfpb.djsj,
+			gyfpb.csmc as fptt,
+         csxxb.yhbh,  
+         csxxb.cglb,  
+         wbmcb.wbdh as wbbh,
+
+			isnull(view_fksqspmx.sqje,0) as sqje,
+			isnull(view_gyfphtmx.yfje,0) + isnull(view_gyfpfymx.yfje,0) as yfkje,
+			isnull(sljzyb.zyje,0) as zyje,
+			gyfpb.fpje - isnull(view_gyfphtmx.yfje,0) - isnull(view_gyfpfymx.yfje,0) - isnull(view_fksqspmx.sqje,0)- isnull(sljzyb.zyje,0)  as wqje,
+			
+			isnull(view_fksqspmx.wbsq,0) as wbsq,
+			isnull(view_gyfphtmx.yfwb,0) + isnull(view_gyfpfymx.yfwb,0) as wbyfk,
+			gyfpb.wbje - isnull(view_fksqspmx.wbsq,0) - isnull(view_gyfphtmx.yfwb,0) - isnull(view_gyfpfymx.yfwb,0) as wqwb,
+			
+			gyfpb.cgym,
+			gyfpb.ttzh,
+			gyfpb.dsbj,
+			gyfpb.dsrm,
+			gyfpb.dssj,
+			gyfpb.zfph,
+			gyfpb.jyid, 
+			gyfpb.ycbj,
+			gyfpb.hcxx
+			,dateadd(day,csxxb.fkts,gyfpb.kprq) as yjfkrq
+			<if test="gsbj!=null and gsbj!=''">
+			,a.wjje,
+			a.ycje,
+			a.xcje,
+			case when isnull(view_fksqspmx.sqje,0)=0 and isnull(view_gyfphtmx.yfje,0) + isnull(view_gyfpfymx.yfje,0)=0 and gyfpb.ycbj=0 and gyfpb.shbj=1 and csxxb.kpbj=1 and gyfpb.fpje&lt;a.xcje then 1 else 0 end as dcbj	
+    		</if>
+    	FROM gyfpb   
+	 left outer join fplxb with (nolock) on gyfpb.fplx = fplxb.lxbh
+	  left outer join sljzyb with (nolock) on sljzyb.csbh = gyfpb.csbh
+	 left outer join ztdwb with (nolock) on gyfpb.ztdw = ztdwb.ztbh
+	 left outer join csxxb with (nolock) on gyfpb.csbh = csxxb.csbh
+	  left outer join wbmcb with (nolock) on csxxb.wbbh = wbmcb.wbbh
+	 left outer join view_fksqspmx with (nolock) on view_fksqspmx.fplb=gyfpb.fplb and view_fksqspmx.fphm=gyfpb.fphm
+	 left outer join view_gyfphtmx with (nolock) on view_gyfphtmx.fplb=gyfpb.fplb and view_gyfphtmx.fphm=gyfpb.fphm
+	 left outer join view_gyfpfymx with (nolock) on view_gyfpfymx.fplb=gyfpb.fplb and view_gyfpfymx.fphm=gyfpb.fphm
+	 <!--  -->
+	 <if test="gsbj!=null and gsbj!=''">
+		 left outer join view_csfpyfhz a with (nolock) on a.csbh=gyfpb.csbh
+	 </if>
+  	where 
+     1=1
+    <if test="begin_date!=null">
+    	and	gyfpb.jzrq&gt;= #{begin_date} 
+    </if>
+	<if test="end_date!=null">
+		and gyfpb.jzrq&lt;= #{end_date}
+	</if>
+	<if test="condition!=null and condition!=''">
+		and ${condition}
+	</if>
+</select>
+<!-- <insert id="addSupplyInvoice" parameterType="erp.erp.SupplyInvoice.model.SupplyInvoice" keyProperty="quotation_id" useGeneratedKeys="true">
+	<selectKey keyProperty="quotation_id" resultType="int" order="BEFORE">
+		select  isnull(max(quotation_id)+1,1) from t_app_quotation 		
+	</selectKey>
+	insert into t_app_quotation
+	(
+		quotation_id,
+		company_id,
+		cpyname_cn,
+		enquiry_detail_id,
+		quote_date,
+		material_costs,
+		process_cost,
+		transportation,
+		other_item,
+		other_cost,
+		vat,
+		enquiry_price,
+		status
+	)
+	values
+	(
+		#{quotation_id},
+		#{company_id},
+		#{cpyname_cn},
+		#{enquiry_detail_id},
+		#{quote_date},
+		#{material_costs},
+		#{process_cost},
+		#{transportation},
+		#{other_item},
+		#{other_cost},
+		#{vat},
+		#{enquiry_price},
+		#{status}
+	)
+</insert>
+<update id="updateSupplyInvoice" parameterType="erp.erp.SupplyInvoice.model.SupplyInvoice">
+	update t_app_quotation
+		set
+			quotation_id = #{quotation_id},
+			company_id = #{company_id},
+			cpyname_cn=#{cpyname_cn},
+			enquiry_detail_id = #{enquiry_detail_id},
+			quote_date = #{quote_date},
+			material_costs = #{material_costs},
+			process_cost = #{process_cost},
+			transportation = #{transportation},
+			other_item = #{other_item},
+			other_cost = #{other_cost},
+			vat = #{vat},
+			enquiry_price = #{enquiry_price},
+			status = #{status}
+		where quotation_id = #{quotation_id}
+</update>
+<delete id="deleteSupplyInvoice" parameterType="erp.erp.SupplyInvoice.model.SupplyInvoice">
+	delete from t_app_quotation
+	where quotation_id = #{quotation_id}
+</delete> -->
+</mapper>

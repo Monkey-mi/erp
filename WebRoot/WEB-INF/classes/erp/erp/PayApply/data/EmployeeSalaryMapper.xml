@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.EmployeeSalaryMapper">
+
+
+<select id="getEmployeeSalaryList" parameterType="map" resultType="erp.erp.PayApply.model.EmployeeSalary">
+	  SELECT fksqspgzb.sqbh,   
+         fksqspgzb.sqxh,
+			fksqspgzb.hsbm,
+			hsbmb.bmmc,
+			fksqspgzb.gznf,
+			fksqspgzb.gzyf,
+			fksqspgzb.msbh,
+			fksqspgzb.zggh, 
+			fksqspgzb.lmmc, 
+			fksqspgzb.lmdh,
+         fksqspgzb.gzje,   
+         fksqspgzb.sqje,
+			fksqspgzb.yfje,
+			fksqspgzb.wbbh,
+			fksqspgzb.wbhl,
+			fksqspgzb.wbje,
+			fksqspgzb.wbsq  
+    FROM fksqspgzb   
+    left outer join hsbmb with (nolock) on hsbmb.bmbh = fksqspgzb.hsbm
+  where
+  1=1
+  <if test="sqbh!=null">
+  and fksqspgzb.sqbh=#{sqbh}
+  </if>
+</select>
+<insert id="addEmployeeSalary" parameterType="erp.erp.PayApply.model.EmployeeSalary">
+
+		insert into fksqspgzb
+		(
+		sqbh,
+		sqxh,
+		gznf,
+		gzyf,
+		hsbm,
+		msbh,
+		zggh,
+		lmmc,
+		lmdh,
+		gzje,
+		sqje,
+		yfje,
+		wbbh,
+		wbhl,
+		wbje,
+		wbsq
+		)
+		values
+		(
+		#{sqbh},
+		#{sqxh},
+		#{gznf},
+		#{gzyf},
+		#{hsbm},
+		#{msbh},
+		#{zggh},
+		#{lmmc},
+		#{lmdh},
+		#{gzje},
+		#{sqje},
+		#{yfje},
+		#{wbbh},
+		#{wbhl},
+		#{wbje},
+		#{wbsq}
+		)
+	</insert>
+	<update id="updateEmployeeSalary" parameterType="erp.erp.PayApply.model.EmployeeSalary">
+		update fksqspgzb
+		set
+		sqbh = #{sqbh},
+		sqxh = #{sqxh},
+		gznf = #{gznf},
+		gzyf = #{gzyf},
+		hsbm = #{hsbm},
+		msbh = #{msbh},
+		zggh = #{zggh},
+		lmmc = #{lmmc},
+		lmdh = #{lmdh},
+		gzje = #{gzje},
+		sqje = #{sqje},
+		yfje = #{yfje},
+		wbbh = #{wbbh},
+		wbhl = #{wbhl},
+		wbje = #{wbje},
+		wbsq = #{wbsq}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspgzb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspgzb.sqxh = #{sqxh}
+		</if>
+	</update>
+	<delete id="deleteEmployeeSalary" parameterType="erp.erp.PayApply.model.EmployeeSalary">
+		delete from fksqspgzb
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspgzb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspgzb.sqxh = #{sqxh}
+		</if>
+	</delete>
+	<select id="getEmployeeSalaryImpList" parameterType="map" resultType="erp.erp.PayApply.model.EmployeeSalaryImp">
+	  SELECT zggzb.gznf,   
+         zggzb.gzyf,   
+         zggzb.zggh,
+			zggzb.hsbm,   
+         rlzy_rsdab.zgxm, 
+			rlzy_rsdab.zgjc,
+			rlzy_rsdab.bzbh,        
+    FROM zggzb   
+	left outer join rlzy_rsdab with (nolock) on zggzb.zggh=rlzy_rsdab.zggh
+	where zggzb.sdbj=1 and zggzb.gznf="+string(#{gznf})+" and zggzb.gzyf="+string(#{gzyf})+" and 
+    not exists (select gznf,gzyf,zggh from fksqspgzb where fksqspgzb.gznf=zggzb.gznf and 
+    fksqspgzb.gzyf=zggzb.gzyf and fksqspgzb.zggh=zggzb.zggh and fksqspgzb.msbh=zggzb.msbh and 
+    fksqspgzb.lmdh='"+#{gzxm}+"')"
+</select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.ZjjhMapper">
+
+
+<select id="getZjjhList" parameterType="map" resultType="erp.erp.PayApply.model.Zjjh">
+	  SELECT ykjhmxb.jhbh,   
+         ykjhmxb.jhxh,   
+         ykjhmxb.xmbh,   
+         ykjhmxb.ykje,   
+         ykjhmxb.bzsm
+    FROM ykjhmxb   
+left outer join ykjhb on ykjhmxb.jhbh = ykjhb.jhbh
+where ykjhb.qsrq &lt;= (select fkqx  from fksqspb where sqbh = #{sqbh}) and ykjhb.jzrq &gt;= (select fkqx  from fksqspb where sqbh = #{sqbh})
+</select>
+<insert id="addZjjh" parameterType="erp.erp.PayApply.model.Zjjh" keyProperty="" useGeneratedKeys="true">
+	insert into Zjjh
+	(
+		jhbh,
+		jhxh,
+		xmbh,
+		ykje,
+		bzsm
+	)
+	values
+	(
+		#{jhbh},
+		#{jhxh},
+		#{xmbh},
+		#{ykje},
+		#{bzsm}
+	)
+</insert>
+<update id="updateZjjh" parameterType="erp.erp.PayApply.model.Zjjh">
+	update Zjjh
+		set
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			xmbh = #{xmbh},
+			ykje = #{ykje},
+			bzsm = #{bzsm}
+		where  = #{}
+</update>
+<delete id="deleteZjjh" parameterType="erp.erp.PayApply.model.Zjjh">
+	delete from Zjjh
+	where  = #{}
+</delete>
+</mapper>

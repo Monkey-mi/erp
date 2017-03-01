@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<display-name>ERP</display-name>
+<session-config>
+    <session-timeout>240</session-timeout>
+</session-config> 
+<filter>  
+    <filter-name>CharacterEncodingFilter</filter-name>  
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
+    <init-param>  
+        <param-name>encoding</param-name>  
+        <param-value>utf-8</param-value>  
+    </init-param>  
+</filter>
+<filter-mapping>  
+    <filter-name>CharacterEncodingFilter</filter-name>  
+    <url-pattern>/*</url-pattern>  
+</filter-mapping>
+<listener>
+    <!-- 加上这个监听器就能通过RequestContextHolder获得当前请求的信息 -->
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+</listener>
+  <listener>
+    <!-- 加上这个监听器就能通过监控登录/注销 -->
+    <listener-class>erp.util.web.SessionListener</listener-class>
+  </listener>
+  
+   <servlet>
+    <servlet-name>common</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:sysconfig/common-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>common</servlet-name>
+    <url-pattern>*.action</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>tps</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:sysconfig/tps-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>tps</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>erp</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:sysconfig/erp-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>3</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>erp</servlet-name>
+    <url-pattern>*.act</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>srm</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:sysconfig/srm-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>4</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>srm</servlet-name>
+    <url-pattern>*.srm</url-pattern>
+  </servlet-mapping> 
+  
+  <servlet>
+    <servlet-name>oa</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:sysconfig/oa-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>5</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>oa</servlet-name>
+    <url-pattern>*.oa</url-pattern>
+  </servlet-mapping> 
+    <servlet>
+    <servlet-name>crm</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:sysconfig/crm-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>6</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>crm</servlet-name>
+    <url-pattern>*.crm</url-pattern>
+  </servlet-mapping>
+  <!-- webservice 监听 -->
+    <listener>
+		<listener-class>
+		org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:sysconfig/cxf.xml,classpath:sysconfig/activemq.xml</param-value>
+	</context-param>
+  
+    <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  
+  <filter>
+    <filter-name>requestFilter</filter-name>
+    <filter-class>erp.util.web.RequestFilter</filter-class>
+    <init-param>
+      <!-- true-允许  false-不允许 -->
+      <param-name>filterEnabled</param-name>
+      <param-value>true</param-value>
+    </init-param>
+
+    <init-param>
+       <!--  把不需要过滤的url列表加进去，用;分割-->
+      <param-name>noFilerList</param-name>
+      <param-value>/dc/execSqlQuery.do</param-value>
+    </init-param>
+
+    <init-param>
+      <!-- 小于0-不记录日志,0-只记录登录/登出,1-记录登录/登出和数据变更操作,2-记录所有操作 -->
+      <param-name>logLevel</param-name>
+      <param-value>1</param-value>
+    </init-param>
+    <init-param>
+      <!-- 是否需要验证码 -->
+      <param-name>needVCode</param-name>
+      <param-value>false</param-value> 
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>requestFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>  
+  <display-name></display-name>	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseDetail.data.ContractSubsidiaryMapper">
+
+
+<select id="getContractSubsidiaryList" parameterType="map" resultType="erp.erp.master.purchaseDetail.model.ContractSubsidiary">
+	  SELECT cghtfzb.htbh,   
+         cghtfzb.htxh,   
+         cghtfzb.jlxh,   
+         cghtfzb.cggg,   
+         cghtfzb.zhgg,   
+         cghtfzb.zhsl,   
+          cghtfzb.zhjl,  
+         cghtfzb.fzsl,   
+         cghtfzb.fzdw,     
+         cghtfzb.cgsl,   
+         cghtfzb.jldw,  
+			cghtfzb.jgbh,
+			round(cghtfzb.jhsl*cghtfzb.gjyl,2) as scxq,
+			cghtfzb.fzdw as fzdw_sc,
+			cghtfzb.yxgg,
+			cghtfzb.dgyl,
+			cghtfzb.gjsl,
+			cghtfzb.gjyl,
+			cghtfzb.jhsl,
+			cghtfzb.fdxs
+
+    FROM cghtfzb
+    <where>
+    	<if test="htbh!=null">
+    		cghtfzb.htbh=#{htbh}
+    	</if>
+    	<if test="htxh!=null">
+    		and cghtfzb.htxh=#{htxh}
+    	</if>
+    </where> 
+</select>
+<insert id="addContractSubsidiary" parameterType="erp.erp.master.purchaseDetail.model.ContractSubsidiary" keyProperty="htbh,htxh,jlxh" useGeneratedKeys="true">
+	insert into dbo.cghtfzb
+	(
+		htbh,
+		htxh,
+		jlxh,
+		cggg,
+		zhgg,
+		zhsl,
+		zhjl,
+		fzsl,
+		fzdw,
+		cgsl,
+		jldw,
+		jgbh,
+		jhsl,
+		fdxs,
+		yxgg,
+		dgyl,
+		gjsl,
+		gjyl
+	)
+	values
+	(
+		#{htbh},
+		#{htxh},
+		#{jlxh},
+		#{cggg},
+		#{zhgg},
+		#{zhsl},
+		#{zhjl},
+		#{fzsl},
+		#{fzdw},
+		#{cgsl},
+		#{jldw},
+		#{jgbh},
+		#{jhsl},
+		#{fdxs},
+		#{yxgg},
+		#{dgyl},
+		#{gjsl},
+		#{gjyl}
+	)
+</insert>
+<update id="updateContractSubsidiary" parameterType="erp.erp.master.purchaseDetail.model.ContractSubsidiary">
+	update dbo.cghtfzb
+		set
+			htbh = #{htbh},
+			htxh = #{htxh},
+			jlxh = #{jlxh},
+			cggg = #{cggg},
+			zhgg = #{zhgg},
+			zhsl = #{zhsl},
+			zhjl = #{zhjl},
+			fzsl = #{fzsl},
+			fzdw = #{fzdw},
+			cgsl = #{cgsl},
+			jldw = #{jldw},
+			jgbh = #{jgbh},
+			jhsl = #{jhsl},
+			fdxs = #{fdxs},
+			yxgg = #{yxgg},
+			dgyl = #{dgyl},
+			gjsl = #{gjsl},
+			gjyl = #{gjyl}
+		where htbh= #{htbh}  and htxh=#{htxh}  and  jlxh=#{jlxh}
+</update>
+<delete id="deleteContractSubsidiary" parameterType="erp.erp.master.purchaseDetail.model.ContractSubsidiary">
+	delete from dbo.cghtfzb
+	where htbh= #{htbh}  and htxh=#{htxh}  and  jlxh=#{jlxh}
+</delete>
+</mapper>

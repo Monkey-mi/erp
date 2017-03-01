@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.purchaseCostSumMapper">
+
+
+<select id="getpurchaseCostSumList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.purchaseCostSum">
+	select
+		dbo.cgfyxmb.fydh,
+		dbo.cgfyxmb.xmxh,
+		dbo.cgfyxmb.fyxm,
+		dbo.cgfyxmb.fyje
+	from
+		dbo.cgfyxmb
+	where
+	fydh=#{fydh}	
+</select>
+<insert id="addpurchaseCostSum" parameterType="erp.erp.master.purchaseCost.model.purchaseCostSum" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.cgfyxmb
+	(
+		fydh,
+		xmxh,
+		fyxm,
+		fyje
+	)
+	values
+	(
+		#{fydh},
+		#{xmxh},
+		#{fyxm},
+		#{fyje}
+	)
+</insert>
+<update id="updatepurchaseCostSum" parameterType="erp.erp.master.purchaseCost.model.purchaseCostSum">
+	update dbo.cgfyxmb
+		set
+			fydh = #{fydh},
+			xmxh = #{xmxh},
+			fyxm = #{fyxm},
+			fyje = #{fyje}
+		where  fydh = #{fydh}
+		  and  xmxh = #{xmxh}
+</update>
+<delete id="deletepurchaseCostSum" parameterType="erp.erp.master.purchaseCost.model.purchaseCostSum">
+	delete from dbo.cgfyxmb
+	where  = #{}
+</delete>
+</mapper>

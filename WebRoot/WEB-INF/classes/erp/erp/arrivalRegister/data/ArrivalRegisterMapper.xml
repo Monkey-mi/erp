@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.arrivalRegister.data.ArrivalRegisterMapper">
+
+
+<select id="getArrivalRegisterList" parameterType="map" resultType="erp.erp.arrivalRegister.model.ArrivalRegister">
+	select aa.* from ( SELECT dhdjb_yl.ckbh,   
+         dhdjb_yl.dhdh,   
+         dhdjb_yl.dhxh,   
+         dhdjb_yl.dhrq,     
+         dhdjb_yl.pjrq,   
+         dhdjb_yl.csbh,     
+         dhdjb_yl.clhh,   
+         dhdjb_yl.cltx1,     
+         dhdjb_yl.cltx2,   
+         dhdjb_yl.cltx3,
+		 dhdjb_yl.hwbh,    
+         dhdjb_yl.pcbh,    
+         dhdjb_yl.ghpc,   
+         dhdjb_yl.dhsl,   
+         dhdjb_yl.yrsl,   
+         dhdjb_yl.jldw,
+			dhdjb_yl.htbh,
+			dhdjb_yl.htxh,   
+			case when dhdjb_yl.htbh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh)))
+			else null end as hth,      
+         dhdjb_yl.wxbj,   
+			case when dhdjb_yl.wxdh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.wxdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.wxxh)))
+			else null end as wxh,      
+			case when dhdjb_yl.jhbh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.jhbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.jhxh)))
+			else null end as jhh,      
+         dhdjb_yl.zzrq,   
+         dhdjb_yl.jkrm,   
+         dhdjb_yl.bzsm,   
+         dhdjb_yl.czym,   
+         dhdjb_yl.czsj,   
+         dhdjb_yl.zjbj,   
+         dhdjb_yl.jjbj,   
+         dhdjb_yl.ztbj,   
+         dhdjb_yl.jyjg,   
+         dhdjb_yl.zjdh,   
+         dhdjb_yl.zjrq,   
+         dhdjb_yl.zjbz,   
+         dhdjb_yl.dpyy,   
+         dhdjb_yl.dybj,   
+         dhdjb_yl.thdh,   
+         dhdjb_yl.thrq,   
+         dhdjb_yl.thbj,
+         dhdjb_yl.shdh,
+			dhdjb_yl.fzdw,
+			dhdjb_yl.fzsl,
+			dhdjb_yl.shbj,
+			dhdjb_yl.shrm,
+			dhdjb_yl.shsj,
+			dhdjb_yl.shjg,
+			dhdjb_yl.shsm,
+			dhdjb_yl.zzbj,
+			dhdjb_yl.zzrm,
+			dhdjb_yl.zzsj,
+         htmxb.jhrq,
+			htmxb.wkjq,
+         jhmxb.sxrq,
+			clbmb.clth,
+         clbmb.clmc,
+			clbmb.fzzbj,   
+         csxxb.csmc,  
+         dbo.f_dhh_sjh(dhdjb_yl.ckbh,dhdjb_yl.dhdh,dhdjb_yl.dhxh) as wtdh,
+         case when gltkb.lldh&lt;&gt;0 then 1 else 0 end as gltk,
+			isnull(clrkzjd.zzjl,'') as zzjl,
+			zjjlb.jlmc,
+			0 as xzbj,
+			jhmxb.cpbh,
+			jhmxb.jhbz,
+			case when dhdjb_yl.jhbh&lt;&gt;0 then
+				case when (select count(distinct khbh) from jhmxb with (nolock) left outer join jhmx_ddxxb with (nolock) on jhmx_ddxxb.jhbh=jhmxb.jhbh and jhmx_ddxxb.jhxh=jhmxb.jhxh where jhmxb.jhbh=dhdjb_yl.jhbh)&lt;=1 then
+					case when (select top 1 zjbh from jhmxb with (nolock) where jhmxb.jhbh=dhdjb_yl.jhbh)=0 then
+					(select khmc from khxxb where khxxb.khbh = (select top 1 khbh from jhmxb with (nolock) left outer join jhmx_ddxxb  with (nolock) on jhmx_ddxxb.jhbh=jhmxb.jhbh and jhmx_ddxxb.jhxh=jhmxb.jhxh where jhmxb.jhbh=dhdjb_yl.jhbh )) 
+					else
+					(select khmc from khxxb where khxxb.khbh =(select top 1 khbh from jhmxb with (nolock) left  outer join jhmxb a  with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh left outer join jhmx_ddxxb  with (nolock) on jhmx_ddxxb.jhbh=a.jhbh and jhmx_ddxxb.jhxh=a.jhxh where jhmxb.jhbh=dhdjb_yl.jhbh))
+					end 
+				else null end
+			else ''
+			end as khmc,
+			case when jhmxb.zjbh &lt;&gt;0 then  (select a.cpbh from jhmxb a where a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh) end as zcpbh,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+			cpbmb.plmth as plmth_cp,
+			cpbmb.plmtx as plmtx_cp,
+			cpbmb.cpmc
+    FROM dhdjb_yl with (nolock)
+	 left outer join zjjlb with (nolock) on zjjlb.jlbh=dhdjb_yl.jyjg
+	 left outer join clbmb with (nolock) on  dhdjb_yl.clhh=clbmb.clhh
+ 	 left outer join csxxb with (nolock) on  dhdjb_yl.csbh=csxxb.csbh
+     left outer join htmxb with (nolock) on  htmxb.htbh=dhdjb_yl.htbh and htmxb.htxh=dhdjb_yl.htxh
+     left outer join jhmxb with (nolock) on  htmxb.jhbh=jhmxb.jhbh and htmxb.jhxh=jhmxb.jhxh
+     left outer join gltkb with (nolock) on gltkb.ckbh=dhdjb_yl.ckbh and gltkb.dhdh=dhdjb_yl.dhdh and gltkb.dhxh=dhdjb_yl.dhxh
+	 left outer join clrkzjd with (nolock) on clrkzjd.jydh=dhdjb_yl.zjdh
+	 left outer join cpbmb with (nolock) on cpbmb.cpbh=jhmxb.cpbh
+	 where dhdjb_yl.ckbh=#{ckbh} and  ztbj&lt;&gt;2 and ztbj&lt;&gt;3 and dhdjb_yl.zzbj = 0
+	 <if test="condition!=null and condition!=''">
+		and ${condition}
+	 </if>
+	 )aa
+	 where
+        1=1 
+    <if test="filterSearch!=null">
+	  ${filterSearch}
+    </if>
+    <if test="sort==null">
+	  		order by dhrq desc
+	</if>
+	<if test="sort!=null">
+	  		order by  ${sort}
+	</if>
+</select>
+<!-- 到货数量合计 -->
+<select id="getSumArrivalRegister" parameterType="map" resultType="erp.erp.arrivalRegister.model.ArrivalRegister">
+    select
+       SUM(dhsl) as dhsl,
+       SUM(fzsl) as fzsl
+    FROM (
+         SELECT dhdjb_yl.ckbh,   
+         dhdjb_yl.dhdh,   
+         dhdjb_yl.dhxh,   
+         dhdjb_yl.dhrq,     
+         dhdjb_yl.pjrq,   
+         dhdjb_yl.csbh,     
+         dhdjb_yl.clhh,   
+         dhdjb_yl.cltx1,     
+         dhdjb_yl.cltx2,   
+         dhdjb_yl.cltx3,
+		 dhdjb_yl.hwbh,    
+         dhdjb_yl.pcbh,    
+         dhdjb_yl.ghpc,   
+         dhdjb_yl.dhsl,   
+         dhdjb_yl.yrsl,   
+         dhdjb_yl.jldw,
+			dhdjb_yl.htbh,
+			dhdjb_yl.htxh,   
+			case when dhdjb_yl.htbh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh)))
+			else null end as hth,      
+         dhdjb_yl.wxbj,   
+			case when dhdjb_yl.wxdh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.wxdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.wxxh)))
+			else null end as wxh,      
+			case when dhdjb_yl.jhbh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.jhbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.jhxh)))
+			else null end as jhh,      
+         dhdjb_yl.zzrq,   
+         dhdjb_yl.jkrm,   
+         dhdjb_yl.bzsm,   
+         dhdjb_yl.czym,   
+         dhdjb_yl.czsj,   
+         dhdjb_yl.zjbj,   
+         dhdjb_yl.jjbj,   
+         dhdjb_yl.ztbj,   
+         dhdjb_yl.jyjg,   
+         dhdjb_yl.zjdh,   
+         dhdjb_yl.zjrq,   
+         dhdjb_yl.zjbz,   
+         dhdjb_yl.dpyy,   
+         dhdjb_yl.dybj,   
+         dhdjb_yl.thdh,   
+         dhdjb_yl.thrq,   
+         dhdjb_yl.thbj,
+         dhdjb_yl.shdh,
+			dhdjb_yl.fzdw,
+			dhdjb_yl.fzsl,
+			dhdjb_yl.shbj,
+			dhdjb_yl.shrm,
+			dhdjb_yl.shsj,
+			dhdjb_yl.shjg,
+			dhdjb_yl.shsm,
+			dhdjb_yl.zzbj,
+			dhdjb_yl.zzrm,
+			dhdjb_yl.zzsj,
+         htmxb.jhrq,
+			htmxb.wkjq,
+         jhmxb.sxrq,
+			clbmb.clth,
+         clbmb.clmc,
+			clbmb.fzzbj,   
+         csxxb.csmc,  
+         dbo.f_dhh_sjh(dhdjb_yl.ckbh,dhdjb_yl.dhdh,dhdjb_yl.dhxh) as wtdh,
+         case when gltkb.lldh&lt;&gt;0 then 1 else 0 end as gltk,
+			isnull(clrkzjd.zzjl,'') as zzjl,
+			zjjlb.jlmc,
+			0 as xzbj,
+			jhmxb.cpbh,
+			jhmxb.jhbz,
+			case when dhdjb_yl.jhbh&lt;&gt;0 then
+				case when (select count(distinct khbh) from jhmxb with (nolock) left outer join jhmx_ddxxb with (nolock) on jhmx_ddxxb.jhbh=jhmxb.jhbh and jhmx_ddxxb.jhxh=jhmxb.jhxh where jhmxb.jhbh=dhdjb_yl.jhbh)&lt;=1 then
+					case when (select top 1 zjbh from jhmxb with (nolock) where jhmxb.jhbh=dhdjb_yl.jhbh)=0 then
+					(select khmc from khxxb where khxxb.khbh = (select top 1 khbh from jhmxb with (nolock) left outer join jhmx_ddxxb  with (nolock) on jhmx_ddxxb.jhbh=jhmxb.jhbh and jhmx_ddxxb.jhxh=jhmxb.jhxh where jhmxb.jhbh=dhdjb_yl.jhbh )) 
+					else
+					(select khmc from khxxb where khxxb.khbh =(select top 1 khbh from jhmxb with (nolock) left  outer join jhmxb a  with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh left outer join jhmx_ddxxb  with (nolock) on jhmx_ddxxb.jhbh=a.jhbh and jhmx_ddxxb.jhxh=a.jhxh where jhmxb.jhbh=dhdjb_yl.jhbh))
+					end 
+				else null end
+			else ''
+			end as khmc,
+			case when jhmxb.zjbh &lt;&gt;0 then  (select a.cpbh from jhmxb a where a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh) end as zcpbh,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+			cpbmb.plmth as plmth_cp,
+			cpbmb.plmtx as plmtx_cp,
+			cpbmb.cpmc
+    FROM dhdjb_yl with (nolock)
+	 left outer join zjjlb with (nolock) on zjjlb.jlbh=dhdjb_yl.jyjg
+	 left outer join clbmb with (nolock) on  dhdjb_yl.clhh=clbmb.clhh
+ 	 left outer join csxxb with (nolock) on  dhdjb_yl.csbh=csxxb.csbh
+     left outer join htmxb with (nolock) on  htmxb.htbh=dhdjb_yl.htbh and htmxb.htxh=dhdjb_yl.htxh
+     left outer join jhmxb with (nolock) on  htmxb.jhbh=jhmxb.jhbh and htmxb.jhxh=jhmxb.jhxh
+     left outer join gltkb with (nolock) on gltkb.ckbh=dhdjb_yl.ckbh and gltkb.dhdh=dhdjb_yl.dhdh and gltkb.dhxh=dhdjb_yl.dhxh
+	 left outer join clrkzjd with (nolock) on clrkzjd.jydh=dhdjb_yl.zjdh
+	 left outer join cpbmb with (nolock) on cpbmb.cpbh=jhmxb.cpbh
+	 where dhdjb_yl.ckbh=#{ckbh} and  ztbj&lt;&gt;2 and ztbj&lt;&gt;3 and dhdjb_yl.zzbj = 0
+	 <if test="condition!=null and condition!=''">
+		and ${condition}
+	 </if>
+	 )dhdjb_yl1
+	 where
+        1=1 
+    <if test="filterSearch!=null">
+	  ${filterSearch}
+    </if>
+</select>
+<insert id="addArrivalRegister" parameterType="erp.erp.arrivalRegister.model.ArrivalRegister" keyProperty="" useGeneratedKeys="false">
+	insert into dbo.dhdjb_yl
+	(
+		ckbh,
+		dhdh,
+		dhxh,
+		dhrq,
+		csbh,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		pcbh,
+		ghpc,
+		dhsl,
+		yrsl,
+		jldw,
+		htbh,
+		htxh,
+		jhbh,
+		jhxh,
+		zzrq,
+		jkrm,
+		bzsm,
+		czym,
+		czsj,
+		zjbj,
+		jjbj,
+		ztbj,
+		jyjg,
+		zjdh,
+		zjrq,
+		zjbz,
+		dpyy,
+		dybj,
+		zjrm,
+		zjsj,
+		thdh,
+		thrq,
+		thbj,
+		wxbj,
+		wxdh,
+		wxxh,
+		shdh,
+		fzsl,
+		fzdw,
+		hwbh,
+		shrm,
+		shsj,
+		shjg,
+		shsm,
+		zzbj,
+		zzrm,
+		zzsj,
+		shbj,
+		pjrq
+	)
+	values
+	(
+		#{ckbh},
+		#{dhdh},
+		#{dhxh},
+		#{dhrq},
+		#{csbh},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{pcbh},
+		#{ghpc},
+		#{dhsl},
+		#{yrsl},
+		#{jldw},
+		#{htbh},
+		#{htxh},
+		#{jhbh},
+		#{jhxh},
+		#{zzrq},
+		#{jkrm},
+		#{bzsm},
+		#{czym},
+		#{czsj},
+		#{zjbj},
+		#{jjbj},
+		#{ztbj},
+		#{jyjg},
+		#{zjdh},
+		#{zjrq},
+		#{zjbz},
+		#{dpyy},
+		#{dybj},
+		#{zjrm},
+		#{zjsj},
+		#{thdh},
+		#{thrq},
+		#{thbj},
+		#{wxbj},
+		#{wxdh},
+		#{wxxh},
+		#{shdh},
+		#{fzsl},
+		#{fzdw},
+		#{hwbh},
+		#{shrm},
+		#{shsj},
+		#{shjg},
+		#{shsm},
+		#{zzbj},
+		#{zzrm},
+		#{zzsj},
+		#{shbj},
+		#{pjrq}
+	)
+</insert>
+<update id="updateArrivalRegister" parameterType="erp.erp.arrivalRegister.model.ArrivalRegister">
+	update dbo.dhdjb_yl
+		set
+			ckbh = #{ckbh},
+			dhdh = #{dhdh},
+			dhxh = #{dhxh},
+			dhrq = #{dhrq},
+			csbh = #{csbh},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			pcbh = #{pcbh},
+			ghpc = #{ghpc},
+			dhsl = #{dhsl},
+			yrsl = #{yrsl},
+			jldw = #{jldw},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			zzrq = #{zzrq},
+			jkrm = #{jkrm},
+			bzsm = #{bzsm},
+			czym = #{czym},
+			czsj = #{czsj},
+			zjbj = #{zjbj},
+			jjbj = #{jjbj},
+			ztbj = #{ztbj},
+			jyjg = #{jyjg},
+			zjdh = #{zjdh},
+			zjrq = #{zjrq},
+			zjbz = #{zjbz},
+			dpyy = #{dpyy},
+			dybj = #{dybj},
+			zjrm = #{zjrm},
+			zjsj = #{zjsj},
+			thdh = #{thdh},
+			thrq = #{thrq},
+			thbj = #{thbj},
+			wxbj = #{wxbj},
+			wxdh = #{wxdh},
+			wxxh = #{wxxh},
+			shdh = #{shdh},
+			fzsl = #{fzsl},
+			fzdw = #{fzdw},
+			hwbh = #{hwbh},
+			shrm = #{shrm},
+			shsj = #{shsj},
+			shjg = #{shjg},
+			shsm = #{shsm},
+			zzbj = #{zzbj},
+			zzrm = #{zzrm},
+			zzsj = #{zzsj},
+			shbj = #{shbj}
+		where  ckbh= #{ckbh} and dhdh = #{dhdh} and dhxh = #{dhxh}
+</update>
+<delete id="deleteArrivalRegister" parameterType="erp.erp.arrivalRegister.model.ArrivalRegister">
+	delete from dbo.dhdjb_yl
+	where  ckbh= #{ckbh} and dhdh = #{dhdh} 
+	<if test="dhxh!=null">
+	and dhxh = #{dhxh}
+	</if>
+</delete>
+
+<select id= "getMaxdhdh" resultType = "int">
+	select isnull(max(dhdh),0)+1 from dhdjb_yl;
+</select>
+
+<select id= "getHxbj" parameterType="map" resultType = "int">
+	select count(*) from dhdjb_yl where ckbh=#{ckbh} and dhdh=#{dhdh} and jyjg&lt;&gt;1;
+</select>
+
+<select id= "getGltk" parameterType="map" resultType = "int">
+	select count(*)  from gltkb where ckbh=#{ckbh} and dhdh=#{dhdh};
+</select>
+
+<select id= "getDhdjb" parameterType="map" resultType ="erp.erp.arrivalRegister.model.ArrivalRegister">
+	 SELECT dhdjb_yl.ckbh,   
+         dhdjb_yl.dhdh,   
+         dhdjb_yl.dhxh,   
+         dhdjb_yl.dhrq,      
+         dhdjb_yl.pjrq,   
+         dhdjb_yl.csbh,   
+         dhdjb_yl.clhh,      
+         dhdjb_yl.cltx1,   
+         dhdjb_yl.cltx2,   
+         dhdjb_yl.cltx3,
+		 dhdjb_yl.hwbh,   
+         dhdjb_yl.pcbh,   
+         dhdjb_yl.ghpc,    
+         dhdjb_yl.dhsl,   
+         dhdjb_yl.yrsl,   
+         dhdjb_yl.jldw,   
+         dhdjb_yl.jhbh,   
+         dhdjb_yl.jhxh,   
+			case when dhdjb_yl.jhbh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.jhbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.jhxh)))
+			else null end as jhh,      
+         dhdjb_yl.htbh,   
+         dhdjb_yl.htxh,   
+			case when dhdjb_yl.htbh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh)))
+			else null end as hth,      
+         dhdjb_yl.wxbj,   
+         dhdjb_yl.wxdh,   
+         dhdjb_yl.wxxh,   
+			case when dhdjb_yl.wxdh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.wxdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.wxxh)))
+			else null end as wxh,      
+         dhdjb_yl.zzrq,   
+         dhdjb_yl.jkrm,   
+         dhdjb_yl.bzsm,   
+         dhdjb_yl.czym,   
+         dhdjb_yl.czsj,   
+         dhdjb_yl.zjbj,   
+         dhdjb_yl.jjbj,   
+         dhdjb_yl.ztbj,   
+         dhdjb_yl.jyjg,   
+         dhdjb_yl.zjdh,   
+         dhdjb_yl.zjrq,   
+         dhdjb_yl.zjbz,   
+         dhdjb_yl.dpyy,   
+         dhdjb_yl.dybj,   
+         dhdjb_yl.thdh,   
+         dhdjb_yl.thrq,   
+         dhdjb_yl.thbj,
+         dhdjb_yl.shdh,
+		 dhdjb_yl.fzdw,
+		 dhdjb_yl.fzsl,
+		 dhdjb_yl.zjrm,
+			dhdjb_yl.shbj,
+			dhdjb_yl.shrm,
+			dhdjb_yl.shsj,
+			dhdjb_yl.shjg,
+			dhdjb_yl.shsm,
+			dhdjb_yl.zzbj,
+			dhdjb_yl.zzrm,
+			dhdjb_yl.zzsj,
+			clbmb.clmc,
+			clbmb.clth,
+			clbmb.fzzbj,
+         clbmb.plmth,
+	 		clbmb.plmtx
+			FROM dhdjb_yl   
+			left outer join clbmb with (nolock) on clbmb.clhh=dhdjb_yl.clhh
+    where ckbh=#{ckbh} and dhdh=#{dhdh}   
+</select>
+
+<select id = "getZtbj" parameterType="map" resultType ="int">
+	select ztbj from dhdjb_yl where ckbh=#{ckbh} and dhdh = #{dhdh} and dhxh=#{dhxh};
+</select>
+
+<update id="updateZtbj" parameterType="map" >
+	update dhdjb_yl set ztbj=2,thdh=#{thdh},thrq=#{thrq} where ckbh=#{ckbh} and dhdh = #{dhdh} and dhxh=#{dhxh} and ztbj=5;
+</update>
+
+
+<!-- 根据sql获取对应值 -->
+<select id="getdoubleFromSql" parameterType="map" resultType="double">
+	${sql}
+</select>
+
+<!-- 中止货单 -->
+<update id="StopList" parameterType="map" >
+	update dhdjb_yl set zzbj=#{zzbj},zzrm=#{zzrm},zzsj=#{zzsj} where ckbh = #{ckbh} and dhdh = #{dhdh} and dhxh = #{dhxh};
+</update>
+<!-- 入库单查询 -->
+<select id="getRkdList" parameterType="map" resultType="erp.erp.arrivalRegister.model.RkdList">
+	  SELECT rkdb_yl.ckbh,   
+         rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.pjrq,   
+         rkdb_yl.csbh,   
+         rkdb_yl.clhh,   
+         rkdb_yl.cltx1,    
+         rkdb_yl.cltx2,      
+         rkdb_yl.cltx3,   
+         rkdb_yl.jldw,   
+         rkdb_yl.rksl,    
+         rkdb_yl.rkdj,
+         rkdb_yl.rkje,
+         rkdb_yl.zzsl,
+         rkdb_yl.csdj,
+         rkdb_yl.csje,   
+			isnull(rkdb_yl.rkje,0) - isnull(rkdb_yl.csje,0) as zzse,
+         case when rkdb_yl.htbh&lt;&gt;0 then
+				ltrim(rtrim(str(rkdb_yl.htbh)))+'-'+ltrim(rtrim(str(rkdb_yl.htxh)))
+			else null end as hth,    
+			case when rkdb_yl.dhdh&lt;&gt;0 then
+				ltrim(rtrim(str(rkdb_yl.dhdh)))+'-'+ltrim(rtrim(str(rkdb_yl.dhxh)))
+			else null end as dhh,     
+         rkdb_yl.wbbh,   
+         rkdb_yl.wbhl,   
+         rkdb_yl.wbdj,   
+         rkdb_yl.wbje, 
+         rkdb_yl.rklb,   
+         rkdb_yl.hxbj,   
+         rkdb_yl.hcbj,   
+         rkdb_yl.hcdh,   
+         rkdb_yl.hcxh,   
+         rkdb_yl.czym,   
+         rkdb_yl.czsj,   
+         rkdb_yl.bzsm,
+         rkdb_yl.sdbj,
+         rkdb_yl.hxrq,
+         rkdb_yl.fplb,
+         rkdb_yl.fphm,
+         rkdb_yl.hxrm,
+         rkdb_yl.hxsj,
+         rkdb_yl.fzhm,
+         jzztb_yl.jzzt,
+			clbmb.clmc, 
+			csxxb.yhbh, 
+			csxxb.cglb, 
+			csxxb.csmc,
+         clbmb.plmth,
+	 		clbmb.plmtx
+    from rkdb_yl with (nolock) 
+	 left outer join jzztb_yl with (nolock) on year(rkdb_yl.rkrq) = nd and month(rkdb_yl.rkrq) = yd and rkdb_yl.ckbh = jzztb_yl.ckbh
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh
+	 where rkdb_yl.ckbh=#{ckbh} and rkdb_yl.dhdh=#{dhdh} and rkdb_yl.dhxh=#{dhxh}
+</select>
+
+<select id="getICQ" parameterType="map" resultType ="int">
+	select count(*) from clrkzjd where jydh=#{zjdh};
+</select>
+
+<select id="getRksj" parameterType="map" resultType ="java.util.Date">
+	select min(rkrq) from rkdb_yl where rkdb_yl.ckbh=#{ckbh} and rkdb_yl.dhdh=#{dhdh} and rkdb_yl.dhxh=#{dhxh};
+</select>
+
+<select id="getSdsj" parameterType="map" resultType ="java.util.Date">
+	select min(sdsj)  from rkdb_yl where rkdb_yl.ckbh=#{ckbh} and rkdb_yl.dhdh=#{dhdh} and rkdb_yl.dhxh=#{dhxh};
+</select>
+
+<update id="updateRkTime" parameterType="map">
+	update dhdjb_yl set rksj = #{rksj},sdsj_rk = #{sdsj} where dhdjb_yl.ckbh=#{ckbh} and dhdjb_yl.dhdh=#{dhdh} and dhdjb_yl.dhxh=#{dhxh};
+</update>
+
+<select id="IfAward" parameterType="map" resultType ="int">
+	select count(*) from dhdjb_yl where ckbh=#{ckbh} and dhdh=#{dhdh}  and ztbj!=1;
+</select>
+<!-- 检验厂商是否存在-->
+<select id = "getCsxx" parameterType="map" resultType ="int">
+	select count(*)  from csxxb where csbh=:s_csbh;
+</select>
+
+<select id = "getJhlb"  parameterType="map" resultType ="String">
+	select jhlb  from wxtzdb where wxdh = #{wxdh};
+</select>
+
+<select id = "getCkmcb" parameterType="map" resultType ="int">
+	select count(*) from ckmcb_yl where ckbh=#{ckbh} and hsbm = (select left(hsbm,len(ckmcb_yl.hsbm)) from jhlbb where lbbh = #{jhlb});
+</select>
+
+<select id="getsCsbh" parameterType="map" resultType = "String">
+	select csbh  from cghtb with (nolock) where htbh= #{htbh};
+</select>
+
+<select id="getllJhsl" parameterType="map" resultType = "double">
+	select isnull(jhsl,0) from jhmxb where jhbh=#{jhbh} and jhxh=#{jhxh};
+</select>
+
+<select id="getllDhslqt"  parameterType="map" resultType ="double">
+	select isnull(sum(dhsl),0)  from dhdjb_yl where jhbh=#{jhbh} and jhxh=#{jhxh} and dhdh!=#{dhdh} and htbh=0 and wxdh=0;
+</select>
+
+
+
+<select id="getBzxssx" parameterType="map" resultType ="erp.erp.arrivalRegister.model.Bzxssx">
+	select bzxssx,bzxsxx,fzzbj,yzws from clbmb where clhh=#{clhh};
+</select>
+
+<select id="getHisArrivalRegister" parameterType="map"  resultType="erp.erp.arrivalRegister.model.ArrivalRegister">
+	SELECT dhdjb_yl.ckbh,   
+         dhdjb_yl.dhdh,   
+         dhdjb_yl.dhxh,   
+         dhdjb_yl.dhrq,   
+         dhdjb_yl.pjrq,      
+         dhdjb_yl.csbh,     
+         dhdjb_yl.clhh,   
+         dhdjb_yl.cltx1,   
+         dhdjb_yl.cltx2,   
+         dhdjb_yl.cltx3,
+			dhdjb_yl.hwbh,     
+         dhdjb_yl.pcbh,    
+         dhdjb_yl.ghpc,   
+         dhdjb_yl.dhsl,   
+         dhdjb_yl.yrsl,   
+         dhdjb_yl.jldw,   
+			dhdjb_yl.wxbj,   
+			dhdjb_yl.jkrm,   
+         dhdjb_yl.bzsm,   
+         dhdjb_yl.czym,   
+         dhdjb_yl.czsj,   
+         dhdjb_yl.zjbj,   
+         dhdjb_yl.jjbj,   
+         dhdjb_yl.ztbj,   
+         dhdjb_yl.jyjg,   
+         dhdjb_yl.zjdh,   
+         dhdjb_yl.zjrq,   
+         dhdjb_yl.zjbz,   
+         dhdjb_yl.dpyy,   
+         dhdjb_yl.dybj,   
+         dhdjb_yl.thdh,   
+         dhdjb_yl.thrq,   
+         dhdjb_yl.thbj,
+			dhdjb_yl.zzbj,
+			dhdjb_yl.zzrm,
+			dhdjb_yl.zzsj,
+         htmxb.jhrq,
+			htmxb.wkjq,
+         jhmxb.sxrq,
+         clbmb.clmc,   
+         csxxb.csmc,
+			dbo.f_dhh_sjh(dhdjb_yl.ckbh,dhdjb_yl.dhdh,dhdjb_yl.dhxh) as wtdh,
+			case when dhdjb_yl.htbh&lt;&gt;0 then ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh)))	else null end as hth,      
+         case when dhdjb_yl.wxdh&lt;&gt;0 then ltrim(rtrim(str(dhdjb_yl.wxdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.wxxh))) else null end as wxh,
+			case when dhdjb_yl.jhbh&lt;&gt;0 then ltrim(rtrim(str(dhdjb_yl.jhbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.jhxh))) else null end as jhh,        
+         case when jhmxb.ddbh&lt;&gt;0 then ltrim(rtrim(str(jhmxb.ddbh)))+'-'+ltrim(rtrim(str(jhmxb.ddxh))) else null end as ddh,
+			isnull(clrkzjd.zzjl,'') as zzjl,
+			zjjlb.jlmc,
+			jhmxb.cpbh,
+			jhmxb.jhbz,
+			cpbmb.cpmc,			
+			khbh.khbh,
+			khxxb.khmc,
+			case when jhmxb.zjbh &lt;&gt;0 then zcpbh.cpbh end as zcpbh,
+ 			dhdjb_yl.shdh,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+			cpbmb.plmth as plmth_cp,
+			cpbmb.plmtx as plmtx_cp,
+			dhdjb_yl.sdsj_rk,
+			dhdjb_yl.rksj
+FROM dhdjb_yl 
+left outer join zjjlb with (nolock) on zjjlb.jlbh=dhdjb_yl.jyjg
+left outer join clbmb with (nolock) on  dhdjb_yl.clhh=clbmb.clhh 
+left outer join csxxb with (nolock) on  dhdjb_yl.csbh=csxxb.csbh
+left outer join htmxb with (nolock) on  htmxb.htbh=dhdjb_yl.htbh and htmxb.htxh=dhdjb_yl.htxh
+left outer join jhmxb with (nolock) on  htmxb.jhbh=jhmxb.jhbh and htmxb.jhxh=jhmxb.jhxh
+left outer join cpbmb with (nolock) on  jhmxb.cpbh=cpbmb.cpbh 
+left outer join clrkzjd with (nolock) on clrkzjd.jydh=dhdjb_yl.zjdh
+left outer join view_dhdj_ls_khbh khbh on khbh.ckbh=dhdjb_yl.ckbh and khbh.dhdh=dhdjb_yl.dhdh and khbh.dhxh=dhdjb_yl.dhxh
+left outer join 
+(
+	select distinct jhbh,jhxh,cpbh 
+	from jhmxb 
+) zcpbh on zcpbh.jhbh=jhmxb.zjbh and zcpbh.jhxh=jhmxb.zjxh
+left outer join khxxb on khxxb.khbh=khbh.khbh
+  where 
+    dhdjb_yl.ckbh = #{ckbh}
+    and (dhdjb_yl.ztbj = 3 or dhdjb_yl.ztbj=2 or dhdjb_yl.zzbj=1)
+  <if test="condition!=null and condition!=''">
+	 ${condition} 
+  </if>  
+  <if test="filterSearch!=null">
+	  ${filterSearch}
+    </if>
+</select>
+
+<update id="createTableSql" parameterType="map">
+${createsql}
+</update>
+
+<insert id = "insertSql" parameterType="map" keyProperty="" useGeneratedKeys="true">
+${insertsql}
+</insert>
+<select id="createView" statementType="CALLABLE"  parameterType="map" > 
+    <![CDATA[  
+           exec proc_dhdjlskhbh @ckbh = #{ckbh}, @condition = #{condition}
+      ]]> 
+</select>
+
+<select id="cancelReturn" parameterType="map" >
+	update dhdjb_yl set thdh=0,ztbj=5,jyjg=3 where ckbh=#{ckbh} and dhdh=#{dhdh} and dhxh=#{dhxh};
+</select>
+
+</mapper>

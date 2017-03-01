@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseInspectionManage.data.PurchaseInspectionPonoMapper">
+
+
+<select id="getPurchaseInspectionPonoList" parameterType="map" resultType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionPono">
+	SELECT 	'订单表' as sjly,
+			ddmxb.ddbh,
+			ddmxb.ddxh,
+			xsddb.pono,
+			ddmxb.fach,
+			ddmxb.khxh,
+			ddmxb.ywms,
+			0 as pono_bj,
+			0 as fach_bj,
+			0 as khxh_bj,
+			0 as ywms_bj  
+    FROM ddmxb with (nolock)
+left outer join xsddb with (nolock) on xsddb.ddbh=ddmxb.ddbh
+where ddmxb.ddbh=#{ddbh} and ddmxb.ddxh=#{ddxh} 
+ 
+union all
+
+SELECT 	'拆分表' as sjly,
+			ddbzcfmxb.cfbh,
+			ddbzcfmxb.cfxh,	
+			ddbzcfmxb.pono,
+			ddbzcfmxb.fach,
+			ddbzcfmxb.khxh,
+			ddbzcfmxb.ywms,
+			0 as pono_bj,
+			0 as fach_bj,
+			0 as khxh_bj,
+			0 as ywms_bj 
+    FROM ddbzcfmxb with (nolock)
+where ddbzcfmxb.ddbh=#{ddbh} and ddbzcfmxb.ddxh=#{ddxh} 
+</select>
+<insert id="addPurchaseInspectionPono" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionPono" keyProperty="" useGeneratedKeys="true">
+	insert into ddmxb
+	(
+		sjly,
+		ddbh,
+		ddxh,
+		pono,
+		fach,
+		khxh,
+		ywms,
+		pono_bj,
+		fach_bj,
+		khxh_bj,
+		ywms_bj
+	)
+	values
+	(
+		#{sjly},
+		#{ddbh},
+		#{ddxh},
+		#{pono},
+		#{fach},
+		#{khxh},
+		#{ywms},
+		#{pono_bj},
+		#{fach_bj},
+		#{khxh_bj},
+		#{ywms_bj}
+	)
+</insert>
+<update id="updatePurchaseInspectionPono" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionPono">
+	update ddmxb
+		set
+			sjly = #{sjly},
+			ddbh = #{ddbh},
+			ddxh = #{ddxh},
+			pono = #{pono},
+			fach = #{fach},
+			khxh = #{khxh},
+			ywms = #{ywms},
+			pono_bj = #{pono_bj},
+			fach_bj = #{fach_bj},
+			khxh_bj = #{khxh_bj},
+			ywms_bj = #{ywms_bj}
+		where  = #{}
+</update>
+<delete id="deletePurchaseInspectionPono" parameterType="erp.erp.purchaseInspectionManage.model.PurchaseInspectionPono">
+	delete from ddmxb
+	where  = #{}
+</delete>
+</mapper>

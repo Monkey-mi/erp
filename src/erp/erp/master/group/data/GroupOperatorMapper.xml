@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.group.data.GroupOperatorMapper">
+	<select id="getGroupOperatorList" parameterType="map" resultType="erp.erp.master.group.model.GroupOperator">
+		select cgzm_qxb.cgzh,
+		       cgzm_qxb.czy_gh,
+		       cgzm_qxb.czy_xm
+		from  cgzm_qxb   
+		where cgzh= #{cgzh}      
+	</select>
+    <delete id="deleteGroupOperator" parameterType="erp.erp.master.group.model.GroupOperator">
+	    delete from cgzm_qxb
+	    where cgzh=#{cgzh} 
+	    and czy_gh=#{czy_gh}
+	 </delete>
+	 <insert id="addGroupOperator" parameterType="erp.erp.master.group.model.GroupOperator"  keyProperty="czy_gh" useGeneratedKeys="true">
+		  insert into cgzm_qxb
+		  (
+		         cgzh,
+		         czy_gh,
+		         czy_xm
+		   )
+		   values
+		   (
+		         #{cgzh},
+		         #{czy_gh},
+		         #{czy_xm}
+		   )      
+	</insert>
+
+</mapper>

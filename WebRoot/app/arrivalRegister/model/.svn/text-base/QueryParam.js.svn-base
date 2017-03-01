@@ -1,0 +1,31 @@
+Ext.define('erp.arrivalRegister.model.QueryParam',{
+      extend : 'Ext.data.Model',
+      fields: [
+         {name : 'checkbox_dhdh'},
+         {name : 'dhdh1'},
+         {name : 'dhdh2'},
+         {name : 'checkbox_dhrq'},
+         {name : 'dhrq1'},
+         {name : 'dhrq2'},
+         {name : 'checkbox_csmc'},
+         {name : 'csmc'},
+         {name : 'checkbox_clmc'},
+         {name : 'clmc'},
+         {name : 'checkbox_ztbj'},
+         {name : 'ztbj'},
+         {name : 'checkbox_jyjg'},
+         {name : 'jyjg'},
+         {name : 'checkbox_zjdh'},
+         {name : 'zjdh1'},
+         {name : 'zjdh2'},
+         {name : 'checkbox_htbh'},
+         {name : 'htbh1'},
+         {name : 'htbh2'},
+         {name : 'checkbox_pcbh'},
+         {name : 'pcbh'},
+         {name : 'checkbox_bzsm'},
+         {name : 'bzsm'},
+         {name : 'checkbox_jlpp'},
+         {name : 'jlpp'}
+      ]
+})

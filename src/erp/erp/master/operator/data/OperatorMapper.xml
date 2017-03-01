@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.operator.data.OperatorMapper">
+
+
+<select id="getOperatorList" parameterType="map" resultType="erp.erp.master.operator.model.Operator">
+	select
+		czyb.czy_gh,
+		czyb.czy_xm,
+		czyb.czy_kl,
+		czyb.czy_gly,
+		czyb.admi,
+		czyb.gzgw,
+		czyb.gzms,
+		czyb.ssbm,
+		czybmlbb.lbmc bmmc,
+		czyb.xgrq,
+		czyb.yxsc,
+		czyb.sxbh,
+		czyb.gdbj,
+		czyb.tybj,
+		czyb.setuppath
+	from
+		czyb
+    left outer join czybmlbb on ssbm=lbbh
+	<where>
+		<if test="tybj!=null">
+			tybj=#{tybj}
+		</if>
+		<if test="condition!=null and condition!=''">
+			and (czy_gh like '%${condition}%' or czy_xm like '%${condition}%')
+		</if>
+		<if test="search!=null and search!=''">
+			and (czy_gh like '%${search}%' or czy_xm like '%${search}%')
+		</if>
+		<if test="query!=null and query!=''">
+			and (czy_gh like '%${query}%' or czy_xm like '%${query}%')
+		</if>
+		<if test="ckbh!=null">
+			and not exists (select * from ckqx_cp  where czyb.czy_gh=ckqx_cp.czy_gh and ckqx_cp.ckbh=#{ckbh} )
+		</if>
+		<if test="czy_xm!=null">
+			czy_xm=#{czy_xm}
+		</if>
+		<if test="role_id!=null">
+		    and czyb.czy_gh not in (
+		       select czy_gh
+		       from 
+		       czy_role_ref 
+		       where 
+		         czy_role_ref.role_id = #{role_id} 
+		    )
+		</if>
+	</where>	
+	<if test="orderBySQL!=null and orderBySQL!=''">
+		order by ${orderBySQL} 
+	</if>	
+</select>
+<insert id="addOperator" parameterType="erp.erp.master.operator.model.Operator" keyProperty="czy_gh" useGeneratedKeys="true">
+	insert into czyb
+	(
+		czy_gh,
+		czy_xm,
+		czy_kl,
+		czy_gly,
+		admi,
+		gzgw,
+		gzms,
+		ssbm,
+		xgrq,
+		yxsc,
+		sxbh,
+		gdbj,
+		tybj,
+		setuppath
+	)
+	values
+	(
+		#{czy_gh},
+		#{czy_xm},
+		#{czy_kl},
+		#{czy_gly},
+		#{admi},
+		#{gzgw},
+		#{gzms},
+		#{ssbm},
+		#{xgrq},
+		#{yxsc},
+		#{sxbh},
+		#{gdbj},
+		#{tybj},
+		#{setuppath}
+	)
+</insert>
+<update id="updateOperator" parameterType="erp.erp.master.operator.model.Operator">
+	update czyb
+		set
+			czy_gh = #{czy_gh},
+			czy_xm = #{czy_xm},
+			czy_kl = #{czy_kl},
+			czy_gly = #{czy_gly},
+			admi = #{admi},
+			gzgw = #{gzgw},
+			gzms = #{gzms},
+			ssbm = #{ssbm},
+			xgrq = #{xgrq},
+			yxsc = #{yxsc},
+			sxbh = #{sxbh},
+			gdbj = #{gdbj},
+			tybj = #{tybj},
+			setuppath = #{setuppath}
+		where czy_gh = #{czy_gh}
+</update>
+<delete id="deleteOperator" parameterType="erp.erp.master.operator.model.Operator">
+	delete from czyb
+	where czy_gh = #{czy_gh}
+</delete>
+<select id="getByczy_gh" parameterType="map" resultType="erp.erp.master.operator.model.Operator">
+	select
+		czyb.czy_gh,
+		czyb.czy_xm,
+		czyb.czy_kl,
+		czyb.czy_gly,
+		czyb.admi,
+		czyb.gzgw,
+		czyb.gzms,
+		czyb.ssbm,
+		czybmlbb.lbmc bmmc,
+		czyb.xgrq,
+		czyb.yxsc,
+		czyb.sxbh,
+		czyb.gdbj,
+		czyb.tybj,
+		czyb.setuppath
+	from
+		czyb
+    left outer join czybmlbb on ssbm=lbbh
+	where czy_gh = #{czy_gh}
+		
+</select>
+
+<select id="getOperatorDeptList" parameterType="map" resultType="erp.erp.master.operator.model.OperatorDept">
+	select
+		czybmlbb.lbbh,
+		czybmlbb.lbmc,
+		czybmlbb.lbjc,		
+		case czybmlbb.mjbz when 1 then 'true' else 'false' end as mjbz
+	from
+		czybmlbb
+</select>
+<insert id="addOperatorDept" parameterType="erp.erp.master.operator.model.OperatorDept" keyProperty="lbbh" useGeneratedKeys="true">
+	insert into czybmlbb
+	(
+		lbbh,
+		lbmc,
+		lbjc,
+		mjbz
+	)
+	values
+	(
+		#{lbbh},
+		#{lbmc},
+		#{lbjc},
+		<if test="mjbz==true">
+			1
+		</if>
+		<if test="mjbz==false">
+			0
+		</if>
+	)
+</insert>
+<update id="updateOperatorDept" parameterType="erp.erp.master.operator.model.OperatorDept">
+	update czybmlbb
+		set
+			lbbh = #{lbbh},
+			lbmc = #{lbmc},
+			lbjc = #{lbjc},
+			<if test="mjbz==true">
+				mjbz =1
+			</if>
+			<if test="mjbz==false">
+				mjbz =0
+			</if>
+		where lbbh = #{lbbh}
+</update>
+<delete id="deleteOperatorDept" parameterType="erp.erp.master.operator.model.OperatorDept">
+	delete from czybmlbb
+	where lbbh = #{lbbh}
+</delete>
+</mapper>

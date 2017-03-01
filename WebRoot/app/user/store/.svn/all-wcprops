@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store
+END
+UserModule.js
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/UserModule.js
+END
+MaterialTree.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/MaterialTree.js
+END
+RoleServices.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/RoleServices.js
+END
+UserMapping.js
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/UserMapping.js
+END
+UserMaterial.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/UserMaterial.js
+END
+UserRoles.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/UserRoles.js
+END
+RoleModules.js
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/RoleModules.js
+END
+UserFunc.js
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/UserFunc.js
+END
+MaterialCateTreeAll.js
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/MaterialCateTreeAll.js
+END
+Roles.js
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/Roles.js
+END
+UserInfos.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/UserInfos.js
+END
+RoleFuncs.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/RoleFuncs.js
+END
+RoleConfig.js
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/user/store/RoleConfig.js
+END

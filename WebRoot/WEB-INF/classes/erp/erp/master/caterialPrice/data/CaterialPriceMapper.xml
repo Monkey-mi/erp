@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.caterialPrice.data.CaterialPriceMapper">
+
+<!-- 判断公式是否被调用-->
+<select id="getCaterialPriceIsQuote" parameterType="erp.erp.master.caterialPrice.model.CaterialPrice" resultType="int">
+	select isnull(count(*),0)  from clbmb where gsbh=#{gsbh};
+</select>
+<select id="getCaterialPriceList" parameterType="map" resultType="erp.erp.master.caterialPrice.model.CaterialPrice">
+	select
+		dbo.cljggswhb.gsbh,
+		dbo.cljggswhb.gsmc,
+		dbo.cljggswhb.jggs,
+		dbo.cljggswhb.bzsm,
+		dbo.cljggswhb.czym,
+		dbo.cljggswhb.czrq,
+		dbo.cljggswhb.sdbj,
+		dbo.cljggswhb.sdrm,
+		dbo.cljggswhb.sdrq
+	from
+		dbo.cljggswhb
+		<where>
+			<if test="sdbj!=null">
+				cljggswhb.sdbj=#{sdbj}
+			</if>
+			<if test="query!=null">
+				and (dbo.cljggswhb.csmc like '%${query}%' or dbo.cljggswhb.csbh =#{query})
+			</if>
+		</where>
+</select>
+<insert id="addCaterialPrice" parameterType="erp.erp.master.caterialPrice.model.CaterialPrice" keyProperty="gsbh" useGeneratedKeys="true">
+	<selectKey keyProperty="gsbh" resultType="int" order="BEFORE">
+		select isnull ( max ( gsbh ) , 1000 ) + 1 from cljggswhb 
+	</selectKey>
+	insert into dbo.cljggswhb
+	(
+		gsbh,
+		gsmc,
+		jggs,
+		bzsm,
+		czym,
+		czrq,
+		sdbj,
+		sdrm,
+		sdrq
+	)
+	values
+	(
+		#{gsbh},
+		#{gsmc},
+		#{jggs},
+		#{bzsm},
+		#{czym},
+		#{czrq},
+		#{sdbj},
+		#{sdrm},
+		#{sdrq}
+	)
+</insert>
+<update id="updateCaterialPrice" parameterType="erp.erp.master.caterialPrice.model.CaterialPrice">
+	update dbo.cljggswhb
+		set
+			gsbh = #{gsbh},
+			gsmc = #{gsmc},
+			jggs = #{jggs},
+			bzsm = #{bzsm},
+			czym = #{czym},
+			czrq = #{czrq},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdrq = #{sdrq}
+		where gsbh = #{gsbh}
+</update>
+<delete id="deleteCaterialPrice" parameterType="erp.erp.master.caterialPrice.model.CaterialPrice">
+	delete from dbo.cljggswhb
+	where gsbh = #{gsbh}
+</delete>
+</mapper>

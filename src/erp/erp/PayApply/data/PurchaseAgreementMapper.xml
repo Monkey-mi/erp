@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.PurchaseAgreementMapper">
+
+
+<select id="getPurchaseAgreementList" parameterType="map" resultType="erp.erp.PayApply.model.PurchaseAgreement">
+	   SELECT fksqsphtb.sqbh,   
+         	  fksqsphtb.sqxh,
+			  fksqsphtb.hsbm,   
+			  hsbmb.bmmc,
+        	  fksqsphtb.htbh,   
+              fksqsphtb.htze, 
+			  fksqsphtb.sqje,
+		   	  fksqsphtb.yfje,
+			  fksqsphtb.wbze,
+			  fksqsphtb.wbje,
+			  fksqsphtb.yfwb  
+    FROM fksqsphtb   
+     left outer join hsbmb with (nolock) on hsbmb.bmbh = fksqsphtb.hsbm
+  where
+  1=1
+  <if test="sqbh!=null">
+   and	 fksqsphtb.sqbh=#{sqbh}
+   </if>
+and not exists (select sqbh,mbhtbh from fksqyftzb with (nolock) where fksqsphtb.sqbh=fksqyftzb.sqbh and fksqsphtb.htbh=fksqyftzb.mbhtbh)
+</select>
+<insert id="addPurchaseAgreement" parameterType="erp.erp.PayApply.model.PurchaseAgreement">
+
+		insert into fksqsphtb
+		(
+		sqbh,
+		sqxh,
+		<!-- ycbj, -->
+		hsbm,
+		htbh,
+		htze,
+		sqje,
+		<!-- kprq, -->
+		yfje,
+		wbze,
+		wbje,
+		yfwb
+		)
+		values
+		(
+		#{sqbh},
+		#{sqxh},
+		<!-- #{ycbj}, -->
+		#{hsbm},
+		#{htbh},
+		#{htze},
+		#{sqje},
+		<!-- #{kprq}, -->
+		#{yfje},
+		#{wbze},
+		#{wbje},
+		#{yfwb}
+		)
+	</insert>
+	<update id="updatePurchaseAgreement" parameterType="erp.erp.PayApply.model.PurchaseAgreement">
+		update fksqsphtb
+		set
+		sqbh = #{sqbh},
+		sqxh = #{sqxh},
+		hsbm = #{hsbm},
+		htbh = #{htbh},
+		htze = #{htze},
+		sqje = #{sqje},
+		yfje = #{yfje},
+		wbze = #{wbze},
+		wbje = #{wbje},
+		yfwb = #{yfwb}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqsphtb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqsphtb.sqxh = #{sqxh}
+		</if>
+	</update>
+	<delete id="deletePurchaseAgreement" parameterType="erp.erp.PayApply.model.PurchaseAgreement">
+		delete from fksqsphtb
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqsphtb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqsphtb.sqxh = #{sqxh}
+		</if>
+	</delete>
+<select id="getPurchaseAgreementImpList" parameterType="map" resultType="erp.erp.PayApply.model.PurchaseAgreementImp">
+	  SELECT cghtb.htbh,   
+         cghtb.cgrq,      
+         cghtb.csbh,
+			isnull((select top 1 isnull(htmxb.hsbm,'') from htmxb with (nolock) where htmxb.htbh=cghtb.htbh and isnull(hsbm,'')&lt;&gt;''),'') as hsbm, 
+			cghtb.htze,
+			isnull((select sum(sqje) from fksqsphtb with (nolock) where fksqsphtb.htbh=cghtb.htbh),0)+isnull((select sum(sqje) from fksqspmxb with (nolock) where exists
+			(select * from rkdb_yl with (nolock) where rkdb_yl.htbh=cghtb.htbh and rkdb_yl.fplb=fksqspmxb.fplb and rkdb_yl.fphm=fksqspmxb.fphm)),0) as yrje,
+         cghtb.htze - (isnull((select sum(sqje) from fksqsphtb with (nolock) where fksqsphtb.htbh=cghtb.htbh),0)+isnull((select sum(sqje) from fksqspmxb with (nolock) where exists
+			(select * from rkdb_yl with (nolock) where rkdb_yl.htbh=cghtb.htbh and rkdb_yl.fplb=fksqspmxb.fplb and rkdb_yl.fphm=fksqspmxb.fphm)),0)) as wrje,
+         cghtb.wbze, 
+			isnull((select sum(wbje) from fksqsphtb with (nolock) where fksqsphtb.htbh=cghtb.htbh),0)+isnull((select sum(wbje) from fksqspmxb with (nolock) where exists
+			(select * from rkdb_yl with (nolock) where rkdb_yl.htbh=cghtb.htbh and rkdb_yl.fplb=fksqspmxb.fplb and rkdb_yl.fphm=fksqspmxb.fphm)),0) as yrwb,
+         cghtb.wbze - (isnull((select sum(wbje) from fksqsphtb with (nolock) where fksqsphtb.htbh=cghtb.htbh),0)+isnull((select sum(wbje) from fksqspmxb with (nolock) where exists
+			(select * from rkdb_yl with (nolock) where rkdb_yl.htbh=cghtb.htbh and rkdb_yl.fplb=fksqspmxb.fplb and rkdb_yl.fphm=fksqspmxb.fphm)),0)) as wrwb,
+         cghtb.cglb,
+         cglbb.lbmc,
+			cghtb.ztdw,
+			ztdwb.ztmc,
+			hsbmb.bmmc,
+         csxxb.yhbh,
+         csxxb.csmc,
+         csxxb.wbbh,
+         wbmcb.wbdh,
+			cghtb.WCBJ  
+    FROM cghtb with (nolock)
+    left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh
+    left outer join ztdwb with (nolock) on ztdwb.ztbh = cghtb.ztdw
+	left outer join hsbmb with (nolock) on hsbmb.bmbh = isnull((select top 1 isnull(htmxb.hsbm,'') from htmxb with (nolock) where htmxb.htbh=cghtb.htbh and isnull(hsbm,'')&lt;&gt;''),'')
+	left outer join wbmcb with (nolock) on wbmcb.wbbh = csxxb.wbbh
+	left outer join cglbb with (nolock) on cglbb.lbbh = cghtb.cglb
+	where 
+	1=1 and cghtb.qfbj=1 and not exists (select * from rkdb_yl where hxbj=1 and rkdb_yl.htbh=cghtb.htbh)
+	<if test="csbh!=null and csbh!=''">
+	and cghtb.csbh=#{csbh}
+	</if>
+	<if test="htbh!=null">
+	and cghtb.htbh=#{htbh}
+	</if>
+</select>
+</mapper>

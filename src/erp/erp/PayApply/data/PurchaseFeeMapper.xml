@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.PurchaseFeeMapper">
+
+
+<select id="getPurchaseFeeList" parameterType="map" resultType="erp.erp.PayApply.model.PurchaseFee">
+	   SELECT fksqspfyb.sqbh,   
+         fksqspfyb.sqxh, 
+			fksqspfyb.hsbm,  
+			hsbmb.bmmc,
+         fksqspfyb.fydh,  
+			fksqspfyb.fyxh,
+			ltrim(rtrim(str(fksqspfyb.fydh)))+'-'+ltrim(rtrim(str(fksqspfyb.fyxh))) as fyh,  
+         fksqspfyb.fyje,   
+         fksqspfyb.sqje,
+			fksqspfyb.yfje,
+			fksqspfyb.wbbh,
+			wbmcb.wbdh,
+			fksqspfyb.wbhl,
+			fksqspfyb.wbje,
+			fksqspfyb.wbsq  
+    FROM fksqspfyb 
+    left outer join hsbmb with (nolock) on hsbmb.bmbh = fksqspfyb.hsbm
+     left outer join wbmcb with (nolock) on wbmcb.wbbh = fksqspfyb.wbbh
+    where
+    1=1
+  <if test="sqbh!=null">
+    and	 fksqspfyb.sqbh=#{sqbh}
+   </if>
+   and not exists (select sqbh,mbfydh from fksqyftzb with (nolock) where fksqspfyb.sqbh=fksqyftzb.sqbh and ltrim(rtrim(str(fksqspfyb.fydh)))+'-'+ltrim(rtrim(str(fksqspfyb.fyxh)))=fksqyftzb.mbfydh)
+</select>
+<insert id="addPurchaseFee" parameterType="erp.erp.PayApply.model.PurchaseFee">
+
+		insert into fksqspfyb
+		(
+		sqbh,
+		sqxh,
+		hsbm,
+		fydh,
+		fyxh,
+		fyje,
+		sqje,
+		yfje,
+		wbbh,
+		wbhl,
+		wbje,
+		wbsq
+		)
+		values
+		(
+		#{sqbh},
+		#{sqxh},
+		#{hsbm},
+		#{fydh},
+		#{fyxh},
+		#{fyje},
+		#{sqje},
+		#{yfje},
+		#{wbbh},
+		#{wbhl},
+		#{wbje},
+		#{wbsq}
+		)
+	</insert>
+	<update id="updatePurchaseFee" parameterType="erp.erp.PayApply.model.PurchaseFee">
+		update fksqspfyb
+		set
+		sqbh = #{sqbh},
+		sqxh = #{sqxh},
+		hsbm = #{hsbm},
+		fydh = #{fydh},
+		fyxh = #{fyxh},
+		yfje = #{yfje},
+		sqje = #{sqje},
+		wbbh = #{wbbh},
+		wbhl = #{wbhl},
+		wbje = #{wbje},
+		wbsq = #{wbsq}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspfyb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspfyb.sqxh = #{sqxh}
+		</if>
+	</update>
+	<delete id="deletePurchaseFee" parameterType="erp.erp.PayApply.model.PurchaseFee">
+		delete from fksqspfyb
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspfyb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspfyb.sqxh = #{sqxh}
+		</if>
+	</delete>
+<select id="getPurchaseFeeImpList" parameterType="map" resultType="erp.erp.PayApply.model.PurchaseFeeImp">
+	 SELECT  cgfyb.fydh,
+			cgfyb.fyxh,
+			case when cgfyb.fydh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.fydh)))+'-'+ltrim(rtrim(str(cgfyb.fyxh))) end as fyh,
+			cgfyb.fyrq,
+			cgfyb.yhbh,
+			cgfyb.cglb,
+			cgfyb.csbh,  
+			cgfyb.fyzy,
+			cgfyb.fysl,
+			cgfyb.fydj,
+			cgfyb.fyje,
+			isnull(view_fksqcgfy.fyje,0) as sqje,
+			cgfyb.fyje - isnull(view_fksqcgfy.fyje,0) as wqje,
+			cgfyb.zzsl,
+			cgfyb.csdj,
+			cgfyb.csje,
+         cgfyb.fyje -  cgfyb.csje as zzse,
+			cgfyb.jhbh,
+			cgfyb.jhxh,
+         case when cgfyb.jhbh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,
+			cgfyb.htbh,
+			cgfyb.htxh,
+         case when cgfyb.htbh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) end as hth,
+			cgfyb.bzsm,
+			cgfyb.hxbj,
+			cgfyb.fplb,
+			cgfyb.fphm,
+			cgfyb.sdbj,
+			cgfyb.sdrm,
+			cgfyb.sdsj,
+			cgfyb.czym,
+			cgfyb.czsj,
+			cgfyb.tzdh,
+			csxxb.csmc,
+			csxxb.fktj,
+        	csxxb.fkts,
+         	csxxb.cszh,
+         	csxxb.khyh,
+         	csxxb.ztdw,
+         	ztdwb.ztmc,
+			cgfyb.hsdh,
+			cgfyb.hsxh,
+			cgfyb.hsbm,
+			hsbmb.bmmc,
+			cgfyb.spbj,
+			cgfyb.sprm,
+			cgfyb.spyj,
+			cgfyb.spsj,
+			cgfyb.tjbj,
+			cgfyb.tjrm,
+			cgfyb.tjsj,
+			cgfyb.tjdx,
+			cgfyb.fylx,
+			cgfyb.cybh,	
+ 			case when cgfyb.hsdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.hsdh)))+'-'+ltrim(rtrim(str(cgfyb.hsxh))) end as hsh,
+			cgfyb.fpdx,
+			cgfyb.fyxz,
+			cgfyb.wbbh,
+			wbmcb.wbdh,
+			cgfyb.wbhl,
+			cgfyb.wbje,
+			isnull(view_fksqcgfy.wbsq,0) as wbsq,
+			cgfyb.wbje - isnull(view_fksqcgfy.wbsq,0) as wqwb,
+         cgfyb.wxdh,
+			cgfyb.wxxh,
+         case when cgfyb.wxdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.wxdh)))+'-'+ltrim(rtrim(str(cgfyb.wxxh))) end as wxh
+			
+    FROM cgfyb  with (nolock)
+left outer join csxxb  with (nolock) on csxxb.csbh=cgfyb.csbh
+left outer join ztdwb with (nolock) on ztdwb.ztbh = csxxb.ztdw
+left outer join hsbmb with (nolock) on hsbmb.bmbh = cgfyb.hsbm
+left outer join wbmcb with (nolock) on wbmcb.wbbh = cgfyb.wbbh
+left outer join view_fksqcgfy with (nolock) on view_fksqcgfy.fydh=cgfyb.fydh and view_fksqcgfy.fyxh=cgfyb.fyxh
+where cgfyb.hxbj=0 and cgfyb.spbj=1  and ( cgfyb.fyje - isnull(view_fksqcgfy.fyje,0)>0 or isnull(view_fksqcgfy.fyje,0)=0)
+	<if test="fydh!=null">
+     and	 cgfyb.fydh=#{fydh}
+   </if>
+    <if test="csbh!=null and csbh!=''">
+   	 and	 cgfyb.csbh=#{csbh}
+   </if>
+</select>
+</mapper>

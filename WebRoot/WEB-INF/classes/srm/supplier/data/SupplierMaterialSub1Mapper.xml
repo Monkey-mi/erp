@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="srm.supplier.data.SupplierMaterialSub1Mapper">
+
+<select id="getRecord_Id" parameterType="int" resultType="Integer">
+    select record_id from t_supplier_file where company_id=#{company_id}
+</select>
+<select id="getSupplierMaterialSub1List" parameterType="map" resultType="srm.supplier.model.SupplierMaterialSub1">
+	select
+		t_app_supplier_material_sub1.id,
+		t_app_supplier_material_sub1.mc_id,
+		t_app_supplier_material_sub1.create_dt,
+		t_app_supplier_material_sub1.company_id
+	from
+		t_app_supplier_material_sub1
+		where 1=1
+	<if test="company_id!=null">
+		and t_app_supplier_material_sub1.company_id=#{company_id}
+	</if>
+</select>
+<insert id="addSupplierMaterialSub1" parameterType="srm.supplier.model.SupplierMaterialSub1" keyProperty="id" useGeneratedKeys="true">
+	insert into t_app_supplier_material_sub1
+	(
+		mc_id,
+		create_dt,
+		company_id
+	)
+	values
+	(
+		#{mc_id},
+		#{create_dt},
+		#{company_id}
+	)
+</insert>
+<update id="updateSupplierMaterialSub1" parameterType="srm.supplier.model.SupplierMaterialSub1">
+	update t_app_supplier_material_sub1
+		set
+			id = #{id},
+			mc_id = #{mc_id},
+			create_dt = #{create_dt},
+			company_id = #{company_id}
+		where id = #{id}
+</update>
+<delete id="deleteSupplierMaterialSub1" parameterType="srm.supplier.model.SupplierMaterialSub1">
+	delete from t_app_supplier_material_sub1
+	where id = #{id}
+</delete>
+<select id="getLbbhFromMaterialClass" parameterType="int" resultType="String">
+   select t_app_material_class.lbbh from t_app_material_class where t_app_material_class.mc_id=#{mc_id}
+</select>
+</mapper>

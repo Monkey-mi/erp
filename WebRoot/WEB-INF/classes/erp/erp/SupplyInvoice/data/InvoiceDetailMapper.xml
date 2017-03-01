@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.SupplyInvoice.data.InvoiceDetailMapper">
+
+
+<select id="getInvoiceDetailList" parameterType="map" resultType="erp.erp.SupplyInvoice.model.InvoiceDetail">
+	SELECT gyfpmxb.fplb,   
+         gyfpmxb.fphm,   
+         gyfpmxb.fpxh,   
+         gyfpmxb.spmc,   
+         gyfpmxb.jldw,  
+         gyfpmxb.rksl,  
+         gyfpmxb.rkdj,    
+         gyfpmxb.rkje,     
+         gyfpmxb.zzsl,  
+         gyfpmxb.csdj,  
+         gyfpmxb.csje,  
+         gyfpmxb.zzse,   
+         gyfpmxb.wbbh,   
+         gyfpmxb.wbhl,   
+         gyfpmxb.wbdj,    
+         gyfpmxb.wbje,   
+         gyfpmxb.htbh,  
+         gyfpmxb.hxlb,
+			hsbmb.bmmc as hsbm,
+			0 as sjly,
+			'' as ckbh,
+			0 as rkdh,
+			0 as rkxh,  
+         0 as scbj  
+    FROM gyfpmxb  
+    left outer join hsbmb with (nolock) on gyfpmxb.hsbm = hsbmb.bmbh
+   WHERE
+   1=1
+   <if test="fplb!=null">
+   	 and gyfpmxb.fplb=#{fplb}
+   </if>
+   <if test="fphm!=null">
+   	and  gyfpmxb.fphm=#{fphm}
+   </if>    
+</select>
+</mapper>

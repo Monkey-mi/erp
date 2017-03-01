@@ -1,0 +1,213 @@
+10
+
+dir
+2600
+https://192.168.1.100/svn/erp/erpForOut62/WebRoot/app
+https://192.168.1.100/svn/erp
+
+
+
+2017-02-22T02:50:19.469885Z
+2599
+wuqia
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+70d35baf-c61e-d24d-b330-644048e49734
+
+Application.js
+file
+
+
+
+
+2017-02-22T05:33:16.567000Z
+1588e38c946169f7e48ebc1f446fb15b
+2017-02-20T09:38:56.486197Z
+2570
+wuqia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2101
+
+PurchaseClearing
+dir
+
+PurchaseCostDetial
+dir
+
+Readme.md
+file
+
+
+
+
+2017-02-22T05:33:20.077000Z
+57676ba35d558d574a88615a60d0c772
+2017-02-20T09:37:06.818005Z
+2568
+wuqia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1136
+
+arrivalRegister
+dir
+
+basic
+dir
+
+basicdata
+dir
+
+bi
+dir
+
+common
+dir
+
+companyQuot
+dir
+
+css
+dir
+
+def
+dir
+
+editor
+dir
+
+enquiryQuote
+dir
+
+express
+dir
+
+hr
+dir
+
+images
+dir
+
+logManager
+dir
+
+main
+dir
+
+master
+dir
+
+materialConfirmation
+dir
+
+materialDistributeAccount
+dir
+
+materialInspection
+dir
+
+materialInventory
+dir
+
+materialQualityTesting
+dir
+
+materialTestEvaluation
+dir
+
+model
+dir
+
+payApply
+dir
+
+prepayAdjustment
+dir
+
+purchaseInspectionManage
+dir
+
+report
+dir
+
+setup
+dir
+
+store
+dir
+
+supplier
+dir
+
+supplierAccess
+dir
+
+supplierManager
+dir
+
+supplyInvoice
+dir
+
+user
+dir
+
+util
+dir
+
+ux
+dir
+
+view
+dir
+

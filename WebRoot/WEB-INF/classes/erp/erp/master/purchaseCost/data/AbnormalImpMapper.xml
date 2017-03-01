@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.AbnormalImpMapper">
+
+
+<select id="getAbnormalImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.AbnormalImp">
+	  select aa.* from (SELECT scycggdb.ycdh,   
+         scycggdb.khbh,   
+         scycggdb.scdh,   
+			scycggdb.jhlb,
+         scycggdb.cybh,    
+         scycggdb.cpbh,
+			scycggdb.sdbj,
+			scycggdb.sdrm,
+			scycggdb.sdsj,
+			scycggdb.czrm,
+			scycggdb.czsj,
+			scycggdb.gdbj,
+			(select isnull(min(qrbj),0) from scycggdzrrb with (nolock) where scycggdzrrb.ycdh=scycggdb.ycdh) as wcbj,
+			cpbmb.cpmc,
+			khxxb.khmc,
+         scycggdmxb.jlxh,   
+         scycggdmxb.yclx,   
+         scycggdmxb.yczt,   
+         scycggdmxb.ycms,   
+         scycggdmxb.zrbm,   
+         scycggdmxb.zrrm,   
+         scycggdmxb.sqbm,   
+         scycggdmxb.sqrm,   
+         scycggdmxb.bzsm,
+			scycggdmxb.jhbh,
+			scycggdmxb.jhxh,
+			scycggdmxb.ycje,
+			scycggdmxb.csbh,
+			case when scycggdb.ddbh&lt;&gt;0 then ltrim(rtrim(scycggdb.ddbh))+'-'+ltrim(rtrim(scycggdb.ddxh)) else null end as ddh,
+			case when scycggdb.jhbh&lt;&gt;0 then ltrim(rtrim(scycggdb.jhbh))+'-'+ltrim(rtrim(scycggdb.jhxh)) else null end as jhh,
+			case when scycggdb.dydh&lt;&gt;0 then ltrim(rtrim(scycggdb.dydh))+'-'+ltrim(rtrim(scycggdb.dyxh)) else null end as dyh,
+			case when scycggdb.cybh&lt;&gt;'' then ltrim(rtrim(scycggdb.cybh))+'-'+ltrim(rtrim(scycggdb.cyxh)) else null end as cyh,
+			scycggdmxb.fjmc,
+			cpbmb.plmth,
+			cpbmb.plmtx,
+			csxxb.csmc,
+			jhlbb.lbmc as jhlbmc
+    FROM scycggdmxb with (nolock)  
+left outer join scycggdb with (nolock) on scycggdb.ycdh=scycggdmxb.ycdh
+left outer join cpbmb with (nolock) on cpbmb.cpbh=scycggdb.cpbh
+left outer join khxxb with (nolock) on khxxb.khbh=scycggdb.khbh
+left outer join csxxb with (nolock) on csxxb.csbh = scycggdmxb.csbh
+left outer join jhlbb with (nolock) on jhlbb.lbbh = scycggdb.jhlb
+where scycggdb.gdbj=0 and scycggdb.spbj=1 and isnull(scycggdmxb.csbh,'')&lt;&gt;'' and not exists (select * from cgfyb with(nolock) where cgfyb.ycdh=scycggdmxb.ycdh and cgfyb.jlxh=scycggdmxb.jlxh)
+and not exists (select * from lsx_scjsjlmxb with(nolock) where lsx_scjsjlmxb.ycdh=scycggdmxb.ycdh and lsx_scjsjlmxb.ycxh=scycggdmxb.jlxh)
+    <if test = "ycdh!=null and ycdh!=''">
+        and scycggdb.ycdh = #{ycdh}
+    </if>
+    <if test = "khmc!=null and khmc!=''">
+        and khxxb.khmc like '%${khmc}%'
+    </if>
+    <if test = "cpmc!=null and cpmc!=''">
+        and cpbmb.cpmc like '%${cpmc}%'
+    </if>
+)aa
+</select>
+<insert id="addAbnormalImp" parameterType="erp.erp.master.purchaseCost.model.AbnormalImp" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.scycggdb
+	(
+		ycdh,
+		khbh,
+		scdh,
+		cybh,
+		cpbh,
+		sdbj,
+		sdrm,
+		sdsj,
+		czrm,
+		czsj,
+		wcbj,
+		wcrm,
+		wcsj,
+		gdbj,
+		jhlb,
+		fsrq,
+		czy_gh,
+		ddbh,
+		ddxh,
+		jhbh,
+		jhxh,
+		dydh,
+		dyxh,
+		cyxh,
+		djly,
+		tjbj,
+		tjrm,
+		tjsj,
+		tjdx,
+		spbj,
+		sprm,
+		spsj,
+		complaint_id,
+		order_number
+	)
+	values
+	(
+		#{ycdh},
+		#{khbh},
+		#{scdh},
+		#{cybh},
+		#{cpbh},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{czrm},
+		#{czsj},
+		#{wcbj},
+		#{wcrm},
+		#{wcsj},
+		#{gdbj},
+		#{jhlb},
+		#{fsrq},
+		#{czy_gh},
+		#{ddbh},
+		#{ddxh},
+		#{jhbh},
+		#{jhxh},
+		#{dydh},
+		#{dyxh},
+		#{cyxh},
+		#{djly},
+		#{tjbj},
+		#{tjrm},
+		#{tjsj},
+		#{tjdx},
+		#{spbj},
+		#{sprm},
+		#{spsj},
+		#{complaint_id},
+		#{order_number}
+	)
+</insert>
+<update id="updateAbnormalImp" parameterType="erp.erp.master.purchaseCost.model.AbnormalImp">
+	update dbo.scycggdb
+		set
+			ycdh = #{ycdh},
+			khbh = #{khbh},
+			scdh = #{scdh},
+			cybh = #{cybh},
+			cpbh = #{cpbh},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			czrm = #{czrm},
+			czsj = #{czsj},
+			wcbj = #{wcbj},
+			wcrm = #{wcrm},
+			wcsj = #{wcsj},
+			gdbj = #{gdbj},
+			jhlb = #{jhlb},
+			fsrq = #{fsrq},
+			czy_gh = #{czy_gh},
+			ddbh = #{ddbh},
+			ddxh = #{ddxh},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			dydh = #{dydh},
+			dyxh = #{dyxh},
+			cyxh = #{cyxh},
+			djly = #{djly},
+			tjbj = #{tjbj},
+			tjrm = #{tjrm},
+			tjsj = #{tjsj},
+			tjdx = #{tjdx},
+			spbj = #{spbj},
+			sprm = #{sprm},
+			spsj = #{spsj},
+			complaint_id = #{complaint_id},
+			order_number = #{order_number}
+		where  = #{}
+</update>
+<delete id="deleteAbnormalImp" parameterType="erp.erp.master.purchaseCost.model.AbnormalImp">
+	delete from dbo.scycggdb
+	where  = #{}
+</delete>
+</mapper>

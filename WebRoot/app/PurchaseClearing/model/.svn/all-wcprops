@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model
+END
+QueryParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/QueryParam.js
+END
+JsFydbImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/JsFydbImp.js
+END
+CostBills.js
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/CostBills.js
+END
+RkQueryParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/RkQueryParam.js
+END
+Cost.js
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/Cost.js
+END
+JsRkdbImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/JsRkdbImp.js
+END
+Audit.js
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/Audit.js
+END
+Notice.js
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/PurchaseClearing/model/Notice.js
+END

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.category.data.CategoryCooperteMapper">
+
+
+<select id="getCooperateAuthority" parameterType="map" resultType="erp.erp.master.category.model.CategoryAuthority">
+	select
+		dbo.xtry_qxb.lbbh,
+		dbo.xtry_qxb.czy_gh,
+		dbo.xtry_qxb.czy_xm
+	from
+		dbo.xtry_qxb
+		<where>
+			<if test="lbbh!=null">
+				lbbh=#{lbbh}
+			</if>
+			<if test="czy_gh!=null">
+				czy_gh=#{czy_gh}
+			</if>
+		</where>
+</select>
+<!-- 判断操作员是否存在 -->
+<select id="getCooperateIsExist" parameterType="map" resultType="int">
+	select isnull(count(*),0)  from xtry_qxb where czy_gh=#{czy_gh} and lbbh=left(#{lbbh},2*#{len});
+</select>
+<insert id="addCooperateAuthority" parameterType="erp.erp.master.category.model.CategoryAuthority" keyProperty="lbbh,czy_gh" useGeneratedKeys="true">
+	insert into dbo.xtry_qxb
+	(
+		lbbh,
+		czy_gh,
+		czy_xm
+	)
+	values
+	(
+		#{lbbh},
+		#{czy_gh},
+		#{czy_xm}
+	)
+</insert>
+<update id="updateCooperateAuthority" parameterType="erp.erp.master.category.model.CategoryAuthority">
+	update dbo.xtry_qxb
+		set
+			lbbh = #{lbbh},
+			czy_gh = #{czy_gh},
+			czy_xm = #{czy_xm}
+		where lbbh= #{lbbh} and czy_gh=#{czy_gh} 
+</update>
+<delete id="deleteCooperateAuthority" parameterType="erp.erp.master.category.model.CategoryAuthority">
+	delete from dbo.xtry_qxb
+	where lbbh= #{lbbh} and czy_gh=#{czy_gh} 
+</delete>
+<delete id="deleteCategoryCooperateLowerLevel" parameterType="erp.erp.master.category.model.CategoryAuthority">
+	delete from xtry_qxb where czy_gh=#{czy_gh} and left(lbbh,len(#{lbbh}))=#{lbbh} and len(lbbh)&gt;len(#{lbbh});
+</delete>
+</mapper>

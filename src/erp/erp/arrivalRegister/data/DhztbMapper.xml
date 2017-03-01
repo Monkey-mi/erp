@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.arrivalRegister.data.DhztbMapper">
+	
+<select id= "getDhztbList" parameterType="map" resultType="erp.erp.arrivalRegister.model.Dhztb">
+	select ckbh ,dhdh,dhxh from rkdb_yl 
+</select>	
+<update id="updateDhdh" parameterType="erp.erp.arrivalRegister.model.Dhztb" >
+    update rkdb_yl set dhdh=#{dhdh}*1 where exists(select ckbh,dhdh,dhxh from rkdb_yl where ckbh=#{ckbh} and dhdh=#{dhdh} and dhxh = #{dhxh});
+</update> 
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.caterialPriceApproval.data.CaterialPriceCompanyMapper">
+
+
+<select id="getCaterialPriceCompanyList" parameterType="map" resultType="erp.erp.master.caterialPriceApproval.model.CaterialPriceCompany">
+	select
+		dbo.clspjg_csb.jlbh,
+		dbo.clspjg_csb.jlxh,
+		dbo.clspjg_csb.csbh,
+		csxxb.csmc
+		from  clspjg_csb
+		left outer join csxxb on csxxb.csbh=clspjg_csb.csbh
+		<where>
+			<if test="jlbh!=null">
+				dbo.clspjg_csb.jlbh=#{jlbh}
+			</if>
+			<if test="jlxh!=null">
+				and dbo.clspjg_csb.jlxh=#{jlxh}
+			</if>
+		</where>
+</select>
+<insert id="addCaterialPriceCompany" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceCompany" keyProperty="jlbh,jlxh,csbh" useGeneratedKeys="true">
+	insert into dbo.clspjg_csb
+	(
+		jlbh,
+		jlxh,
+		csbh
+	)
+	values
+	(
+		#{jlbh},
+		#{jlxh},
+		#{csbh}
+	)
+</insert>
+<update id="updateCaterialPriceCompany" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceCompany">
+	update dbo.clspjg_csb
+		set
+			jlbh = #{jlbh},
+			jlxh = #{jlxh},
+			csbh = #{csbh}
+		where jlbh = #{jlbh} and jlxh=#{jlxh} and csbh=#{csbh}
+</update>
+<delete id="deleteCaterialPriceCompany" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceCompany">
+	delete from dbo.clspjg_csb
+	where jlbh = #{jlbh} and jlxh=#{jlxh} and csbh=#{csbh}
+</delete>
+</mapper>

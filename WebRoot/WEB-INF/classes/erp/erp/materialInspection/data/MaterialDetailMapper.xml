@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialInspection.data.MaterialDetailMapper">
+
+
+<select id="getMaterialDetailList" parameterType="map" resultType="erp.erp.materialInspection.model.InspectionMaterialDetail">
+select 
+		wtjycssqmxb.wtdh,		
+		wtjycssqmxb.wtxh,
+		wtjycssqmxb.wtsqxh,		
+		wtjycssqmxb.csxm,		
+		wtjycssqmxb.csbz,		
+		wtjycssqmxb.bzsm,		
+		wtjycssqmxb.jyjg,
+		wtjycssqmxb.wjmc,
+		wtjycssqmxb.wjlj,
+      wtjycssqmxb.csz,
+		wtjycssqmxb.cjrm,
+		wtjycssqmxb.cjrq,
+		wtjycssqmxb.yqjq,
+		wtjycssqmxb.psjq,
+		wtjycssqmxb.psbj,
+		wtjycssqmxb.psrm,
+		wtjycssqmxb.clrm,
+		wtjycssqmxb.csjg,
+		wtjycssqmxb.jjd,
+		wtjycssqmxb.jybj,
+		wtjycssqmxb.jysj,
+		wtjycssqmxb.jyrm,
+		wtjycssqmxb.txrm,
+		wtjycssqmxb.txsj, 
+		csbzjffwhb.xsjbj
+from wtjycssqmxb
+left outer join csxmwhb on csxmwhb.xmmc = wtjycssqmxb.csxm
+left outer join csbzjffwhb on csbzjffwhb.xmbh = csxmwhb.xmbh and csbzjffwhb.xmbz = wtjycssqmxb.csbz	
+where wtjycssqmxb.wtdh=#{wtdh} 
+<if test="wtxh!=null">
+and wtjycssqmxb.wtxh=#{wtxh}
+</if>
+</select>
+<insert id="addMaterialDetail" parameterType="erp.erp.materialInspection.model.InspectionMaterialDetail">
+	insert into dbo.wtjycssqmxb
+	(
+		wtdh,
+		wtxh,
+		wtsqxh,
+		csxm,
+		csbz,
+		<if test="bzsm!=null">
+		bzsm,
+		</if>
+		<if test="jyjg!=null">
+		jyjg,
+		</if>
+		wjmc,
+		wjlj,
+		cjrq,
+		cjrm,
+		csz,
+		psbj,
+		psjq,
+		psrm,
+		pssj,
+		clrm,
+		jjcd,
+		csjg,
+		jjd,
+		jybj,
+		jysj,
+		jyrm,
+		cszq,
+		cszj,
+		fpsj,
+		yqjq
+	)
+	values
+	(
+		#{wtdh},
+		#{wtxh},
+		#{wtsqxh},
+		#{csxm},
+		#{csbz},
+		<if test="bzsm!=null">
+		#{bzsm},
+		</if>
+		<if test="jyjg!=null">
+		#{jyjg},
+		</if>
+		#{wjmc},
+		#{wjlj},
+		#{cjrq},
+		#{cjrm},
+		#{csz},
+		#{psbj},
+		#{psjq},
+		#{psrm},
+		#{pssj},
+		#{clrm},
+		#{jjcd},
+		#{csjg},
+		#{jjd},
+		#{jybj},
+		#{jysj},
+		#{jyrm},
+		#{cszq},
+		#{cszj},
+		#{fpsj},
+		#{yqjq}
+	)
+</insert>
+<update id="updateMaterialDetail" parameterType="erp.erp.materialInspection.model.InspectionMaterialDetail">
+	update dbo.wtjycssqmxb
+		set
+			wtdh = #{wtdh},
+			wtxh = #{wtxh},
+			wtsqxh = #{wtsqxh},
+			csxm = #{csxm},
+			csbz = #{csbz},
+			bzsm = #{bzsm},
+			jyjg = #{jyjg},
+			wjmc = #{wjmc},
+			wjlj = #{wjlj},
+			cjrq = #{cjrq},
+			cjrm = #{cjrm},
+			csz = #{csz},
+			psbj = #{psbj},
+			psjq = #{psjq},
+			psrm = #{psrm},
+			pssj = #{pssj},
+			clrm = #{clrm},
+			jjcd = #{jjcd},
+			csjg = #{csjg},
+			jjd = #{jjd},
+			jybj = #{jybj},
+		    jysj = #{jysj},
+			cszq = #{cszq},
+			cszj = #{cszj},
+			fpsj = #{fpsj},
+			yqjq = #{yqjq}
+		where  wtdh = #{wtdh} and wtxh = #{wtxh} and wtsqxh = #{wtsqxh}
+</update>
+<delete id="deleteMaterialDetail" parameterType="map">
+	delete from dbo.wtjycssqmxb
+	where  wtdh = #{wtdh} and wtxh = #{wtxh} and wtsqxh = #{wtsqxh}
+</delete>
+</mapper>

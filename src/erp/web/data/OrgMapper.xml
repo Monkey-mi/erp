@@ -1,0 +1,873 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.web.data.OrgMapper">
+<!-- <cache />  -->
+
+<select id="getOrgUnitList" parameterType="map" resultType="OrgUnit">
+    select 
+        ou.ou_id,
+        ou.ou_code,
+        ou.ou_name,
+        ou.ou_alias,
+        ou.ou_addr,
+        ou.ou_leader,
+        ou.ou_treasurer,
+        ou.ou_type,
+        ou.is_corp,
+        ou.d_id,
+        ou.creator,
+        ou.create_ou_code,
+        ou.create_dtm,
+        ou.del_flag,
+        ou.ou_attr1
+    from t_org_orgunit ou
+    <where>
+        <if test="ou_id != null">
+            and ou.ou_id =#{ou_id}
+        </if>
+        <if test="ou_code != null">
+        	and (ou.ou_code like #{ou_code}
+        	<if test="ou_name != null">
+                or ou.ou_name like #{ou_name}
+            </if>
+            <if test="create_ou_code!=null">
+                or ou.create_ou_code=#{create_ou_code}
+            </if>   
+            )
+        </if>
+        <if test="ou_code ==null ">
+            <if test="ou_name != null">
+                and (ou.ou_name like #{ou_name}
+                <if test="create_ou_code!=null">
+                    or ou.create_ou_code=#{create_ou_code}
+                </if>
+                )
+            </if>
+            <if test="ou_name == null">
+                <if test="create_ou_code!=null">
+                    and ou.create_ou_code=#{create_ou_code}
+                </if>
+            </if>
+        </if>
+        <if test="ou_type != null">
+            and ou.ou_type =#{ou_type}
+        </if>
+        <if test="d_id!=null">
+            and ou.d_id=#{d_id}
+        </if>
+        <if test="ou_attr1!=null">
+        ou_attr1=#{ou_attr1}
+        </if>
+        and (ou.del_flag =1 or ou.del_flag is null) 
+    </where>
+</select>
+<select id="getOrgUnitListByOrgRelDetail" parameterType="map" resultType="UnitTree">
+select ou.ou_id as id
+      ,ou.ou_code as code
+      ,ou.ou_name as name
+      ,od.orv_id as orv_id
+      ,od.leaf as leaf
+      ,od.pod_id as parentId
+    from t_org_orgunit ou,t_org_orgrel_detail od
+    <where>
+    <if test="orv_id!=null">od.orv_id=#{orv_id}</if>
+    <if test="od_id!=null">and od.od_id=#{od_id}</if>
+    <if test="pod_id!=null">
+    and od.pod_id=#{pod_id}
+    </if>
+    and ou.ou_id=od.ou_id
+    </where>
+</select>
+<select id="getOrgUnitListByOd" parameterType="map" resultType="UnitTree">
+select    ou.ou_id as id
+      ,ou.ou_code as code
+      ,ou.ou_name as name
+      ,od.orv_id as orv_id
+      ,od.leaf as leaf
+      ,od.pod_id as parentId
+from t_org_orgunit ou,t_org_orgrel_detail od
+<where>
+</where>
+</select>
+<insert id="addOrgUnit" parameterType="OrgUnit">
+     <selectKey keyProperty="ou_id" resultType="int" order="BEFORE">
+	      select isnull(max(ou_id)+1,1) from t_org_orgunit
+     </selectKey>
+    insert into t_org_orgunit(
+        ou_id,
+        ou_code,
+        ou_name,
+        ou_alias,
+        ou_addr,
+        ou_leader,
+        ou_treasurer,
+        ou_type,
+        is_corp,
+        d_id,
+        creator,
+        create_ou_code,
+        create_dtm,
+        ou_attr1
+        )
+    values(
+        #{ou_id},
+        #{ou_code},
+        #{ou_name},
+        #{ou_alias},
+        #{ou_addr},
+        #{ou_leader},
+        #{ou_treasurer},
+        #{ou_type},
+        #{is_corp},
+        #{d_id},
+        #{creator},
+        #{create_ou_code},
+        #{create_dtm},
+        #{ou_attr1}
+        )
+</insert>
+<update id="updateOrgUnit" parameterType="OrgUnit">
+    update t_org_orgunit 
+        set ou_id=#{ou_id},
+            ou_code=#{ou_code},
+            ou_name=#{ou_name},
+            ou_type=#{ou_type},
+            is_corp=#{is_corp},
+            ou_alias=#{ou_alias},
+            ou_addr =#{ou_addr},
+            ou_leader=#{ou_leader},
+            ou_treasurer=#{ou_treasurer},
+            d_id=#{d_id},
+            del_flag = #{del_flag},
+            ou_attr1=#{ou_attr1}
+    where 
+        ou_id=#{ou_id}
+</update>
+<delete id="deleteOrgUnit" parameterType="OrgUnit">
+    delete from  t_org_orgunit
+    where ou_id=#{ou_id}
+</delete>
+
+<!--部门相关部分  -->
+ <select id="getDeptChartList" parameterType="map" resultType="Dept">
+    select 
+            d_id,
+            pd_id,
+            ou_id,
+            ou_code,
+            d_code,
+            d_name,
+            d_manager,
+            leaf,
+            func_code,
+            order_seq,
+            del_flag
+     from t_sys_dept
+     <where>
+        <if test="d_id!=null">
+            d_id=#{d_id}
+        </if>
+     </where>
+ </select>
+ <select id="getDeptList" parameterType="map" resultType="Dept">
+             select 
+                   d.d_id,
+                   d.pd_id,
+                   d.ou_id,
+                   d.ou_code,
+                   d.d_code,
+                   d.d_name,
+                   d.d_manager,
+                   d.leaf,
+                   d.func_code,
+                   d.order_seq,
+                   d.del_flag
+             from 
+             t_sys_dept d 
+             <where>
+                 <if test="d_id !=null">
+                       and d.d_id=#{d_id}
+                 </if>
+                 <if test="pd_id !=null">
+                       and d.pd_id=#{pd_id}
+                 </if>
+                 <if test="ou_id !=null">
+                       and d.ou_id=#{ou_id}
+                 </if>
+                 <if test="d_name!=null">
+                       and d.d_name like #{d_name}
+                 </if>
+                 <if test="d_code!=null">
+                       and d.d_code = #{d_code}
+                 </if>
+                 and (d.del_flag =1 or d.del_flag is null) 
+             </where>
+ </select>
+
+<select id="getDeptWithParent" parameterType="map" resultType="Dept">
+select d.d_id,
+                   d.pd_id,
+                   d.ou_id,
+                   d.ou_code,
+                   d.d_code,
+                   d.d_name,
+                   d.d_manager,
+                   d.leaf,
+                   d.order_seq,
+                   d.func_code,
+                   d.del_flag
+        from t_sys_dept d 
+        <where>
+             pd_id=#{node}
+            <if test="ou_id!=null">
+            and ou_id=#{ou_id}
+            </if>
+            <if test="leaf == 'true'">
+             or d_id=#{node}
+            </if>
+            and (d.del_flag =1 or d.del_flag is null) 
+        </where>
+</select>
+<select id="getCountOfDept" parameterType="map" resultType="int">
+select count(*) from t_sys_dept
+<where>
+<if test="d_id !=null">
+                   d_id=#{d_id}
+             </if>
+             <if test="pd_id !=null">
+                   and pd_id=#{pd_id}
+             </if>
+             <if test="ou_id !=null">
+                   and ou_id=#{ou_id}
+             </if>
+             <if test="d_name!=null">
+                   and d_name like #{d_name}
+             </if>
+             <if test="d_code!=null">
+                   and d_code like #{d_code}
+             </if>
+             and (del_flag =1 or del_flag is null) 
+</where>
+</select>
+<select id="getCountByPId" parameterType="map" resultType="int">
+select count(*) from t_sys_dept 
+                     where pd_id=#{node}
+</select>
+ <insert id="addDept" parameterType="Dept">
+     <selectKey keyProperty="d_id" resultType="int" order="BEFORE">
+           select isnull(max(d_id)+1,1) from t_sys_dept
+     </selectKey>
+       insert into t_sys_dept ( d_id, 
+                          pd_id, 
+                          ou_id,
+                          ou_code, 
+                          d_code, 
+                          d_name,
+                          d_manager, 
+                          leaf, 
+                          order_seq,
+                          func_code) 
+                     values(#{d_id},
+                            #{pd_id},
+                            #{ou_id},
+                            #{ou_code},
+                            #{d_code},
+                            #{d_name},
+                            #{d_manager},
+                            #{leaf},
+                            #{order_seq},
+                            #{func_code}
+                            )
+ </insert>
+ <update id="updateDept" parameterType="Dept">
+    update t_sys_dept 
+        set pd_id=#{pd_id},
+            ou_id=#{ou_id},
+            ou_code=#{ou_code},
+            d_code=#{d_code},
+            d_name=#{d_name},
+            d_manager=#{d_manager},
+            leaf=#{leaf},
+            order_seq=#{order_seq},
+            func_code=#{func_code},
+            del_flag=#{del_flag}
+    where d_id = #{d_id}
+ </update>
+ <delete id="deleteDept" parameterType="int">
+    delete from t_sys_dept
+             where d_id=#{value}
+ </delete>
+ <delete id="deleteDeptByUnitId" parameterType="int">
+ delete from t_sys_dept where ou_id=#{value}
+ </delete>
+
+
+<!-- =====================================组织关系相关======================================== -->
+<select id="getOrgRelList" parameterType="map" resultType="OrgRel">
+    select or_id,name,or_desc,or_type,code,or_desc
+    from t_org_orgrel
+    <where>
+        <if test="or_id  != null">
+            or_id=#{or_id}
+        </if>
+        <if test="or_type  != null">
+            and or_type=#{or_type}
+        </if>
+        <if test="or_name != null">
+            and name like #{name}
+        </if>
+    </where>
+</select>
+<insert id="addOrgRel" parameterType="OrgRel">
+    <selectKey keyProperty="or_id" resultType="int" order="BEFORE">
+	      select isnull(max(or_id)+1,1) from t_org_orgrel
+    </selectKey>
+    insert into t_org_orgrel(or_id,name,or_desc,or_type,code)
+    values(#{or_id},#{name},#{or_desc},#{or_type},#{code});
+</insert>
+
+<update id="updateOrgRel" parameterType="OrgRel">
+    update t_org_orgrel
+    set or_id=#{or_id},name=#{name},or_desc=#{or_desc},
+        or_type=#{or_type},code=#{code}
+    where or_id=#{or_id}
+</update>
+
+<delete id="deleteOrgRel" parameterType="OrgRel">
+    delete from t_org_orgrel
+    where or_id=#{or_id}
+</delete>
+
+
+<select id="getOrgTreeNodeWithParent" parameterType="map" resultType="OrgTreeNode">
+	select
+	od.od_id as id,
+	od.pod_id as parentId,
+	ou.ou_name as text,
+	od.orv_id as orv_id,
+	od.ou_id as ou_id,
+	ou.ou_code as ou_code,
+	'false' as expanded,
+	od.leaf as leaf ,
+	od.order_seq as
+	order_seq
+	from t_org_orgrel_detail od,t_org_orgunit ou
+	<where>
+		od.ou_id=ou.ou_id
+		<if test="orv_id!=null">
+			and od.orv_id = #{orv_id}
+        </if>
+		<if test="node!=null">
+			and od.pod_id = #{node}
+        </if>
+	</where>
+</select>
+
+
+<select id="getOrgTreeNodeWithParentByUser" parameterType="map" resultType="OrgTreeNode">
+select 
+		od.od_id as id,
+		od.pod_id as parentId,
+		ou.ou_name as text,
+		ou.ou_code,
+		od.orv_id as orv_id,
+		od.od_id as od_id,
+		od.ou_id as ou_id,
+		'false' as expanded,
+		od.leaf as leaf,
+		od.order_seq as order_seq,
+		uorg.has_qry,
+		uorg.has_curd,
+		uorg.is_default,
+		uorg.has_op1,
+		uorg.has_op2,
+		uorg.has_op3,
+		uorg.has_op4
+from t_org_orgrel o , t_org_orgrelver orv, t_org_orgrel_detail od,
+     t_org_orgunit ou, t_user_org uorg ,t_user_info uinfo
+where o.or_id = orv.or_id and o.or_type=#{or_type}
+and orv.orv_id = od.orv_id and orv.is_valid='true'
+and od.ou_id = ou.ou_id
+and ou.ou_id = uorg.ou_id
+and uorg.u_id = uinfo.u_id
+and uinfo.login_id =#{login_id}
+and od.pod_id = #{node}
+</select>
+<select id="getOrTypeTreeNode" parameterType="map" resultType="OrgTreeNode">
+select 
+		od.od_id as id,
+		od.pod_id as parentId,
+		ou.ou_name as text,
+		ou.ou_code,
+		od.orv_id as orv_id,
+		od.od_id as od_id,
+		od.ou_id as ou_id,
+		'false' as expanded,
+		od.leaf as leaf,
+		od.order_seq as order_seq,
+		'false' as pv,
+		'false' as po,
+		'false' as has_qry,
+		'false' as has_curd,
+		'false' as is_default,
+		'false' as has_op1,
+		'false' as has_op2,
+		'false' as has_op3,
+		'false' as has_op4
+from t_org_orgrel_detail od 
+inner join t_org_orgrelver orv on orv.orv_id = od.orv_id
+inner join t_org_orgrel o on o.or_id = orv.or_id 
+inner join t_org_orgunit ou on ou.ou_id = od.ou_id
+where o.or_type= #{or_type}
+and orv.is_valid= 'true'
+</select>
+<select id="getOrTypeTreeNodeByUser" parameterType="map" resultType="OrgTreeNode">
+select 
+		od.od_id as id,
+		od.pod_id as parentId,
+		ou.ou_name as text,
+		ou.ou_code,
+		od.orv_id as orv_id,
+		od.od_id as od_id,
+		od.ou_id as ou_id,
+		'false' as expanded,
+		od.leaf as leaf,
+		od.order_seq as order_seq,
+		uorg.has_qry,
+		uorg.has_curd,
+		uorg.is_default,
+		uorg.has_op1,
+		uorg.has_op2,
+		uorg.has_op3,
+		uorg.has_op4
+from t_org_orgrel o, t_org_orgrelver orv, t_org_orgrel_detail od,
+     t_org_orgunit ou, t_user_org uorg ,t_user_info uinfo
+where o.or_id = orv.or_id and o.or_type=#{or_type}
+and orv.orv_id = od.orv_id and orv.is_valid='true'
+and od.ou_id = ou.ou_id
+and ou.ou_id = uorg.ou_id
+and uorg.u_id = uinfo.u_id
+and uinfo.login_id =#{login_id}
+</select>
+
+<select id="getAllDeptTreeNode" parameterType="map" resultType="DeptTreeNode">
+select 
+		a.d_id as id,
+		a.pd_id as parentId,
+		a.ou_id,
+		a.ou_code,
+		a.d_code,
+		a.d_name as text,
+		a.d_manager,
+		a.func_code,
+		a.leaf,
+		'false' as pv,
+		'false' as po,
+		'false' as has_qry,
+		'false' as has_curd,
+		'false' as is_default,
+		'false' as has_op1,
+		'false' as has_op2,
+		'false' as has_op3,
+		'false' as has_op4
+from t_sys_dept a
+
+</select>
+
+<select id="getAllDeptTreeNodeByUser" parameterType="map" resultType="DeptTreeNode">
+select 	
+		t_sys_dept.d_id as id,
+		t_sys_dept.pd_id as parentId,
+		ou.ou_id,
+		ou.ou_code,
+		t_sys_dept.d_code,
+		t_sys_dept.d_name as text,
+		t_sys_dept.d_manager,
+		t_sys_dept.func_code,
+		t_sys_dept.leaf,
+		udept.has_qry,
+        udept.has_curd,
+        udept.is_default,
+        udept.has_op1,
+        udept.has_op2,
+        udept.has_op3,
+        udept.has_op4
+from t_sys_dept t_sys_dept , t_org_orgunit ou, t_user_dept udept,t_user_info uinfo
+where t_sys_dept.ou_id = ou.ou_id and t_sys_dept.d_id=udept.d_id
+and udept.u_id=uinfo.u_id
+and uinfo.login_id =#{login_id}
+</select>
+
+<select id="getDeptTreeNodeWithParentByUser" parameterType="map" resultType="DeptTreeNode">
+select 	
+		t_sys_dept.d_id as id,
+		t_sys_dept.pd_id as parentId,
+		ou.ou_id,
+		ou.ou_code,
+		t_sys_dept.d_code,
+		t_sys_dept.d_name as text,
+		t_sys_dept.func_code,
+		t_sys_dept.leaf,
+		udept.has_qry,
+        udept.has_curd,
+        udept.is_default,
+        udept.has_op1,
+        udept.has_op2,
+        udept.has_op3,
+        udept.has_op4
+from t_sys_dept t_sys_dept , t_org_orgunit ou, t_user_dept udept,t_user_info uinfo
+where t_sys_dept.ou_id = ou.ou_id and t_sys_dept.d_id=udept.d_id
+and udept.u_id=uinfo.u_id
+and uinfo.login_id =#{login_id}
+and ou.ou_id =#{ou_id}
+and t_sys_dept.pd_id =#{node}	
+</select>
+
+<select id="getOrgRelVerUpdatedList" parameterType="map" resultType="OrgRelVerUpdated">
+select 
+		a.orv_id,
+		a.or_id,
+		a.orv_name,
+		a.orv_desc,
+		a.is_valid,
+		a.attr_code,
+		a.start_date,
+		a.end_date,
+		b.name as or_name,
+		b.or_type
+from 	t_org_orgrelver a inner join t_org_orgrel b on a.or_id = b.or_id
+<where>	
+		a.is_valid = 'true'
+	<if test="or_type != null">
+	and b.or_type in (${or_type})
+	</if>
+</where>
+</select>
+
+<select id="getOdIdByOrgTree" parameterType="map" resultType="map">
+select 	c.od_id,
+		d.ou_id,
+		d.ou_code,
+		d.ou_name
+from 	t_org_orgrelver a
+inner join t_org_orgrel b on a.or_id = b.or_id
+inner join t_org_orgrel_detail c on c.orv_id = a.orv_id
+inner join t_org_orgunit d on d.ou_id = c.ou_id
+where 	a.is_valid = 'true'
+and 	b.or_type = #{or_type}
+and 	d.ou_code = #{ou_code}
+</select>
+<!-- 组织关系版本相关 -->
+<select id="getOrgRelVerList" parameterType="map" resultType="OrgRelVer">
+select orv_id,
+       or_id,
+       orv_name,
+       orv_desc,
+       is_valid,
+       attr_code,
+       start_date,
+       end_date
+       from t_org_orgrelver 
+       <where>
+       <if test="orv_id!=null">
+       orv_id=#{orv_id}
+       </if>
+       <if test="or_id!=null">
+      and  or_id=#{or_id}
+       </if>
+       <if test="is_valid!=null">
+       and is_valid=#{is_valid}
+       </if>
+       </where>
+</select>
+<insert id="addOrgRelVer" parameterType="OrgRelVer">
+    <selectKey keyProperty="orv_id" resultType="int" order="BEFORE">
+	        select isnull(max(orv_id)+1,1) from t_org_orgrelver
+    </selectKey>
+    insert into t_org_orgrelver ( orv_id, or_id,orv_name,orv_desc,is_valid,attr_code, start_date,end_date)
+               values (#{orv_id},#{or_id},#{orv_name},#{orv_desc},#{is_valid},#{attr_code},#{start_date},#{end_date})
+</insert>
+<update id="updateOrgRelVer" parameterType="OrgRelVer">
+update t_org_orgrelver set orv_id=#{orv_id},or_id=#{or_id},orv_name=#{orv_name},orv_desc=#{orv_desc},is_valid=#{is_valid},
+                     attr_code=#{attr_code}, start_date=#{start_date},end_date=#{end_date}
+                    where orv_id=#{orv_id} and or_id=#{or_id}
+</update>
+<delete id="deleteOrgRelVer" parameterType="OrgRelVer">
+delete from t_org_orgrelver where orv_id=#{orv_id}
+</delete>
+<delete id="deleteOrgRelVerByOr" parameterType="int">
+delete from t_org_orgrelver where or_id=#{or_id}
+</delete>
+<select id="getNewOrv_id" parameterType="map" resultType="OrgRelVer">
+select orv_id from t_org_orgrelver where or_id=#{or_id} and is_valid="true"
+</select>
+<select id="getOrvId" parameterType="map" resultType="Integer">
+select orv.orv_id from t_org_orgrelver orv,t_org_orgrel o where o.or_type=#{or_type}
+and orv.or_id=o.or_id and orv.is_valid='true'
+</select>
+<!--   组织关系详情相关 -->
+<resultMap type="OrgrelDetail" id="OrgrelDetailMap">
+<id property="od_id" column="od_id"/>
+<result property="pod_id" column="pod_id"/>
+<result property="orv_id" column="orv_id"/>
+<result property="ou_id" column="ou_id"/>
+<result property="leaf" column="leaf"/>
+<result property="order_seq" column="order_seq"/>
+<collection property="orgRelVer" ofType="OrgRelVer">
+<id property="orv_id" column="orv_id"/>
+<result property="or_id" column="or_id"/>
+<result property="orv_name" column="orv_name"/>
+<result property="orv_desc" column="orv_desc"/>
+<result property="is_valid" column="is_valid"/>
+<result property="attr_code" column="attr_code"/>
+</collection>
+<collection property="orgUnit" ofType="OrgUnit">
+<id property="ou_id" column="ou_id"/>
+<result property="ou_code" column="ou_code"/>
+<result property="d_id" column="d_id"/>
+<result property="ou_name" column="ou_name"/>
+<result property="ou_alias" column="ou_alias"/>
+<result property="ou_addr" column="ou_addr"/>
+<result property="ou_leader" column="ou_leader"/>
+<result property="ou_treasurer" column="ou_treasurer"/>
+<result property="ou_type" column="ou_type"/>
+<result property="is_corp" column="is_corp"/>
+</collection>
+</resultMap>
+<select id="getOrgrelDetailByUnit" parameterType="map" resultType="OrgrelDetail">
+select d.od_id,d.pod_id,d.orv_id,d.ou_id,o.d_id as d_id 
+from t_org_orgrel_detail d,t_org_orgunit o,t_org_orgrel r,t_org_orgrelver v
+where r.or_type='0001' and v.or_id=r.or_id and v.is_valid='true' and d.orv_id=v.orv_id and 
+o.ou_code=#{ou_code} and d.ou_id=o.ou_id
+</select>
+<select id="getCountOfOrgRelDetail" parameterType="map" resultType="int">
+select count(*) from t_org_orgrel_detail d, t_org_orgrelver v
+where d.orv_id=v.orv_id and v.is_valid='true' and d.ou_id=#{ou_id}
+</select>
+  <select id="getOrgrelDetailList" parameterType="map" resultMap="OrgrelDetailMap">
+select a.od_id as od_id
+      ,a.pod_id as pod_id
+      ,a.orv_id as orv_id
+      ,a.ou_id as ou_id 
+      ,a.leaf  as leaf
+      ,a.order_seq as order_seq
+      ,b.orv_name as orv_name
+      ,b.orv_desc as orv_desc
+      ,b.is_valid as is_valid
+      ,b.attr_code as attr_code
+      ,c.ou_code as ou_code
+      ,c.ou_name as ou_name
+      ,c.ou_alias as ou_alias
+      ,c.ou_addr as ou_addr
+      ,c.ou_leader as ou_leader
+      ,c.ou_treasurer as ou_treasurer
+      ,c.d_id as d_id
+      ,c.ou_type as ou_type
+      ,c.is_corp as is_corp
+      from t_org_orgrel_detail a left outer join t_org_orgrelver b on a.orv_id=b.orv_id
+                           left outer join t_org_orgunit c on a.ou_id=c.ou_id and (c.del_flag =1 or c.del_flag is null) 
+      <where>
+      <if test="od_id!=null">
+      and a.od_id=#{od_id}
+      </if>
+      <if test="pod_id!=null">
+      and a.pod_id=#{pod_id}
+      </if>
+      <if test="orv_id!=null">
+      and a.orv_id=#{orv_id}
+      </if>
+      <if test="ou_id!=null">
+      and a.ou_id=#{ou_id}
+      </if>
+      </where>
+</select>
+<insert id="addOrgrelDetail" parameterType="OrgrelDetail">
+   <selectKey keyProperty="od_id" resultType="int" order="BEFORE">
+	        select isnull(max(od_id)+1,1) from t_org_orgrel_detail
+   </selectKey>
+    insert into t_org_orgrel_detail(od_id,pod_id,orv_id,ou_id,leaf,order_seq)
+    values(#{od_id},#{pod_id},#{orv_id},#{ou_id},#{leaf},#{order_seq})
+</insert>
+
+<update id="updateOrgrelDetail" parameterType="OrgrelDetail">
+    update t_org_orgrel_detail
+    set od_id=#{od_id},pod_id=#{pod_id},orv_id=#{orv_id},ou_id=#{ou_id},leaf=#{leaf},order_seq=#{order_seq}
+    where od_id=#{od_id}
+</update>
+
+<delete id="deleteOrgrelDetail" parameterType="OrgrelDetail">
+    delete from t_org_orgrel_detail
+    where od_id=#{od_id}
+</delete>
+<delete id="deleteOrgrelDetailByOu" parameterType="int">
+ delete from t_org_orgrel_detail
+    where ou_id=#{ou_id}
+</delete>
+<delete id="deleteOrgrelDetailByOrv" parameterType="int">
+delete from t_org_orgrel_detail
+        where orv_id=#{orv_id}
+</delete>
+<select id="getOrgRelDetailinOrg" parameterType="map" resultType="OrgTreeNode">
+select  a.od_id as od_id
+      ,a.pod_id as pod_id
+      ,a.orv_id as orv_id
+      ,a.ou_id as ou_id 
+      ,a.leaf  as leaf
+      ,a.order_seq as order_seq
+      from t_org_orgunit ou,t_org_orgrel_detail a
+      <where>
+      <if test="orv_id!=null">
+      a.orv_id=#{orv_id}
+      </if>
+      <if test="pod_id!=null">
+      and pod_id=#{pod_id}
+      </if>
+      </where>
+</select>
+
+<!-- 用户组织 -->
+<select id="getUserOrgListByUid" parameterType="int" resultType="UserOrg">
+    select 
+        id        ,
+        u_id      ,
+        ou_id     ,
+        has_qry   ,
+        has_curd  ,
+        is_default,
+        has_op1   ,
+        has_op2   ,
+        has_op3   ,
+        has_op4
+    from t_user_org
+    where u_id=#{value}   
+</select>
+<select id="getUserOrgList" parameterType="map" resultType="UserOrg">
+select 
+        id        ,
+        u_id      ,
+        ou_id     ,
+        has_qry   ,
+        has_curd  ,
+        is_default,
+        has_op1   ,
+        has_op2   ,
+        has_op3   ,
+        has_op4
+    from t_user_org
+    <where>
+    <if test="u_id!=null">
+        u_id=#{u_id}
+    </if>
+    <if test="ou_id!=null">
+    	and ou_id=#{ou_id}
+    </if>
+    <if test="is_default!=null">
+    and is_default=#{is_default}
+    </if>
+    <if test="has_op1!=null">
+    and has_op1=#{has_op1}
+    </if>
+     <if test="has_op2!=null">
+    and has_op2=#{has_op2}
+    </if>
+     <if test="has_op3!=null">
+    and has_op3=#{has_op3}
+    </if>
+     <if test="has_op4!=null">
+    and has_op4=#{has_op4}
+    </if>
+    </where>
+</select>
+<insert id="addUserOrg" parameterType="UserOrg" keyProperty="id" useGeneratedKeys="true">
+    insert into t_user_org(
+		u_id      ,
+		ou_id     ,
+		has_qry   ,
+		has_curd  ,
+		is_default,
+		has_op1   ,
+		has_op2   ,
+		has_op3   ,
+		has_op4   
+    )values(
+		#{u_id      },
+		#{ou_id     },
+		#{has_qry   },
+		#{has_curd  },
+		#{is_default},
+		#{has_op1   },
+		#{has_op2   },
+		#{has_op3   },
+		#{has_op4   }
+    )
+</insert>
+<delete id="deleteUserOrg" parameterType="UserOrg">
+    delete from t_user_org
+    where u_id=#{u_id} and ou_id=#{ou_id} 
+</delete>
+
+<delete id="deleteUserOrgByUid" parameterType="int">
+    delete from t_user_org
+    where u_id=#{value}
+</delete>
+<delete id="deleteUserOrgByOUid" parameterType="int">
+    delete from t_user_org
+    where ou_id=#{value}
+</delete>
+
+<!-- 用户部门 -->
+<select id="getUserDeptListByUid" parameterType="int" resultType="UserDept">
+    select 
+        id        ,
+        u_id      ,
+        d_id     ,
+        has_qry   ,
+        has_curd  ,
+        is_default,
+        has_op1   ,
+        has_op2   ,
+        has_op3   ,
+        has_op4
+    from t_user_dept
+    where u_id=#{value}   
+</select>
+<insert id="addUserDept" parameterType="UserDept" keyProperty="id" useGeneratedKeys="true">
+    insert into t_user_dept(
+        u_id      ,
+        d_id     ,
+        has_qry   ,
+        has_curd  ,
+        is_default,
+        has_op1   ,
+        has_op2   ,
+        has_op3   ,
+        has_op4   
+    )values(
+        #{u_id      },
+        #{d_id      },
+        #{has_qry   },
+        #{has_curd  },
+        #{is_default},
+        #{has_op1   },
+        #{has_op2   },
+        #{has_op3   },
+        #{has_op4   }
+    )
+</insert>
+<delete id="deleteUserDept" parameterType="UserDept">
+    delete from t_user_dept
+    where u_id=#{u_id} and d_id=#{d_id}
+</delete>
+
+<delete id="deleteUserDeptByUid" parameterType="int">
+    delete from t_user_dept
+    where u_id=#{value}
+</delete>
+<delete id="deleteUserDeptByDid" parameterType="int">
+    delete from t_user_dept
+    where d_id=#{value}
+</delete>
+
+</mapper>

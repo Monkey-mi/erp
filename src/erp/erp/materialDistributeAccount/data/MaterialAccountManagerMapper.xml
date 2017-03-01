@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialDistributeAccount.data.MaterialAccountManagerMapper">
+
+<select id="getClhh" parameterType="map" resultType="String">
+	select
+		dbo.clbmb.clhh
+		from 
+		dbo.clbmb
+		left outer join cllbb with (nolock) on cllbb.lbbh=clbmb.lbbh
+		where clbmb.lbbh = #{lbbh}
+</select>
+<select id="getMaterialAccountManagerCount" parameterType="map" resultType="Integer">
+	select count(0) 
+	from ( select view_kchz.clhh, view_kchz.cltx1, view_kchz.cltx2, view_kchz.cltx3, 
+	sum(view_kchz.kcsl) as kcsl, sum(view_kchz.kcsl_fcp) as kcsl_fcp, 
+	isnull(sum(view_kchz.kcsl),0) - isnull(sum(view_kchz.kcsl_fcp),0) as kykc, 
+	sum(view_djdrdt_hz.djsl) as djsl, sum(view_djdrdt_hz.drsl) as drsl, 
+	sum(view_djdrdt_hz.dtsl) as dtsl, clbmb.clmc, clbmb.jldw, clbmb.lbbh, 
+	clbmb.gdbj, clbmb.plmth, clbmb.plmtx
+	from view_kchz 
+	left outer join clbmb with (nolock) on view_kchz.clhh=clbmb.clhh 
+	left outer join view_djdrdt_hz with (nolock) on view_djdrdt_hz.ckbh=view_kchz.ckbh and view_djdrdt_hz.clhh=view_kchz.clhh 
+	and view_djdrdt_hz.cltx1=view_kchz.cltx1 and view_djdrdt_hz.cltx2=view_kchz.cltx2 
+	and view_djdrdt_hz.cltx3=view_kchz.cltx3 where 1=1 
+	<if test="lbbh !='' and lbbh != null">
+		and left(clbmb.lbbh,LEN(#{lbbh}))=#{lbbh}
+	</if>
+	group by view_kchz.clhh, view_kchz.cltx1, view_kchz.cltx2, view_kchz.cltx3, clbmb.clmc, clbmb.jldw, clbmb.lbbh, clbmb.gdbj, clbmb.plmth, clbmb.plmtx )a
+</select>
+<select id="getMaterialAccountManagerList" parameterType="map" resultType="erp.erp.materialDistributeAccount.model.MaterialAccountManager">
+	select * from (select row_number()over( order by clhh desc)as row_num,* from ( 
+	select view_kchz.clhh,
+       view_kchz.cltx1,
+       view_kchz.cltx2,
+       view_kchz.cltx3,
+       sum(view_kchz.kcsl) as kcsl,
+       sum(view_kchz.kcsl_fcp) as kcsl_fcp,
+       isnull(sum(view_kchz.kcsl),0) - isnull(sum(view_kchz.kcsl_fcp),0) as kykc,
+       sum(view_djdrdt_hz.djsl) as djsl,
+       sum(view_djdrdt_hz.drsl) as drsl,
+       sum(view_djdrdt_hz.dtsl) as dtsl,
+       clbmb.clmc,
+       clbmb.jldw,
+       clbmb.lbbh,
+		 clbmb.gdbj,
+         clbmb.plmth,
+	 		clbmb.plmtx 
+from view_kchz 
+left outer join clbmb with (nolock) on view_kchz.clhh=clbmb.clhh 
+left outer join view_djdrdt_hz with (nolock) on view_djdrdt_hz.ckbh=view_kchz.ckbh and view_djdrdt_hz.clhh=view_kchz.clhh 
+and view_djdrdt_hz.cltx1=view_kchz.cltx1 and view_djdrdt_hz.cltx2=view_kchz.cltx2 and view_djdrdt_hz.cltx3=view_kchz.cltx3
+where 1=1
+	<if test="lbbh !='' and lbbh != null">
+		and left(clbmb.lbbh,LEN(#{lbbh}))=#{lbbh}
+	</if>
+	<if test="condition !=null and condition != ''">
+	   ${condition}
+	</if>
+group by  view_kchz.clhh,
+			 view_kchz.cltx1,
+			 view_kchz.cltx2,
+			 view_kchz.cltx3,
+			 clbmb.clmc,
+			 clbmb.jldw,
+			 clbmb.lbbh,
+			 clbmb.gdbj,
+             clbmb.plmth,
+	 		 clbmb.plmtx
+)as t ) as tt where row_num between #{start} and #{limit}
+</select>
+<insert id="addMaterialAccountManager" parameterType="erp.erp.materialDistributeAccount.model.MaterialAccountManager" keyProperty="" useGeneratedKeys="true">
+	insert into view_kchz
+	(
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		kcsl,
+		kcsl_fcp,
+		kykc,
+		djsl,
+		drsl,
+		dtsl,
+		clmc,
+		jldw,
+		lbbh,
+		gdbj,
+		plmth,
+		plmtx
+	)
+	values
+	(
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{kcsl},
+		#{kcsl_fcp},
+		#{kykc},
+		#{djsl},
+		#{drsl},
+		#{dtsl},
+		#{clmc},
+		#{jldw},
+		#{lbbh},
+		#{gdbj},
+		#{plmth},
+		#{plmtx}
+	)
+</insert>
+<update id="updateMaterialAccountManager" parameterType="erp.erp.materialDistributeAccount.model.MaterialAccountManager">
+	update view_kchz
+		set
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			kcsl = #{kcsl},
+			kcsl_fcp = #{kcsl_fcp},
+			kykc = #{kykc},
+			djsl = #{djsl},
+			drsl = #{drsl},
+			dtsl = #{dtsl},
+			clmc = #{clmc},
+			jldw = #{jldw},
+			lbbh = #{lbbh},
+			gdbj = #{gdbj},
+			plmth = #{plmth},
+			plmtx = #{plmtx}
+		where  = #{}
+</update>
+<delete id="deleteMaterialAccountManager" parameterType="erp.erp.materialDistributeAccount.model.MaterialAccountManager">
+	delete from view_kchz
+	where  = #{}
+</delete>
+</mapper>

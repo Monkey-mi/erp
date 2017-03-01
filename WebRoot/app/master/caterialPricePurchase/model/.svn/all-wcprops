@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model
+END
+HistoryPriceCtl.js
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/HistoryPriceCtl.js
+END
+QueryParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/QueryParam.js
+END
+CaterialHistoryPriceCtl.js
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/CaterialHistoryPriceCtl.js
+END
+HistroyQuote.js
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/HistroyQuote.js
+END
+MaterialPrice.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/MaterialPrice.js
+END
+MaterialClass.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/MaterialClass.js
+END
+VendorHistoryPriceCtl.js
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/VendorHistoryPriceCtl.js
+END
+MaterialQueryParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/MaterialQueryParam.js
+END
+VendorPriceCtl.js
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/VendorPriceCtl.js
+END
+CaterialPricePurchase.js
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/CaterialPricePurchase.js
+END
+PurchasePrice.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/erp/!svn/ver/2572/erpForOut62/WebRoot/app/master/caterialPricePurchase/model/PurchasePrice.js
+END

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.LoadingCostsImpMapper">
+
+
+<select id="getLoadingCostsImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.LoadingCostsImp">
+select aa.* from (
+select 
+	ltrim(rtrim(wmdz_zgfymxb.zgbh))+'-'+ltrim(rtrim(wmdz_zgfymxb.zgxh)) as zgh,
+	wmdz_zgfymxb.zgbh, 
+	wmdz_zgfymxb.zgxh,
+	wmdz_zgfymxb.fyxh,
+	wmdz_zgjhb.zysj,
+	wmdz_zgfymxb.zgfs,
+	wmdz_zgfymxb.jzxx,
+	wmdz_zgfymxb.tgrq,
+	wmdz_zgfymxb.csbh,
+	csxxb.csmc,
+	wmdz_zgfymxb.zgtj,
+	isnull((select sum(fysl) from cgfyb where cgfyb.zgbh=wmdz_zgfymxb.zgbh and cgfyb.zgxh=wmdz_zgfymxb.zgxh and cgfyb.zgfyxh=wmdz_zgfymxb.fyxh),0) as ydtj,
+	wmdz_zgfymxb.zgtj-isnull((select sum(fysl) from cgfyb where cgfyb.zgbh=wmdz_zgfymxb.zgbh and cgfyb.zgxh=wmdz_zgfymxb.zgxh and cgfyb.zgfyxh=wmdz_zgfymxb.fyxh),0) as wdtj,
+	wmdz_zgfymxb.zgfy,
+	isnull((select sum(fyje) from cgfyb where cgfyb.zgbh=wmdz_zgfymxb.zgbh and cgfyb.zgxh=wmdz_zgfymxb.zgxh and cgfyb.zgfyxh=wmdz_zgfymxb.fyxh),0) as ydfy,
+	wmdz_zgfymxb.zgfy-isnull((select sum(fyje) from cgfyb where cgfyb.zgbh=wmdz_zgfymxb.zgbh and cgfyb.zgxh=wmdz_zgfymxb.zgxh and cgfyb.zgfyxh=wmdz_zgfymxb.fyxh),0) as wdfy
+from wmdz_zgfymxb
+left outer join wmdz_zgjhb with (nolock) on wmdz_zgjhb.zgbh=wmdz_zgfymxb.zgbh and wmdz_zgjhb.zgxh=wmdz_zgfymxb.zgxh
+left outer join csxxb with (nolock) on csxxb.csbh = wmdz_zgfymxb.csbh
+where wmdz_zgjhb.fybj=1 and
+		wmdz_zgfymxb.zgfy-isnull((select sum(fyje) from cgfyb where cgfyb.zgbh=wmdz_zgfymxb.zgbh and cgfyb.zgxh=wmdz_zgfymxb.zgxh and cgfyb.zgfyxh=wmdz_zgfymxb.fyxh),0)>0
+	<if test="s1!=null and s1!=''">
+ 	 ${s1}
+    </if>
+    <if test="qsrq!=null and qsrq!=''">
+    and wmdz_zgjhb.zysj &gt;= #{qsrq}
+    </if>	
+    <if test="jzrq!=null and jzrq!=''">
+    and wmdz_zgjhb.zysj &lt;= #{jzrq}
+    </if>
+group by
+	wmdz_zgfymxb.zgbh, 
+	wmdz_zgfymxb.zgxh,
+	wmdz_zgfymxb.fyxh,
+	wmdz_zgjhb.zysj,
+	wmdz_zgfymxb.zgfs,
+	wmdz_zgfymxb.jzxx,
+	wmdz_zgfymxb.tgrq,
+	wmdz_zgfymxb.csbh,
+	csxxb.csmc,
+	wmdz_zgfymxb.zgtj,
+	wmdz_zgfymxb.zgfy
+	)aa
+</select>
+
+</mapper>

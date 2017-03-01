@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.caterialPricePurchase.data.VendorPriceCtlMapper">
+
+
+<select id="getVendorPriceCtlList" parameterType="map" resultType="erp.erp.master.caterialPricePurchase.model.VendorPriceCtl">
+	  SELECT csjjb.clhh,   
+         csjjb.csbh, 
+         clbmb.clmc,  
+         csjjb.zdcgl,   
+         csjjb.zxbzl,   
+         csjjb.ghzq,   
+         csjjb.kzdj,        
+         csjjb.csxh,   
+         csjjb.bzsm,
+         csjjb.czym,
+         csjjb.czsj,
+         csxxb.csmc,  
+         csxxb.wbbh,   
+         csxxb.yhbh,  
+         csxxb.cglb,
+		 clbmb.fzdw,
+		 clbmb.jldw,
+		 csjjb.fzkj,
+		 csjjb.qssxsj,
+		 csjjb.jzsxsj,
+		 csjjb.spbj_kj,
+		 csjjb.sprm_kj,
+		 csjjb.spsj_kj,
+	     wbxx.wbdh as wbdh,
+	     cglb.lbmc as cglbmc
+    FROM csjjb 
+ left outer join csxxb with (nolock) on csxxb.csbh=csjjb.csbh
+ left outer join clbmb with (nolock) on clbmb.clhh=csjjb.clhh
+ left outer join (
+      select cglbb.lbbh,
+             cglbb.lbmc,
+             csxxb.csbh as csbh
+      from cglbb with(nolock)
+      left outer join csxxb  with (nolock) on  csxxb.cglb = cglbb.lbbh       
+ )cglb on cglb.csbh = csjjb.csbh
+ left outer join (
+      select wbmcb.wbdh,
+             wbmcb.wbbh,
+             csxxb.csbh as csbh
+      from wbmcb with(nolock)
+      left outer join csxxb  with (nolock) on  csxxb.wbbh = wbmcb.wbbh  
+ )wbxx  on wbxx.csbh = csjjb.csbh
+ where 1=1
+<if test="clhh!=null"> 
+   and  csjjb.clhh = #{clhh} 
+</if>
+<if test="csbh!=null">
+	and csjjb.csbh = #{csbh}
+</if> 
+<if test="gdbj!=null">
+	and clbmb.gdbj=#{gdbj}
+</if>
+<if test="condition!=null and condition!=''">
+	 and ${condition}
+</if>
+<if test="sort!=null">
+	 order by  ${sort}
+</if>
+</select>
+<insert id="addVendorPriceCtl" parameterType="erp.erp.master.caterialPricePurchase.model.VendorPriceCtl" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.csjjb
+	(
+		clhh,
+		csbh,
+		zxbzl,
+		zdcgl,
+		ghzq,
+		kzdj,
+		csxh,
+		bzsm,
+		czym,
+		czsj,
+		fzkj,
+		jzsxsj,
+		spbj_kj,
+		sprm_kj,
+		spsj_kj
+	)
+	values
+	(
+		#{clhh},
+		#{csbh},
+		#{zxbzl},
+		#{zdcgl},
+		#{ghzq},
+		#{kzdj},
+		#{csxh},
+		#{bzsm},
+		#{czym},
+		#{czsj},
+		#{fzkj},
+		#{jzsxsj},
+		#{spbj_kj},
+		#{sprm_kj},
+		#{spsj_kj}
+	)
+</insert>
+<update id="updateVendorPriceCtl" parameterType="erp.erp.master.caterialPricePurchase.model.VendorPriceCtl">
+	update dbo.csjjb
+		set
+		    clhh = #{clhh},
+			csbh = #{csbh},
+			zdcgl = #{zdcgl},
+			zxbzl = #{zxbzl},
+			ghzq = #{ghzq},
+			kzdj = #{kzdj},
+			fzkj = #{fzkj},
+			csxh = #{csxh},
+			bzsm = #{bzsm},
+			czym = #{czym},
+			czsj = #{czsj}
+		where
+		   1=1  
+		  <if test="csbh!=null and clhh!=null">
+		   and csjjb.csbh = #{csbh}
+		   and csjjb.clhh =#{clhh}
+		  </if> 
+</update>
+<delete id="deleteVendorPriceCtl" parameterType="map">
+	delete from dbo.csjjb
+	where csjjb.clhh =#{clhh} and csbh=#{csbh}
+</delete>
+<delete id="deleteCsjjxx" parameterType="map">
+    delete from csjjxxb 
+    where clhh=#{clhh} and csbh=#{csbh};
+</delete>
+</mapper>

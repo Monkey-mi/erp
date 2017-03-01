@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.FkjhMapper">
+
+
+<select id="getFkjhList" parameterType="map" resultType="erp.erp.PayApply.model.Fkjh">
+	  SELECT fkjhmxb.jhbh,   
+         fkjhmxb.jhxh,   
+         fkjhmxb.csbh,   
+         fkjhmxb.wbbh,   
+         fkjhmxb.yfje,   
+         fkjhmxb.bqyf,   
+         fkjhmxb.zfje,   
+         fkjhmxb.wbyfje,   
+         fkjhmxb.wbbqyf,   
+         fkjhmxb.wbzfje,   
+         fkjhmxb.bzsm,
+			fkjhmxb.fkje,
+			csxxb.csmc  
+    FROM fkjhmxb   
+left outer join csxxb on csxxb.csbh=fkjhmxb.csbh
+left outer join fkjhb on fkjhmxb.jhbh=fkjhb.jhbh
+where fkjhmxb.csbh = (select csbh  from fksqspb where sqbh = #{sqbh}) and fkjhb.qsrq &lt;= (select fkqx  from fksqspb where sqbh = #{sqbh}) and fkjhb.jzrq &gt;= (select fkqx  from fksqspb where sqbh = #{sqbh}) 
+</select>
+<insert id="addFkjh" parameterType="erp.erp.PayApply.model.Fkjh" keyProperty="" useGeneratedKeys="true">
+	insert into Fkjh
+	(
+		jhbh,
+		jhxh,
+		csbh,
+		wbbh,
+		yfje,
+		bqyf,
+		zfje,
+		wbyfje,
+		wbbqyf,
+		wbzfje,
+		bzsm,
+		fkje,
+		csmc
+	)
+	values
+	(
+		#{jhbh},
+		#{jhxh},
+		#{csbh},
+		#{wbbh},
+		#{yfje},
+		#{bqyf},
+		#{zfje},
+		#{wbyfje},
+		#{wbbqyf},
+		#{wbzfje},
+		#{bzsm},
+		#{fkje},
+		#{csmc}
+	)
+</insert>
+<update id="updateFkjh" parameterType="erp.erp.PayApply.model.Fkjh">
+	update Fkjh
+		set
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			csbh = #{csbh},
+			wbbh = #{wbbh},
+			yfje = #{yfje},
+			bqyf = #{bqyf},
+			zfje = #{zfje},
+			wbyfje = #{wbyfje},
+			wbbqyf = #{wbbqyf},
+			wbzfje = #{wbzfje},
+			bzsm = #{bzsm},
+			fkje = #{fkje},
+			csmc = #{csmc}
+		where  = #{}
+</update>
+<delete id="deleteFkjh" parameterType="erp.erp.PayApply.model.Fkjh">
+	delete from Fkjh
+	where  = #{}
+</delete>
+</mapper>

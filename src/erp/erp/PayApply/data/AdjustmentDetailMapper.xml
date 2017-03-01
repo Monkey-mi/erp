@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.AdjustmentDetailMapper">
+
+
+<select id="getAdjustmentDetailList" parameterType="map" resultType="erp.erp.PayApply.model.AdjustmentDetail">
+	  SELECT fksqyftzb.tzdh,   
+         fksqyftzb.tzxh,
+			fksqyftzb.tzrq,
+			fksqyftzb.tzlx,
+			fksqyftzb.sqbh,
+			fksqyftzb.tzhtbh,
+			fksqyftzb.mbhtbh,
+			fksqyftzb.tzfydh,
+			fksqyftzb.mbfydh,
+			fksqyftzb.tzhsbm,
+			fksqyftzb.mbhsbm,
+			fksqyftzb.tzje,
+			fksqyftzb.tzfplb, 
+			fksqyftzb.tzfphm,
+			fksqyftzb.yfhtbh,
+			fksqyftzb.tzyy,
+			fksqyftzb.bzsm,
+			fksqyftzb.sdbj,
+			fksqyftzb.sdrm,
+			fksqyftzb.sdsj,
+			fksqyftzb.czrm,
+			fksqyftzb.czsj
+    FROM fksqyftzb  
+where 1=1
+<if test="sqbh!=null">
+and fksqyftzb.sqbh=#{sqbh}
+</if>
+</select>
+</mapper>

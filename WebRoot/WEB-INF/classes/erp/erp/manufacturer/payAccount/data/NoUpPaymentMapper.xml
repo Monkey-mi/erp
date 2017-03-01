@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.NoUpPaymentMapper">
+ <select id="getNoUpPayment" parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.NoUpPayment">
+   SELECT  
+	cgfyb.fydh,
+	cgfyb.fyxh,
+	cgfyb.fyrq,
+	cgfyb.yhbh,
+	cgfyb.cglb,
+	cglbb.lbmc,
+	cgfyb.csbh,
+	csxxb.csmc,
+	cgfyb.fyzy,   
+	cgfyb.fysl,
+	cgfyb.fydj,
+	cgfyb.fyje,
+	cgfyb.zzsl,
+	cgfyb.csdj,
+	cgfyb.csje,
+	cgfyb.fyje - cgfyb.csje as zzse,
+	cgfyb.wbje,
+	cgfyb.jhbh,
+	cgfyb.jhxh,
+	case when cgfyb.jhbh&lt;&gt;0 then
+		ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) 
+	end as jhh,
+	cgfyb.htbh,
+	cgfyb.htxh,
+	case when cgfyb.htbh&lt;&gt;0 then
+		ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) 
+	end as hth,
+	cgfyb.bzsm,
+	cgfyb.hxbj,
+	cgfyb.fplb,
+	cgfyb.fphm,
+	cgfyb.sdbj,
+	cgfyb.sdrm,
+	cgfyb.sdsj,
+	cgfyb.czym,
+	cgfyb.czsj,
+	cgfyb.tzdh,
+	isnull(cgfyb.hsbm,'') as hsbm,
+	csxxb.csmc
+FROM cgfyb  
+left outer join cglbb on cglbb.lbbh = cgfyb.cglb
+left outer join csxxb with (nolock) on csxxb.csbh=cgfyb.csbh
+<where>
+<if test="csbh!=null and csbh!='' ">
+and cgfyb.csbh=#{csbh}
+</if>
+<if test="hsbm!=null and hsbm!=''">
+and left(cgfyb.hsbm,len(#{hsbm}))=#{hsbm}
+</if>
+<if test="jzrq!=null and jzrq!=''">
+and ((cgfyb.hxrq &gt; #{jzrq} and hxbj=1) or hxbj=0)
+and fyrq &lt;= #{jzrq}
+</if>
+<if test="condition!=null and condition!=''">
+and ${condition}
+</if>
+</where>
+ </select>
+
+</mapper>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="srm.supplierAccess.data.OutsideInformationMapper">
+	<select id="getWbbh" parameterType="map" resultType="String">
+		select wbbh from wbmcb where wbdh=#{wbdh} 
+	</select>
+	<select id="getWbdh" parameterType="map" resultType="String">
+		select wbdh from wbmcb where wbbh=#{wbbh} 
+	</select>
+</mapper>

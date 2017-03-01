@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.common.main.data.ContentMapper">
+   
+   <select id="getCPList" parameterType="map" resultType="ContentPermit">
+        select 
+	        cp_id       ,
+			cp_module   ,
+			cp_table    ,
+			cp_table_key,
+			tar_type    ,
+			tar_id      ,
+			tar_name    ,
+			src_type    ,
+			src_id      ,
+			cp_add      ,
+			cp_modify   ,
+			cp_delete   ,
+			cp_view     ,
+			cp_grant    ,
+			cp_f01      ,
+			cp_f02      ,
+			cp_f03      ,
+			cp_f04      ,
+			cp_f05      
+		from t_rpt_content_permit
+		<where>
+		    <if test="cp_module != null"> (cp_module=#{cp_module}
+                <if test="cp_table !=null"> and cp_table=#{cp_table}</if>
+                <if test="cp_table_key !=null"> and cp_table_key=#{cp_table_key}</if>
+                )
+            </if>
+		</where>
+   </select>
+   <insert id="addCP" parameterType="ContentPermit" keyProperty="cp_id" useGeneratedKeys="true">
+        insert into t_rpt_content_permit(
+            cp_module   ,
+            cp_table    ,
+            cp_table_key,
+            tar_type    ,
+            tar_id      ,
+            tar_name    ,
+            src_type    ,
+            src_id      ,
+            cp_add      ,
+            cp_modify   ,
+            cp_delete   ,
+            cp_view     ,
+            cp_grant    ,
+            cp_f01      ,
+            cp_f02      ,
+            cp_f03      ,
+            cp_f04      ,
+            cp_f05 
+        )
+        values(
+			#{cp_module   },
+			#{cp_table    },
+			#{cp_table_key},
+			#{tar_type    },
+			#{tar_id      },
+			#{tar_name    },
+			#{src_type    },
+			#{src_id      },
+			#{cp_add      },
+			#{cp_modify   },
+			#{cp_delete   },
+			#{cp_view     },
+			#{cp_grant    },
+			#{cp_f01      },
+			#{cp_f02      },
+			#{cp_f03      },
+			#{cp_f04      },
+			#{cp_f05      }
+        )
+   </insert>
+   <update id="updateCP" parameterType="ContentPermit">
+        update t_rpt_content_permit set
+            cp_module   = #{cp_module   }, 
+			cp_table    = #{cp_table    }, 
+			cp_table_key= #{cp_table_key}, 
+			tar_type    = #{tar_type    }, 
+			tar_id      = #{tar_id      },
+			tar_name    = #{tar_name    }, 
+			src_type    = #{src_type    }, 
+			src_id      = #{src_id      }, 
+			cp_add      = #{cp_add      }, 
+			cp_modify   = #{cp_modify   }, 
+			cp_delete   = #{cp_delete   }, 
+			cp_view     = #{cp_view     }, 
+			cp_grant    = #{cp_grant    }, 
+			cp_f01      = #{cp_f01      }, 
+			cp_f02      = #{cp_f02      }, 
+			cp_f03      = #{cp_f03      }, 
+			cp_f04      = #{cp_f04      }, 
+			cp_f05      = #{cp_f05      } 
+        where cp_id=#{cp_id}
+   </update>
+   <delete id="deleteCP" parameterType="ContentPermit">
+        delete from t_rpt_content_permit 
+        <where>
+            <if test="cp_id != null">cp_id=#{cp_id}</if>
+            <if test="cp_module != null"> or (cp_module=#{cp_module}
+                <if test="cp_table !=null"> and cp_table=#{cp_table}</if>
+                <if test="cp_table_key !=null"> and cp_table_key=#{cp_table_key}</if>
+                )
+            </if>
+        </where>
+   </delete>
+   <delete id="deleteCPById" parameterType="int">
+  	 delete from t_rpt_content_permit 
+  	 <where>
+  	 <if test="cp_id!=null">
+  	   cp_id=#{cp_id}
+  	 </if>
+  	 </where>
+   </delete>
+   
+   <sql id="ddlstcolCols">
+       id       ,
+	   ddl_code ,
+	   col_code ,
+	   col_name ,
+	   col_width,
+	   order_seq,
+	   isdatacol,
+	   isdispcol,
+	   issortcol
+  </sql>
+  <select id="getDdlstcolList" parameterType="map" resultType="Ddlstcol">
+       select <include refid="ddlstcolCols"/> 
+       from ddlstcol
+       <where>
+            <if test="ddl_code != null">ddl_code=#{ddl_code}</if>
+       </where>
+       order by order_seq
+  </select>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.projectTemplate.data.ProjectTemplateMapper">
+
+
+<select id="getProjectTemplateList" parameterType="map" resultType="erp.erp.master.projectTemplate.model.ProjectTemplate">
+	select
+		dbo.mbwhb.mbbh,
+		dbo.mbwhb.mbxh,
+		dbo.mbwhb.mbmc,
+		dbo.mbwhb.mbnr
+	from
+		dbo.mbwhb
+		<where>
+			<if test="mbbh!=null">
+	   			 mbbh=#{mbbh}
+	   		</if>
+	   		<if test="condition!=null">
+	   			and (mbmc like '%${condition}%' or mbxh like '${condition}')
+	   		</if>
+			<if test="orderBySQL!=null and orderBySQL!=''">
+				order by ${orderBySQL} 
+			</if>
+		</where>
+</select>
+<insert id="addProjectTemplate" parameterType="erp.erp.master.projectTemplate.model.ProjectTemplate" keyProperty="mbxh" useGeneratedKeys="true">
+	<selectKey keyProperty="mbxh" resultType="int" order="BEFORE">
+		select isnull ( max ( mbxh ) , 0 ) + 1 from mbwhb where mbbh =#{mbbh}
+	</selectKey> 
+	insert into dbo.mbwhb
+	(
+		mbbh,
+		mbxh,
+		mbmc,
+		mbnr
+	)
+	values
+	(
+		#{mbbh},
+		#{mbxh},
+		#{mbmc},
+		#{mbnr}
+	)
+</insert>
+<update id="updateProjectTemplate" parameterType="erp.erp.master.projectTemplate.model.ProjectTemplate">
+	update dbo.mbwhb
+		set
+			mbbh = #{mbbh},
+			mbxh = #{mbxh},
+			mbmc = #{mbmc},
+			mbnr = #{mbnr}
+		where  mbbh=#{mbbh}
+			and mbxh=#{mbxh}
+</update>
+<delete id="deleteProjectTemplate" parameterType="erp.erp.master.projectTemplate.model.ProjectTemplate">
+	delete from dbo.mbwhb
+	where  mbbh=#{mbbh}
+	and mbxh=#{mbxh}
+</delete>
+</mapper>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseInspectionManage.data.ImpPurchaseInspetionMapper">
+
+
+<select id="getImpPurchaseInspetionList" parameterType="map" resultType="erp.erp.purchaseInspectionManage.model.ImpPurchaseInspetion">
+	select  cghtb.csbh,
+			htmxb.htbh,
+			htmxb.htxh,
+			case when htmxb.htbh&lt;&gt;0 then ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) else null end as hth,
+			htmxb.jhbh,
+			htmxb.jhxh,
+			case when htmxb.jhbh&lt;&gt;0 then ltrim(rtrim(htmxb.jhbh))+'-'+ltrim(rtrim(htmxb.jhxh)) else null end as jhh,
+			htmxb.ddbh, 
+			htmxb.ddxh,
+			case when wms_zttzdb.ddbh&lt;&gt;0 then ltrim(rtrim(wms_zttzdb.ddbh))+'-'+ltrim(rtrim(wms_zttzdb.ddxh)) else null end as ddh,
+			htmxb.clhh,
+			htmxb.cltx1,
+			htmxb.cltx2,
+			htmxb.cltx3,
+			htmxb.jldw,
+			htmxb.cgsl,
+			htmxb.rksl,
+			cpbmb.cpmc,
+			khxxb.khmc,
+			htmxb.hsbm,
+			htmxb.htbz,
+			ddbzcfmxb.pono,
+			ddbzcfmxb.cfbh,
+			ddbzcfmxb.cfxh,
+			case when ddbzcfmxb.ddbh&lt;&gt;0 then ltrim(rtrim(ddbzcfmxb.cfbh))+'-'+ltrim(rtrim(ddbzcfmxb.cfxh)) else null end as cfh,
+			wms_zttzdb.khbh,		
+			csxxb.csmc,
+			wms_zttzdb.cpbh,
+			wms_zttzdb.khxh,
+			wms_zttzdb.ywms,
+			wms_zttzdb.zxgz,
+			wms_zttzdb.wxdh,
+			wms_zttzdb.wxxh,
+			case when wms_zttzdb.wxdh&lt;&gt;0 then ltrim(rtrim(wms_zttzdb.wxdh))+'-'+ltrim(rtrim(wms_zttzdb.wxxh)) else null end as wxh,
+			wms_zttzdb.xtcd,
+			wms_zttzdb.xtkd,
+			wms_zttzdb.xtgd,
+			wms_zttzdb.mxmz,
+			wms_zttzdb.mxtj,
+			wms_zttzdb.mxjz,
+			wms_zttzdb.mxzs,
+			isnull(wms_zttzdb.tzsl,0) as tzsl,
+			0 as xzbj
+from htmxb with (nolock)
+left outer join cghtb with (nolock) on htmxb.htbh=cghtb.htbh
+left outer join cpbmb with (nolock) on cpbmb.bcpbh=htmxb.clhh
+left outer join xsddb with (nolock) on xsddb.ddbh=htmxb.ddbh 
+left outer join khxxb with (nolock) on khxxb.khbh=htmxb.khbh
+left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh
+left outer join ddbzcfmxb with (nolock) on ddbzcfmxb.ddbh=htmxb.ddbh and ddbzcfmxb.ddxh=htmxb.ddxh
+left outer join wms_zttzdb with (nolock) on wms_zttzdb.ddbh=ddbzcfmxb.ddbh  and wms_zttzdb.ddxh=htmxb.ddxh and ddbzcfmxb.cfbh=wms_zttzdb.cfbh and ddbzcfmxb.cfxh=wms_zttzdb.cfxh
+where cghtb.gdbj=0 and cghtb.qfbj=1 and htmxb.wcbj=0 and cghtb.cglb=7211
+<if test="htbh!=null">
+and htmxb.htbh = htbh
+</if>
+<if test="csmc!=null">
+and csxxb.csmc like '%${csmc}%' or cghtb.csbh like '%${csmc}%'
+</if>
+</select>
+<insert id="addImpPurchaseInspetion" parameterType="erp.erp.purchaseInspectionManage.model.ImpPurchaseInspetion" keyProperty="" useGeneratedKeys="true">
+	insert into htmxb
+	(
+		csbh,
+		htbh,
+		htxh,
+		hth,
+		jhbh,
+		jhxh,
+		jhh,
+		ddbh,
+		ddxh,
+		ddh,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		jldw,
+		cgsl,
+		rksl,
+		cpmc,
+		khmc,
+		hsbm,
+		htbz,
+		pono,
+		cfbh,
+		cfxh,
+		cfh,
+		khbh,
+		csmc,
+		cpbh,
+		khxh,
+		ywms,
+		zxgz,
+		wxdh,
+		wxxh,
+		wxh,
+		xtcd,
+		xtkd,
+		xtgd,
+		mxmz,
+		mxtj,
+		mxjz,
+		mxzs,
+		tzsl,
+		xzbj
+	)
+	values
+	(
+		#{csbh},
+		#{htbh},
+		#{htxh},
+		#{hth},
+		#{jhbh},
+		#{jhxh},
+		#{jhh},
+		#{ddbh},
+		#{ddxh},
+		#{ddh},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{jldw},
+		#{cgsl},
+		#{rksl},
+		#{cpmc},
+		#{khmc},
+		#{hsbm},
+		#{htbz},
+		#{pono},
+		#{cfbh},
+		#{cfxh},
+		#{cfh},
+		#{khbh},
+		#{csmc},
+		#{cpbh},
+		#{khxh},
+		#{ywms},
+		#{zxgz},
+		#{wxdh},
+		#{wxxh},
+		#{wxh},
+		#{xtcd},
+		#{xtkd},
+		#{xtgd},
+		#{mxmz},
+		#{mxtj},
+		#{mxjz},
+		#{mxzs},
+		#{tzsl},
+		#{xzbj}
+	)
+</insert>
+<update id="updateImpPurchaseInspetion" parameterType="erp.erp.purchaseInspectionManage.model.ImpPurchaseInspetion">
+	update htmxb
+		set
+			csbh = #{csbh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			hth = #{hth},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			jhh = #{jhh},
+			ddbh = #{ddbh},
+			ddxh = #{ddxh},
+			ddh = #{ddh},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			jldw = #{jldw},
+			cgsl = #{cgsl},
+			rksl = #{rksl},
+			cpmc = #{cpmc},
+			khmc = #{khmc},
+			hsbm = #{hsbm},
+			htbz = #{htbz},
+			pono = #{pono},
+			cfbh = #{cfbh},
+			cfxh = #{cfxh},
+			cfh = #{cfh},
+			khbh = #{khbh},
+			csmc = #{csmc},
+			cpbh = #{cpbh},
+			khxh = #{khxh},
+			ywms = #{ywms},
+			zxgz = #{zxgz},
+			wxdh = #{wxdh},
+			wxxh = #{wxxh},
+			wxh = #{wxh},
+			xtcd = #{xtcd},
+			xtkd = #{xtkd},
+			xtgd = #{xtgd},
+			mxmz = #{mxmz},
+			mxtj = #{mxtj},
+			mxjz = #{mxjz},
+			mxzs = #{mxzs},
+			tzsl = #{tzsl},
+			xzbj = #{xzbj}
+		where  = #{}
+</update>
+<delete id="deleteImpPurchaseInspetion" parameterType="erp.erp.purchaseInspectionManage.model.ImpPurchaseInspetion">
+	delete from htmxb
+	where  = #{}
+</delete>
+</mapper>

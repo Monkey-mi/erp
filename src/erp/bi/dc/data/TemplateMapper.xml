@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.bi.dc.data.TemplateMapper">
+<select id="getDatagridTplList" parameterType="map" resultType="erp.bi.dc.model.DateReportTemplate">
+	select
+		tpl_id,
+		name,
+		code,
+		b_code,
+		description,
+		ou_code,
+		d_code,
+		type,
+		creator,
+		create_date,
+		valid,
+		list_id
+	from
+		t_rpt_datareport_tpl 
+	<where>
+		<if test="ou_code != null">
+		and ou_code = #{ou_code}
+		</if>
+		<if test="b_code != null">
+		and b_code = #{b_code}
+		</if>
+		<if test="tpl_id != null">
+		and tpl_id = #{tpl_id}
+		</if>
+		<if test="code != null">
+		and code = #{code}
+		</if>
+		<if test="type != null">
+		and type = #{type}
+		</if>
+		<if test="list_id != null">
+		and list_id = #{list_id}
+		</if>
+	</where>
+	order by code
+</select>
+<select id="getDatagridTplWithXml" parameterType="map" resultType="erp.bi.dc.model.DateReportTemplate">
+	select
+		tpl_id,
+		name,
+		code,
+		b_code,
+		description,
+		ou_code,
+		d_code,
+		type,
+		tpl_xml,
+		creator,
+		create_date,
+		valid,
+		list_id
+	from
+		t_rpt_datareport_tpl 
+	<where>
+		<if test="b_code != null">
+		and b_code = #{b_code}
+		</if>
+		<if test="tpl_id != null">
+		and tpl_id = #{tpl_id}
+		</if>
+		<if test="code != null">
+		and code = #{code}
+		</if>
+		<if test="list_id != null">
+		and list_id = #{list_id}
+		</if>
+	</where>
+</select>
+<select id="getDatagridTplXml" parameterType="map" resultType="String">
+	select
+		tpl_xml
+	from
+		t_rpt_datareport_tpl 
+	where tpl_id = #{tpl_id}
+</select>
+<select id="setDatagridTplXml" parameterType="map">
+	update t_rpt_datareport_tpl
+	set tpl_xml = #{tpl_xml}
+	where tpl_id = #{tpl_id}
+</select>
+<insert id="addDatagridTpl" parameterType="erp.bi.dc.model.DateReportTemplate" keyProperty="tpl_id" useGeneratedKeys="true">
+	insert into t_rpt_datareport_tpl
+	(
+		name,
+		code,
+		b_code,
+		description,
+		ou_code,
+		d_code,
+		type,
+		creator,
+		create_date,
+		valid,
+		list_id
+	)
+	values
+	(
+		#{name},
+		#{code},
+		#{b_code},
+		#{description},
+		#{ou_code},
+		#{d_code},
+		#{type},
+		#{creator},
+		#{create_date},
+		#{valid},
+		#{list_id}
+	)
+</insert>
+<update id="updateDatagridTpl" parameterType="erp.bi.dc.model.DateReportTemplate">
+	update t_rpt_datareport_tpl
+		set
+			tpl_id = #{tpl_id},
+			name = #{name},
+			code = #{code},
+			b_code = #{b_code},
+			description = #{description},
+			ou_code = #{ou_code},
+			d_code = #{d_code},
+			type = #{type},
+			creator = #{creator},
+			create_date = #{create_date},
+			valid = #{valid}
+		where tpl_id = #{tpl_id}
+</update>
+<delete id="deleteDatagridTpl" parameterType="erp.bi.dc.model.DateReportTemplate">
+	delete from t_rpt_datareport_tpl
+	where tpl_id = #{tpl_id}
+</delete>
+
+
+</mapper>

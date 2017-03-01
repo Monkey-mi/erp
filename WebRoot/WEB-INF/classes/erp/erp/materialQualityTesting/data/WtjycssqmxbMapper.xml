@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.WtjycssqmxbMapper">
+
+
+<select id="getwtjycssqmxbList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Wtjycssqmxb">
+	select 
+		wtjycssqmxb.wtdh,		
+		wtjycssqmxb.wtxh,	
+	    wtjycssqmxb.wtsqxh,	
+		wtjycssqmxb.csxm,		
+		wtjycssqmxb.csbz,		
+		wtjycssqmxb.bzsm,		
+		wtjycssqmxb.jyjg,
+		wtjycssqmxb.wjmc,
+		wtjycssqmxb.wjlj,
+        wtjycssqmxb.csz,
+		wtjycssqmxb.cjrm,
+		wtjycssqmxb.cjrq,
+		wtjycssqmxb.yqjq,
+		wtjycssqmxb.psjq,
+		wtjycssqmxb.clrm,
+		wtjycssqmxb.psbj,
+		wtjycssqmxb.psrm,
+		wtjycssqmxb.csjg,
+		wtjycssqmxb.pssj,
+		wtjycssqmxb.jjcd,
+		wtjycssqmxb.jybj,
+		wtjycssqmxb.jysj,
+		wtjycssqmxb.jyrm
+     from wtjycssqmxb		
+     where wtjycssqmxb.wtdh=#{wtdh}
+</select>
+<insert id="addwtjycssqmxb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqmxb" keyProperty="" useGeneratedKeys="true">
+	insert into wtjycssqmxb
+	(
+		wtdh,
+		wtxh,
+		wtsqxh,
+		csxm,
+		csbz,
+		bzsm,
+		jyjg,
+		wjmc,
+		wjlj,
+		csz,
+		cjrm,
+		cjrq,
+		yqjq,
+		psjq,
+		clrm,
+		psbj,
+		psrm,
+		csjg,
+		pssj,
+		jjcd,
+		jybj,
+		jysj,
+		jyrm
+	)
+	values
+	(
+		#{wtdh},
+		#{wtxh},
+		#{wtsqxh},
+		#{csxm},
+		#{csbz},
+		#{bzsm},
+		#{jyjg},
+		#{wjmc},
+		#{wjlj},
+		#{csz},
+		#{cjrm},
+		#{cjrq},
+		#{yqjq},
+		#{psjq},
+		#{clrm},
+		#{psbj},
+		#{psrm},
+		#{csjg},
+		#{pssj},
+		#{jjcd},
+		#{jybj},
+		#{jysj},
+		#{jyrm}
+	)
+</insert>
+<update id="updatewtjycssqmxb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqmxb">
+	update wtjycssqmxb
+		set
+			wtdh = #{wtdh},
+			wtxh = #{wtxh},
+			wtsqxh = #{wtsqxh},
+			csxm = #{csxm},
+			csbz = #{csbz},
+			bzsm = #{bzsm},
+			jyjg = #{jyjg},
+			wjmc = #{wjmc},
+			wjlj = #{wjlj},
+			csz = #{csz},
+			cjrm = #{cjrm},
+			cjrq = #{cjrq},
+			yqjq = #{yqjq},
+			psjq = #{psjq},
+			clrm = #{clrm},
+			psbj = #{psbj},
+			psrm = #{psrm},
+			csjg = #{csjg},
+			pssj = #{pssj},
+			jjcd = #{jjcd},
+			jybj = #{jybj},
+			jysj = #{jysj},
+			jyrm = #{jyrm}
+		where  = #{}
+</update>
+<delete id="deletewtjycssqmxb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqmxb">
+	delete from wtjycssqmxb
+	where  = #{}
+</delete>
+</mapper>

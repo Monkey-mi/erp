@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.master.purchaseCost.data.PatentImpMapper">
+	<select id = "getPatentImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.PatentImp">
+ select 
+	rkdb_yl.rkdh,
+	rkdb_yl.rkxh,
+	case when rkdb_yl.rkdh&lt;&gt;0 then ltrim(rtrim(rkdb_yl.rkdh))+'-'+ltrim(rtrim(rkdb_yl.rkxh)) end as rkh,
+	rkdb_yl.ckbh,
+	rkdb_yl.rkrq,
+	rkdb_yl.rksl,
+	rkdb_yl.zlje,
+	rkdb_yl.fzsl,
+	rkdb_yl.htbh,
+	rkdb_yl.htxh,
+	case when rkdb_yl.htbh&lt;&gt;0 then ltrim(rtrim(rkdb_yl.htbh))+'-'+ltrim(rtrim(rkdb_yl.htxh)) end as hth,
+	a.zlcsbh,
+	htmxb.zldj,
+	b.wbbh,
+	wbmcb.wbdh,
+	ckmcb_yl.ckmc,
+	c.csmc as zlcsmc
+from rkdb_yl
+left outer join htmxb with(nolock) on htmxb.htbh = rkdb_yl.htbh and htmxb.htxh = rkdb_yl.htxh
+left outer join cghtb a with(nolock) on a.htbh = rkdb_yl.htbh
+left outer join csxxb b with(nolock) on a.zlcsbh = b.csbh
+left outer join wbmcb with(nolock) on wbmcb.wbbh = b.wbbh
+left outer join ckmcb_yl with(nolock) on ckmcb_yl.ckbh = rkdb_yl.ckbh
+left outer join csxxb c with(nolock) on c.csbh = a.zlcsbh
+where rkdb_yl.zlje!=0 and rkdb_yl.zlje is not null and not exists(select * from cgfyb a where a.zlckbh=rkdb_yl.ckbh and a.zlrkdh=rkdb_yl.rkdh and a.zlrkxh=rkdb_yl.rkxh)
+and not exists(select * from ##cgfyb1 b where b.zlckbh=rkdb_yl.ckbh and b.zlrkdh=rkdb_yl.rkdh and b.zlrkxh=rkdb_yl.rkxh)
+	</select>
+</mapper>

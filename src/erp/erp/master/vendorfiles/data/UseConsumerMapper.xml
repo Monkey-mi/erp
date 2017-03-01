@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.vendorfiles.data.UseConsumerMapper">
+<select id="getUseConsumerList" parameterType="map" resultType="erp.erp.master.vendorfiles.model.UseConsumer">
+  SELECT distinct
+			cyjhb.khbh,
+			khxxb.khmc, 
+			khxxb.ywmc  
+    FROM cyjhb   
+left outer join khxxb on khxxb.khbh=cyjhb.khbh
+left outer join cyjh_wtsb on cyjh_wtsb.cybh=cyjhb.cybh
+where cyjh_wtsb.hdmc=#{csbh}
+</select>
+</mapper>

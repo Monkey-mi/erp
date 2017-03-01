@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.CghtbMapper">
+<select id="getCghtb" parameterType="map" resultType="String">
+ select cgyq as cghtyq from cghtb with (nolock) where htbh=#{htbh}
+</select>
+<update id="updateCghtb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqclmxb">
+ update cghtyq set cgyq = #{cghtyq} where htbh=#{htbh}
+</update>
+<insert id="addCghtb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqclmxb">
+ insert into cghtyq (cgyq) values (#{cghtyq}) where htbh=#{htbh}
+</insert>
+<delete id="deleteCghtb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqclmxb">
+ delete from cghtyq where where  = #{}
+</delete>
+</mapper>

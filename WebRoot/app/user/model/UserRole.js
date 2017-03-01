@@ -1,0 +1,17 @@
+Ext.define('erp.user.model.UserRole',{
+    extend:'Ext.data.Model',
+    idProperty:'id',
+    identifier:'negative',
+    fields:[
+    {
+    	name:'id',type:'int'
+    },
+    {
+    	name:'u_id',type:'int'
+    },
+    {
+    	name:'role_id',type:'int'
+    },
+    {name:'ou_id',type:'int'}
+    ]
+});

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.prematerial.data.PrematerialMapper">
+
+
+<select id="getPrematerialList" parameterType="map" resultType="erp.erp.master.prematerial.model.Prematerial">
+	select
+		          d.ckbh,
+		          d.dhdh,
+		          d.dhxh,
+		          d.dhrq,
+	              d.pjrq,
+	              d.csbh,
+	              d.clhh,
+	              d.cltx1,
+	              d.cltx2,
+	              d.cltx3,
+	              d.pcbh,
+	              d.ghpc,
+	              d.dhsl,
+	              d.yrsl,
+	              d.jldw,
+	              case when htbh!=0 then
+				       ltrim(rtrim(str(d.htbh)))+'-'+ltrim(rtrim(str(d.htxh)))
+			      else null end as hth,   
+			      d.htbh, 
+	              d.jhbh,
+	              d.jhxh,
+	              d.zzrq,
+	              d.jkrm,
+	              d.bzsm,
+	              d.czym,
+	              d.czsj,
+	              d.zjbj,
+	              d.jjbj,
+	              d.ztbj,
+	              d.jyjg,
+	              d.zjdh,
+	              d.zjrq,
+	              d.zjbz,
+	              d.dpyy,
+	              d.dybj,
+	              d.zjrm,
+	              d.zjsj,
+	              d.thdh,
+	              d.thrq,
+	              d.thbj,
+	              d.wxbj,
+	              case when wxdh!=0 then
+				       ltrim(rtrim(str(d.wxdh)))+'-'+ltrim(rtrim(str(d.wxxh)))
+			      else null end as wxh, 
+	              d.shdh,
+	              d.fzsl,
+	              d.fzdw,
+	              d.hwbh,
+	              d.shrm,
+	              d.shsj,
+	              d.shjg,
+	              d.shsm,
+	              d.zzbj,
+	              d.zzrm,
+	              d.zzsj,
+	              d.shbj,
+		          c.csmc,
+		          l.clmc,
+		          h.ztmc,
+		          j.jlmc,
+		          k.ckmc
+	from
+		dbo.dhdjb_yl d
+    left outer join dbo.csxxb c
+    on
+    	d.csbh = c.csbh	 
+    left outer join dbo.clbmb l
+    on 
+        d.clhh = l.clhh
+    left outer join dbo.dhztb h
+    on  
+        d.ztbj = h.ztbh    	
+    left outer join dbo.zjjlb j
+    on  
+        d.jyjg = j.jlbh
+    left outer join ckmcb_yl k
+    on 
+        d.ckbh = k.ckbh     
+    where
+       d.ztbj!= 2 and d.ztbj!= 3	 	
+	<if test="condition!=null and condition!=''">
+		and ${condition}
+	</if> 
+	<if test="ckqx!=null">
+	 ${ckqx}	
+	</if>
+</select>
+<insert id="addPrematerial" parameterType="erp.erp.master.prematerial.model.Prematerial" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.dhdjb_yl
+	(
+		ckbh,
+		dhdh,
+		dhxh,
+		dhrq,
+		pjrq,
+		csbh,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		pcbh,
+		ghpc,
+		dhsl,
+		yrsl,
+		jldw,
+		htbh,
+		htxh,
+		jhbh,
+		jhxh,
+		zzrq,
+		jkrm,
+		bzsm,
+		czym,
+		czsj,
+		zjbj,
+		jjbj,
+		ztbj,
+		jyjg,
+		zjdh,
+		zjrq,
+		zjbz,
+		dpyy,
+		dybj,
+		zjrm,
+		zjsj,
+		thdh,
+		thrq,
+		thbj,
+		wxbj,
+		wxdh,
+		wxxh,
+		shdh,
+		fzsl,
+		fzdw,
+		hwbh,
+		shrm,
+		shsj,
+		shjg,
+		shsm,
+		zzbj,
+		zzrm,
+		zzsj,
+		shbj
+	)
+	values
+	(
+		#{ckbh},
+		#{dhdh},
+		#{dhxh},
+		#{dhrq},
+		#{pjrq},
+		#{csbh},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{pcbh},
+		#{ghpc},
+		#{dhsl},
+		#{yrsl},
+		#{jldw},
+		#{htbh},
+		#{htxh},
+		#{jhbh},
+		#{jhxh},
+		#{zzrq},
+		#{jkrm},
+		#{bzsm},
+		#{czym},
+		#{czsj},
+		#{zjbj},
+		#{jjbj},
+		#{ztbj},
+		#{jyjg},
+		#{zjdh},
+		#{zjrq},
+		#{zjbz},
+		#{dpyy},
+		#{dybj},
+		#{zjrm},
+		#{zjsj},
+		#{thdh},
+		#{thrq},
+		#{thbj},
+		#{wxbj},
+		#{wxdh},
+		#{wxxh},
+		#{shdh},
+		#{fzsl},
+		#{fzdw},
+		#{hwbh},
+		#{shrm},
+		#{shsj},
+		#{shjg},
+		#{shsm},
+		#{zzbj},
+		#{zzrm},
+		#{zzsj},
+		#{shbj}
+	)
+</insert>
+<update id="updatePrematerial" parameterType="erp.erp.master.prematerial.model.Prematerial">
+	update dbo.dhdjb_yl
+		set
+			ckbh = #{ckbh},
+			dhdh = #{dhdh},
+			dhxh = #{dhxh},
+			dhrq = #{dhrq},
+			pjrq = #{pjrq},
+			csbh = #{csbh},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			pcbh = #{pcbh},
+			ghpc = #{ghpc},
+			dhsl = #{dhsl},
+			yrsl = #{yrsl},
+			jldw = #{jldw},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			zzrq = #{zzrq},
+			jkrm = #{jkrm},
+			bzsm = #{bzsm},
+			czym = #{czym},
+			czsj = #{czsj},
+			zjbj = #{zjbj},
+			jjbj = #{jjbj},
+			ztbj = #{ztbj},
+			jyjg = #{jyjg},
+			zjdh = #{zjdh},
+			zjrq = #{zjrq},
+			zjbz = #{zjbz},
+			dpyy = #{dpyy},
+			dybj = #{dybj},
+			zjrm = #{zjrm},
+			zjsj = #{zjsj},
+			thdh = #{thdh},
+			thrq = #{thrq},
+			thbj = #{thbj},
+			wxbj = #{wxbj},
+			wxdh = #{wxdh},
+			wxxh = #{wxxh},
+			shdh = #{shdh},
+			fzsl = #{fzsl},
+			fzdw = #{fzdw},
+			hwbh = #{hwbh},
+			shrm = #{shrm},
+			shsj = #{shsj},
+			shjg = #{shjg},
+			shsm = #{shsm},
+			zzbj = #{zzbj},
+			zzrm = #{zzrm},
+			zzsj = #{zzsj},
+			shbj = #{shbj}
+		where  = #{}
+</update>
+<delete id="deletePrematerial" parameterType="erp.erp.master.prematerial.model.Prematerial">
+	delete from dbo.dhdjb_yl
+	where  = #{}
+</delete>
+<select id="getCsList" parameterType="map" resultType="string">
+	select  dbo.csxxb.csmc 
+	from csxxb
+	where dbo.csxxb.csbh = #{csbh}
+</select>
+<select id="getCkqx" parameterType="map" resultType="String">
+	select ckbh
+	    From  ckqx_yl
+	    where czy_gh=#{czy_gh};
+</select>
+</mapper>

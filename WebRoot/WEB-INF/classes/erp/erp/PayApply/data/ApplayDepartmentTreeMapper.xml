@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.ApplayDepartmentTreeMapper">
+<!-- 获取类别名称 -->
+<select id="getDepartmentName" parameterType="map" resultType="String">
+	select lbmc  from czybmlbb  where  lbbh=#{lbbh};
+</select>
+<!-- 获取序号 -->
+<select id="getDepartmentOne" parameterType="map" resultType="String">
+	select isnull(max ( lbbh ),0)+4 from czybmlbb where lbjc =1
+</select>
+<select id="getDepartmentTwo" parameterType="map" resultType="String">
+	select max ( substring ( lbbh , LEN(lbbh)-1 , 2 ) ) from czybmlbb where lbjc =#{lbjc} and lbbh like '${lbbh}%'
+</select>
+<select id="getDepartmentList" parameterType="map" resultType="erp.erp.PayApply.model.ApplayDepartmentTree">
+	select
+		czybmlbb.lbbh,
+		czybmlbb.lbmc,
+		czybmlbb.lbjc,
+		czybmlbb.mjbz		
+	from
+		czybmlbb		
+		where 1=1
+		<if test="node!=null and node==0">
+			and  czybmlbb.lbjc=1
+		</if>
+		<if test="node!=null and node>0">
+		 	 and left(czybmlbb.lbbh,len(#{node}))=#{node} and czybmlbb.lbbh!=#{node}
+		</if>
+		<if test="lbbh!=null">
+			and (czybmlbb.lbbh like '${lbbh}%' or czybmlbb.lbmc like '${lbbh}%')
+		</if>
+		<if test="mjbz!=null">
+			and czybmlbb.mjbz=#{mjbz}
+		</if>
+		<!-- 2017/1/2李晓波提出工号20589申请部门没有
+		<if test="czy_gh!=null and czy_gh!=''">
+			and  exists(select 1 from cglb_qxb where cglb_qxb.czy_gh=#{czy_gh} and cglb_qxb.lbbh=left(lbbh,len(czybmlbb.lbbh)))
+		</if> -->
+		<if test="orderBySQL!=null and orderBySQL!=''">
+			order by ${orderBySQL} 
+		</if>
+</select>
+
+</mapper>

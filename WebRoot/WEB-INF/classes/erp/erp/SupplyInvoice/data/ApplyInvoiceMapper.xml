@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.SupplyInvoice.data.ApplyInvoiceMapper">
+
+
+<select id="getApplyInvoiceList" parameterType="map" resultType="erp.erp.SupplyInvoice.model.ApplyInvoice">
+	  SELECT fksqspmxb.sqbh,   
+         fksqspmxb.sqxh,
+         fksqspmxb.fplb,   
+         fksqspmxb.fphm,   
+         fksqspmxb.jzrq,   
+         fksqspmxb.fpje,
+			fksqspmxb.sqje,
+			fksqspmxb.yfje,
+			gyfpb.kprq
+    FROM fksqspmxb  
+left outer join gyfpb on gyfpb.fphm=fksqspmxb.fphm and gyfpb.fplb=fksqspmxb.fplb 
+   WHERE
+   1=1
+   <if test="fplb!=null">
+   	 and fksqspmxb.fplb=#{fplb}
+   </if>
+   <if test="fphm!=null">
+   	and  fksqspmxb.fphm=#{fphm}
+   </if>    
+</select>
+</mapper>

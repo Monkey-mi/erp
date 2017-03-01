@@ -1,0 +1,40 @@
+10
+
+dir
+2600
+https://192.168.1.100/svn/erp/erpForOut62/WebRoot/app/basicdata/enumType
+https://192.168.1.100/svn/erp
+
+
+
+2017-02-20T09:49:07.055670Z
+2571
+wuqia
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+70d35baf-c61e-d24d-b330-644048e49734
+
+controller
+dir
+
+model
+dir
+
+store
+dir
+
+view
+dir
+

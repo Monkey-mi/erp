@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.OutMaterialMapper">
+
+
+<select id="getOutMaterialList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.OutMaterial">
+  SELECT wxclshjlb.shdh,   
+         wxclshjlb.shxh,   
+         wxclshjlb.jlrq,    
+         wxclshjlb.clhh,   
+         wxclshjlb.jldw,   
+         wxclshjlb.shsl,   
+         wxclshjlb.shlb,   
+         wxclshjlb.csbh,    
+         wxclshjlb.bzsm,
+         clbmb.clmc,
+			isnull(a.fysl,0) as yrsl,
+			(wxclshjlb.shsl - isnull(a.fysl,0)) as wrsl
+    FROM wxclshjlb 
+left outer join clbmb with (nolock) on clbmb.clhh=wxclshjlb.clhh
+left outer join view_wxclsh_cgfy a with (nolock) on a.shdh=wxclshjlb.shdh and a.shxh=wxclshjlb.shxh
+where year(jlrq)  =#{year} and month(jlrq)=#{month} and wxclshjlb.shsl - isnull(a.fysl,0)>0
+</select>
+
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.ClbmbMapper">
+
+
+<select id="getClbmbList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Clbmb">
+	select
+		Clbmb.clhh,
+		Clbmb.lbbh,
+		Clbmb.zjbj,
+		Clbmb.clmc,
+		Clbmb.jldw,
+		Clbmb.yshh,
+		Clbmb.ysmc,
+		Clbmb.bcpbj
+	from
+		Clbmb left outer join cllbb on clbmb.lbbh = cllbb.lbbh
+	 <where>
+	  <if test="lbbh !=null and lbbh !=''">
+	  and Clbmb.lbbh = #{lbbh}
+	  </if>
+	  <if test="clmc !=null and lbbh !=''">
+	  and Clbmb.clmc = #{clmc}
+	  </if>
+	  <if test="clhh !=null and lbbh !=''">
+	  and Clbmb.clhh = #{clhh}
+	  </if>
+	  <if test="condition!=null">
+	  and Clbmb.clhh like '${condition}%' or Clbmb.clmc like '%${condition}%'
+	  </if>
+	  <if test="query!=null">
+	  and Clbmb.lbbh like '${query}%' or Clbmb.clmc like '%${query}%'
+	  </if>
+	  <if test="search!=null">
+	  and Clbmb.lbbh like '${search}%' or Clbmb.clmc like '%${search}%'
+	 </if>
+    	<if test="xsbjsearch!=null and xsbjsearch!=''">
+	  and   Clbmb.clhh like '%${xsbjsearch}%' or 
+		    Clbmb.clmc like '%${xsbjsearch}%' or
+		    Clbmb.lbbh like '%${xsbjsearch}%' 
+	</if>
+	 </where>
+</select>
+<insert id="addClbmb" parameterType="erp.erp.materialQualityTesting.model.Clbmb" keyProperty="" useGeneratedKeys="true">
+	insert into Clbmb
+	(
+		clhh,
+		lbbh,
+		zjbj,
+		clmc,
+		jldw,
+		yshh,
+		ysmc,
+		bcpbj
+	)
+	values
+	(
+		#{clhh},
+		#{lbbh},
+		#{zjbj},
+		#{clmc},
+		#{jldw},
+		#{yshh},
+		#{ysmc},
+		#{bcpbj}
+	)
+</insert>
+<update id="updateClbmb" parameterType="erp.erp.materialQualityTesting.model.Clbmb">
+	update Clbmb
+		set
+			clhh = #{clhh},
+			lbbh = #{lbbh},
+			zjbj = #{zjbj},
+			clmc = #{clmc},
+			jldw = #{jldw},
+			yshh = #{yshh},
+			ysmc = #{ysmc},
+			bcpbj = #{bcpbj}
+		where  = #{}
+</update>
+<delete id="deleteClbmb" parameterType="erp.erp.materialQualityTesting.model.Clbmb">
+	delete from Clbmb
+	where  = #{}
+</delete>
+</mapper>

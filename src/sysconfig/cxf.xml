@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cxf="http://cxf.apache.org/core"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+    http://cxf.apache.org/jaxws 
+    http://cxf.apache.org/schemas/jaxws.xsd">
+    	
+      <context:property-placeholder location="classpath:sysconfig/publishInfo.properties" />
+    	
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+	<bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+	<bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
+	<cxf:bus>
+	    <cxf:inInterceptors>
+	        <ref bean="loggingInInterceptor"/>
+	    </cxf:inInterceptors>
+	    <cxf:outInterceptors>
+	        <ref bean="loggingOutInterceptor"/>
+	    </cxf:outInterceptors>
+	    <cxf:outFaultInterceptors>
+	        <ref bean="loggingOutInterceptor"/>
+	    </cxf:outFaultInterceptors>
+	    <cxf:inFaultInterceptors>
+	        <ref bean="loggingInInterceptor"/>
+	    </cxf:inFaultInterceptors>
+	</cxf:bus>
+	<bean id="clientPasswordCallback" class="erp.util.web.ClientPasswordCallback"/>
+	<bean id="authentication_client" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">  
+                <constructor-arg>  
+                    <map>  
+                        <entry key="action" value="UsernameToken" />  
+                        <entry key="passwordType" value="PasswordText" />  
+                        <entry key="user" value="FHDClient" />  
+                        <entry key="passwordCallbackRef">  
+                            <ref bean="clientPasswordCallback" />  
+                        </entry>  
+                    </map>  
+                </constructor-arg>  
+            </bean> 
+    <jaxws:client id="supplierInter" serviceClass="com.outsideasy.ws.erp.supplier.SupplierInter" 
+		address="http://${cxf_url}/ws/erp/supplier/supplierInter">
+		 <jaxws:handlers>
+		   <bean class="erp.util.web.SessionLogicalHandler"></bean>
+		 </jaxws:handlers>
+		 <jaxws:outInterceptors>  
+            <!-- <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" /> -->  
+            <!-- SAAJInInterceptor只在CXF是2.0.X版本时或之前版本时才是必须的 -->  
+            <!-- <bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor"/> -->  
+             <ref bean="authentication_client"></ref>
+        </jaxws:outInterceptors> 
+	</jaxws:client>
+	<jaxws:client id="supplierAccessInter" serviceClass="com.outsideasy.ws.erp.supplier.SupplierAccessInter" 
+		address="http://${cxf_url}/ws/erp/supplier/supplierAccessInter">
+		 <jaxws:handlers>
+		   <bean class="erp.util.web.SessionLogicalHandler"></bean>
+		 </jaxws:handlers>
+		 <jaxws:outInterceptors>  
+            <!-- <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" /> -->  
+            <!-- SAAJInInterceptor只在CXF是2.0.X版本时或之前版本时才是必须的 -->  
+            <!-- <bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor"/> -->  
+             <ref bean="authentication_client"></ref>
+        </jaxws:outInterceptors> 
+	</jaxws:client>
+	<jaxws:client id="contractSyncInter" serviceClass="com.outsideasy.ws.erp.contract.ContractSyncInter" 
+		address="http://${cxf_url}/ws/erp/contract/contractSyncInter">
+		 <jaxws:handlers>
+		   <bean class="erp.util.web.SessionLogicalHandler"></bean>
+		 </jaxws:handlers>
+		 <jaxws:outInterceptors>  
+            <!-- <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" /> -->  
+            <!-- SAAJInInterceptor只在CXF是2.0.X版本时或之前版本时才是必须的 -->  
+            <!-- <bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor"/> -->  
+             <ref bean="authentication_client"></ref>
+        </jaxws:outInterceptors> 
+	</jaxws:client>
+	<!-- 追催协同 -->
+	<jaxws:client id="synergyUrgeSyncInter" serviceClass="com.outsideasy.ws.erp.contract.SynergyUrgeSyncInter" 
+		address="http://${cxf_url}/ws/erp/contract/synergyUrgeSyncInter">
+		 <jaxws:handlers>
+		   <bean class="erp.util.web.SessionLogicalHandler"></bean>
+		 </jaxws:handlers>
+		 <jaxws:outInterceptors>  
+            <!-- <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" /> -->  
+            <!-- SAAJInInterceptor只在CXF是2.0.X版本时或之前版本时才是必须的 -->  
+            <!-- <bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor"/> -->  
+             <ref bean="authentication_client"></ref>
+        </jaxws:outInterceptors> 
+	</jaxws:client>
+	<cxf:bus>
+	  <cxf:features>
+	    <cxf:logging/>
+	  </cxf:features>
+	</cxf:bus>	
+    </beans>

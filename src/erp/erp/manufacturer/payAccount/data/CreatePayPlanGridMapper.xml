@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.CreatePayPlanGridMapper">
+<select id="getCreatePayPlanGrid" parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.CreatePayPlanGrid" >
+   SELECT fkjhmxb.jhbh,   
+         fkjhmxb.jhxh,   
+         fkjhmxb.csbh,   
+         fkjhmxb.wbbh,   
+         fkjhmxb.yfje,   
+         fkjhmxb.bqyf,   
+         fkjhmxb.zfje,   
+         fkjhmxb.wbyfje,   
+         fkjhmxb.wbbqyf,   
+         fkjhmxb.wbzfje,   
+         fkjhmxb.bzsm,
+		 fkjhmxb.fpje,
+		 fkjhmxb.fkje
+    FROM fkjhmxb
+    <where>
+    <if test="jhbh!=null and jhbh != ''">
+    fkjhmxb.jhbh=#{jhbh}
+    </if>
+    </where> 
+</select>
+<update id="updateCreatePayPlanGrid" parameterType="erp.erp.manufacturer.payAccount.model.CreatePayPlanGrid">
+update fkjhmxb 
+       set
+       jhbh = #{jhbh},
+       jhxh = #{jhxh},
+       csbh = #{csbh},
+       wbbh = #{wbbh},
+       yfje = #{yfje},
+       bqyf = #{bqyf},
+       zfje = #{wbyfje},
+       wbbqyf = #{wbbqyf},
+       wbzfje = #{wbzfje},
+       bzsm = #{bzsm},
+       fpje = #{fpje},
+       fkje = #{fkje}
+       from fkjhmxb
+       where jhbh=#{jhbh}
+       and jhxh = #{jhxh}
+       
+</update>
+<insert id="addCreatePayPlanGrid" parameterType="erp.erp.manufacturer.payAccount.model.CreatePayPlanGrid">
+insert into fkjhmxb(fkjhmxb.jhbh,   
+         fkjhmxb.jhxh,   
+         fkjhmxb.csbh,   
+         fkjhmxb.wbbh,   
+         fkjhmxb.yfje,   
+         fkjhmxb.bqyf,   
+         fkjhmxb.zfje,   
+         fkjhmxb.wbyfje,   
+         fkjhmxb.wbbqyf,   
+         fkjhmxb.wbzfje,   
+         fkjhmxb.bzsm,
+		 fkjhmxb.fpje,
+		 fkjhmxb.fkje) 
+		 values(
+		 #{jhbh},#{jhxh},#{csbh},#{wbbh},#{yfje},#{bqyf},#{zfje},#{wbyfje},#{wbbqyf},#{wbzfje},#{bzsm},#{fpje},#{fkje}
+		 )
+
+</insert>
+<delete id="deleteCreatePayPlanGrid">
+delete from fkjhmxb where jhbh = #{jhbh} 
+<if test="jhxh != null">
+and jhxh = #{jhxh}
+</if>
+</delete>
+</mapper>

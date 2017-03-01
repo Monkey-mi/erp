@@ -1,0 +1,33 @@
+Ext.define('erp.prepayAdjustment.model.PrepayAdjustment', {
+			extend : 'Ext.data.Model',
+			idProperty : 'tzxh' + 'tzdh',
+			fields : [
+				{name : 'sdbj',type : 'int'},
+				{name : 'tzdh',type : 'float'},
+				{name : 'tzrq',type : 'date',dateFormat : 'Y-m-d H:i:s'},
+				{name : 'tzlx'},
+				{name : 'tzxh',type : 'float'},
+				{name : 'sqbh',type : 'float'},
+				{name : 'yfhtbh',type : 'float'},
+				{name : 'yffydh'},
+				{name : 'tzhtbh',type : 'float'},
+				{name : 'tzfydh'},
+				{name : 'mbhtbh',type : 'float'},
+				{name : 'mbfydh'},
+				{name : 'tzhsbm'},
+				{name : 'mbhsbm'},
+				{name : 'bmmc1'},
+				{name : 'bmmc2'},
+				{name : 'wbdh'},
+				{name : 'tzfplb'},
+				{name : 'tzfphm'},
+				{name : 'tzje',type : 'float'},
+				{name : 'wbbh'},
+				{name : 'tzyy'},
+				{name : 'bzsm'},
+				{name : 'sdrm'},
+				{name : 'sdsj',type : 'date',dateFormat : 'Y-m-d H:i:s'},
+				{name : 'czrm'},
+				{name : 'czsj',type : 'date',dateFormat : 'Y-m-d H:i:s'}
+			]
+		});

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.arrivalRegister.data.GoodsAllocationMapper">
+
+
+<select id="getGoodsAllocationList" parameterType="map" resultType="erp.erp.arrivalRegister.model.GoodsAllocation">
+  SELECT clhwb.hwbh,   
+         clhwb.hwmc,  
+         clhwb.hwlb,  
+         clhwb.bzsm,  
+         clhwpcb.pcbh
+    FROM clhwb   
+ left outer join clhwpcb on clhwb.hwbh=clhwpcb.hwbh
+ where 1 = 1 
+  <if test="pcbh!=null and pcbh!=''">
+ 	 and pcbh=#{pcbh}
+  </if>
+  <if test="hwlb!=null and hwlb!=''">
+ 	and clhwb.tybj=0 and hwlb=#{hwlb} 
+  </if>
+</select>
+<insert id="addGoodsAllocation" parameterType="erp.erp.arrivalRegister.model.GoodsAllocation" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.clhwb
+	(
+		hwbh,
+		hwmc,
+		hwlb,
+		bzsm,
+		sdbj,
+		sdrm,
+		sdsj,
+		tybj
+	)
+	values
+	(
+		#{hwbh},
+		#{hwmc},
+		#{hwlb},
+		#{bzsm},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{tybj}
+	)
+</insert>
+<update id="updateGoodsAllocation" parameterType="erp.erp.arrivalRegister.model.GoodsAllocation">
+	update dbo.clhwb
+		set
+			hwbh = #{hwbh},
+			hwmc = #{hwmc},
+			hwlb = #{hwlb},
+			bzsm = #{bzsm},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			tybj = #{tybj}
+		where  = #{}
+</update>
+<delete id="deleteGoodsAllocation" parameterType="erp.erp.arrivalRegister.model.GoodsAllocation">
+	delete from dbo.clhwb
+	where  = #{}
+</delete>
+</mapper>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.caterialPriceApproval.data.CaterialPriceApprovalMapper">
+<!-- 根据sql获取对应值 -->
+<select id="getStringFromSql" parameterType="map" resultType="String">
+	${sql}
+</select>
+<!--控价刷新-->
+<select id="getRefreshPrice" statementType="CALLABLE" parameterType="map">
+       <![CDATA[  
+           exec proc_CaterialPriceApproval  @s_gsbh=#{s_gsbh},@s_jlbh=#{s_jlbh},@ss_jggs=#{s_jggs},@czrm=#{czrm}
+       ]]> 
+</select>
+<!--判断公式名称是否刷新过  -->
+<select id="getBeforRefreshPrice" parameterType="map" resultType="int">
+	select isnull(count(*),0)  from clspjgb where gsbh = #{gsbh} and qyrq is not null;
+</select>
+<!-- 材料档案和价格审批不能同时维护厂商 -->
+<select id="getCaterialPriceClddAndJgsp" parameterType="erp.erp.master.caterialPrice.model.CaterialPrice" resultType="int">
+select isnull(COUNT(1),0) from sysxxb where exists (
+ select count(*)  from clbmb where gsbh=#{gsbh} and (select count(*) from clbm_gscsb where clhh=clbmb.clhh and gycs&lt;&gt;'')>0 having count(*)&gt;0
+) and exists(
+	select count(*)  from clspjg_csb where jlbh=#{jlbh} and csbh&lt;&gt;'' having count(*)&gt;0
+)
+</select>
+<!-- 获取应用公式-->
+<select id="getCaterialPriceFormula" parameterType="map" resultType="erp.erp.master.caterialPrice.model.CaterialPrice">
+	select Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(jggs,')',''),'(',''),'[',''),']',''),'{',''),'}',''),'+','*'),'-','*'),'/','*') as jggs from cljggswhb where gsbh=#{gsbh};
+</select>
+<select id="getCaterialPriceApprovalList" parameterType="map" resultType="erp.erp.master.caterialPriceApproval.model.CaterialPriceApproval">
+select
+		dbo.clspjgb.jlbh,
+		dbo.clspjgb.jlrq,
+		dbo.clspjgb.gsbh,
+		dbo.clspjgb.qfrm,
+		dbo.clspjgb.qfbj,
+		dbo.clspjgb.qfrq,
+		dbo.clspjgb.czrm,
+		dbo.clspjgb.czrq,
+		dbo.clspjgb.sdrm,
+		dbo.clspjgb.sdbj,
+		dbo.clspjgb.sdrq,
+		dbo.clspjgb.qyrm,
+		dbo.clspjgb.qybj,
+		dbo.clspjgb.qyrq,
+		dbo.clspjgb.bzsm,
+		dbo.clspjgb.gdbj,
+		dbo.clspjgb.gdrq,
+		dbo.clspjgb.gdrm,
+		cljggswhb.gsmc
+	from
+		dbo.clspjgb
+	left outer join cljggswhb on cljggswhb.gsbh=clspjgb.gsbh
+	<where>
+		<if test="jlbh!=null">
+			clspjgb.jlbh=#{jlbh}
+		</if>
+		<if test="history!=null">
+			clspjgb.gdbj=#{history}
+		</if>
+	</where>
+	<if test="sort==null">
+		order by jlbh desc
+	</if>
+</select>
+<insert id="addCaterialPriceApproval" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceApproval" keyProperty="jlbh" useGeneratedKeys="true">
+	<selectKey keyProperty="jlbh" resultType="int" order="BEFORE">
+		select isnull ( max ( jlbh ) , 0 ) + 1 from clspjgb 
+	</selectKey>
+	insert into dbo.clspjgb
+	(
+		jlbh,
+		jlrq,
+		gsbh,
+		qfrm,
+		qfbj,
+		qfrq,
+		czrm,
+		czrq,
+		sdrm,
+		sdbj,
+		sdrq,
+		qyrm,
+		qybj,
+		qyrq,
+		bzsm,
+		gdbj,
+		gdrq,
+		gdrm
+	)
+	values
+	(
+		#{jlbh},
+		#{jlrq},
+		#{gsbh},
+		#{qfrm},
+		#{qfbj},
+		#{qfrq},
+		#{czrm},
+		#{czrq},
+		#{sdrm},
+		#{sdbj},
+		#{sdrq},
+		#{qyrm},
+		#{qybj},
+		#{qyrq},
+		#{bzsm},
+		#{gdbj},
+		#{gdrq},
+		#{gdrm}
+	)
+</insert>
+<update id="updateCaterialPriceApproval" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceApproval">
+	update dbo.clspjgb
+		set
+			jlbh = #{jlbh},
+			jlrq = #{jlrq},
+			gsbh = #{gsbh},
+			qfrm = #{qfrm},
+			qfbj = #{qfbj},
+			qfrq = #{qfrq},
+			czrm = #{czrm},
+			czrq = #{czrq},
+			sdrm = #{sdrm},
+			sdbj = #{sdbj},
+			sdrq = #{sdrq},
+			qyrm = #{qyrm},
+			qybj = #{qybj},
+			qyrq = #{qyrq},
+			bzsm = #{bzsm},
+			gdbj = #{gdbj},
+			gdrq = #{gdrq},
+			gdrm = #{gdrm}
+		where jlbh = #{jlbh}
+</update>
+<delete id="deleteCaterialPriceApproval" parameterType="map">
+	delete from dbo.clspjgb
+	where jlbh = #{jlbh}
+</delete>
+<!-- 级联删除明细 -->
+<delete id="deleteCompanyByKey" parameterType="map">
+	delete from dbo.clspjg_csb
+	where jlbh = #{jlbh}
+</delete>
+<!-- 级联删除明细 -->
+<delete id="deleteCaterialPriceDetailByKey" parameterType="map">
+	delete from dbo.clspjg_jgb
+	where jlbh = #{jlbh}
+</delete>
+</mapper>

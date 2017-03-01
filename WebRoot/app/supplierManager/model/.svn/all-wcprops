@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model
+END
+AppGoods.js
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppGoods.js
+END
+AppSupplierAccessLoop.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppSupplierAccessLoop.js
+END
+SupplierMaterialcheck.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/SupplierMaterialcheck.js
+END
+AppDevicelist.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppDevicelist.js
+END
+supplierQueryParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/supplierQueryParam.js
+END
+AppBankAccount.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppBankAccount.js
+END
+AppCompetitor.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppCompetitor.js
+END
+AppInvoiceTitle.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppInvoiceTitle.js
+END
+Supplier.js
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/Supplier.js
+END
+AppMetarial.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppMetarial.js
+END
+SupplierFile.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/SupplierFile.js
+END
+SupplierMaterialSub1.js
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/SupplierMaterialSub1.js
+END
+SupplierCheckfactoryReport.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/SupplierCheckfactoryReport.js
+END
+AppRegisterAttched.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppRegisterAttched.js
+END
+SupplierAccessScoreDetails.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/SupplierAccessScoreDetails.js
+END
+AccessScoreSummary.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AccessScoreSummary.js
+END
+AppMainCustomer.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplierManager/model/AppMainCustomer.js
+END

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.ViewCsyf11Mapper">
+<select id="getmanufAccountDetial11" parameterType="map" statementType="CALLABLE" resultType="erp.erp.manufacturer.payAccount.model.Viewcsyf">
+ <![CDATA[  
+           exec dbo.s_view_bykc @qcqs = #{qcqs}, @qsrq = #{qsrq}, @s_jzrq = #{s_jzrq}, @nf = #{nf}, @tjlb = #{tjlb}, @wbbj = #{wbbj}, @hsbm = #{hsbm}, @yhbh = #{yhbh}, @gdbj = #{gdbj}, @condition = #{condition}
+        ]]> 
+</select>
+
+</mapper>

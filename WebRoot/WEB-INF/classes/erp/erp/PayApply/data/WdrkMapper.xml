@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.WdrkMapper">
+
+
+<select id="getWdrkList" parameterType="map" resultType="erp.erp.PayApply.model.Wdrk">
+	  SELECT ckmcb_yl.ckmc as ckbh,   
+         rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.clhh,      
+         rkdb_yl.cltx1,   
+         rkdb_yl.cltx2,   
+         rkdb_yl.cltx3,   
+         rkdb_yl.jldw,   
+         rkdb_yl.rksl,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.thdj else rkdb_yl.rkdj end as rkdj,
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.thje else rkdb_yl.rkje end as rkje, 
+         rkdb_yl.zzsl,
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.csdj else rkdb_yl.csdj end as csdj,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.csje else rkdb_yl.csje end as csje,    
+			(case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.thje else rkdb_yl.rkje end)
+			 -  (case when cgjgtzmxb.tjdh is not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.csje else rkdb_yl.csje end) as zzse,
+         wbmcb.wbdh as wbbh,   
+         rkdb_yl.wbhl,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.wbdj else rkdb_yl.wbdj end as wbdj,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh&lt;&gt;0 then cgjgtzmxb.wbje else rkdb_yl.wbje end as wbje, 
+         rklbb.rklb as rklb,   
+         rkdb_yl.hxbj,   
+			clbmb.clmc,
+			rkdb_yl.fzdw,
+			rkdb_yl.fzsl,
+			rkdb_yl.tzdh,
+			cgyb.cgyxm as cgym
+    from rkdb_yl with (nolock) 
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join wbmcb with (nolock) on rkdb_yl.wbbh=wbmcb.wbbh
+	 left outer join cgyb with (nolock) on cgyb.cgybh=(select cgym from cghtb where cghtb.htbh=rkdb_yl.htbh)
+	 left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb
+	 left outer join ckmcb_yl with (nolock) on ckmcb_yl.CKBH=rkdb_yl.ckbh
+	 left outer join cghtb with (nolock) on cghtb.htbh=rkdb_yl.htbh
+	 left outer join cgjgtzmxb with (nolock) on cgjgtzmxb.ckbh=rkdb_yl.ckbh and rkdb_yl.rklb&lt;&gt;4 and cgjgtzmxb.rkdh=rkdb_yl.rkdh and cgjgtzmxb.rkxh=rkdb_yl.rkxh and (select qfbj from cgjgtzb where cgjgtzb.tjdh=cgjgtzmxb.tjdh)=1
+    where rkdb_yl.csbh=(select csbh  from fksqspb where sqbh = #{sqbh}) and ((rkdb_yl.hxrq>#{jzrq} and hxbj=1) or hxbj=0)
+      and rkrq&lt;=#{jzrq}
+ <if test="condition!=null and condition!=''">
+		and ${condition}
+</if>
+</select>
+<insert id="addWdrk" parameterType="erp.erp.PayApply.model.Wdrk" keyProperty="" useGeneratedKeys="true">
+	insert into Wdrk
+	(
+		ckbh,
+		rkdh,
+		rkxh,
+		rkrq,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		jldw,
+		rksl,
+		rkdj,
+		rkje,
+		zzsl,
+		csdj,
+		csje,
+		zzse,
+		wbbh,
+		wbhl,
+		wbdj,
+		wbje,
+		rklb,
+		hxbj,
+		clmc,
+		fzdw,
+		fzsl,
+		tzdh,
+		cgym
+	)
+	values
+	(
+		#{ckbh},
+		#{rkdh},
+		#{rkxh},
+		#{rkrq},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{jldw},
+		#{rksl},
+		#{rkdj},
+		#{rkje},
+		#{zzsl},
+		#{csdj},
+		#{csje},
+		#{zzse},
+		#{wbbh},
+		#{wbhl},
+		#{wbdj},
+		#{wbje},
+		#{rklb},
+		#{hxbj},
+		#{clmc},
+		#{fzdw},
+		#{fzsl},
+		#{tzdh},
+		#{cgym}
+	)
+</insert>
+<update id="updateWdrk" parameterType="erp.erp.PayApply.model.Wdrk">
+	update Wdrk
+		set
+			ckbh = #{ckbh},
+			rkdh = #{rkdh},
+			rkxh = #{rkxh},
+			rkrq = #{rkrq},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			jldw = #{jldw},
+			rksl = #{rksl},
+			rkdj = #{rkdj},
+			rkje = #{rkje},
+			zzsl = #{zzsl},
+			csdj = #{csdj},
+			csje = #{csje},
+			zzse = #{zzse},
+			wbbh = #{wbbh},
+			wbhl = #{wbhl},
+			wbdj = #{wbdj},
+			wbje = #{wbje},
+			rklb = #{rklb},
+			hxbj = #{hxbj},
+			clmc = #{clmc},
+			fzdw = #{fzdw},
+			fzsl = #{fzsl},
+			tzdh = #{tzdh},
+			cgym = #{cgym}
+		where  = #{}
+</update>
+<delete id="deleteWdrk" parameterType="erp.erp.PayApply.model.Wdrk">
+	delete from Wdrk
+	where  = #{}
+</delete>
+</mapper>

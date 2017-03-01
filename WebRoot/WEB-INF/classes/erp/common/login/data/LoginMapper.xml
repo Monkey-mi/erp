@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.common.login.data.LoginMapper">
+  
+   <sql id="selColumns">
+     u_id,login_id,pwd,u_type,login_type,login_def,name,sex,birthday,tel,email,post,address,create_dt,modify_dt,last_login,nickname,nick_portrait,is_valid
+   </sql>
+	<select id="getUserList" parameterType="map" resultType="UserInfo">  
+		select <include refid="selColumns" />
+		from t_user_info
+		<where>
+            <if test="login_id != null">
+                login_id =#{login_id}
+            </if>
+            <if test="u_type != null"> 
+                and u_type =#{u_type}
+            </if>
+            <if test="login_type != null">
+                and login_type =#{login_type}
+            </if>
+            <if test="name != null">
+                and name like #{name}
+            </if>
+        </where>
+	    order by login_id
+	</select>
+	
+	<select id="getUserCount" parameterType="map" resultType="int">
+        select count(*)
+        from t_user_info
+        <where>
+            <if test="login_id != null">
+                login_id =#{login_id}
+            </if>
+            <if test="u_type != null">
+                and u_type =#{u_type}
+            </if>
+            <if test="login_type != null">
+                and login_type =#{login_type}
+            </if>
+            <if test="name != null">
+                and name like #{name}
+            </if>
+            <if test="pwd != null">
+                and pwd=#{pwd}
+            </if>
+            <if test="is_valid != null">
+                and is_valid=#{is_valid}
+            </if>
+        </where>
+  </select>
+   <select id="getMenuList"  parameterType="map" resultType="Menu">
+   	SELECT distinct m.[id]
+      ,[menuid]
+      ,[menuname]
+      ,[menu_desc]
+      ,[path]
+      ,[permission]
+      ,[isleaf]
+      ,[icon_class]
+      ,[parent_id]
+      ,[status_flg]
+      ,[order_flg]
+      ,[create_by]
+      ,[create_date]
+      ,[update_by]
+      ,[update_date]
+	  FROM t_sys_menu m
+	  left outer join t_user_role_model rm 
+		on rm.model_id=m.id and m.status_flg=1 
+	  left outer join t_user_role_ref ur on ur.role_id=rm.role_id
+	  left outer join t_user_info ui on ui.u_id=ur.u_id	
+    <where>
+            <if test="parent_id != null">
+                parent_id =#{parent_id}
+            </if>
+            <if test="u_id != null">
+                and ui.u_id = #{u_id}
+            </if>
+     </where>       
+   </select>
+  
+    <select id="getRoleListByLoginId" parameterType="map" resultType="Role">
+        select DISTINCT 
+        		a.role_id,
+        		a.role_name,
+        		a.role_desc,
+        		a.order_seq,
+        		a.creator,
+        		a.has_prj
+        from 	t_user_role a
+        inner join t_user_role_ref b on a.role_id = b.role_id
+        inner join t_user_info c on b.u_id = c.u_id
+	    where	c.login_id = #{login_id}
+  </select>
+  
+  
+  <update id="updateUser" parameterType="UserInfo" >
+        update t_user_info set 
+            login_id    =#{login_id},
+            u_type      =#{u_type},
+            login_type  =#{login_type},
+            login_def   =#{login_def},
+            name        =#{name},
+            sex         =#{sex},
+            birthday    =#{birthday},
+            tel         =#{tel},
+            email       =#{email},
+            post        =#{post},
+            address     =#{address},
+            create_dt   =#{create_dt},
+            modify_dt   =#{modify_dt},
+            last_login  =#{last_login},
+            nickname    =#{nickname},
+            nick_portrait=#{nick_portrait},
+            is_valid    =#{is_valid}
+        where u_id=#{u_id}
+  </update>
+
+</mapper>

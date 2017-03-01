@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.PurchaseCostMapper">
+
+
+<select id="getPurchaseCostList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.PurchaseCost">
+select aa.* from  (
+select      cgfyb.fydh,
+			cgfyb.fyxh,
+			cgfyb.fyrq,
+			cgfyb.yhbh,
+			cgfyb.cglb,
+			cgfyb.csbh,  
+			cgfyb.fyzy,
+			cgfyb.fysl,
+			cgfyb.fydj,
+			cgfyb.fyje,
+			cgfyb.zzsl,
+			cgfyb.csdj,
+			cgfyb.csje,
+         cgfyb.fyje -  cgfyb.csje as zzse,
+			case when len(cgfyb.zflb)>=4 then left(cgfyb.zflb,2) else '' end as sjfylb,
+			cgfyb.jhbh,
+			cgfyb.jhxh,
+         case when cgfyb.jhbh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,
+			cgfyb.htbh,
+			cgfyb.htxh,
+         case when cgfyb.htbh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) end as hth,
+			cgfyb.fhck,
+			ckmcb_cp.ckmc as fhckmc,
+			cgfyb.fhdh,
+			cgfyb.fhxh,
+         case when cgfyb.fhdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.fhdh)))+'-'+ltrim(rtrim(str(cgfyb.fhxh))) end as fhh,
+         case when cgfyb.zlrkdh&lt;&gt;0 then 
+            ltrim(rtrim(str(cgfyb.zlrkdh)))+'-'+ltrim(rtrim(str(cgfyb.zlrkxh))) end as rkh,
+			cgfyb.bzsm,
+			cgfyb.hxbj,
+			cgfyb.fplb,
+			cgfyb.fphm,
+			cgfyb.sdbj,
+			cgfyb.sdrm,
+			cgfyb.sdsj,
+			cgfyb.czym,
+			cgfyb.czsj,
+			cgfyb.tzdh,
+			csxxb.csmc,
+			cgfyb.hsdh,
+			cgfyb.hsxh,
+			cgfyb.hsbm,
+			cgfyb.spbj,
+			cgfyb.sprm,
+			cgfyb.spyj,
+			cgfyb.spsj,
+			cgfyb.tjbj,
+			cgfyb.tjrm,
+			cgfyb.tjsj,
+			cgfyb.tjdx,
+			cgfyb.ystj,
+			cgfyb.fylx,
+			cgfyb.cybh,	
+ 			case when cgfyb.hsdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.hsdh)))+'-'+ltrim(rtrim(str(cgfyb.hsxh))) end as hsh,
+			cgfyb.fpdx,
+			cgfyb.fyxz,
+			case when cgfyb.fysl&lt;&gt;0 then round(cgfyb.wbje/cgfyb.fysl,6) else 0 end as wbdj,
+			cgfyb.wbbh,
+			cgfyb.wbhl,
+			cgfyb.wbje,
+			cgfyb.zlckbh,
+			cgfyb.zlrkdh,
+			cgfyb.zlrkxh,
+         cgfyb.wxdh,
+			cgfyb.wxxh,
+			cgfyb.dybj,
+			cgfyb.dysj,
+         case when cgfyb.wxdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.wxdh)))+'-'+ltrim(rtrim(str(cgfyb.wxxh))) end as wxh,
+			cgfyb.gxbh,
+			cgfyb.jlbh,
+			cgfyb.ycdh,
+			cgfyb.jlxh,
+			case when cgfyb.ycdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.ycdh)))+'-'+ltrim(rtrim(str(cgfyb.jlxh))) end as ych,
+			cgfyb.ckbh,
+			w.ckmc as dcckmc,
+			cgfyb.dbdh,
+			cgfyb.dbxh,
+			case when cgfyb.dbdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.dbdh)))+'-'+ltrim(rtrim(str(cgfyb.dbxh))) end as dbh,
+			cgfyb.ftms,
+			cgfyb.ftxs,
+			cgfyb.fsbm,
+			cgfyb.xslb,
+			cgfyb.gzdh,
+			cgfyb.gzxh,
+			cgfyb.mxzs,
+			cgfyb.fyxs,
+			cgfyb.zflb,
+			scjhb.jhlb,
+			jhmxb.jhbz,
+			cgfyb.dcrq,
+			cgfyb.dbxs,
+			cgfyb.sgtzh,
+			cgfyb.cglx,
+			cgfyb.zyrm,
+			cgfyb.zrbm,
+			cgfyb.xkxj,
+			cgfyb.clwtdh,
+			cgfyb.clwtxh,
+			cgfyb.ysjldh_wms,
+			cgfyb.ysjlxh_wms,
+			hsbmb.bmmc,
+			case when cgfyb.ysjldh_wms&lt;&gt;0 then ltrim(rtrim(str(cgfyb.ysjldh_wms)))+'-'+ltrim(rtrim(str(cgfyb.ysjlxh_wms))) end as ysjlh,
+	        case when cgfyb.clwtdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.clwtdh)))+'-'+ltrim(rtrim(str(cgfyb.clwtxh))) end as clwth,
+			cgfyb.cpwtdh,
+			cgfyb.cpwtxh,
+			xslbb.lbmc as xslbmc,
+			clfbx_fsbmb.bmmc as sybm,
+			zjzflbb.lbmc as zflbmc,
+			jhlbb.lbmc as jhlbmc,
+			z.lbmc as sjzflbmc,
+			cgfyb_fkb.fkfs as fkfs,
+			cgfyb_fkb.ztdw as ztbh,
+			lsx_gxmcb.gxmc as scgxmc,
+			ypdsb.jfzl,
+			ypdsb.fffs,
+			##yfbj.yfbj as yfbj,
+			##khxx.khbh as khbh,
+            ##khxx.khmc as khmc,
+			wbmcb.wbdh,
+			case when cgfyb.cpwtdh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.cpwtdh)))+'-'+ltrim(rtrim(str(cgfyb.cpwtxh))) end as cpwth   
+   from cgfyb with (nolock) 
+    left outer join wbmcb  with(nolock) on cgfyb.wbbh = wbmcb.wbbh
+    left outer join ckmcb_cp with(nolock) on cgfyb.fhck = ckmcb_cp.ckbh
+    left outer join ckmcb_cp w with(nolock) on cgfyb.fhck = w.ckbh
+    left outer join cgfyb_fkb with(nolock) on cgfyb_fkb.fydh = cgfyb.fydh
+    left outer join jhmxb with(nolock) on jhmxb.jhbh=cgfyb.jhbh and jhmxb.jhxh=cgfyb.jhxh
+    left outer join csxxb with (nolock) on csxxb.csbh=cgfyb.csbh
+    left outer join scjhb  with (nolock) on scjhb.jhbh=cgfyb.jhbh 
+    left outer join hsbmb  with (nolock) on hsbmb.bmbh=cgfyb.hsbm
+    left outer join xslbb  with (nolock) on xslbb.lbbh=cgfyb.xslb
+    left outer join clfbx_fsbmb with (nolock) on clfbx_fsbmb.bmbh=cgfyb.fsbm
+    left outer join zjzflbb with (nolock) on zjzflbb.lbbh=cgfyb.zflb
+    left outer join jhlbb with (nolock) on jhlbb.lbbh = scjhb.jhlb
+    left outer join ypdsb with (nolock) on ypdsb.jlbh = cgfyb.jlbh
+    left outer join zjzflbb  z with (nolock) on z.lbbh=(left(cgfyb.zflb,2))
+    left outer join lsx_gxmcb with (nolock) on lsx_gxmcb.gxbh=cgfyb.gxbh
+    left outer join ##khxx  with (nolock) on ##khxx.fydh=cgfyb.fydh and ##khxx.fyxh=cgfyb.fyxh
+    left outer join ##yfbj  with (nolock) on ##yfbj.fydh=cgfyb.fydh and ##yfbj.fyxh=cgfyb.fyxh
+    where 
+     1=1
+    <if test="year!=null">
+    	and year(fyrq)=#{year}
+    </if>
+    <if test="month!=null">
+    	and month(fyrq)=#{month}
+    </if>
+    <if test="fydh!=null">
+    	and cgfyb.fydh=#{fydh}
+    </if>
+     <if test="fyxh!=null">
+    	and cgfyb.fyxh=#{fyxh}
+    </if>
+    <if test="condition!=null and condition!=''">
+		and ${condition}
+	</if>
+	<if test="hsbm!=null and hsbm!=0">
+	    and left(cgfyb.hsbm,len(#{hsbm})) = #{hsbm}
+	</if>
+	<if test="search!=null">
+	    ${search}
+	</if>
+	<if test="bmqx!=null">
+	    ${bmqx}	
+	</if>
+	) aa
+     where
+        1=1 
+    <if test="filterSearch!=null">
+	  ${filterSearch}
+     </if>
+    order by fyrq desc 
+</select>
+<select id="getMainCost" parameterType="map" resultType="erp.erp.master.purchaseCost.model.MainCost">
+    select aa.* from  (
+   select   
+            distinct
+            cgfyb.fydh,
+			cgfyb.cglb,
+			cgfyb.hxbj,
+			cgfyb.sdbj,
+			cgfyb.czym,
+			cgfyb.hsbm,
+			cgfyb.spbj,
+			cgfyb.sprm,
+			cgfyb.tjbj,
+			cgfyb.tjrm,
+			cgfyb.fylx,
+			cgfyb.dybj,
+			cgfyb.ftms,
+			cgfyb.xkxj,
+			convert(datetime,convert(varchar(10),cgfyb.fyrq,120)) as fyrq,
+			hsbmb.bmmc,
+			cgfyb_fkb.fkfs as fkfs,
+			cgfyb_fkb.ztdw as ztbh,
+			##yfbj.yfbj as yfbj,
+			##khxx.khbh as khbh,
+            ##khxx.khmc as khmc,
+            ztdwb.ztmc as ztdw
+   from cgfyb with (nolock) 
+    left outer join cgfyb_fkb with(nolock) on cgfyb_fkb.fydh = cgfyb.fydh
+    left outer join hsbmb  with (nolock) on hsbmb.bmbh=cgfyb.hsbm
+    left outer join ##khxx  with (nolock) on ##khxx.fydh=cgfyb.fydh and ##khxx.fyxh=cgfyb.fyxh
+    left outer join ##yfbj  with (nolock) on ##yfbj.fydh=cgfyb.fydh and ##yfbj.fyxh=cgfyb.fyxh
+    left outer join ztdwb  with (nolock) on ztdwb.ztbh = cgfyb_fkb.ztdw
+    where 
+     1=1
+    <if test="year!=null">
+    	and year(fyrq)=#{year}
+    </if>
+    <if test="month!=null">
+    	and month(fyrq)=#{month}
+    </if>
+    <if test="fydh!=null">
+    	and cgfyb.fydh=#{fydh}
+    </if>
+    <if test="condition!=null and condition!=''">
+		and ${condition}
+	</if>
+	<if test="hsbm!=null and hsbm!=0">
+	    and left(cgfyb.hsbm,len(#{hsbm})) = #{hsbm}
+	</if>
+	<if test="search!=null">
+	    ${search}
+	</if>
+	<if test="bmqx!=null">
+	    ${bmqx}	
+	</if>
+	) aa
+     where
+        1=1 
+    <if test="filterSearch!=null">
+	  ${filterSearch}
+     </if>
+     order by fyrq desc
+</select>
+<insert id="addPurchaseCost" parameterType="erp.erp.master.purchaseCost.model.PurchaseCost" >
+	insert into dbo.cgfyb
+	(
+		fydh,
+		fyxh,
+		fyrq,
+		yhbh,
+		cglb,
+		csbh,
+		fyzy,
+		fysl,
+		fydj,
+		fyje,
+		fylb,
+		jhbh,
+		jhxh,
+		bzsm,
+		hxbj,
+		hxrq,
+		fplb,
+		fphm,
+		sdbj,
+		sdrm,
+		sdsj,
+		czym,
+		czsj,
+		tzdh,
+		cfxh,
+		fzhm,
+		htbh,
+		htxh,
+		zzsl,
+		csdj,
+		csje,
+		hsdh,
+		hsxh,
+		hsbm,
+		spbj,
+		sprm,
+		spyj,
+		spsj,
+		tjbj,
+		tjrm,
+		tjsj,
+		tjdx,
+		cybh,
+		fylx,
+		fpdx,
+		fyxz,
+		wbbh,
+		wbhl,
+		wbje,
+		wxdh,
+		wxxh,
+		shdh,
+		shxh,
+		dybj,
+		dysj,
+		gxbh,
+		jlbh,
+		ycdh,
+		jlxh,
+		ckbh,
+		dbdh,
+		dbxh,
+		fypc,
+		ftms,
+		ftxs,
+		fsbm,
+		xslb,
+		fhdh,
+		fhxh,
+		fhck,
+		gzdh,
+		gzxh,
+		mxzs,
+		fyxs,
+		zflb,
+		dcrq,
+		dbxs,
+		ystj,
+		zyrm,
+		sgtzh,
+		zgbh,
+		zgxh,
+		xkxj,
+		cglx,
+		clwtdh,
+		clwtxh,
+		cpwtdh,
+		cpwtxh,
+		ysjldh_wms,
+		ysjlxh_wms,
+		zrbm,
+		kjbj,
+		zgfyxh,
+		zlrkdh,
+		zlrkxh,
+		zlckbh
+	)
+	values
+	(
+		#{fydh},
+		#{fyxh},
+		#{fyrq},
+		#{yhbh},
+		#{cglb},
+		#{csbh},
+		#{fyzy},
+		#{fysl},
+		#{fydj},
+		#{fyje},
+		#{fylb},
+		#{jhbh},
+		#{jhxh},
+		#{bzsm},
+		#{hxbj},
+		#{hxrq},
+		#{fplb},
+		#{fphm},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{czym},
+		#{czsj},
+		#{tzdh},
+		#{cfxh},
+		#{fzhm},
+		#{htbh},
+		#{htxh},
+		#{zzsl},
+		#{csdj},
+		#{csje},
+		#{hsdh},
+		#{hsxh},
+		#{hsbm},
+		#{spbj},
+		#{sprm},
+		#{spyj},
+		#{spsj},
+		#{tjbj},
+		#{tjrm},
+		#{tjsj},
+		#{tjdx},
+		#{cybh},
+		#{fylx},
+		#{fpdx},
+		#{fyxz},
+		#{wbbh},
+		#{wbhl},
+		#{wbje},
+		#{wxdh},
+		#{wxxh},
+		#{shdh},
+		#{shxh},
+		#{dybj},
+		#{dysj},
+		#{gxbh},
+		#{jlbh},
+		#{ycdh},
+		#{jlxh},
+		#{ckbh},
+		#{dbdh},
+		#{dbxh},
+		#{fypc},
+		#{ftms},
+		#{ftxs},
+		#{fsbm},
+		#{xslb},
+		#{fhdh},
+		#{fhxh},
+		#{fhck},
+		#{gzdh},
+		#{gzxh},
+		#{mxzs},
+		#{fyxs},
+		#{zflb},
+		#{dcrq},
+		#{dbxs},
+		#{ystj},
+		#{zyrm},
+		#{sgtzh},
+		#{zgbh},
+		#{zgxh},
+		#{xkxj},
+		#{cglx},
+		#{clwtdh},
+		#{clwtxh},
+		#{cpwtdh},
+		#{cpwtxh},
+		#{ysjldh_wms},
+		#{ysjlxh_wms},
+		#{zrbm},
+		#{kjbj},
+		#{zgfyxh},
+		#{zlrkdh},
+		#{zlrkxh},
+		#{zlckbh}
+	)
+</insert>
+<update id="updatePurchaseCost" parameterType="erp.erp.master.purchaseCost.model.PurchaseCost">
+	update dbo.cgfyb
+		set
+			fydh = #{fydh},
+			fyxh = #{fyxh},
+			fyrq = #{fyrq},
+			yhbh = #{yhbh},
+			cglb = #{cglb},
+			csbh = #{csbh},
+			fyzy = #{fyzy},
+			fysl = #{fysl},
+			fydj = #{fydj},
+			fyje = #{fyje},
+			fylb = #{fylb},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			bzsm = #{bzsm},
+			hxbj = #{hxbj},
+			hxrq = #{hxrq},
+			fplb = #{fplb},
+			fphm = #{fphm},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			czym = #{czym},
+			czsj = #{czsj},
+			tzdh = #{tzdh},
+			cfxh = #{cfxh},
+			fzhm = #{fzhm},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			zzsl = #{zzsl},
+			csdj = #{csdj},
+			csje = #{csje},
+			hsdh = #{hsdh},
+			hsxh = #{hsxh},
+			hsbm = #{hsbm},
+			spbj = #{spbj},
+			sprm = #{sprm},
+			spyj = #{spyj},
+			spsj = #{spsj},
+			tjbj = #{tjbj},
+			tjrm = #{tjrm},
+			tjsj = #{tjsj},
+			tjdx = #{tjdx},
+			cybh = #{cybh},
+			fylx = #{fylx},
+			fpdx = #{fpdx},
+			fyxz = #{fyxz},
+			wbbh = #{wbbh},
+			wbhl = #{wbhl},
+			wbje = #{wbje},
+			wxdh = #{wxdh},
+			wxxh = #{wxxh},
+			shdh = #{shdh},
+			shxh = #{shxh},
+			dybj = #{dybj},
+			dysj = #{dysj},
+			gxbh = #{gxbh},
+			jlbh = #{jlbh},
+			ycdh = #{ycdh},
+			jlxh = #{jlxh},
+			ckbh = #{ckbh},
+			dbdh = #{dbdh},
+			dbxh = #{dbxh},
+			fypc = #{fypc},
+			ftms = #{ftms},
+			ftxs = #{ftxs},
+			fsbm = #{fsbm},
+			xslb = #{xslb},
+			fhdh = #{fhdh},
+			fhxh = #{fhxh},
+			fhck = #{fhck},
+			gzdh = #{gzdh},
+			gzxh = #{gzxh},
+			mxzs = #{mxzs},
+			fyxs = #{fyxs},
+			zflb = #{zflb},
+			dcrq = #{dcrq},
+			dbxs = #{dbxs},
+			ystj = #{ystj},
+			zyrm = #{zyrm},
+			sgtzh = #{sgtzh},
+			zgbh = #{zgbh},
+			zgxh = #{zgxh},
+			xkxj = #{xkxj},
+			cglx = #{cglx},
+			clwtdh = #{clwtdh},
+		    clwtxh=#{clwtxh},
+		    cpwtdh=#{cpwtdh},
+		    cpwtxh=#{cpwtxh},
+		    ysjldh_wms=#{ysjldh_wms},
+		    ysjlxh_wms=#{ysjlxh_wms},
+		    zrbm=#{zrbm},
+		    kjbj=#{kjbj},
+		    zgfyxh=#{zgfyxh},
+		    zlrkdh= #{zlrkdh},
+		    zlrkxh= #{zlrkxh},
+		    zlckbh= #{zlckbh}
+		where  cgfyb.fydh= #{fydh} 
+		 <if test="fyxh!=null">
+		 and cgfyb.fyxh = #{fyxh}
+		 </if>
+</update>
+<delete id="deletePurchaseCost" parameterType="map">
+	delete  from dbo.cgfyb
+	where fydh = #{fydh} 
+	<if test="fyxh!=null">
+	    and fyxh = #{fyxh}
+	</if>
+</delete>
+
+<delete id ="deleteCgfydzb" parameterType="map">
+	delete from cgfydzb where fydh=#{fydh}
+	<if test="fyxh!=null">
+	    and fyxh = #{fyxh}
+	</if>;
+</delete>
+<delete id ="deleteCgfy_fjb" parameterType="map">
+	delete from cgfy_fjb where fydh=#{fydh};
+</delete>
+<delete id ="deleteSplc_spjlb" parameterType="map">
+	delete from cgfydzb where fydh=#{fydh};
+</delete>
+<delete id ="deleteCgfyb_fkb" parameterType="map">
+	delete from cgfydzb where fydh=#{fydh};
+</delete>
+
+    <select id="getPurchaseCostOne" parameterType="map" resultType="String">
+	select isnull(max ( fydh ),0) from cgfyb where 1 =1
+    </select>
+    <select id="checkStatusSame" parameterType="map" resultType="java.lang.Integer">
+    	select count(*) from cgfyb
+    	where fydh = #{fydh} and tjbj=#{tjbj}
+    </select>
+    <update id="updateStatus" parameterType="map" >
+    	update cgfyb
+    	   set tjbj=#{tjbj}
+    	   <if test="tjsj!=null">
+    	   ,tjsj=#{tjsj}
+    	   </if>
+    	   <if test="tjrm!=null">
+    	   ,tjrm = #{tjrm}
+    	   </if>
+    	   <if test="tjdx!=null">
+		   ,tjdx = #{tjdx}
+			</if>
+    	 where  fydh = #{fydh} 
+    </update>
+    <update id="doAppro" parameterType="map" >
+    	update cgfyb
+    	   set spbj=#{spbj},spsj=#{spsj},sprm = #{sprm}
+    	 where  fydh = #{fydh} 
+    </update>
+    <select id="hasAppro" parameterType="map" resultType="java.lang.Integer">
+    	select count(*) from cgfyb 
+    	where cgfyb.spbj= 1 and fydh = #{fydh}
+    </select>
+  
+    <select id="getPayCategoryList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.PayCategory">
+	select
+		a.lbbh,
+		a.lbmc,
+		a.lbjc,
+		case a.mjbz when 1 then 'true' else 'false' end as mjbz,
+		a.rwbj,
+		a.ftlb,
+		a.hsfy
+	from
+		dbo.zjzflbb a
+	where 1=1 
+	<if test="node!=null and node==0">
+		and  a.lbjc=1
+	</if>
+	<if test="node!=null and node!=0">
+	 	 and left(a.lbbh,len(#{node}))=#{node} and a.lbbh!=#{node}
+	</if>
+	<if test="lbbh!=null">
+		and lbbh = #{lbbh}
+	</if>
+	<if test="lbmc!=null">
+		and lbmc = #{lbmc}
+	</if>
+  </select>
+  
+  <select id="getBenefitDeptList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.BenefitDept">
+	select
+		a.bmbh,
+		a.bmmc,
+		a.bmjc,
+		case a.mjbz when 1 then 'true' else 'false' end as mjbz,
+		a.tybj,
+		a.hsbm
+	from
+		dbo.clfbx_fsbmb a
+	where 1=1 
+	<if test="node!=null and node==0">
+		and  a.bmjc=1
+	</if>
+	<if test="node!=null and node!=0">
+	 	 and left(a.bmbh,len(#{node}))=#{node} and a.bmbh!=#{node}
+	</if>
+	<if test="bmmc!=null">
+		and bmmc = #{bmmc}
+	</if>	
+  </select>
+  
+  <select id='hasPermission' parameterType="map" resultType="String">
+    select count(*) as bmqx from hsbm_qxb 
+	where (left(bmbh,len(#{hsbm}))=#{hsbm} or bmbh=left(#{hsbm},len(bmbh)))	and czy_gh=#{czyh};
+  </select> 
+
+  <select id="ifPay" parameterType="map" resultType="String" >
+    select jzzt from yfjzb where 
+    1 = 1
+    <if test="year!=null">
+    and  yfjzb.nd=#{year}  
+    </if>
+    <if test="month!=null">
+    and yfjzb.yf=#{month}	
+    </if>
+   </select>  
+ 
+   
+   <select id="getMaxfydj" parameterType="map" resultType="String">
+   	    select max(fydj) as maxfydj from cgfyb where  fydh = #{fydh};
+   </select>
+   
+   <select id="getyskzdj" parameterType="map" resultType="String">
+   	   select kzdj  as yskzdj
+		from  sybnysb_mxb  
+		left outer join sybnysb on sybnysb.jlxh_zj =sybnysb_mxb.jlxh_zj and sybnysb.hsbm=sybnysb_mxb.hsbm and sybnysb.nf=sybnysb_mxb.nf 
+		where sybnysb.nf=year(#{fyrq}) and qjbj =1 and sybnysb_mxb.kzbj =1 and sybnysb_mxb.cglx =#{cglx} and  ywdx = '采购费用'and left(sybnysb_mxb.hsbm,4) =left(#{hsbm},4); 
+   </select> 
+   
+   <select id="CompeletePrice" parameterType="map"  resultType="java.lang.Integer">
+   	  	select count(*) from  sybnysb_mxb 
+   	  	left outer join sybnysb on sybnysb.jlxh_zj =sybnysb_mxb.jlxh_zj and sybnysb.hsbm=sybnysb_mxb.hsbm and sybnysb.nf=sybnysb_mxb.nf
+        where sybnysb.nf= year(#{fyrq}) and qjbj =1 and sybnysb_mxb.kzbj =1 and sybnysb_mxb.cglx =#{cglx} and  ywdx = '采购费用'and left(sybnysb_mxb.hsbm,4) =left(#{hsbm},4);  
+   </select>
+   
+   <select id="ifFksqd" parameterType="map" resultType="java.lang.Integer">
+   	 select count(*)  from fksqspfyb where fydh=#{fydh};
+   </select>
+   <select id="getfyjeSum" parameterType="map" resultType="String">
+   	 select COALESCE(sum(fyje),0.00) as fyjesum 
+   	 from cgfyb where fydh =#{fydh}; 
+   </select>
+
+   <select id="getPayfs" parameterType="map" resultType="erp.erp.master.purchaseCost.model.Payfs">
+   	    SELECT cgfyb_fkb.ztdw,   
+         cgfyb_fkb.fkfs,   
+         cgfyb_fkb.fydh   
+        FROM cgfyb_fkb   
+       where cgfyb_fkb.fydh = #{fydh}
+   </select> 
+   <update id="updatePayfs" parameterType="map">
+   	  update cgfyb_fkb
+   	   set
+   	     fkfs = #{fkfs},
+   	     ztdw = #{ztdw}
+   	  where fydh = #{fydh}   
+   </update>
+   <insert id="addPayfs" parameterType="erp.erp.master.purchaseCost.model.Payfs" keyProperty="" useGeneratedKeys="true">
+   	  insert into cgfyb_fkb
+   	  (
+   	  fkfs,
+   	  fydh,
+   	  ztdw 
+   	  )
+   	  values 
+   	  (
+   	  #{fkfs},
+   	  #{fydh},
+   	  #{ztdw}
+   	  )
+   </insert>
+   <select id="getRwbj"  parameterType="map" resultType="String">
+   	 select rwbj from zjzflbb where lbbh=#{lbbh};
+   </select> 
+   <select id="getWbbh" parameterType="map" resultType="String">
+   	 select wbbh as wbbh from csxxb where csbh=#{csbh};
+   </select>
+   <select id="getDsfy" parameterType="map" resultType="String">
+   	 select isnull(dsfy,0.00)  from ypdsb with (nolock)  where jlbh=#{jlbh};
+   </select>
+   <select id="getYdfy" parameterType="map" resultType="String" >
+   	select isnull(fyje,0.00) as ydfy from cgfyb  with (nolock) where jlbh=#{jlbh} and fydh!=#{fydh};
+   </select>
+   <select id="getYdsl" parameterType="map" resultType="java.lang.Integer" >
+   	select isnull(sum(fysl),0) as ydsl from cgfyb  with (nolock)
+   	 where
+   	 ckbh= #{ckbh} and dbdh= #{dbdh} and dbxh= #{dbxh} and fydh!= #{fydh};
+   </select>
+   <select id="getZffyhz" parameterType="map" resultType="String">
+   	select sum(fyje)  
+		from cgfyb 
+		where left(hsbm,4) =left(#{hsbm},4)  and fyrq &gt;=#{qsrq} and fyrq &lt;=#{jzrq} and tjbj = 1 
+		and exists 
+			  (select * from sybnysb_mxb  
+				left outer join sybnysb on sybnysb.jlxh_zj =sybnysb_mxb.jlxh_zj and sybnysb.hsbm=sybnysb_mxb.hsbm and sybnysb.nf=sybnysb_mxb.nf 
+				where sybnysb.nf= #{year} and qjbj =1 and sybnysb_mxb.kzbj =1 and sybnysb_mxb.cglx =cgfyb.cglx and  ywdx = '采购费用'
+				and left(sybnysb_mxb.hsbm,4) =left(#{hsbm},4)  ); 
+   </select>
+   <select id="getJidu"  parameterType="map"  resultType="map">
+   	 select  top 1 month(#{fyrq}) as month, year(#{fyrq}) as year from sysxxb;
+   </select>
+   <select id="getHtze"  parameterType="map" resultType="String">
+   	select sum(case when kjlx=1 then
+		round(htmxb.FZSL*htmxb.CGDJ,2) else
+		round(htmxb.CGSL*htmxb.CGDJ,2) end) as htze 
+		from htmxb
+		left outer join  clbmb on clbmb.clhh = htmxb.clhh
+		left outer join cghtb on cghtb.htbh = htmxb.htbh
+		where htmxb.cgrq &gt;= #{qsrq} and htmxb.cgrq &lt;= #{jzrq}  and qfbj = 1  and left(hsbm,4) =left(#{hsbm},4) 
+		and exists 
+		(select * from sybnysb_mxb  
+				left outer join sybnysb on sybnysb.jlxh_zj =sybnysb_mxb.jlxh_zj and sybnysb.hsbm=sybnysb_mxb.hsbm and sybnysb.nf=sybnysb_mxb.nf 
+				where sybnysb.nf=#{year} and qjbj =1 and sybnysb_mxb.kzbj =1 and sybnysb_mxb.cglx =cghtb.cglx_fk and    ywdx = '采购合同'
+				and left(sybnysb.hsbm,4) =left(#{hsbm},4)  ); 
+   </select>
+   <select id="ifhaveYsje" parameterType="map" resultType="java.lang.Integer">
+   	  select count(ysje) from sybnysb where hsbm = left(#{hsbm},4) and qjbj = 1 and nf = #{year};
+   </select>
+   <select id="getYsje" parameterType="map"  resultType="String"> 
+   	  select ysje  from sybnysb where hsbm = left(#{hsbm},4) and qjbj = 1 and nf = #{year};
+   </select>
+   <select id="getRealSpbj" parameterType="map"  resultType="String">
+   	  select isnull(spbj,0) as lsspbj  from   t_inf_purchasefee_hdr
+	  where exists
+		(   
+			select max(a.id) from t_inf_purchasefee_hdr a
+			where a.fydh = #{fydh}
+			having
+			max(a.id)=t_inf_purchasefee_hdr.id
+		);
+   </select>
+   <select id="getJlbhList" parameterType="map" resultType="String">
+   	   select jlbh from cgfyb where fydh=#{fydh}
+   </select> 
+   <select id="getSumFyje" parameterType="map" resultType="double">
+   	   select sum(cgfyb.fyje)  from cgfyb where jlbh=#{jlbh};
+   </select>
+   <update id="updateYdfy" parameterType="map">
+   	   update ypdsb set ydfy=#{fyje} where jlbh=#{jlbh};
+   </update>
+</mapper>

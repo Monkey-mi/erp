@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.manufacturer.payAccount.data.CsmcMapper">
+
+
+<select id="getcsmcList" parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.Csmc">
+	select
+		CSXXB.csmc,
+		CSXXB.csbh,
+		CSXXB.csjc,
+		CSXXB.wbbh,
+		CSXXB.cslx,
+		CSXXB.cslb,
+		wbmcb.wbdh
+	from
+		CSXXB left outer join wbmcb on CSXXB.wbbh = wbmcb.wbbh
+    <where>
+    <if test="csbh!=null">
+    and CSXXB.csbh = #{csbh}
+    </if>
+    <if test="csmc!=null">
+    and CSXXB.csmc = #{csmc}
+    </if>
+    <if test="condition!=null">
+	and CSXXB.csbh like '${condition}%' or CSXXB.csmc like '%${condition}%'
+	</if>
+	<if test="query!=null">
+	and CSXXB.csbh like '${query}%' or CSXXB.csmc like '%${query}%'
+	</if>
+	<if test="search!=null">
+	and CSXXB.csbh like '${search}%' or CSXXB.csmc like '%${search}%'
+	</if>
+	<if test="xsbjsearch!=null and xsbjsearch!=''">
+	and   CSXXB.csbh like '%${xsbjsearch}%' or 
+		  CSXXB.csmc like '%${xsbjsearch}%' or
+		  CSXXB.wbbh like '%${xsbjsearch}%' 
+	</if>
+	</where>
+</select>
+<insert id="addcsmc" parameterType="erp.erp.manufacturer.payAccount.model.Csmc" keyProperty="csbh" useGeneratedKeys="true">
+	insert into CSXXB
+	(
+		csmc,
+		csbh
+	)
+	values
+	(
+		#{csmc},
+		#{csbh}
+	)
+</insert>
+<update id="updatecsmc" parameterType="erp.erp.manufacturer.payAccount.model.Csmc">
+	update CSXXB
+		set
+			csmc = #{csmc},
+			csbh = #{csbh}
+		where csbh = #{csbh}
+</update>
+<delete id="deletecsmc" parameterType="erp.erp.manufacturer.payAccount.model.Csmc">
+	delete from CSXXB
+	where csbh = #{csbh}
+</delete>
+</mapper>

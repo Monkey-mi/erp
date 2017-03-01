@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialDistributeAccount.data.MaterialAccountManagerDetailMapper">
+
+
+<select id="getMaterialAccountManagerDetailList" parameterType="map" resultType="erp.erp.materialDistributeAccount.model.MaterialAccountManagerDetail">
+	select #{nf} as nf,1 as yf,ltrim(str(#{nf}))+'.01.01' as rq,null as dh,null as rksl,null as llsl,sum(kcsl) as kcsl,null as lb,null as djlx,null as bh,'年初库存' as bzsm,1 as px,'' as dckh
+	from   nckcb_yl with (nolock) 
+	where nckcb_yl.nd=#{nf} and nckcb_yl.ckbh=#{ckbh} and  nckcb_yl.clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3}
+union all
+SELECT year(rkrq),month(rkrq),convert(char(10),rkrq,102),rkdh,rksl,null,null,rklbb.rklb,'入库单',case when htbh&lt;&gt;0 then '合同:'+ltrim(rtrim(str(htbh)))+'-'+ltrim(rtrim(str(htxh))) else null end ,csmc,2,''
+	FROM rkdb_yl with (nolock) 
+	left outer join csxxb  with (nolock) on csxxb.csbh=rkdb_yl.csbh
+   left outer join rklbb  with (nolock) on rkdb_yl.rklb=rklbb.lbbh
+where year(rkrq)&gt;=#{nf}  and ckbh=#{ckbh} and rkdb_yl.clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3}	
+union all 
+SELECT year(drrq),month(drrq),convert(char(10),drrq,102),dbdh,dbsl,null,null,null,'调入单',null,bzsm+'/调出仓库：'+ckmcb_yl.ckmc,2,dckh
+	from dbdb_yl  with (nolock) 
+	left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=dbdb_yl.dckh
+	where year(drrq)&gt;=#{nf} and drkh=#{ckbh} and dbdb_yl.clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3} and qrbj=1
+union all 
+SELECT year(dcrq),month(dcrq),convert(char(10),dcrq,102),dbdh,-1*dbsl,null,null,null,'调出单',null,bzsm+'/调入仓库：'+ckmcb_yl.ckmc,3,''
+	from dbdb_yl  with (nolock) 
+	left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=dbdb_yl.drkh
+	where year(dcrq)&gt;=#{nf} and dckh=#{ckbh} and dbdb_yl.clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2} and cltx3=#{cltx3}
+union all
+SELECT year(llrq),month(llrq),convert(char(10),llrq,102),lldh,null,llsl,null,lylbb.lylb,'领料单',case when jhbh&lt;&gt;0 then '计划:'+ltrim(rtrim(str(jhbh)))+'-'+ltrim(rtrim(str(jhxh))) else null end,bmmc,3,''
+  FROM lldb_yl with (nolock) 
+  left outer join lylbb  with (nolock) on lldb_yl.lylb=lylbb.lbbh
+  left outer join lybmb  with (nolock) on lybmb.bmbh=lldb_yl.bmbh
+ where year(llrq)&gt;=#{nf} and ckbh=#{ckbh} and lldb_yl.clhh=#{clhh} and cltx1=#{cltx1} and cltx2=#{cltx2}
+ and cltx3=#{cltx3} 
+</select>
+</mapper>

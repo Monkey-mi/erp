@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="srm.materialConfirmation.data.MaterialSampleMapper">
+
+
+<select id="getMaterialSampleList" parameterType="map" resultType="srm.materialConfirmation.model.MaterialSample">
+	select
+		t_app_material_sample.sample_id,
+		t_app_material_sample.confirmation_id,
+		t_app_material_sample.material_name,
+		t_app_material_sample.material_num,
+		t_app_material_sample.version,
+		t_app_material_sample.customer_name,
+		t_app_material_sample.product_name,
+		t_app_material_sample.haskey_point,
+		t_app_material_sample.key_point,
+		t_app_material_sample.createon,
+		t_app_material_sample.confirm_result
+	from
+		t_app_material_sample
+		where 1=1
+	<if test="confirmation_id!=null">
+		and t_app_material_sample.confirmation_id=#{confirmation_id}
+	</if>
+</select>
+<insert id="addMaterialSample" parameterType="srm.materialConfirmation.model.MaterialSample" keyProperty="sample_id" useGeneratedKeys="true">
+	<selectKey keyProperty="sample_id" resultType="int" order="BEFORE">
+		select  isnull(max(sample_id)+1,1) from t_app_material_sample 		
+	</selectKey>
+	insert into t_app_material_sample
+	(
+		sample_id,
+		confirmation_id,
+		material_name,
+		material_num,
+		version,
+		customer_name,
+		product_name,
+		haskey_point,
+		key_point,
+		createon,
+		confirm_result
+	)
+	values
+	(
+		#{sample_id},
+		#{confirmation_id},
+		#{material_name},
+		#{material_num},
+		#{version},
+		#{customer_name},
+		#{product_name},
+		#{haskey_point},
+		#{key_point},
+		#{createon},
+		#{confirm_result}
+	)
+</insert>
+<update id="updateMaterialSample" parameterType="srm.materialConfirmation.model.MaterialSample">
+	update t_app_material_sample
+		set
+			sample_id = #{sample_id},
+			confirmation_id = #{confirmation_id},
+			material_name = #{material_name},
+			material_num = #{material_num},
+			version = #{version},
+			customer_name = #{customer_name},
+			product_name = #{product_name},
+			haskey_point = #{haskey_point},
+			key_point = #{key_point},
+			createon = #{createon},
+			confirm_result = #{confirm_result}
+		where sample_id = #{sample_id}
+</update>
+<delete id="deleteMaterialSample" parameterType="srm.materialConfirmation.model.MaterialSample">
+	delete from t_app_material_sample
+	where sample_id = #{sample_id}
+</delete>
+</mapper>

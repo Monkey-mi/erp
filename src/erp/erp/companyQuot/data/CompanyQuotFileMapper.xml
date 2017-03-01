@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.companyQuot.data.CompanyQuotFileMapper">
+	
+    <select id="getCompanyQuotFile"  parameterType="map" resultType="erp.erp.companyQuot.model.CompanyQuotFile">
+    SELECT csbjfjb.bjdh,   
+         csbjfjb.wjbh,   
+         csbjfjb.wjmc,   
+         csbjfjb.wjlj,   
+         csbjfjb.cjrq,   
+         csbjfjb.cjrm  
+    FROM csbjfjb   
+	where bjdh=#{bjdh}; 
+    </select>
+     <insert id="addCompanyQuotFile" parameterType="erp.erp.companyQuot.model.CompanyQuotFile" keyProperty="" useGeneratedKeys="true">
+     	insert into csbjfjb
+     	(
+     	bjdh,
+     	wjbh,
+     	wjmc,
+     	wjlj,
+     	cjrq,
+     	cjrm
+     	)
+     	values
+     	(
+     	#{bjdh},
+     	#{wjbh},
+     	#{wjmc},
+     	#{wjlj},
+     	#{cjrq},
+     	#{cjrm}
+     	)
+     </insert> 
+    <delete id="deleteCompanyQuotFile" parameterType="erp.erp.companyQuot.model.CompanyQuotFile"  >
+     	delete from csbjfjb 
+     	where 
+     	bjdh = #{bjdh} 
+     	<if test="wjbh!=null and wjbh!=''">
+	    and wjbh = #{wjbh};
+        </if>
+     </delete>
+     <select id="getWjbhOne"  parameterType="map" resultType="int">
+     	select isnull(max(wjbh),0)+1 as wjbh from csbjfjb where bjdh = #{bjdh};
+     </select>
+</mapper>

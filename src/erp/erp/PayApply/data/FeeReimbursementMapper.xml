@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.FeeReimbursementMapper">
+
+
+<select id="getFeeReimbursementList" parameterType="map" resultType="erp.erp.PayApply.model.FeeReimbursement">
+	  SELECT fksqspfybxb.sqbh,   
+         fksqspfybxb.sqxh,
+			fksqspfybxb.hsbm,   
+			hsbmb.bmmc,
+         fksqspfybxb.jlbh,  
+			fksqspfybxb.jlxh,
+			ltrim(rtrim(str(fksqspfybxb.jlbh)))+'-'+ltrim(rtrim(str(fksqspfybxb.jlxh))) as bxh,  
+         fksqspfybxb.bxje,   
+         fksqspfybxb.sqje,
+			fksqspfybxb.yfje,
+			fksqspfybxb.wbbh, 
+			fksqspfybxb.wbhl,
+			fksqspfybxb.wbje,
+			fksqspfybxb.wbsq  
+    FROM fksqspfybxb   
+    left outer join hsbmb with (nolock) on hsbmb.bmbh = fksqspfybxb.hsbm
+  where 1=1
+  <if test="sqbh!=null">
+  and fksqspfybxb.sqbh=#{sqbh}
+  </if>
+</select>
+<insert id="addFeeReimbursement" parameterType="erp.erp.PayApply.model.FeeReimbursement">
+
+		insert into fksqspfybxb
+		(
+		sqbh,
+		sqxh,
+		hsbm,
+		jlbh,
+		jlxh,
+		bxje,   
+        sqje,
+		yfje,
+		wbbh,
+		wbhl,
+		wbje,
+		wbsq
+		)
+		values
+		(
+		#{sqbh},
+		#{sqxh},
+		#{hsbm},
+		#{jlbh},
+		#{jlxh},
+		#{bxje},
+		#{sqje},
+		#{yfje},
+		#{wbbh},
+		#{wbhl},
+		#{wbje},
+		#{wbsq}
+		)
+	</insert>
+	<update id="updateFeeReimbursement" parameterType="erp.erp.PayApply.model.FeeReimbursement">
+		update fksqspfybxb
+		set
+		sqbh = #{sqbh},
+		sqxh = #{sqxh},
+		jlbh = #{jlbh},
+		jlxh = #{jlxh},
+		hsbm = #{hsbm},
+		bxje = #{bxje},
+		sqje = #{sqje},
+		yfje = #{yfje},
+		wbbh = #{wbbh},
+		wbhl = #{wbhl},
+		wbje = #{wbje},
+		wbsq = #{wbsq}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspfybxb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspfybxb.sqxh = #{sqxh}
+		</if>
+	</update>
+	<delete id="deleteFeeReimbursement" parameterType="erp.erp.PayApply.model.FeeReimbursement">
+		delete from fksqspfybxb
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspfybxb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspfybxb.sqxh = #{sqxh}
+		</if>
+	</delete>
+<select id="getFeeReimbursementImpList" parameterType="map" resultType="erp.erp.PayApply.model.FeeReimbursementImp">
+	SELECT   clfbxb.bxrq,   
+         clfbxb.ccrm,   
+         clfbxb.ccsy,   
+         clfbxb.tjbj,   
+         clfbxb.tjrm,   
+         clfbxb.lkrm,     
+         clfbxb.gdbj,   
+         clfbxb.bxrm,
+         rlzy_rsdab.zgxm,
+			isnull(clfbxmxb.pjje,0) + isnull(clfbxmxb.qtje,0) as hjje,
+         clfbxb.qrbj,   
+         clfbxb.dybj,   
+         clfbxb.dyrm,   
+         clfbxb.qrrm,   
+         clfbxb.qrrq,   
+         clfbxb.bzsm,   
+         clfbxb.yfbj, 
+			clfbxb.yfsj,  
+         clfbxb.bxbm,   
+         clfbxb.tjsj,   
+         clfbxb.tjdx,   
+         clfbxb.czym,   
+         clfbxb.czsj,   
+         clfbxb.spsj,   
+         clfbxb.spbj,   
+         clfbxb.sprm, 
+			clfbxb.wbbh, 
+			wbmcb.wbdh,
+			clfbxmxb.jlbh,   
+         clfbxmxb.jlxh,
+			ltrim(rtrim(str(clfbxmxb.jlbh)))+'-'+ltrim(rtrim(str(clfbxmxb.jlxh))) as jlh,
+         clfbxmxb.qsrq,   
+         clfbxmxb.jzrq,
+			clfbxmxb.pjhm,
+			clfbxmxb.pjje,
+			clfbxmxb.qtje,
+			isnull(clfbxmxb.pjje,0) + isnull(clfbxmxb.qtje,0) as hjje,
+			isnull(clfbxmxb.pjje,0) + isnull(clfbxmxb.qtje,0) - isnull(view_fksqfybx.bxje,0) as wqje,
+			clfbxmxb.zflb,
+			case when len(clfbxmxb.zflb)>=4 then left(clfbxmxb.zflb,2) else '' end as sjfylb,
+			 a.bmmc as bmmc1,
+			 b.bmmc as bmmc2,
+			c.lbmc as lbmc1,
+			d.lbmc as lbmc2,
+			clfbxmxb.fsbm,
+			clfbxmxb.hsbm,
+			e.bmmc as bmmc3,
+			clfbxmxb.bxsy
+    FROM clfbxmxb 
+left outer join clfbxb with(nolock) on clfbxb.jlbh=clfbxmxb.jlbh
+left outer join rlzy_rsdab with(nolock) on rlzy_rsdab.zggh=clfbxb.bxrm
+left outer join clfbx_fsbmb a with(nolock) on a.bmbh= clfbxb.bxbm 
+left outer join clfbx_fsbmb b with(nolock) on b.bmbh= clfbxmxb.fsbm
+left outer join zjzflbb c with(nolock) on c.lbbh= clfbxmxb.zflb  
+left outer join zjzflbb d with(nolock) on d.lbbh= (case when len(clfbxmxb.zflb)>=4 then left(clfbxmxb.zflb,2) else '' end)
+left outer join view_fksqfybx with (nolock) on view_fksqfybx.jlbh=clfbxmxb.jlbh and view_fksqfybx.jlxh=clfbxmxb.jlxh
+left outer join hsbmb e with (nolock) on e.bmbh = clfbxmxb.hsbm
+left outer join wbmcb with (nolock) on wbmcb.wbbh = clfbxb.wbbh
+ where clfbxb.qrbj=1 and isnull(clfbxmxb.pjje,0) + isnull(clfbxmxb.qtje,0) - isnull(view_fksqfybx.bxje,0)>0
+<if test="jlh!=null">
+     and	 clfbxmxb.jlbh=#{jlh}
+   </if>
+</select>
+</mapper>

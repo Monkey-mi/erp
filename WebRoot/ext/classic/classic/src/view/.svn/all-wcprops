@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view
+END
+AbstractView.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/AbstractView.js
+END
+View.js
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/View.js
+END
+NavigationModel.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/NavigationModel.js
+END
+DragZone.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/DragZone.js
+END
+NodeCache.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/NodeCache.js
+END
+BoundListKeyNav.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/BoundListKeyNav.js
+END
+MultiSelectorSearch.js
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/MultiSelectorSearch.js
+END
+Table.js
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/Table.js
+END
+TagKeyNav.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/TagKeyNav.js
+END
+BoundList.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/BoundList.js
+END
+DropZone.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/DropZone.js
+END
+TableLayout.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/TableLayout.js
+END
+MultiSelector.js
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/view/MultiSelector.js
+END

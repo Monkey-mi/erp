@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.SupplyInvoice.data.PayDetailMapper">
+
+
+<select id="getPayDetailList" parameterType="map" resultType="erp.erp.SupplyInvoice.model.PayDetail">
+	  SELECT ZJZFB.zdsx,   
+         ZJZFB.zfpzh,        
+         ZJZFB.zfrq,   
+         ZJZFB.zfje,   
+         ZJZFB.zfxs,   
+         ZJZFB.zhbh,   
+         ZJZFB.csbh,     
+         ZJZFB.bzsm,   
+         ZJZFB.czym,   
+         ZJZFB.sdbj,   
+         ZJZFB.wbbh,   
+         ZJZFB.wbhl,   
+         ZJZFB.wbje,   
+         ZJZFB.kmdm,   
+         ZJZFB.dfdm,   
+         ZJZFB.htbh,   
+         ZJZFB.lbbh,   
+         ZJZFB.xjlb,   
+         ZJZFB.hslb,   
+         ZJZFB.qtlb,   
+         ZJZFB.qtfx,   
+         ZJZFB.pzbj,   
+         ZJZFB.ztbh,   
+         ZJZFB.pzlb,   
+         ZJZFB.pzbh,   
+         ZJZFB.jdfx,   
+         ZJZFB.czsj,
+         ZJZFB.czym,
+         ZJZFB.sdrm,   
+         ZJZFB.sdsj,  
+         csxxb.yhbh,  
+         csxxb.cglb,  
+         csxxb.csmc,
+         ZJZFB.fplb,
+         ZJZFB.fphm,
+			zjzfb.syjhbh,
+			zjzfb.syjhxh,
+			case when zjzfb.syjhbh&lt;&gt;0 then ltrim(rtrim(str(zjzfb.syjhbh)))+'-'+ltrim(rtrim(str(zjzfb.syjhxh))) else null end as syh,
+			zjzfb.fkjhbh,
+			zjzfb.fkjhxh,
+			case when zjzfb.fkjhbh&lt;&gt;0 then ltrim(rtrim(str(zjzfb.fkjhbh)))+'-'+ltrim(rtrim(str(zjzfb.fkjhxh))) else null end as fkh    
+    FROM ZJZFB  
+    left  outer join csxxb on ZJZFB.csbh = csxxb.csbh
+   WHERE
+   1=1
+   <if test="fplb!=null">
+   	 and  ZJZFB.fplb=#{fplb}
+   </if>
+   <if test="fphm!=null">
+   	and  ZJZFB.fphm=#{fphm}
+   </if>    
+</select>
+</mapper>

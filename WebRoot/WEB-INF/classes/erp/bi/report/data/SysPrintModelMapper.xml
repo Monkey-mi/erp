@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.bi.report.data.SysPrintModelMapper">
+
+
+<select id="getSysPrintModelList" parameterType="map" resultType="erp.bi.report.model.SysPrintModel">
+	with tree as 
+			 ( 
+		
+			 select id from t_sys_module a where softSet ='erp' and (id =#{menu_id} or parentid=#{menu_id})
+		
+			 union all  
+		
+			 select c.id  from t_sys_module c inner join tree t on t.id = c.parentid
+		
+			 ) 
+	select
+		t_sys_print_model.mod_id,
+		t_sys_print_model.menu_id,
+		t_sys_print_model.name,
+		t_sys_print_model.mod_description,
+		t_sys_print_model.creater,
+		t_sys_print_model.mod_tpl,
+		t_sys_print_model.sql_text,
+		t_sys_print_model.default_style,
+		t_sys_print_model.ds_id,
+		t_user_info.name as userName,
+		t_sys_print_model.is_active,
+		t_sys_print_model.is_out,
+		t_sys_print_model.order_seq<!-- 新增模板排序字段 -->
+	from
+		t_sys_print_model
+	left outer join t_user_info on creater=u_id
+		<where>
+		    1=1
+			<if test="mod_id!=null">
+				and mod_id=#{mod_id}			
+			</if>
+			<if test="menu_id!=null">
+				and menu_id in (select * from tree)			
+			</if>
+			<if test="is_active!=null">
+				and is_active=#{is_active}
+			</if>
+		</where>
+		order by order_seq
+</select>
+<insert id="addSysPrintModel" parameterType="erp.bi.report.model.SysPrintModel" keyProperty="mod_id" useGeneratedKeys="true">
+	insert into t_sys_print_model
+	(
+		menu_id,
+		name,
+		mod_description,
+		creater,
+		mod_tpl,
+		sql_text,
+		default_style,
+		ds_id,
+		is_active,
+		is_out
+		order_seq <!-- 新增模板排序字段 -->
+	)
+	values
+	(
+		#{menu_id},
+		#{name},
+		#{mod_description},
+		#{creater},
+		#{mod_tpl},
+		#{sql_text},
+		#{default_style},
+		#{ds_id},
+		#{is_active},
+		#{is_out},
+		#{order_seq}
+	)
+</insert>
+<update id="updateSysPrintModel" parameterType="erp.bi.report.model.SysPrintModel">
+	update t_sys_print_model
+		set
+			menu_id = #{menu_id},
+			name = #{name},
+			mod_description = #{mod_description},
+			creater = #{creater},
+			mod_tpl = #{mod_tpl},
+			sql_text = #{sql_text},
+			default_style=#{default_style},
+			ds_id=#{ds_id},
+			is_active=#{is_active},
+			is_out=#{is_out},
+			order_seq=#{order_seq}<!-- 新增模板排序字段 -->
+		where mod_id = #{mod_id}
+</update>
+
+<update id="setDatagridTplXml" parameterType="map">
+	update t_sys_print_model
+		set
+			mod_tpl = #{mod_tpl}
+		where mod_id = #{mod_id}
+</update>
+<delete id="deleteSysPrintModel" parameterType="erp.bi.report.model.SysPrintModel">
+	delete from t_sys_print_model
+	where mod_id = #{mod_id}
+</delete>
+<!-- 付款申请单打印模板 -->
+<select id="getPayApplyPrintModelList" parameterType="map" resultType="erp.bi.report.model.SysPrintModel">
+select t_sys_print_model.menu_id,t_sys_print_model.mod_id,t_sys_print_model.default_style,t_sys_print_model.mod_tpl,t_sys_print_model.order_seq,t_sys_print_model.name from t_sys_print_model where menu_id=#{menu_id} and order_seq=#{order_seq}	
+</select>
+</mapper>

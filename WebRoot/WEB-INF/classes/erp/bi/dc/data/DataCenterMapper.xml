@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.bi.dc.data.DataCenterMapper">
+
+<sql id="DsCenterList">
+	b_code,code,name,tip,data_url,desc_url,mode,script_sql,dsid,list_id,ft_id,fd_code
+</sql>
+<select id="getDsCenterList" parameterType="map" resultType="erp.bi.dc.model.DataCenter">
+		   select ds_id,b_code,code,name,tip,data_url,desc_url,mode,dsid,script_sql,list_id,ft_id,fd_code from t_rpt_datasource_center
+		 <where>
+		   <if test="ds_id!=null">
+		   ds_id=#{ds_id}
+		   </if>
+		   <if test="code!=null">
+		    code=#{code}
+		   </if>
+		   <if test="list_id!=null">
+		   	list_id=#{list_id}
+		   </if>
+		 </where>
+</select> 
+
+<select id="getDsCenterListForSpe" parameterType="map" resultType="erp.bi.dc.model.DataCenter">
+		   select * from v_rpt_dsCenter
+		 <where>
+		   <if test="ds_id!=null">
+		   ds_id=#{ds_id}
+		   </if>
+		   <if test="code!=null">
+		    code=#{code}
+		   </if>
+		   <if test="list_id!=null">
+		   	list_id=#{list_id}
+		   </if>
+		   <if test="data_type!=null">
+		   		and data_type=#{data_type}
+		   </if>
+		 </where>
+</select> 
+
+<insert id="addDataCenter" parameterType="erp.bi.dc.model.DataCenter" keyProperty="ds_id" useGeneratedKeys="true">
+insert into t_rpt_datasource_center (<include refid="DsCenterList"/>) 
+                   values(#{b_code},#{code},#{name},#{tip},#{data_url},#{desc_url},#{mode},#{script_sql},#{dsid},#{list_id},#{ft_id},#{fd_code})
+</insert>
+ <update id="updateDataCenter" parameterType="erp.bi.dc.model.DataCenter">
+update t_rpt_datasource_center set b_code=#{b_code},
+                        code=#{code},
+                        name=#{name},
+                        tip=#{tip},
+                        data_url=#{data_url},
+                        desc_url=#{desc_url},
+                        mode=#{mode},
+                        script_sql=#{script_sql},
+                        dsid=#{dsid},
+                        ft_id=#{ft_id},
+                        fd_code=#{fd_code}
+                        <where>
+                        <if test="ds_id">
+                        ds_id=#{ds_id}
+                        </if>
+                        </where>
+</update>
+<delete id="deleteDsCenter" parameterType="erp.bi.dc.model.DataCenter">
+  delete from t_rpt_datasource_center
+  <where>
+  <if test="ds_id!=null">
+  ds_id=#{ds_id}
+  </if>
+  </where>
+</delete>
+
+<!-- 中心数据源描述 -->
+<sql id="DsDesc">
+ds_id,
+col_name,
+col_code,
+data_type
+</sql>
+<select id="getDsDescList" parameterType="map" resultType="erp.bi.dc.model.DataCenterDesc">
+  select ds_desc_id,ds_id,col_name,col_code,data_type from t_rpt_datasource_desc
+  <where>
+  <if test="ds_id!=null">
+     ds_id=#{ds_id}
+  </if>
+  </where>
+</select>
+<insert id="addDataCenterDesc" parameterType="erp.bi.dc.model.DataCenterDesc" keyProperty="ds_desc_id" useGeneratedKeys="true">
+ insert into t_rpt_datasource_desc(<include refid="DsDesc"/>)
+                   values(#{ds_id},#{col_name},#{col_code},#{data_type})
+</insert>
+<update id="updateDataCenterDesc" parameterType="erp.bi.dc.model.DataCenterDesc">
+update t_rpt_datasource_desc set col_name=#{col_name},
+                       col_code=#{col_code},
+                       data_type=#{data_type}
+                       <where>
+                       <if test="ds_desc_id!=null">
+                       ds_desc_id=#{ds_desc_id}
+                       </if>
+                       </where>
+</update>
+<delete id="deleteDataCenterDesc" parameterType="erp.bi.dc.model.DataCenterDesc">
+delete from t_rpt_datasource_desc 
+<where>
+<if test="ds_desc_id!=null">
+ds_desc_id=#{ds_desc_id}
+</if>
+</where>
+</delete>
+<delete id="deleteDataCenterDescByDs" parameterType="int">
+ delete from t_rpt_datasource_desc
+ where ds_id=#{value}
+</delete>
+
+ <!-- 中心数据源参数  -->
+<sql id="DsParam">
+ ds_id,
+ name,
+ code,
+ datatype,
+ seq,
+ basic_code,
+ list_id,
+ default_value
+</sql>
+<select id="getDsParamList" parameterType="map" resultType="erp.bi.dc.model.DataCenterParam">
+   select ds_param_id,ds_id,name,code,datatype,seq,basic_code,list_id,default_value from t_rpt_datasource_param
+   <where>
+   1=1
+   <if test="ds_param_id!=null">
+     and ds_param_id=#{ds_param_id}
+   </if>
+   <!--  
+   <if test="ds_id!=null">
+    and ds_id=#{ds_id}
+   </if>
+   -->
+   <if test="code!=null">
+    and code=#{code}
+   </if>
+    <if test="list_id!=null">
+    and	list_id=#{list_id}
+   </if>
+   </where>
+</select>
+<insert id="addDataCenterParam" parameterType="erp.bi.dc.model.DataCenterParam" keyProperty="ds_param_id" useGeneratedKeys="true">
+insert into t_rpt_datasource_param(<include refid="DsParam"/>)
+                 values(#{ds_id},#{name},#{code},#{datatype},#{seq},#{basic_code},#{list_id},#{default_value})
+</insert>
+<update id="updateDataCenterParam" parameterType="erp.bi.dc.model.DataCenterParam">
+ update t_rpt_datasource_param set name=#{name},
+                        code=#{code},
+                        datatype=#{datatype},
+                        seq=#{seq},
+                        basic_code=#{basic_code},
+                        default_value=#{default_value}
+                        <where>
+                        <if test="ds_param_id!=null">
+                        ds_param_id=#{ds_param_id}
+                        </if>
+                        </where>
+</update>
+<delete id="deleteDataCenterParam" parameterType="erp.bi.dc.model.DataCenterParam">
+   delete from t_rpt_datasource_param
+   <where>
+   <if test="ds_param_id!=null">
+   ds_param_id=#{ds_param_id}
+   </if>
+   </where>
+</delete>
+<delete id="deleteDataCenterParamByDs" parameterType="int">
+  delete from t_rpt_datasource_param
+	  where ds_id=#{value}
+</delete>
+
+</mapper>

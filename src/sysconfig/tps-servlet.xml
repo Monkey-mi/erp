@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+        
+       <context:property-placeholder location="classpath:sysconfig/jdbc.properties" />
+         <!-- enable autowire -->
+       <context:annotation-config /> 
+       
+       <task:annotation-driven/>
+       
+       <context:component-scan base-package="erp.util,erp.common,erp.web,erp.bi" /> 
+		<!-- Configures the @Controller programming model 必须加上这个，不然请求controller时会出现no mapping url错误-->
+   	   <mvc:annotation-driven />
+   		
+   <bean id="defaultDataSource"   class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+        p:driverClassName="${jdbc.driverClassName}"
+        p:url="${jdbc.databaseurl}"
+        p:username="${jdbc.username}"
+        p:password="${jdbc.password}" >
+        <property name="maxActive"><value>${jdbc.maxActive}</value></property>  
+        <property name="initialSize"><value>${jdbc.initialSize}</value></property>  
+        <property name="maxWait"><value>${jdbc.maxWait}</value></property>  
+        <property name="maxIdle"><value>${jdbc.maxIdle}</value></property>
+        <property name="minIdle"><value>${jdbc.minIdle}</value></property>
+      <!-- 只要下面两个参数设置成小于8小时(MySql默认)，就能避免MySql的8小时自动断开连接问题 -->
+        <property name="timeBetweenEvictionRunsMillis"><value>18000000</value></property><!-- 5小时 -->
+        <property name="minEvictableIdleTimeMillis"><value>10800000</value></property><!-- 3小时 -->
+    </bean>
+       
+    <!-- define the SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="defaultDataSource" />
+        <property name="typeAliasesPackage" value="erp.common,erp.web,erp.bi" />
+         <!-- 可以单独指定mybatis的配置文件，或者写在本文件里面。 用下面的自动扫描装配(推荐)或者单独mapper --> 
+        <property name="configLocation" value="classpath:sysconfig/mybatis-config.xml" />
+    </bean>
+    
+    
+        <!-- 自动扫描并组装MyBatis的映射文件和接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="erp.common.*.data,erp.common.data,erp.web.data,erp.bi.*.data,erp.bi.*.*.data" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+    
+    <!-- enable transaction demarcation with annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"  />
+    
+    <!-- transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="defaultDataSource" />
+    </bean>
+    
+    
+    <!-- AOP 相关 -->
+    <bean id="mapperInterceptor" class="erp.util.db.MapperInterceptor">
+        <property name="dataSource" ref="defaultDataSource" />
+    </bean>
+    <aop:config>
+    	<aop:aspect ref="mapperInterceptor">
+    		<aop:pointcut id="mapperPointcut" expression="execution(public * erp.*..data.*.*(..))" />
+    		<aop:around method="methodRound" pointcut-ref="mapperPointcut" />
+    	</aop:aspect>
+    </aop:config>  
+    
+    <!-- AOP order  by sql params -->
+    <bean id="myStringUtilsInterceptor" class="erp.util.MyStringUtils">
+    </bean>
+    <aop:config>
+    	<aop:aspect ref="myStringUtilsInterceptor">
+    		<aop:pointcut id="myStringUtilsPointcut" expression="execution(public * erp.bi..data.*.*List(..)) and args(params)" />
+    		<aop:before method="addOrderBySQL2" pointcut-ref="myStringUtilsPointcut"/>
+    	</aop:aspect>
+    </aop:config> 
+    
+      <!-- Configure the multipart resolver -->
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes 1M
+        <property name="maxUploadSize" value="1000000" />-->
+        <property name="defaultEncoding" value="utf-8"></property>
+    </bean>
+    
+    <bean class="erp.util.UTF8StringBeanPostProcessor"></bean>	
+    <!-- 定时器配置 -->
+	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+	    <property name="scheduledTimerTasks">
+	        <list>
+	            <ref bean="scheduledTask"></ref>
+	        </list>
+	    </property>
+	</bean>
+	<bean id="scheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<!-- 设置启动延迟 -->
+	    <property  name="delay"><value>${timerTask.delay}</value></property>
+	    <!-- 后续延迟 -->
+	    <property  name="period"><value>${timerTask.delay}</value></property>
+	    <!-- 指定触发器信息 -->
+	    <property name="timerTask" ref="checkAlarmTask"></property>
+	</bean>
+	    
+	<bean id="checkAlarmTask" class="erp.util.web.CheckAlarmTask">
+	</bean>	
+	
+	
+</beans>

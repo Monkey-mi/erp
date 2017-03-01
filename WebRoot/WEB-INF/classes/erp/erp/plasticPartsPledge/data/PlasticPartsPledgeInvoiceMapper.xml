@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.plasticPartsPledge.data.PlasticPartsPledgeInvoiceMapper">
+<!-- 获取未申请金额 -->
+<select id="getApplicationsAmount" parameterType="map" resultType="String">
+	select top 1 gyfpb.fpje - isnull(view_gyfphtmx.yfje,0) - isnull(view_gyfpfymx.yfje,0) - isnull(view_fksqspmx.sqje,0) - isnull(b.zyje,0)  from gyfpb
+	left outer join (
+		select fplb,fphm,sum(sljzyb_fp.zyje) as zyje from sljzyb_fp 
+		left outer join sljzyb on sljzyb_fp.zydh = sljzyb.zydh
+ 		where isnull(sljzyb.jybj,0)=0 group by fplb,fphm 
+	 ) b on b.fplb=gyfpb.fplb and b.fphm=gyfpb.fphm
+	left outer join view_fksqspmx with (nolock) on view_fksqspmx.fplb=gyfpb.fplb and view_fksqspmx.fphm=gyfpb.fphm
+	left outer join view_gyfphtmx with (nolock) on view_gyfphtmx.fplb=gyfpb.fplb and view_gyfphtmx.fphm=gyfpb.fphm
+	left outer join view_gyfpfymx with (nolock) on view_gyfpfymx.fplb=gyfpb.fplb and view_gyfpfymx.fphm=gyfpb.fphm
+	where gyfpb.fplb=#{fplb} and gyfpb.fphm=#{fphm};
+</select>
+<!-- 发票导入 -->
+<select id="getPlasticPartsPledgeInvoiceImpList" parameterType="map" resultType="erp.erp.plasticPartsPledge.model.PlasticPartsPledgeInvoiceImp">
+	select 
+		ltrim(rtrim(gyfpb.fplb))+'-'+ltrim(rtrim(gyfpb.fphm)) as fplbhm,
+		gyfpb.fplb,
+		gyfpb.fphm,
+		gyfpb.kprq,
+		gyfpb.shsj,
+		gyfpb.hkzq,
+		gyfpb.fpje,
+		gyfpb.fpje - isnull(view_gyfphtmx.yfje,0) - isnull(view_gyfpfymx.yfje,0) - isnull(view_fksqspmx.sqje,0) - isnull(b.zyje,0) as wqje
+	from gyfpb
+	left outer join (
+			select fplb,fphm,sum(sljzyb_fp.zyje) as zyje from sljzyb_fp 
+			left outer join sljzyb on sljzyb_fp.zydh = sljzyb.zydh
+	 		where isnull(sljzyb.jybj,0)=0 group by fplb,fphm 
+		 ) b on b.fplb=gyfpb.fplb and b.fphm=gyfpb.fphm
+	left outer join view_fksqspmx with (nolock) on view_fksqspmx.fplb=gyfpb.fplb and view_fksqspmx.fphm=gyfpb.fphm
+	left outer join view_gyfphtmx with (nolock) on view_gyfphtmx.fplb=gyfpb.fplb and view_gyfphtmx.fphm=gyfpb.fphm
+	left outer join view_gyfpfymx with (nolock) on view_gyfpfymx.fplb=gyfpb.fplb and view_gyfpfymx.fphm=gyfpb.fphm
+	where gyfpb.shbj=1 and gyfpb.fpje - isnull(view_gyfphtmx.yfje,0) - isnull(view_gyfpfymx.yfje,0) - isnull(view_fksqspmx.sqje,0) - isnull(b.zyje,0)&gt;0
+	and LEFT(convert(char(10),dateadd(MONTH,-2,GetDate( )),112),4) &gt;= LEFT(convert(char(10),dateadd(MONTH,0,gyfpb.hkzq),112),4) 
+	and right(LEFT(convert(char(10),dateadd(MONTH,-2,GetDate( )),112),6),2) &gt;= 
+	case when LEFT(convert(char(10),dateadd(MONTH,-2,GetDate( )),112),4) = LEFT(convert(char(10),dateadd(MONTH,0,gyfpb.hkzq),112),4)  then right(LEFT(convert(char(10),dateadd(MONTH,0,gyfpb.hkzq),112),6),2) else 0 end 
+	<if test="fplbhm!=null">
+		and ltrim(rtrim(gyfpb.fplb))+'-'+ltrim(rtrim(gyfpb.fphm)) not in (${fplbhm})
+	</if>
+	and gyfpb.csbh=#{csbh}
+	<if test="search!=null">
+		${search}
+	</if>
+</select>
+<select id="getPlasticPartsPledgeInvoiceList" parameterType="map" resultType="erp.erp.plasticPartsPledge.model.PlasticPartsPledgeInvoice">
+	select
+		sljzyb_fp.zydh,
+		gyfpb.kprq,
+		gyfpb.shsj,
+		sljzyb_fp.fphm,
+		sljzyb_fp.fplb,
+		gyfpb.fpje,
+		sljzyb_fp.zyje,
+		gyfpb.fpje - isnull(view_gyfphtmx.yfje,0) - isnull(view_gyfpfymx.yfje,0) - isnull(view_fksqspmx.sqje,0) - isnull(b.zyje,0) as wqje
+	from sljzyb_fp
+	left outer join gyfpb with (nolock) on sljzyb_fp.fphm=gyfpb.fphm and sljzyb_fp.fplb=gyfpb.fplb
+	left outer join (
+			select fplb,fphm,sum(sljzyb_fp.zyje) as zyje from sljzyb_fp 
+			left outer join sljzyb on sljzyb_fp.zydh = sljzyb.zydh
+	 		where isnull(sljzyb.jybj,0)=0 group by fplb,fphm 
+		 ) b on b.fplb=gyfpb.fplb and b.fphm=gyfpb.fphm
+	left outer join view_fksqspmx with (nolock) on view_fksqspmx.fplb=gyfpb.fplb and view_fksqspmx.fphm=gyfpb.fphm
+	left outer join view_gyfphtmx with (nolock) on view_gyfphtmx.fplb=gyfpb.fplb and view_gyfphtmx.fphm=gyfpb.fphm
+	left outer join view_gyfpfymx with (nolock) on view_gyfpfymx.fplb=gyfpb.fplb and view_gyfpfymx.fphm=gyfpb.fphm
+	where sljzyb_fp.zydh=#{zydh}
+</select>
+<insert id="addPlasticPartsPledgeInvoice" parameterType="erp.erp.plasticPartsPledge.model.PlasticPartsPledgeInvoice">
+	insert into sljzyb_fp
+	(
+		zydh,
+		kprq,
+		shsj_fp,
+		fphm,
+		fplb,
+		fpje,
+		zyje
+	)
+	values
+	(
+		#{zydh},
+		#{kprq},
+		#{shsj_fp},
+		#{fphm},
+		#{fplb},
+		#{fpje},
+		#{zyje}
+	)
+</insert>
+<update id="updatePlasticPartsPledgeInvoice" parameterType="erp.erp.plasticPartsPledge.model.PlasticPartsPledgeInvoice">
+	update sljzyb_fp
+		set
+			zydh = #{zydh},
+			kprq = #{kprq},
+			shsj_fp = #{shsj_fp},
+			fphm = #{fphm},
+			fplb = #{fplb},
+			fpje = #{fpje},
+			zyje = #{zyje}
+		where zydh = #{zydh}
+</update>
+<delete id="deletePlasticPartsPledgeInvoice" parameterType="erp.erp.plasticPartsPledge.model.PlasticPartsPledgeInvoice">
+	delete from sljzyb_fp
+	where zydh = #{zydh} and  fplb = #{fplb} and  fphm = #{fphm}
+</delete>
+<delete id="deletePlasticPartsPledgeInvoiceByZydh" parameterType="erp.erp.plasticPartsPledge.model.PlasticPartsPledge">
+	delete from sljzyb_fp
+	where zydh = #{zydh} 
+</delete>
+<delete id="deletePlasticPartsPledgeInvoiceByZydhOne" parameterType="map">
+	delete from sljzyb_fp
+	where zydh in (${zydh})
+</delete>
+</mapper>

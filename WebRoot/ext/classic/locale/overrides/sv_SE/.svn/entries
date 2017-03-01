@@ -1,0 +1,86 @@
+10
+
+dir
+2600
+https://192.168.1.100/svn/erp/erpForOut62/WebRoot/ext/classic/locale/overrides/sv_SE
+https://192.168.1.100/svn/erp
+
+
+
+2017-02-20T10:21:25.499474Z
+2578
+wuqia
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+70d35baf-c61e-d24d-b330-644048e49734
+
+Date.js
+file
+
+
+
+
+2017-02-22T05:28:17.403000Z
+795f33894214c7d100e61f2500401e14
+2017-02-20T10:21:25.499474Z
+2578
+wuqia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1132
+
+form
+dir
+
+grid
+dir
+
+picker
+dir
+
+tab
+dir
+
+toolbar
+dir
+
+util
+dir
+
+view
+dir
+
+window
+dir
+

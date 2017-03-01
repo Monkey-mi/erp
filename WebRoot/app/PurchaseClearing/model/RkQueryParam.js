@@ -1,0 +1,33 @@
+Ext.define('erp.PurchaseClearing.model.RkQueryParam', {
+	extend: 'Ext.data.Model',
+	fields: [
+	    { name: 'all'},
+		{ name: 'checkbox_rkdh',type: 'boolean', defaultValue: false},
+		{ name: 'rkdh1' },
+		{ name: 'rkdh2' },
+		{ name: 'checkbox_rkrq',type: 'boolean', defaultValue: false},
+		{ name: 'rkrq1', type: 'date', dateFormat: 'Y-m-d' },
+		{ name: 'rkrq2', type: 'date', dateFormat: 'Y-m-d'},
+		{ name: 'checkbox_htbh',type: 'boolean', defaultValue: false},
+		{ name: 'htbh1'},
+		{ name: 'htbh2'},
+		{ name: 'checkbox_csmc',type: 'boolean', defaultValue: false},
+		{ name: 'csmc' },
+		{ name: 'checkbox_clmc',type: 'boolean', defaultValue: false},
+		{ name: 'clmc' },
+		{ name: 'checkbox_rklb',type: 'boolean', defaultValue: false},
+		{ name: 'rklb'},
+		{ name: 'checkbox_fzhm',type: 'boolean', defaultValue: false},
+		{ name: 'fzhm'},
+		{ name: 'checkbox_tzdh',type: 'boolean', defaultValue: false},
+		{ name: 'tzdh1'},
+		{ name: 'tzdh2'},
+		{ name: 'checkbox_bzsm',type: 'boolean', defaultValue: false},
+		{ name: 'bzsm'},
+		{ name: 'checkbox_shdh',type: 'boolean', defaultValue: false},
+		{ name: 'shdh'},
+		{ name: 'checkbox_shsj',type: 'boolean', defaultValue: false},
+		{ name: 'shsj1', type: 'date', dateFormat: 'Y-m-d'},
+		{ name: 'shsj2', type: 'date', dateFormat: 'Y-m-d'}
+	]
+});

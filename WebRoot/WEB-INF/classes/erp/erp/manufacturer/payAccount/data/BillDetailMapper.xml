@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.BillDetailMapper">
+
+<select id="getBillDetailList" parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.BillDetail">
+<!-- 
+   select hsbmb.bmmc as hsbm,nf,yf,rq,pzh,kcpj,yfpj,pjyf,a.bzsm,px
+  from 
+  (
+	select isnull(hsbm,'') as hsbm,#{nf} as nf,1 as yf,#{ncrq} as rq,null as pzh,null as kcpj,null as yfpj,sum(ncye) as pjyf,'票据年初' as bzsm,1 as px
+	from yfpjncb where nf = #{nf} and csbh=	#{csbh} and left(hsbm,len(#{hsbm}))=#{hsbm}
+	group by hsbm
+	
+	union all
+	SELECT isnull(zjzffksqmxb.hsbm,''),year(zjzfb.zfrq),month(zjzfb.zfrq),convert(char(10),zjzfb.zfrq,102),zjzfb.zfpzh,zjzffksqmxb.zfje,null,null,zjzfb.bzsm,3
+	FROM zjzffksqmxb with (nolock)
+	left outer join zjzfb with (nolock) on zjzfb.zdsx=zjzffksqmxb.zdsx
+	Where year(zjzfb.zfrq) &gt;= #{nf} and zjzfb.csbh=#{csbh} and left(zjzffksqmxb.hsbm,len(#{hsbm}))=#{hsbm} and zjzfb.yfpjbj=1 
+	   
+	union all
+	SELECT isnull(zchsbm,''),year(zzrq),month(zzrq),convert(char(10),zzrq,102),convert(char(8),zzpzh),null,zzje,null,bzsm,3
+	FROM zjnbzzb
+	Where year(zzrq) &gt;=#{nf} and csbh = #{csbh} and yfpjbj=1 
+   ) a left outer join hsbmb on a.hsbm=hsbmb.bmbh  where 1=1
+   
+  -->  
+select hsbmb.bmmc as hsbm,nf,yf,rq,pzh,kcpj,yfpj,pjyf,a.bzsm,px
+from 
+(
+	select isnull(hsbm,'') as hsbm,#{nf} as nf,1 as yf,#{rq} as rq,null as pzh,null as kcpj,null as yfpj,sum(ncye) as pjyf,'票据年初' as bzsm,1 as px
+	from yfpjncb where nf=#{nf} and csbh=#{csbh} and left(hsbm,len(#{hsbm}))=#{hsbm}
+	group by hsbm
+	
+	union all
+	SELECT isnull(zjzffksqmxb.hsbm,''),year(zjzfb.zfrq),month(zjzfb.zfrq),convert(char(10),zjzfb.zfrq,102),zjzfb.zfpzh,zjzffksqmxb.zfje,null,null,zjzfb.bzsm,3
+	FROM zjzffksqmxb with (nolock)
+	left outer join zjzfb with (nolock) on zjzfb.zdsx=zjzffksqmxb.zdsx
+	Where year(zjzfb.zfrq)&gt;=#{nf} and zjzfb.csbh=#{csbh} and left(zjzffksqmxb.hsbm,len(#{hsbm}))=#{hsbm} and zjzfb.yfpjbj=1 
+	
+	union all
+	SELECT isnull(zchsbm,''),year(zzrq),month(zzrq),convert(char(10),zzrq,102),convert(char(8),zzpzh),null,zzje,null,bzsm,3
+	FROM zjnbzzb
+	Where year(zzrq)&gt;=#{nf} and csbh=#{csbh}  and yfpjbj=1 
+) a left outer join hsbmb on a.hsbm=hsbmb.bmbh  where 1=1
+</select>
+
+</mapper>

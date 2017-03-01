@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseDetail.data.OutSourceSubsidiaryMapper">
+
+
+<select id="getOutSourceSubsidiaryList" parameterType="map" resultType="erp.erp.master.purchaseDetail.model.OutSourceSubsidiary">
+	  SELECT wxlltzdb.wxdh,   
+         wxlltzdb.wxxh,   
+         wxlltzdb.tzxh,   
+         wxlltzdb.lbbh,   
+         wxlltzdb.clhh,
+		 wxlltzdb.cltx1,
+		 wxlltzdb.cltx2, 
+		 wxlltzdb.cltx3,   
+         wxlltzdb.jldw,   
+         wxlltzdb.jgyl,   
+         wxlltzdb.jsbl,   
+         wxlltzdb.tzll,   
+         wxlltzdb.ylsl,   
+         wxlltzdb.bzsm,
+		 wxlltzdb.jgbh,
+         wxlltzdb.csdj,
+         wxlltzdb.csje,
+         wxlltzdb.djyl,
+         clbmb.plmth,
+	 		clbmb.plmtx
+    FROM wxlltzdb
+left outer join clbmb with (nolock) on clbmb.clhh=wxlltzdb.clhh  
+where wxlltzdb.wxdh=#{wxdh} 
+</select>
+<insert id="addOutSourceSubsidiary" parameterType="erp.erp.master.purchaseDetail.model.OutSourceSubsidiary" >
+	insert into wxlltzdb
+	(
+		wxdh,
+		wxxh,
+		tzxh,
+		lbbh,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		jldw,
+		jgyl,
+		jsbl,
+		tzll,
+		ylsl,
+		bzsm,
+		jgbh,
+		csdj,
+		csje,
+		djyl
+	)
+	values
+	(
+		#{wxdh},
+		#{wxxh},
+		#{tzxh},
+		#{lbbh},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{jldw},
+		#{jgyl},
+		#{jsbl},
+		#{tzll},
+		#{ylsl},
+		#{bzsm},
+		#{jgbh},
+		#{csdj},
+		#{csje},
+		#{djyl}
+	)
+</insert>
+<update id="updateOutSourceSubsidiary" parameterType="erp.erp.master.purchaseDetail.model.OutSourceSubsidiary">
+	update wxlltzdb
+		set
+			wxdh = #{wxdh},
+			wxxh = #{wxxh},
+			tzxh = #{tzxh},
+			lbbh = #{lbbh},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			jldw = #{jldw},
+			jgyl = #{jgyl},
+			jsbl = #{jsbl},
+			tzll = #{tzll},
+			ylsl = #{ylsl},
+			bzsm = #{bzsm},
+			jgbh = #{jgbh},
+			csdj = #{csdj},
+			csje = #{csje},
+			djyl = #{djyl}
+		where wxxh = #{wxxh}
+</update>
+<delete id="deleteOutSourceSubsidiary" parameterType="erp.erp.master.purchaseDetail.model.OutSourceSubsidiary">
+	delete from wxlltzdb
+	where wxxh = #{wxxh}
+</delete>
+</mapper>

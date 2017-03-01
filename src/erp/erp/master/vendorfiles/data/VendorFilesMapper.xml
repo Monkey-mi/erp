@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.vendorfiles.data.VendorFilesMapper">
+
+
+<select id="getVendorFilesList" parameterType="map" resultType="erp.erp.master.vendorfiles.model.VendorFiles">
+  SELECT csxxb.csbh,
+		 csxxb.yhbh,
+		 csxxb.hzcs,   
+         csxxb.csjc,   
+         csxxb.csmc,   
+         csxxb.csdh,      
+         csxxb.cscz,      
+         csxxb.csdz,      
+         csxxb.cssh,    
+         csxxb.cszh,          
+         csxxb.csyb, 
+		 csxxb.khyh,  
+         csxxb.lxrm,   
+         csxxb.cglb,   
+         csxxb.cslb,   
+         csxxb.cslx,   
+         csxxb.fkts,   
+         csxxb.xyed,   
+         csxxb.bzsm,   
+         csxxb.gdbj,   
+         csxxb.wbbh,   
+         csxxb.fzrq, 
+         csxxb.psbj,
+         csxxb.khbh,
+         csxxb.khbh as khmc,
+         csxxb.czrm,
+         csxxb.czsj,
+		 csxxb.spbj,
+		 csxxb.sprm,
+		 csxxb.spsj,
+         csxxb.ywmc,
+		 wbmcb.wbdh as wbdh,
+		 wbmcb.wbmc as wbmc,
+		 csxxb.zgrd,
+		 csxxb.tdrd,
+		 csxxb.hdxz,
+		 csxxb.fktj,
+		 csxxb.KPBJ,
+		 csxxb.KPDJ,
+		 csxxb.xdbl,
+		 csxxb.jybj,
+		 csxxb.hddw
+    FROM csxxb  
+  left outer join wbmcb on wbmcb.wbbh=csxxb.wbbh
+  where 
+   1=1
+ <if test="search!=null">
+        and (csbh like '%${search}%' or csmc like '%${search}%' )
+ </if>
+ <if test="condition!=null and condition!=''">
+		and ${condition}
+ </if>
+ 
+</select>
+<insert id="addVendorFiles" parameterType="erp.erp.master.vendorfiles.model.VendorFiles" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.csxxb
+	(
+		csbh,
+		csjc,
+		csmc,
+		yhbh,
+		cglb,
+		hzcs,
+		psbj,
+		fzrq,
+		fkts,
+		khbh,
+		cslb,
+		wbbh,
+		xyed,
+		csdh,
+		cscz,
+		lxrm,
+		csdz,
+		csyb,
+		cssh,
+		cszh,
+		bzsm,
+		gdbj,
+		czrm,
+		czsj,
+		spbj,
+		sprm,
+		spsj,
+		cslx,
+		ywmc,
+		zgrd,
+		tdrd,
+		hdxz,
+		fktj,
+		scbj,
+		kpbj,
+		kpdj,
+		khyh,
+		xdbl,
+		jybj,
+		hddw,
+		ztdw
+	)
+	values
+	(
+		#{csbh},
+		#{csjc},
+		#{csmc},
+		#{yhbh},
+		#{cglb},
+		#{hzcs},
+		#{psbj},
+		#{fzrq},
+		#{fkts},
+		#{khbh},
+		#{cslb},
+		#{wbbh},
+		#{xyed},
+		#{csdh},
+		#{cscz},
+		#{lxrm},
+		#{csdz},
+		#{csyb},
+		#{cssh},
+		#{cszh},
+		#{bzsm},
+		#{gdbj},
+		#{czrm},
+		#{czsj},
+		#{spbj},
+		#{sprm},
+		#{spsj},
+		#{cslx},
+		#{ywmc},
+		#{zgrd},
+		#{tdrd},
+		#{hdxz},
+		#{fktj},
+		#{scbj},
+		#{kpbj},
+		#{kpdj},
+		#{khyh},
+		#{xdbl},
+		#{jybj},
+		#{hddw},
+		#{ztdw}
+	)
+</insert>
+<update id="updateVendorFiles" parameterType="erp.erp.master.vendorfiles.model.VendorFiles">
+	update dbo.csxxb
+		set
+			csbh = #{csbh},
+			csjc = #{csjc},
+			csmc = #{csmc},
+			yhbh = #{yhbh},
+			cglb = #{cglb},
+			hzcs = #{hzcs},
+			psbj = #{psbj},
+			fzrq = #{fzrq},
+			fkts = #{fkts},
+			khbh = #{khbh},
+			cslb = #{cslb},
+			wbbh = #{wbbh},
+			xyed = #{xyed},
+			csdh = #{csdh},
+			cscz = #{cscz},
+			lxrm = #{lxrm},
+			csdz = #{csdz},
+			csyb = #{csyb},
+			cssh = #{cssh},
+			cszh = #{cszh},
+			bzsm = #{bzsm},
+			gdbj = #{gdbj},
+			czrm = #{czrm},
+			czsj = #{czsj},
+			spbj = #{spbj},
+			sprm = #{sprm},
+			spsj = #{spsj},
+			cslx = #{cslx},
+			ywmc = #{ywmc},
+			zgrd = #{zgrd},
+			tdrd = #{tdrd},
+			hdxz = #{hdxz},
+			fktj = #{fktj},
+			scbj = #{scbj},
+			kpbj = #{kpbj},
+			kpdj = #{kpdj},
+			khyh = #{khyh},
+			xdbl = #{xdbl},
+			jybj = #{jybj},
+			hddw = #{hddw},
+			ztdw = #{ztdw}
+		where csbh = #{csbh}
+</update>
+<delete id="deleteVendorFiles" parameterType="erp.erp.master.vendorfiles.model.VendorFiles">
+	delete from dbo.csxxb
+	where csbh = #{csbh}
+</delete>
+<select id="getVendorFilesOne" parameterType="map" resultType="String">
+	select isnull(max( csbh ),0) from csxxb where 1=1
+</select>
+<update id="updateApproStatus" parameterType="map">
+	update csxxb
+	  set spbj=#{spbj},spsj=#{spsj},sprm=#{sprm}
+	where csbh = #{csbh}  
+</update>
+
+</mapper>

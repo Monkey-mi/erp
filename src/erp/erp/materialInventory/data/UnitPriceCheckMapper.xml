@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialInventory.data.UnitPriceCheckMapper">
+
+
+<select id="getUnitPriceCheckList" parameterType="map" resultType="erp.erp.materialInventory.model.UnitPriceCheck">
+   
+	 <![CDATA[  
+           exec dbo.proc_unitPriceCheck @ckbh = #{ckbh}, @rkdh = #{rkdh}, @rkxh = #{rkxh}, 
+              @rkrq = #{rkrq}, @csbh = #{csbh}, @clhh = #{clhh}, @htbh = #{htbh},
+              @htxh = #{htxh}, @rkdj = #{rkdj}, @pjrq = #{pjrq},@wbbh = #{wbbh},
+              @wbdj = #{wbdj}, @count = #{count}
+        ]]> 
+</select>
+<insert id="addUnitPriceCheck" parameterType="erp.erp.materialInventory.model.UnitPriceCheck" keyProperty="" useGeneratedKeys="true">
+	insert into UnitPriceCheck
+	(
+		ckbh,
+		rkdh,
+		rkxh,
+		rkrq,
+		htbh,
+		htxh,
+		rkdj,
+		pjrq,
+		wbdj,
+		kzdj,
+		cgkj,
+		cgdj,
+		csbh,
+		clhh,
+		wbbh,
+		ckbh
+	)
+	values
+	(
+		#{ckbh},
+		#{rkdh},
+		#{rkxh},
+		#{rkrq},
+		#{htbh},
+		#{htxh},
+		#{rkdj},
+		#{pjrq},
+		#{wbdj},
+		#{kzdj},
+		#{cgkj},
+		#{cgdj},
+		#{csbh},
+		#{clhh},
+		#{wbbh},
+		#{ckbh}
+	)
+</insert>
+<update id="updateUnitPriceCheck" parameterType="erp.erp.materialInventory.model.UnitPriceCheck">
+	update UnitPriceCheck
+		set
+			ckbh = #{ckbh},
+			rkdh = #{rkdh},
+			rkxh = #{rkxh},
+			rkrq = #{rkrq},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			rkdj = #{rkdj},
+			pjrq = #{pjrq},
+			wbdj = #{wbdj},
+			kzdj = #{kzdj},
+			cgkj = #{cgkj},
+			cgdj = #{cgdj},
+			csbh = #{csbh},
+			clhh = #{clhh},
+			wbbh = #{wbbh},
+			ckbh = #{ckbh}
+		where  = #{}
+</update>
+<delete id="deleteUnitPriceCheck" parameterType="erp.erp.materialInventory.model.UnitPriceCheck">
+	delete from UnitPriceCheck
+	where  = #{}
+</delete>
+</mapper>

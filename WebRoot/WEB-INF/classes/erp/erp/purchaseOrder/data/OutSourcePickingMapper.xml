@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseOrder.data.OutSourcePickingMapper">
+<select id="getOutSourceDetailImpList" parameterType="map" resultType="erp.erp.purchaseOrder.model.OutSourceDetailImp">
+select a.*,cllbb.lbmc as cllbmc,lsx_gxmcb.gxmc from (
+  SELECT scbomb.jhbh,   
+         scbomb.jhxh,   
+         scbomb.jlxh,   
+         scbomb.cpbh,   
+         scbomb.bbbh,   
+         scbomb.jgbh,   
+         scbomb.jgsx,   
+         scbomb.xnbj,   
+         scbomb.mjbz,     
+         scbomb.xqbj,   
+         scbomb.dybj,   
+         scbomb.lbbh,
+         clbmb.shbl, 
+         scbomb.bjbb,   
+         scbomb.clhh,
+		 scbomb.clmc, 
+	     scbomb.jldw,   
+         clbmb.clth,   
+         scbomb.wzdh,   
+         scbomb.djyl,   
+         scbomb.clyl,   
+         round(#{jhsl}*scbomb.clyl,6) as jhyl,
+         round(#{jhsl}*scbomb.clyl,6) as bcyl,
+         scbomb.csbh,
+         scbomb.bzsm,   
+			case when mjbz=1 then left(jgbh,len(jgbh) - 2) else jgbh end as px ,
+         0 as bj,
+         1 as sx,
+         case when scbomb.gxbh=#{gxbh} then 1 else 0 end as xzbj,
+			scbomb.gxbh,
+			scbomb.cltx1,
+         clbmb.plmth,
+	 		clbmb.plmtx  
+    FROM scbomb 
+    left outer join clbmb on clbmb.clhh=scbomb.clhh
+    left outer join jhmxb on jhmxb.jhbh=scbomb.jhbh and jhmxb.jhxh=scbomb.jhxh
+    where scbomb.jhbh=#{jhbh} and scbomb.jhxh=#{jhxh}
+union all
+select jhmxb.jhbh,
+		 jhmxb.jhxh,
+		 0,
+		 jhmxb.cpbh,
+		 null,
+		 '10包装',
+		 0,
+		 0,
+		 0,
+		 0,
+		 0,
+		 null,
+		 0,
+		 null,
+		 null,
+		 '   '+'包装材料',
+		 null,
+       null,
+       null,
+		 0,
+		 0,
+		 null,
+	 	 null,
+		 null,
+       null,
+       null,
+       0 as bj,
+       2,
+       0,
+		 null,
+		 null,
+		 '',
+		 ''
+from jhmxb  
+where jhmxb.jhbh=#{jhbh} and jhmxb.jhxh=#{jhxh}
+union all
+select bzclb.jhbh,
+		 bzclb.jhxh,
+		 0,
+		 jhmxb.cpbh,
+		 null,
+		 '10包装'+bzclb.clhh,
+		 0,
+		 0,
+		 1,
+		 0,
+		 0,
+		 clbmb.lbbh,
+		 clbmb.shbl,
+		 null,
+		 bzclb.clhh,
+		 '      '+clbmb.clmc,
+		 bzclb.jldw,
+		 clbmb.clth,
+       null,
+		 0,
+		 0,
+		 bzclb.bzsl,
+		 bzclb.bzsl,
+	 	 bzclb.csbh,
+		 bzclb.bzsm,
+       null,
+       0 as bj,
+       3,
+       case when bzclb.gxbh=#{gxbh} then 1 else 0 end,
+		 bzclb.gxbh,
+		 null,
+		 '',
+		 ''  
+from bzclb
+left outer join jhmxb on jhmxb.jhbh=bzclb.jhbh and jhmxb.jhxh=bzclb.jhxh
+left outer join clbmb on clbmb.clhh=bzclb.clhh
+where bzclb.jhbh=#{jhbh} and bzclb.jhxh=#{jhxh}
+) a
+left outer join cllbb on cllbb.lbbh=a.lbbh
+left outer join lsx_gxmcb on lsx_gxmcb.gxbh=a.gxbh
+order by px 
+</select>
+<select id="getOutSourceImpList" parameterType="map" resultType="erp.erp.purchaseOrder.model.OutSourceImp">
+  SELECT jhmxb.ddbh,   
+         jhmxb.ddxh,   
+         jhmxb.jhbh,   
+         jhmxb.jhxh,
+		 case when jhmxb.jhbh&lt;&gt;0 then
+		 ltrim(rtrim(str(jhmxb.jhbh)))+'-'+ltrim(rtrim(str(jhmxb.jhxh)))else '' end as jhh,     
+         jhmxb.cpbh,   
+         jhmxb.jldw,    
+         jhmxb.cpbz,   
+         jhmxb.jhsl,
+		 jhmxb.tcsl,
+		 (jhmxb.jhsl - jhmxb.tcsl) as wtsl,
+		 (jhmxb.jhsl - jhmxb.tcsl) as bctc,
+		  1.00 as fdbl,
+		  0.00 as jgsl,
+		 jhmxb.sxrq,  
+         jhmxb.wcrq,   
+         jhmxb.qfbj,   
+         cpbmb.cpmc,
+         clbmb.clhh,
+         clbmb.clmc,
+		 case when jhmxb.zjbh=0 then jhmxb.jhbz else a.jhbz end as jhbz,
+         scjhb.scyq,
+         scjhb.jhlb,
+		 0 as xzbj,
+         0 as kjbj,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+	 	 jhlbb.lbmc as jhlbmc
+    FROM jhmxb   
+	left outer join scjhb with (nolock) on scjhb.jhbh=jhmxb.jhbh
+	left outer join cpbmb with (nolock) on jhmxb.CPBH=cpbmb.CPBH 
+    left outer join clbmb with (nolock)  on clbmb.bcpbh=cpbmb.cpbh
+    left outer join jhmxb a  with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh and jhmxb.zjbh&lt;&gt;0
+    left outer join jhlbb with (nolock) on jhlbb.lbbh=scjhb.jhlb
+    where scjhb.gdbj=0 and jhmxb.qfbj=1  and jhmxb.wxbj=1 and (jhmxb.jhsl - jhmxb.tcsl) &gt; 0
+	<!-- and not exists (select * from wxtzdmxb a where jhmxb.jhbh = a.jhbh and jhmxb.jhxh=a.jhxh) -->
+	<if test="jhh!=null">
+		and ltrim(rtrim(str(jhmxb.jhbh)))+'-'+ltrim(rtrim(str(jhmxb.jhxh))) like '%${jhh}%'
+	</if>
+</select>
+<select id="getOutSourcePickingForEdtList" parameterType="map" resultType="erp.erp.purchaseOrder.model.OutSourcePicking">
+	SELECT 
+			cghtwxlltzdb.htbh,
+			cghtwxlltzdb.htxh,
+			cghtwxlltzdb.tzxh,
+			cghtwxlltzdb.lbbh,
+			cghtwxlltzdb.clhh,
+			cghtwxlltzdb.cltx1,
+			cghtwxlltzdb.cltx2,
+			cghtwxlltzdb.cltx3,
+			cghtwxlltzdb.jldw,
+			cghtwxlltzdb.jgyl,
+			cghtwxlltzdb.jsbl,
+			cghtwxlltzdb.tzll,
+			cghtwxlltzdb.ylsl,
+			cghtwxlltzdb.bzsm,
+			cghtwxlltzdb.jgbh,
+			cghtwxlltzdb.csdj,
+			cghtwxlltzdb.csje,
+			cghtwxlltzdb.djyl,
+			clbmb.plmth,
+			clbmb.plmtx,
+			CLLBB.lbmc,
+			clbmb.clmc,
+			cghtwxlltzdb.login_id,
+			cghtwxlltzdb.ip
+			FROM cghtwxlltzdb_tmp cghtwxlltzdb 
+			left outer join clbmb with (nolock) on clbmb.clhh=cghtwxlltzdb.clhh
+			left outer join CLLBB with (nolock) on CLLBB.lbbh=cghtwxlltzdb.lbbh
+				where cghtwxlltzdb.htbh=#{htbh} and cghtwxlltzdb.htxh=#{htxh}  and cghtwxlltzdb.login_id=#{login_id} and cghtwxlltzdb.ip=#{ip}
+</select>
+<select id="getOutSourcePickingList" parameterType="map" resultType="erp.erp.purchaseOrder.model.OutSourcePicking">
+	SELECT 
+			cghtwxlltzdb.htbh,
+			cghtwxlltzdb.htxh,
+			cghtwxlltzdb.tzxh,
+			cghtwxlltzdb.lbbh,
+			cghtwxlltzdb.clhh,
+			cghtwxlltzdb.cltx1,
+			cghtwxlltzdb.cltx2,
+			cghtwxlltzdb.cltx3,
+			cghtwxlltzdb.jldw,
+			cghtwxlltzdb.jgyl,
+			cghtwxlltzdb.jsbl,
+			cghtwxlltzdb.tzll,
+			cghtwxlltzdb.ylsl,
+			cghtwxlltzdb.bzsm,
+			cghtwxlltzdb.jgbh,
+			cghtwxlltzdb.csdj,
+			cghtwxlltzdb.csje,
+			cghtwxlltzdb.djyl,
+			clbmb.plmth,
+			clbmb.plmtx,
+			CLLBB.lbmc,
+			clbmb.clmc
+			FROM cghtwxlltzdb
+			left outer join clbmb with (nolock) on clbmb.clhh=cghtwxlltzdb.clhh
+			left outer join CLLBB with (nolock) on CLLBB.lbbh=cghtwxlltzdb.lbbh
+				where cghtwxlltzdb.htbh=#{htbh} and cghtwxlltzdb.htxh=#{htxh}  
+</select>
+<insert id="addOutSourcePicking" parameterType="erp.erp.purchaseOrder.model.OutSourcePicking" >
+	insert into cghtwxlltzdb_tmp
+	(
+		htbh,
+		htxh,
+		tzxh,
+		lbbh,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		jldw,
+		jgyl,
+		jsbl,
+		tzll,
+		ylsl,
+		bzsm,
+		jgbh,
+		csdj,
+		csje,
+		djyl,
+		login_id,
+		ip
+	)
+	values
+	(
+		#{htbh},
+		#{htxh},
+		#{tzxh},
+		#{lbbh},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{jldw},
+		#{jgyl},
+		#{jsbl},
+		#{tzll},
+		#{ylsl},
+		#{bzsm},
+		#{jgbh},
+		#{csdj},
+		#{csje},
+		#{djyl},
+		#{login_id},
+		#{ip}
+	)
+</insert>
+<update id="updateOutSourcePicking" parameterType="erp.erp.purchaseOrder.model.OutSourcePicking">
+	update cghtwxlltzdb_tmp
+		set
+			htbh = #{htbh},
+			htxh = #{htxh},
+			tzxh = #{tzxh},
+			lbbh = #{lbbh},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			jldw = #{jldw},
+			jgyl = #{jgyl},
+			jsbl = #{jsbl},
+			tzll = #{tzll},
+			ylsl = #{ylsl},
+			bzsm = #{bzsm},
+			jgbh = #{jgbh},
+			csdj = #{csdj},
+			csje = #{csje},
+			djyl = #{djyl},
+			login_id = #{login_id},
+			ip = #{ip}
+		where cghtwxlltzdb_tmp.htbh=#{htbh} and cghtwxlltzdb_tmp.htxh=#{htxh} and tzxh = #{tzxh} and login_id=#{login_id} and ip=#{ip}
+</update>
+<delete id="deleteOutSourcePicking" parameterType="erp.erp.purchaseOrder.model.OutSourcePicking">
+	delete from cghtwxlltzdb
+	where cghtwxlltzdb.htbh=#{htbh} and cghtwxlltzdb.htxh=#{htxh} and tzxh = #{tzxh} and login_id=#{login_id} and ip=#{ip}
+</delete>
+</mapper>

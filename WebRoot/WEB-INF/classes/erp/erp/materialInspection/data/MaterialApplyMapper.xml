@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialInspection.data.MaterialApplyMapper">
+
+
+<select id="getMaterialApplyList" parameterType="map" resultType="erp.erp.materialInspection.model.MaterialApply">
+select 
+		wtjycssqclmxb.wtdh,
+		wtjycssqclmxb.wtxh,				
+		wtjycssqclmxb.clhh,		
+		wtjycssqclmxb.htbh,    
+		wtjycssqclmxb.htxh,
+		case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.htbh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.htxh))) else '' end as hth,   		
+		wtjycssqclmxb.sjsl,
+		wtjycssqclmxb.dhdh,
+		wtjycssqclmxb.dhxh,
+		case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.dhdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.dhxh))) else '' end as dhh, 
+		wtjycssqclmxb.jldw,
+		wtjycssqclmxb.llrq,
+		wtjycssqclmxb.ckbh,
+		wtjycssqclmxb.cghtyq,
+		clbmb.clmc,
+		clbmb.plmth,
+		clbmb.plmtx,
+		ckmcb_yl.ckmc
+from wtjycssqclmxb
+left outer join clbmb with(nolock) on clbmb.clhh=wtjycssqclmxb.clhh
+left outer join ckmcb_yl with(nolock) on ckmcb_yl.ckbh=wtjycssqclmxb.ckbh
+where wtjycssqclmxb.wtdh=#{wtdh}
+</select>
+<insert id="addMaterialApply" parameterType="erp.erp.materialInspection.model.MaterialApply">
+	insert into dbo.wtjycssqclmxb
+	(
+		wtdh,
+		wtxh,
+		clhh,
+		htbh,
+		htxh,
+		sjsl,
+		ckbh,
+		dhdh,
+		dhxh,
+		cghtyq,
+		llrq,
+		jldw
+	)
+	values
+	(
+		#{wtdh},
+		#{wtxh},
+		#{clhh},
+		#{htbh},
+		#{htxh},
+		#{sjsl},
+		#{ckbh},
+		#{dhdh},
+		#{dhxh},
+		#{cghtyq,jdbcType=VARCHAR},
+		#{llrq},
+		#{jldw}
+	)
+</insert>
+<update id="updateMaterialApply" parameterType="erp.erp.materialInspection.model.MaterialApply">
+	update dbo.wtjycssqclmxb
+		set
+			wtdh = #{wtdh},
+			wtxh = #{wtxh},
+			clhh = #{clhh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			sjsl = #{sjsl},
+			ckbh = #{ckbh},
+			cghtyq = #{cghtyq},
+			dhdh = #{dhdh},
+			dhxh = #{dhxh},
+			llrq = #{llrq},
+			jldw = #{jldw}
+		where  wtdh = #{wtdh} and wtxh = #{wtxh}
+</update>
+<delete id="deleteMaterialApply" parameterType="erp.erp.materialInspection.model.MaterialApply">
+	delete from dbo.wtjycssqclmxb
+	where  wtdh = #{wtdh} and wtxh = #{wtxh}
+</delete>
+</mapper>

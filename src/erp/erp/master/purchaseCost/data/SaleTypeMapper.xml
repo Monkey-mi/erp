@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.SaleTypeMapper">
+
+
+<select id="getSaleTypeList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.SaleType">
+	select
+		dbo.xslbb.lbbh,
+		dbo.xslbb.lbmc,
+		dbo.xslbb.lbjc,
+		dbo.xslbb.mjbz,
+		dbo.xslbb.bzsm,
+		dbo.xslbb.dhhm,
+		dbo.xslbb.czhm,
+		dbo.xslbb.dzyx,
+		dbo.xslbb.yhbh,
+		dbo.xslbb.sxbh,
+		dbo.xslbb.scbj,
+		dbo.xslbb.hsbm,
+		dbo.xslbb.ysbbj
+	from
+		dbo.xslbb
+</select>
+</mapper>

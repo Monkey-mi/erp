@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.WtjycssqclmxbMapper">
+
+
+<select id="getwtjycssqclmxbList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Wtjycssqclmxb">
+  <!-- 	
+  select                  
+         dhdjb_yl.clhh, 
+         dhdjb_yl.htbh,
+         dhdjb_yl.htxh,
+         1 as wtxh, 
+         case when dhdjb_yl.dhdh &lt;&gt; 0 then
+				ltrim(rtrim(str(dhdjb_yl.dhdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.dhxh)))
+		 else null end as dhh,        
+		 dhdjb_yl.dhsl as sjsl,	
+		 dhdjb_yl.dhdh,
+		 dhdjb_yl.dhxh, 
+		 case when dhdjb_yl.htbh &lt;&gt; 0 then
+				ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh)))
+		 else null end as hth,		   		
+		 dhdjb_yl.jldw,
+		 dhdjb_yl.dhrq as llrq,		 
+         dhdjb_yl.ckbh,
+         g.clmc,
+         cghtb.cgyq as cghtyq      
+     FROM dhdjb_yl 
+     left outer join cghtb on cghtb.htbh = dhdjb_yl.htbh
+     left outer join zjjlb on zjjlb.jlbh = dhdjb_yl.jyjg
+     left outer join dhztb on dhztb.ztbh=dhdjb_yl.ztbj    
+     left outer join ckmcb_yl on ckmcb_yl.ckbh =  dhdjb_yl.ckbh
+	 left outer join clbmb g with (nolock) on dhdjb_yl.clhh=g.clhh 
+	 left outer join cllbb on cllbb.lbbh = left(g.lbbh,2)
+ 	 left outer join csxxb with (nolock) on  dhdjb_yl.csbh=csxxb.csbh
+     left outer join htmxb with (nolock) on  htmxb.htbh=dhdjb_yl.htbh and htmxb.htxh=dhdjb_yl.htxh
+	 left outer join scjhb with (nolock) on  htmxb.jhbh=scjhb.jhbh
+	 left outer join jhmx_ddxxb with (nolock) on jhmx_ddxxb.jhbh=htmxb.jhbh and jhmx_ddxxb.jhxh=htmxb.jhxh
+	 left outer join jhmxb with (nolock) on jhmxb.jhbh=dhdjb_yl.jhbh and jhmxb.jhxh=dhdjb_yl.jhxh
+	 left outer join jhmxb a with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh
+	 left outer join cpbmb on cpbmb.cpbh=a.cpbh
+	 left outer join jhmx_ddxxb b with (nolock) on b.jhbh=a.jhbh and b.jhxh=a.jhxh
+	 left outer join cpbmb d with (nolock) on d.cpbh=a.cpbh 
+	 left outer join cpbmb f on jhmxb.cpbh = f.cpbh
+	 left outer join htmxb c with (nolock) on c.htbh=dhdjb_yl.htbh and c.htxh=dhdjb_yl.htxh
+	 left outer join khxxb on khxxb.khbh = c.khbh
+	 left outer join khxxb e on e.khbh = jhmx_ddxxb.khbh
+	 left outer join clrkzjd with (nolock) on clrkzjd.jydh=dhdjb_yl.zjdh
+ 	 where ((ztbj=1 and jyjg=1) or (ztbj=5 and jyjg=3))
+ 	 <if test="ckbh !=null and ckbh !=''">
+ 	   and dhdjb_yl.ckbh=#{ckbh} 
+ 	 </if>
+ 	 <if test="dhdh !=null and dhdh !=''">
+ 	 and dhdjb_yl.dhdh=#{dhdh} 
+ 	 </if>
+ 	 <if test="dhxh !=null and dhxh !=''">
+ 	 and dhdjb_yl.dhxh=#{dhxh} 
+ 	 </if>
+    -->   
+    
+	select 
+		wtjycssqclmxb.wtdh,
+		wtjycssqclmxb.wtxh,				
+		wtjycssqclmxb.clhh,		
+		wtjycssqclmxb.htbh,    
+		wtjycssqclmxb.htxh,
+		case when wtjycssqclmxb.htbh &lt;&gt; 0 then ltrim(rtrim(str(wtjycssqclmxb.htbh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.htxh))) else '' end as hth,   		
+		wtjycssqclmxb.sjsl,
+		wtjycssqclmxb.dhdh,
+		wtjycssqclmxb.dhxh,
+		case when wtjycssqclmxb.htbh &lt;&gt; 0 then ltrim(rtrim(str(wtjycssqclmxb.dhdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.dhxh))) else '' end as dhh, 
+		wtjycssqclmxb.jldw,
+		wtjycssqclmxb.llrq,
+		wtjycssqclmxb.ckbh,
+		wtjycssqclmxb.cghtyq,
+		clbmb.clmc   
+   from wtjycssqclmxb
+   left outer join clbmb with(nolock) on clbmb.clhh=wtjycssqclmxb.clhh
+   <where>
+    1=1
+    <if test="wtdh!=null and wtdh!=''">
+     and wtjycssqclmxb.wtdh = #{wtdh}
+    </if>
+   </where>  
+  
+</select>
+<insert id="addwtjycssqclmxb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqclmxb">
+	insert into wtjycssqclmxb
+	(
+		wtdh,
+		wtxh,
+		clhh,
+		htbh,
+		htxh,
+		sjsl,
+		dhdh,
+		dhxh,
+		jldw,
+		llrq,
+		ckbh,
+		cghtyq
+	)
+	values
+	(
+		#{wtdh},
+		#{wtxh},
+		#{clhh},
+		#{htbh},
+		#{htxh},
+		#{sjsl},
+		#{dhdh},
+		#{dhxh},
+		#{jldw},
+		#{llrq},
+		#{ckbh},
+		#{cghtyq}
+	)
+</insert>
+<update id="updatewtjycssqclmxb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqclmxb">
+	update wtjycssqclmxb
+		set
+			wtdh = #{wtdh},
+			wtxh = #{wtxh},
+			clhh = #{clhh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			hth = #{hth},
+			sjsl = #{sjsl},
+			dhdh = #{dhdh},
+			dhxh = #{dhxh},
+			dhh = #{dhh},
+			jldw = #{jldw},
+			llrq = #{llrq},
+			ckbh = #{ckbh},
+			cghtyq = #{cghtyq},
+			clmc = #{clmc}
+		where  wtdh= #{wtdh} and wtxh=#{wtxh}
+</update>
+<delete id="deletewtjycssqclmxb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqclmxb">
+	delete from wtjycssqclmxb
+	where  = #{}
+</delete>
+</mapper>

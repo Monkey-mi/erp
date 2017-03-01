@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.bi.report.data.ReportMapper">
+  
+  <select id="getCurrentTree" parameterType="map" resultType="erp.bi.report.model.CurrentTreeRPT">
+     select * from t_rpt_Current_Tree a
+        <where >
+	        <if test="node!=null">
+	          a.parentId = #{node} 
+	        </if>
+	        <if test="leaf =='true'"> 
+            or nodeId = #{node}
+            </if>
+            <if test="type!=null">
+            and a.type=#{type}
+            </if>
+        </where>
+  </select>
+  
+  <select id="getCurrentTreeIncludeReport" parameterType="map" resultType="erp.bi.report.model.CurrentTreeRPT">
+		    select *
+		    from ( SELECT [nodeId]
+		      ,[parentId]
+		      ,[text]
+		      ,[code]
+		      ,[expanded]
+		      ,'false' [leaf]
+		      ,[order_seq]
+		      ,[create_date]
+		      ,[modify_date]
+		      ,[type]
+		      ,[level]
+		  FROM [t_rpt_current_tree]
+		  where type='report'
+		union 
+		 SELECT list_id*10000 as nodeId,
+				a.nodeId as [parentId],
+				name as text,
+				'' as code,
+				'false' as [expanded],
+				'true' [leaf],
+		        999 as [order_seq],
+		        b.creatTime as create_date,
+				'' as [modify_date],
+				'report'+tpl_type as [type],
+		      	'' as level
+		  FROM [t_rpt_custom_query_list] b  
+		  inner join [t_rpt_current_tree] a on a.nodeId=b.docId
+		  
+		 <if test="creater!=null">
+  	           where ( creater = #{creater} 
+  	           or
+           	   list_id in (
+				   select cp_table_key from ( select cp.cp_table_key,case cp.tar_type 
+							when 'U' then 
+								(case cp.tar_id when u.login_id then 'true' else 'false' end)
+							when 'R' then 
+							    (select (case COUNT(*) when 0 then 'false' else 'true' end)	
+							      from dbo.t_user_role_ref rf
+							       inner join t_user_info ui on ui.u_id=rf.u_id
+							       inner join dbo.t_user_role ur on rf.role_id=ur.role_id
+							      where ui.u_id=#{creater}
+							        and ur.role_id=cp.tar_id) 
+							end	 as is_valid
+						 from t_rpt_content_permit cp 
+						 left outer join t_user_info u
+						 on u.login_id=cp.tar_id and u.u_id=#{creater}
+						 where cp.cp_view='true'
+						) as aa
+						where aa.is_valid='true'
+					)	
+				)	
+           </if>
+		  
+		  ) as a
+		  
+        <where >
+	        <if test="node!=null">
+	          	a.parentId = #{node} 
+	        </if>
+	        <if test="leaf =='true'"> 
+            	or nodeId = #{node}
+            </if>
+            <if test="type!=null">
+            	and a.type like '%${type}%'
+            </if>
+        </where>
+  </select>
+  
+  
+    <select id="getCurrentTreeCombo" parameterType="map" resultType="erp.bi.report.model.CurrentTreeRPT">
+     select * from t_rpt_Current_Tree a
+        <where >
+	        <if test="node!=null">
+	          a.parentId = #{node} 
+	        </if>
+	        <if test="leaf !=null"> 
+              a.leaf=#{leaf}
+            </if>
+            <if test="type!=null">
+            and a.type=#{type}
+            </if>
+        </where>
+  </select>
+  
+  <select id="getReportDocContent" parameterType="map" resultType="int">
+		SELECT 
+		   count(*) 
+		FROM 
+		   t_rpt_custom_query_list
+		where
+		    docId = #{id}
+</select>
+<select id="getDocLeafCount" parameterType="map" resultType="int">
+		SELECT 
+		   count(*) 
+		FROM 
+		   t_rpt_Current_Tree
+		where
+		    parentId = #{pid}
+</select>
+    <select id="getCurrentTreeNode" parameterType="map" resultType="String">
+     select a.nodeId from t_rpt_Current_Tree a
+        <where >
+	        <if test="nodeId!=null">
+	          a.parentId = #{nodeId} 
+	        </if>
+            <if test="type!=null">
+            and a.type=#{type}
+            </if>
+        </where>
+  </select> 
+  
+  <select id="getReportDocTree" parameterType="map" resultType="erp.bi.report.model.ReportDocTree">
+     SELECT * FROM t_rpt_doctree a WHERE a.parentId = #{id}
+  </select>
+  <insert id="addReportDocTree" parameterType="erp.bi.report.model.ReportDocTree" keyProperty="docId" useGeneratedKeys="true">
+      <!-- todo: -->
+       <selectKey keyProperty="order_seq" resultType="int" order="BEFORE">
+	        select isnull(max(order_seq)+1,1) from t_rpt_doctree
+	  </selectKey>
+	  
+	   insert into t_rpt_doctree
+        (
+        	parentId,
+        	text,
+        	expanded,
+        	leaf,
+        	order_seq,
+        	create_date
+        )
+        values
+        (
+        	#{parentId},
+        	#{text},
+        	#{expanded},
+        	#{leaf},
+        	#{order_seq},
+        	#{create_date}
+        )
+  </insert>
+  <delete id="deleteReportDocTree" parameterType="map">
+		  DELETE FROM t_rpt_doctree  
+		  <where>
+  		     <if test="docId!=null">
+			     docId = #{docId}
+		    </if>
+		     <if test="parentId!=null">
+			    and parentId = #{parentId}
+		    </if>
+  	     </where>
+  </delete>
+  <update id="updateReportDocTree" parameterType="erp.bi.report.model.ReportDocTree">
+  	update t_rpt_doctree
+  	  set 
+  	    text=#{text},
+  	    parentId=#{parentId},
+  	    modify_date=#{modify_date}
+  	  where
+  	    docId=#{docId}
+  </update>
+  
+  <insert id="addCurrentTree" parameterType="erp.bi.report.model.CurrentTreeRPT" keyProperty="nodeId" useGeneratedKeys="true">
+      <!-- todo: -->
+       <selectKey keyProperty="order_seq" resultType="int" order="BEFORE">
+	        select isnull(max(order_seq)+1,1) from t_rpt_Current_Tree
+	  </selectKey>
+	   insert into t_rpt_Current_Tree
+        (
+        	parentId,
+        	text,
+        	expanded,
+        	leaf,
+        	order_seq,
+        	create_date,
+        	type
+        )
+        values
+        (
+        	#{parentId},
+        	#{text},
+        	#{expanded},
+        	#{leaf},
+        	#{order_seq},
+        	#{create_date},
+        	#{type}
+        )
+  </insert>
+  <delete id="deleteCurrentTree" parameterType="map">
+		  DELETE FROM t_rpt_Current_Tree  
+		  <where>
+		    nodeId = #{nodeId}
+		    and parentId = #{parentId}
+		    and type = #{type}
+  	     </where>
+  </delete>
+  <update id="updateCurrentTree" parameterType="erp.bi.report.model.CurrentTreeRPT">
+  	update t_rpt_Current_Tree
+  	  set 
+  	    text=#{text},
+  	    parentId=#{parentId},
+  	    modify_date=#{modify_date}
+  	  where
+  	    nodeId=#{nodeId}
+  </update>
+  
+   <update id="updateCurrentTreeStatus" parameterType="erp.bi.report.model.CurrentTreeRPT">
+  	update t_rpt_Current_Tree
+  	  set 
+  	    leaf=#{leaf}
+  	  where
+  	    nodeId=#{nodeId}
+  </update>
+  
+  </mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.category.data.CategoryAuthorityMapper">
+
+
+<select id="getCategoryAuthorityList" parameterType="map" resultType="erp.erp.master.category.model.CategoryAuthority">
+	select
+		dbo.cglb_qxb.lbbh,
+		dbo.cglb_qxb.czy_gh,
+		dbo.cglb_qxb.czy_xm,
+		dbo.cglb_qxb.tpbj
+	from
+		dbo.cglb_qxb
+		<where>
+			<if test="lbbh!=null">
+				lbbh=#{lbbh}
+			</if>
+			<if test="czy_gh!=null">
+				czy_gh=#{czy_gh}
+			</if>
+		</where>
+</select>
+<insert id="addCategoryAuthority" parameterType="erp.erp.master.category.model.CategoryAuthority" keyProperty="lbbh,czy_gh" useGeneratedKeys="true">
+	insert into dbo.cglb_qxb
+	(
+		lbbh,
+		czy_gh,
+		czy_xm,
+		tpbj
+	)
+	values
+	(
+		#{lbbh},
+		#{czy_gh},
+		#{czy_xm},
+		#{tpbj}
+	)
+</insert>
+<update id="updateCategoryAuthority" parameterType="erp.erp.master.category.model.CategoryAuthority">
+	update dbo.cglb_qxb
+		set
+			lbbh = #{lbbh},
+			czy_gh = #{czy_gh},
+			czy_xm = #{czy_xm},
+			tpbj = #{tpbj}
+		where lbbh= #{lbbh} and czy_gh=#{czy_gh} 
+</update>
+<delete id="deleteCategoryAuthority" parameterType="erp.erp.master.category.model.CategoryAuthority">
+	delete from dbo.cglb_qxb
+	where lbbh= #{lbbh} and czy_gh=#{czy_gh} 
+</delete>
+<delete id="deleteCategoryAuthorityLowerLevel" parameterType="erp.erp.master.category.model.CategoryAuthority">
+	delete from cglb_qxb where czy_gh=#{czy_gh} and left(lbbh,len(#{lbbh}))=#{lbbh} and len(lbbh)&gt;len(#{lbbh});
+</delete>
+</mapper>

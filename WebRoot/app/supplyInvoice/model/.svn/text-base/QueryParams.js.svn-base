@@ -1,0 +1,31 @@
+Ext.define('erp.supplyInvoice.model.QueryParams', {
+	extend: 'Ext.data.Model',
+	fields: [		
+		{ name: 'checkbox_fplx'},
+		{ name: 'fplx' },
+		{ name: 'checkbox_fphm'},
+		{ name: 'fphm' },
+		{ name: 'checkbox_kprq' },
+		{ name: 'kprq1' },
+		{ name: 'kprq2' },
+		{ name: 'checkbox_csmc'},
+		{ name: 'csmc' },
+		{ name: 'checkbox_jzrq' },
+		{ name: 'jzrq1' },
+		{ name: 'jzrq2' },
+		{ name: 'checkbox_wbbh'},
+		{ name: 'wbbh' },
+		{ name: 'checkbox_bzsm'},
+		{ name: 'bzsm' },
+		{ name: 'checkbox_ztdw'},
+		{ name: 'ztdw' },
+		{ name: 'checkbox_pzh'},
+		{ name: 'pzh' },
+		{ name: 'checkbox_shbj'},
+		{ name: 'shbj' },
+		{ name: 'checkbox_yfbj'},
+		{ name: 'yfbj' },
+		{ name: 'checkbox_cgy'},
+		{ name: 'cgym' }
+	]
+});

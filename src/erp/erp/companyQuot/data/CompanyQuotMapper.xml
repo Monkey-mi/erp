@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.companyQuot.data.CompanyQuotMapper">
+
+
+<select id="getCompanyQuotList" parameterType="map" resultType="erp.erp.companyQuot.model.CompanyQuot">
+select aa.* from  (	
+	SELECT csbjdb.shbj,
+		   csbjdb.bjdh,   
+           csbjdb.bjrq,   
+           csbjdb.csbh,   
+           csbjdb.csmc,   
+           csbjdb.czym,   
+           csbjdb.gdbj,   
+           csbjdb.czsj,     
+           csbjdb.bzsm,
+		   csbjdb.sdbj,
+		   csbjdb.spbj,
+		   csbjdb.sprm,
+		   csbjdb.spsj 
+    FROM csbjdb  
+    where 1=1 
+    <if test="gdbj==null">
+    and csbjdb.gdbj = 0
+    </if>
+    <if test="gdbj!=null">
+    and	csbjdb.gdbj = #{gdbj}
+    </if>
+    <if test="search!=null">
+		  ${search}
+    </if>
+    <if test="condition!=null and condition!=''">
+		and ${condition}
+	</if>) aa
+    where
+      1=1 
+    <if test="filterSearch!=null">
+	${filterSearch}
+    </if>    
+    order by bjdh desc
+  
+</select>
+<insert id="addCompanyQuot" parameterType="erp.erp.companyQuot.model.CompanyQuot" keyProperty="bjdh" useGeneratedKeys="true">
+    <selectKey keyProperty="bjdh" resultType="int" order="BEFORE">
+		select isnull(max(bjdh),0)+1  from csbjdb	
+	</selectKey>
+	insert into dbo.csbjdb
+	(
+		bjdh,
+		bjrq,
+		csbh,
+		csmc,
+		czym,
+		czsj,
+		gdbj,
+		bzsm,
+		shbj,
+		sdbj,
+		spbj,
+		sprm,
+		spsj
+	)
+	values
+	(
+		#{bjdh},
+		#{bjrq},
+		#{csbh},
+		#{csmc},
+		#{czym},
+		#{czsj},
+		#{gdbj},
+		#{bzsm},
+		
+		#{shbj},
+		#{sdbj},
+		#{spbj},
+		#{sprm},
+		#{spsj}
+	)
+</insert>
+<update id="updateCompanyQuot" parameterType="erp.erp.companyQuot.model.CompanyQuot">
+	update dbo.csbjdb
+		set
+			bjdh = #{bjdh},
+			bjrq = #{bjrq},
+			csbh = #{csbh},
+			csmc = #{csmc},
+			czym = #{czym},
+			czsj = #{czsj},
+			gdbj = #{gdbj},
+			bzsm = #{bzsm},
+			shbj = #{shbj},
+			sdbj = #{sdbj},
+			spbj = #{spbj},
+			sprm = #{sprm},
+			spsj = #{spsj}
+		where bjdh = #{bjdh}
+</update>
+<delete id="deleteCompanyQuot" parameterType="erp.erp.companyQuot.model.CompanyQuot">
+	delete from dbo.csbjdb
+	where  bjdh= #{bjdh}
+</delete>
+<select id="getwbbjcp"  resultType="java.lang.Integer">
+	select wbbj_cp from sysxxb;
+</select>
+<select id="getWbbh" parameterType="map" resultType="String">
+	select  wbbh  from csxxb where csbh=#{csbh};
+</select>
+<select id="getSpbj" parameterType="map" resultType="java.lang.Integer">
+	select spbj as spbj from csbjdb where bjdh=#{bjdh};
+</select>
+<select id="getCompanyQuotOne" resultType="int" >
+	select isnull(max(bjdh),0) from csbjdb where 1=1
+</select>
+<update id="updateGdbj" parameterType="map">
+	update csbjdb set gdbj= #{gdbj} where bjdh=#{bjdh};
+</update> 
+<update id="updateSdbj" parameterType="map">
+	update csbjmxb set sdbj= #{sdbj} 
+	<if test="sdrm!=null">
+	   ,sdrm = #{sdrm}	
+	</if>
+	<if test="sdsj!=null">
+	   ,sdsj = #{sdsj}
+	</if>
+	where bjdh=#{bjdh}
+	  and bjxh=#{bjxh};
+</update> 
+<update id="updateShbj" parameterType="map">
+	update csbjmxb set shbj= #{shbj} 
+	<if test="shrm!=null">
+	   ,shrm = #{shrm}	
+	</if>
+	<if test="shsj!=null">
+	   ,shsj = #{shsj}
+	</if>
+	where bjdh=#{bjdh}
+	  and bjxh=#{bjxh};
+</update> 
+<select id="ifAllsd" parameterType="map" resultType="java.lang.Integer">
+	select count(*) as count from csbjmxb where bjdh=#{bjdh} and sdbj=0;
+</select>
+<select id="ifAllsh" parameterType="map" resultType="java.lang.Integer">
+	select count(*) as count from csbjmxb where bjdh=#{bjdh} and shbj=0;
+</select>
+<update id="updateMainSdbj" parameterType="map">
+	update csbjdb set sdbj=#{sdbj} where bjdh=#{bjdh};
+</update>
+<update id="updateMainShbj" parameterType="map">
+	update csbjdb set shbj=#{shbj} where bjdh=#{bjdh};
+</update>
+<update id="updateCsjj" parameterType="map">
+	update csjjb set kzdj = #{csbj},fzkj = #{fzkj} where csbh=#{csbh} and clhh=#{clhh};
+</update>
+<update id="updateCsjjsp"  parameterType="map">
+	update csjjb set spbj_kj = 1,sprm_kj=#{czym},spsj_kj=#{czsj} where csbh=#{csbh} and clhh=#{clhh};
+</update>
+<select id="getllcount"  parameterType="map" resultType="java.lang.Integer">
+	select count(*) as llcount from csjjb where csbh=#{csbh} and clhh=#{clhh};
+</select>
+<insert id="insertCsjjb" parameterType="map" keyProperty="" useGeneratedKeys="true">
+	insert into csjjb(clhh,csbh,kzdj,fzkj,bzsm,spbj_kj,sprm_kj,spsj_kj) 
+	values (#{clhh},#{csbh},#{csbj},#{fzkj},#{bzsm},1,#{czym},#{czsj});
+</insert>
+<update id="updateGxbj_jg" parameterType="map">
+	update csbjmxb set gxbj_jg=1 where bjdh=#{bjdh} and bjxh=#{bjxh};
+</update>
+<update id="doAppro" parameterType="map">
+	update csbjdb set spbj=#{spbj},sprm=#{sprm},spsj=#{spsj} where bjdh=#{bjdh};
+</update>
+<delete id="deleteDetail" parameterType="erp.erp.companyQuot.model.CompanyQuot">
+	delete from dbo.csbjmxb
+	where  bjdh = #{bjdh} 
+</delete> 
+</mapper>

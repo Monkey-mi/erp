@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/state
+END
+CookieProvider.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/state/CookieProvider.js
+END
+LocalStorageProvider.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/state/LocalStorageProvider.js
+END
+Provider.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/state/Provider.js
+END
+Manager.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/state/Manager.js
+END
+Stateful.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2577/erpForOut62/WebRoot/ext/classic/classic/src/state/Stateful.js
+END

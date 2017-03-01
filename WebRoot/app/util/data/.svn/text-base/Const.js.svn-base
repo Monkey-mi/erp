@@ -1,0 +1,141 @@
+/**
+ * 数据仓库常数
+ */
+Ext.define('erp.util.data.Const',{
+	/**
+	 * 配置参数信息
+	 */
+	CONFIG_TYPE:'typeCode',
+	/**
+	 * 基础数据代码
+	 */
+	BASIC_CODE:'code',
+	ORGUNIT:'orgunit',
+	DEPT:'dept', 
+	EMPLOYEE:'employee',
+	ACCSUBJECT:'accsubject',
+	BUSSNESSUNIT:'bussnessunit',
+	PROJECT:'project',
+	FUNCP:'func_p',
+	USERINFO:'userinfo',
+	ROLE:'role',
+	SALESORDER:'sales_order',
+	POSITION:'tp_position',
+	BASIC_CODE_TYPE:'basic_code_type',
+	CURRENT_TREE_TYPE:'current_tree_type',
+	BASIC_CODE:'basic_code',
+	DICTIONARY:'dictionary',
+	FORM_CODE:'form_code',
+	CODE_CONFIG:'code_config',
+	TEXT_CONFIG:'text_config',
+	CUSTOMER:'customer',
+	PRODUCTION:'production',
+	PRODUCTION2:'production2',
+	MODULE_FUNC:'module',
+	DESCRIPTION:'desc',
+	FACTORYINFO:'factoryInfo',
+	FACTORYINFO_CSMC:'factoryInfo_csmc',
+	COMPANY:'company',
+	SYSPARAM:'sys_param',
+	DRPCUSTOMER:'drp_customer',
+	PLANCODE:'plancode',
+	BOXTYPE:'boxtype',
+	WORKER:'worker',
+	WATCHMAN:'watchman',
+	IMPORTCYJH:'Importcyjh',
+	IMPORTCYJH2:'Importcyjh2',
+	DECLARATIONFORM:'DeclarationForm',
+	STATETAXATIONINVOICEHELP:'StateTaxationInvoiceHelp',		
+	/**    
+	 * storeid集合
+	 */
+	CODETYPE_STOREID:"code_type",
+	CODECONFIG_STOREID:"code_config",
+	SELLKIND_STOREID:'sale_type',
+	PLAN_STOREID:'plan_type',
+	FLD_STOREID:'frm_fld',
+	OPERATOR:'oparetor',
+	OPERATOR_XM:'oparetor_xm',
+	SELLKIND:'sell_kind',
+	RECEIVER:'receiver',
+	FRMREG_STOREID:'frm_reg',
+	FRMTBL_STOREID:'frm_tbl',
+	FRMRENDER_STOREID:"frm_render",
+	TYPECODE:"typeCode",
+	PurGroupMan:'PurGroupMan',//采购员
+	Supplier:'Supplier',//供应商信息
+	CUSTOMER:'CUSTOMER',//客户信息
+	MATEINFO:'MATEINFO',//材料
+	SubAccout:'SubAccout',
+	MaterialTestPro:'MaterialTestPro_help',///材料测试项目
+	CustomerJC:'CustomerJC',
+	requires:[
+		'erp.common.basic.view.field.HelpField',
+		'erp.common.basic.view.PurGroupManHelp',//采购员
+		'erp.view.master.purchaseDetail.store.PurGroupMan',
+		'erp.common.basic.view.ProductionHelp',
+		'erp.user.store.Roles',
+		'erp.common.basic.view.FactoryInfo',
+		'erp.master.production.store.Production',//产品
+		'erp.view.master.company.store.CompanyShow',//厂商
+		'erp.common.basic.view.OperatorHelp',		//操作员帮助
+		'erp.master.operator.store.Operator',
+		'erp.common.basic.view.SupplierHelp',
+		'erp.supplierManager.store.SupplierFileHelp',
+		'erp.master.customer.store.CustomersForHelp',
+		'erp.common.basic.view.CustomerHelp',
+		'erp.common.basic.view.MateComboHelp',//材料
+		'erp.master.operator.store.SubAccout',
+		'erp.common.basic.view.SubAccoutHelp',//平台账户
+		'erp.materialInspection.store.MaterialTestPro',
+		'erp.common.basic.view.MaterialTestProHelp'//测试项目帮助窗口
+    ],
+    suitStore:Ext.create('Ext.data.Store',{
+     fields:['name','value'],
+     data:[
+     {
+       name:'系统基础数据',value:'SYS'
+     }
+     ]	
+    }),
+	/**
+	 * 初始化
+	 */
+	init:function(){
+		var me=this;
+		var dataArray =[
+				{name:'厂商信息',code:me.FACTORYINFO,xtype:'helpField',view:'factoryInfo_help',store:'erp.view.master.company.store.CompanyShow',displayField:'csmc',valueField:'csbh'},
+				{name:'角色',code:me.ROLE,xtype:'',store:'erp.user.store.Roles',view:'code_config_help',displayField:'role_name',valueField:'role_id'},
+				{name:'基础数据列表',code:me.CODE_CONFIG,xtype:'helpField',view:'code_config_help',store:'erp.common.basic.store.CodeConfigs',displayField:'name',valueField:'code'},
+				{name:'采购员',code:me.PurGroupMan,xtype:'helpField',view:'PurGroupMan_help',store:'erp.view.master.purchaseDetail.store.PurGroupMan',displayField:'cgyxm',valueField:'cgybh'},
+				{name:'产品信息列表'},
+				{name:'操作员列表',code:me.OPERATOR,xtype:'helpField',view:'opt_help',store:'erp.master.operator.store.Operator',displayField:'czy_xm',valueField:'czy_gh'},
+                {name:'操作员列表',code:me.OPERATOR_XM,xtype:'helpField',view:'opt_help',store:'erp.master.operator.store.Operator',displayField:'czy_xm',valueField:'czy_xm'},
+				{name:'产品信息列表',code:me.PRODUCTION,xtype:'helpField',view:'production_help',store:'erp.master.production.store.Production',displayField:'cpmc',valueField:'cpbh'},
+				{name:'供应商信息列表',code:me.Supplier,xtype:'helpField',view:'supplier_help',store:'erp.supplierManager.store.SupplierFileHelp',displayField:'cpyname_cn',valueField:'cpyname_cn'},
+				{name:'客户信息列表',code:me.CUSTOMER,xtype:'helpField',view:'customer_help',store:'erp.master.customer.store.CustomersForHelp',displayField:'khmc',valueField:'khbh'},
+				{name:'材料信息',code:me.MATEINFO,xtype:'helpField',view:'mateCombo_help',store:'erp.view.master.purchaseDetail.store.MaterialDetail',displayField:'clmc',valueField:'clmc'},
+				{name:'平台账户',code:me.SubAccout,xtype:'helpField',view:'subAccout_help',store:'erp.master.operator.store.SubAccout',displayField:'username',valueField:'sa_id'},
+				{name:'材料测试项目',code:me.MaterialTestPro,xtype:'helpField',view:'MaterialTestPro_help',store:'erp.materialInspection.store.MaterialTestPro',displayField:'xmmc',valueField:'xmmc'},
+				{name:'客户简称',code:me.CustomerJC,xtype:'helpField',view:'customer_help',store:'erp.master.customer.store.CustomersForHelp',displayField:'khjc',valueField:'khjc'}
+        ];
+        me.Config=Ext.create('Ext.data.Store',{
+            fields:['name','code','xtype','view','store',"displayField","valueField","storeId"],
+            data:dataArray
+        });
+		me.CtrInit();
+	},
+	CtrInit:function(){
+		var me=this;
+		me.CtrConfig=Ext.create('Ext.data.Store',{
+		    fields:['code','xtype'],
+		    data:[
+		    {code:'UserModule',classType:''},
+		    {code:'UserFunc',classType:''}
+		    ]
+		});
+	}
+},function(){
+	erp.DataConst=erp.util.data.Const=new erp.util.data.Const();
+	erp.DataConst.init();
+});

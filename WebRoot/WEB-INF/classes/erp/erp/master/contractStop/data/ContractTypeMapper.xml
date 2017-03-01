@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.contractStop.data.ContractTypeMapper">
+
+
+<select id="getContractTypeList" parameterType="map" resultType="erp.erp.master.contractStop.model.ContractType">
+	select
+		dbo.htzzlxb.lxbh,
+		dbo.htzzlxb.lxmc,
+		dbo.htzzlxb.bzsm
+	from
+		dbo.htzzlxb
+</select>
+<insert id="addContractType" parameterType="erp.erp.master.contractStop.model.ContractType" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.htzzlxb
+	(
+		lxbh,
+		lxmc,
+		bzsm
+	)
+	values
+	(
+		#{lxbh},
+		#{lxmc},
+		#{bzsm}
+	)
+</insert>
+<update id="updateContractType" parameterType="erp.erp.master.contractStop.model.ContractType">
+	update dbo.htzzlxb
+		set
+			lxbh = #{lxbh},
+			lxmc = #{lxmc},
+			bzsm = #{bzsm}
+		where  lxbh= #{lxbh}
+</update>
+<delete id="deleteContractType" parameterType="erp.erp.master.contractStop.model.ContractType">
+	delete from dbo.htzzlxb
+	where  lxbh= #{lxbh}
+</delete>
+<select id="getContractTypeOne" parameterType="map" resultType="String">
+	select isnull(max ( lxbh ),0) from htzzlxb where 1 =1
+</select>
+</mapper>

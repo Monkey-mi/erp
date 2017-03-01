@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.CreatePayPlanFormMapper">
+<select id="getMaxjhbh" parameterType="map" resultType="int" >
+    SELECT isnull(max(fkjhb.jhbh),0)+1 as jhbh   
+    FROM fkjhb where 1=1   
+</select>
+ 
+<select id="getCreatePayPlanForm" parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.CreatePayPlanForm" >
+    SELECT fkjhb.jhbh,   
+         fkjhb.qsrq,   
+         fkjhb.jzrq,   
+         fkjhb.bzsm,   
+         fkjhb.czym,   
+         fkjhb.czsj
+    FROM fkjhb where 1=1
+    <if test="jhbh != null or jhbh != ''">
+     and jhbh = #{jhbh}
+    </if> 
+</select>
+
+<select id="getldt" parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.CreatePayPlanForm" >
+  select convert(char(7),getdate(),102)+'.01' as ldt_qsrq from sysxxb
+    union all
+    select dateadd(day,-1,convert(char(7),dateadd(month,1,getdate()),102)+'.01') as ldt_jzrq from sysxxb
+
+</select>
+<update id="updateCreatePayPlanForm" parameterType="erp.erp.manufacturer.payAccount.model.CreatePayPlanForm">
+update fkjhb 
+       set
+       qsrq = #{qsrq},
+       jzrq = #{jzrq},
+       bzsm = #{bzsm},
+       czym = #{czym},
+       czsj = #{czsj}
+       from fkjhb
+       where jhbh=#{jhbh}
+</update>
+<insert id="addCreatePayPlanForm" parameterType="erp.erp.manufacturer.payAccount.model.CreatePayPlanForm">
+insert into fkjhb(fkjhb.jhbh,   
+         fkjhb.qsrq,   
+         fkjhb.jzrq,   
+         fkjhb.bzsm,   
+         fkjhb.czym,   
+         fkjhb.czsj) 
+		 values(
+		 #{jhbh},#{qsrq},#{jzrq},#{bzsm},#{czym},#{czsj}
+		 )
+
+</insert>
+<delete id="deleteCreatePayPlanForm">
+delete from fkjhb where jhbh = #{jhbh} 
+</delete>
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.accessEvaluateOptions.data.AccessEvaluterOptionMapper">
+
+
+<select id="getAccessEvaluterOptionList" parameterType="map" resultType="erp.erp.master.accessEvaluateOptions.model.AccessEvaluterOption">
+	select
+		t_app_supplier_access_basetable.item_id,
+		t_app_supplier_access_basetable.item_name,
+		t_app_supplier_access_basetable.f_id,
+		t_app_supplier_access_basetable.Activity_status as activity_status,
+		t_app_supplier_access_basetable.weightValue
+	from
+		t_app_supplier_access_basetable
+	where 1=1
+	<if test="node!=null">
+		and t_app_supplier_access_basetable.f_id=#{node}
+	</if>
+	<if test="nodeIdForGrid!=null">
+		and (t_app_supplier_access_basetable.f_id=#{nodeIdForGrid} or t_app_supplier_access_basetable.item_id=#{nodeIdForGrid})
+	</if>
+	<if test="item_name!=null">
+		and t_app_supplier_access_basetable.item_name=#{item_name}
+	</if>
+</select>
+<insert id="addAccessEvaluterOption" parameterType="erp.erp.master.accessEvaluateOptions.model.AccessEvaluterOption" keyProperty="item_id" useGeneratedKeys="true">
+	<selectKey keyProperty="item_id" resultType="int" order="BEFORE">
+		select  isnull(max(item_id)+1,1) from t_app_supplier_access_basetable 		
+	</selectKey>
+	insert into t_app_supplier_access_basetable
+	(
+		item_id,
+		item_name,
+		f_id,
+		Activity_status,
+		weightValue
+	)
+	values
+	(
+		#{item_id},
+		#{item_name},
+		#{f_id},
+		#{activity_status},
+		#{weightValue}
+	)
+</insert>
+<update id="updateAccessEvaluterOption" parameterType="erp.erp.master.accessEvaluateOptions.model.AccessEvaluterOption">
+	update t_app_supplier_access_basetable
+		set
+			item_id = #{item_id},
+			item_name = #{item_name},
+			f_id = #{f_id},
+			Activity_status = #{activity_status},
+			weightValue = #{weightValue}
+		where item_id = #{item_id}
+</update>
+<delete id="deleteAccessEvaluterOption" parameterType="erp.erp.master.accessEvaluateOptions.model.AccessEvaluterOption">
+	delete from t_app_supplier_access_basetable
+	where item_id = #{item_id}
+</delete>
+
+<select id="getCountForAdd" parameterType="map" resultType="java.lang.Integer">
+	select count(*) from t_app_supplier_access_basetable where f_id =#{f_id} and item_name=#{item_name}
+</select>
+
+<select id="getCountForUpdate" parameterType="map" resultType="java.lang.Integer">
+	select count(*) from t_app_supplier_access_basetable where f_id =#{f_id} and item_name=#{item_name} and item_id != #{item_id}
+</select>
+
+<select id="getXiajiCount" parameterType="map" resultType="java.lang.Integer">
+	select count(*) from t_app_supplier_access_basetable where f_id =#{item_id} 
+</select>
+<select id="getAccessEvaluteOptionActive" parameterType="map" resultType="erp.erp.master.accessEvaluateOptions.model.AccessEvaluterOption">
+	select
+		t_app_supplier_access_basetable.item_id,
+		t_app_supplier_access_basetable.item_name,
+		t_app_supplier_access_basetable.f_id,
+		t_app_supplier_access_basetable.Activity_status as activity_status,
+		t_app_supplier_access_basetable.weightValue
+	from
+		t_app_supplier_access_basetable
+	where t_app_supplier_access_basetable.Activity_status=1 and t_app_supplier_access_basetable.f_id=0
+</select>
+</mapper>

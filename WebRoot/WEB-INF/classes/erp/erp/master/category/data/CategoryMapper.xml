@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.category.data.CategoryMapper">
+<!-- 获取类别名称 -->
+<select id="getCategoryName" parameterType="map" resultType="String">
+	select lbmc  from cglbb where  lbbh=#{lbbh};
+</select>
+<!-- 判断操作员是否存在 -->
+<select id="getOperatorIsExist" parameterType="map" resultType="int">
+	select isnull(count(*),0)  from cglb_qxb where czy_gh=#{czy_gh} and lbbh=left(#{lbbh},2*#{len});
+</select>
+<!-- 判断是否有末级 -->
+<select id="getCategoryIsHaving" parameterType="erp.erp.master.category.model.Category" resultType="int">
+	select isnull(count(*),0)  from cglbb where left(lbbh,len(#{lbbh}))=#{lbbh};
+</select>
+<!-- 获取序号 -->
+<select id="getCategoryOne" parameterType="map" resultType="String">
+	select isnull(max ( lbbh ),0)+4 from cglbb where lbjc =1
+</select>
+<select id="getCategoryTwo" parameterType="map" resultType="String">
+	select max ( substring ( lbbh , LEN(lbbh)-1 , 2 ) ) from cglbb where lbjc =#{lbjc} and lbbh like '${lbbh}%'
+</select>
+<select id="getCategoryList" parameterType="map" resultType="erp.erp.master.category.model.Category">
+	select
+		dbo.cglbb.lbbh,
+		dbo.cglbb.lbmc,
+		dbo.cglbb.lbjc,
+		dbo.cglbb.mjbz,
+		dbo.cglbb.bzsm,
+		dbo.cglbb.dhhm,
+		dbo.cglbb.czhm,
+		dbo.cglbb.dzyx,
+		dbo.cglbb.yhbh,
+		dbo.cglbb.hsbm,
+		dbo.cglbb.cpbj,
+		dbo.cglbb.cfbj,
+		dbo.cglbb.ghlbbh,
+		dbo.cglbb.bzclbj,
+		c.lbmc as ghlbmc
+	from
+		dbo.cglbb
+		left outer join cglbb c on c.lbbh=cglbb.ghlbbh
+		where 1=1
+		<if test="node!=null and node>0">
+		 	 and left(dbo.cglbb.lbbh,len(#{node}))=#{node} and dbo.cglbb.lbbh!=#{node}
+		</if>
+		<if test="lbbh!=null">
+			and (dbo.cglbb.lbbh like '${lbbh}%' or dbo.cglbb.lbmc like '${lbbh}%')
+		</if>
+		<if test="mjbz!=null">
+			and dbo.cglbb.mjbz=#{mjbz}
+		</if>
+		<if test="czy_gh!=null and czy_gh!=''">
+			and  exists(
+				select 1 from cglb_qxb where cglb_qxb.czy_gh=#{czy_gh} and cglbb.lbbh like cglb_qxb.lbbh+'%' 
+				<if test="node!=null and node==0">
+					and  cglbb.lbbh = cglb_qxb.lbbh
+				</if>
+			)
+		</if>
+		<if test="orderBySQL!=null and orderBySQL!=''">
+			order by ${orderBySQL} 
+		</if>
+</select>
+<insert id="addCategory" parameterType="erp.erp.master.category.model.Category" keyProperty="lbbh" useGeneratedKeys="true">
+	insert into dbo.cglbb
+	(
+		lbbh,
+		lbmc,
+		lbjc,
+		mjbz,
+		bzsm,
+		dhhm,
+		czhm,
+		dzyx,
+		yhbh,
+		hsbm,
+		cpbj,
+		cfbj,
+		ghlbbh,
+		bzclbj
+	)
+	values
+	(
+		#{lbbh},
+		#{lbmc},
+		#{lbjc},
+		#{mjbz},
+		#{bzsm},
+		#{dhhm},
+		#{czhm},
+		#{dzyx},
+		#{yhbh},
+		#{hsbm},
+		#{cpbj},
+		#{cfbj},
+		#{ghlbbh},
+		#{bzclbj}
+	)
+</insert>
+<update id="updateCategory" parameterType="erp.erp.master.category.model.Category">
+	update dbo.cglbb
+		set
+			lbbh = #{lbbh},
+			lbmc = #{lbmc},
+			lbjc = #{lbjc},
+			mjbz = #{mjbz},
+			bzsm = #{bzsm},
+			dhhm = #{dhhm},
+			czhm = #{czhm},
+			dzyx = #{dzyx},
+			yhbh = #{yhbh},
+			hsbm = #{hsbm},
+			cpbj = #{cpbj},
+			cfbj = #{cfbj},
+			ghlbbh = #{ghlbbh},
+			bzclbj = #{bzclbj}
+		where lbbh = #{lbbh}
+</update>
+<delete id="deleteCategory" parameterType="erp.erp.master.category.model.Category">
+	delete from dbo.cglbb
+	where lbbh = #{lbbh}
+</delete>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseDetail.data.OutSourceMapper">
+<!-- 获取工序名称树 -->
+<select id="getProcessNameList" parameterType="map" resultType="erp.erp.master.purchaseDetail.model.ProcessName">
+		select
+		dbo.lsx_gxmcb.gxbh,
+		dbo.lsx_gxmcb.gxmc,
+		dbo.lsx_gxmcb.sclx,
+		dbo.lsx_gxmcb.tcbj,
+		dbo.lsx_gxmcb.wgbj,
+		dbo.lsx_gxmcb.bzsm,
+		dbo.lsx_gxmcb.tybj,
+		dbo.lsx_gxmcb.gxsx,
+		dbo.lsx_gxmcb.jybj,
+		dbo.lsx_gxmcb.lygx,
+		dbo.lsx_gxmcb.wxbj,
+		dbo.lsx_gxmcb.clbj,
+		dbo.lsx_gxmcb.jsbj,
+		dbo.lsx_gxmcb.xzbj,
+		dbo.lsx_gxmcb.cyts,
+		dbo.lsx_gxmcb.gjlx,
+		dbo.lsx_gxmcb.jfxs,
+		dbo.lsx_gxmcb.gxjc,
+		dbo.lsx_gxmcb.mjbz,
+		dbo.lsx_gxmcb.jhlb,
+		dbo.lsx_gxmcb.msxm,
+		dbo.lsx_gxmcb.scbj,
+		dbo.lsx_gxmcb.xsgz,
+		dbo.lsx_gxmcb.gsbj,
+		dbo.lsx_gxmcb.rwxzbj,
+		dbo.lsx_gxmcb.zzbj,
+		dbo.lsx_gxmcb.mrbz,
+		dbo.lsx_gxmcb.zhjs,
+		dbo.lsx_gxmcb.kjbj
+	from
+		dbo.lsx_gxmcb
+		<where>
+			<if test="node!=null and node==0">
+				and  gxjc=1
+			</if>
+			<if test="node!=null and node>0">
+			 	and left(gxbh,len(#{node}))=#{node} and gxbh!=#{node}
+			</if>
+			<if test="gxbh!=null">
+				gxbh=#{gxbh}
+			</if>
+		</where>
+</select>
+<select id="getOutSourceList" parameterType="map" resultType="erp.erp.master.purchaseDetail.model.OutSource">
+	select
+		dbo.wxtzdb.wxdh,
+		dbo.wxtzdb.wxrq,
+		dbo.wxtzdb.wcrq,
+		dbo.wxtzdb.csbh,
+		dbo.wxtzdb.bzsm,
+		dbo.wxtzdb.httk,
+		dbo.wxtzdb.czym,
+		dbo.wxtzdb.czsj,
+		dbo.wxtzdb.jhlb,
+		dbo.wxtzdb.gxbh,
+		dbo.wxtzdb.lllx,
+		dbo.wxtzdb.ztdw,
+		dbo.wxtzdb.dhrk,
+		dbo.wxtzdb.rksl
+	from
+		dbo.wxtzdb
+		<where>
+			<if test="wxdh!=null">
+				wxtzdb.wxdh=#{wxdh}
+			</if>
+		</where>
+</select>
+<insert id="addOutSource" parameterType="erp.erp.master.purchaseDetail.model.OutSource" keyProperty="wxdh" useGeneratedKeys="true">
+	<selectKey keyProperty="wxdh" resultType="int" order="BEFORE">
+		select isnull(max(wxdh),0)+1  from wxtzdb	
+	</selectKey>
+	insert into dbo.wxtzdb
+	(
+		wxdh,
+		wxrq,
+		wcrq,
+		csbh,
+		bzsm,
+		httk,
+		czym,
+		czsj,
+		jhlb,
+		gxbh,
+		lllx,
+		ztdw,
+		dhrk,
+		rksl
+	)
+	values
+	(
+		#{wxdh},
+		#{wxrq},
+		#{wcrq},
+		#{csbh},
+		#{bzsm},
+		#{httk},
+		#{czym},
+		#{czsj},
+		#{jhlb},
+		#{gxbh},
+		#{lllx},
+		#{ztdw},
+		#{dhrk},
+		#{rksl}
+	)
+</insert>
+<update id="updateOutSource" parameterType="erp.erp.master.purchaseDetail.model.OutSource">
+	update dbo.wxtzdb
+		set
+			wxdh = #{wxdh},
+			wxrq = #{wxrq},
+			wcrq = #{wcrq},
+			csbh = #{csbh},
+			bzsm = #{bzsm},
+			httk = #{httk},
+			czym = #{czym},
+			czsj = #{czsj},
+			jhlb = #{jhlb},
+			gxbh = #{gxbh},
+			lllx = #{lllx},
+			ztdw = #{ztdw},
+			dhrk = #{dhrk},
+			rksl = #{rksl}
+		where wxdh = #{wxdh}
+</update>
+<delete id="deleteOutSource" parameterType="erp.erp.master.purchaseDetail.model.OutSource">
+	delete from dbo.wxtzdb
+	where wxdh = #{wxdh}
+</delete>
+</mapper>

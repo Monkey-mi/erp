@@ -1,0 +1,37 @@
+package srm.basicdata.industryClass.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import srm.basicdata.industryClass.data.IndustryClassMapper;
+import srm.basicdata.industryClass.model.IndustryClass;
+
+
+@Service
+public class IndustryClassService {
+	@Autowired
+	private IndustryClassMapper mapper;
+
+
+	public List<IndustryClass> getIndustryClassList(Map<String,Object> params) {
+		return mapper.getIndustryClassList(params);
+	}
+	public void addIndustryClass(IndustryClass[] arr) {
+		for(IndustryClass obj: arr) {
+			mapper.addIndustryClass(obj);
+		}
+	}
+	public void updateIndustryClass(IndustryClass[] arr) {
+		for(IndustryClass obj: arr) {
+			mapper.updateIndustryClass(obj);
+		}
+	}
+	public void deleteIndustryClass(IndustryClass[] arr) {
+		for(IndustryClass obj: arr) {
+			mapper.deleteIndustryClass(obj);
+		}
+	}
+}

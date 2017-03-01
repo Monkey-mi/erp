@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialTestEvaluation.data.MaterialTestEvaluationMapper">
+
+
+<select id="getMaterialTestEvaluationList" parameterType="map" resultType="erp.erp.materialTestEvaluation.model.MaterialTestEvaluation">
+	select 
+		wtjycssqb.wtdh,
+		wtjycssqb.wtlb,	
+		wtsjlbb.lbmc as wtlbmc,	 	
+		wtjycssqb.wtbm,		
+		wtjycssqb.wtrm,		
+		wtjycssqb.wtrq,
+		dateadd(day,-1,wtjycssqb.wtrq) as ypwtrq,		 	
+		wtjycssqb.csbh,    		
+		wtjycssqb.sdbj,   
+		wtjycssqb.sdrm,    	
+		wtjycssqb.sdsj,    		
+		wtjycssqb.gdbj,   
+		wtjycssqb.gdbj_pd,				
+		wtjycssqb.czym,    
+		wtjycssqb.czsj,
+		wtjycssqb.shbj,
+		wtjycssqb.shsj,
+        wtjycssqb.bzsm, 
+		csxxb.csmc,
+		wtjycssqclmxb.wtxh,				
+		wtjycssqclmxb.clhh,		
+		wtjycssqclmxb.htbh,    
+		wtjycssqclmxb.htxh,
+		case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.htbh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.htxh))) else '' end as hth,   		
+		wtjycssqclmxb.sjsl,
+		wtjycssqclmxb.dhdh,
+		wtjycssqclmxb.dhxh,
+		case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.dhdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.dhxh))) else '' end as dhh, 
+		wtjycssqclmxb.jldw,
+		wtjycssqclmxb.llrq,
+		wtjycssqclmxb.ckbh,
+		clbmb.clmc,
+		wtjycssqmxb.wtsqxh,			
+		wtjycssqmxb.csxm,		
+		wtjycssqmxb.csbz,		
+		wtjycssqmxb.bzsm as wtjycssqmxb_bzsm,		
+		wtjycssqmxb.jyjg,
+		wtjycssqmxb.wjmc,
+		wtjycssqmxb.wjlj,
+		wtjycssqmxb.cjrm,
+		wtjycssqmxb.cjrq,
+		wtjycssqmxb.csz,
+		wtjycssqmxb.yqjq,
+		wtjycssqmxb.psjq,
+		wtjycssqmxb.clrm,
+		wtjycssqmxb.psbj,
+		wtjycssqmxb.psrm,
+		wtjycssqmxb.csjg,
+		wtjycssqmxb.pssj,
+		wtjycssqmxb.jybj,
+		wtjycssqmxb.jysj,
+		wtjycssqmxb.jyrm,
+		case when htmxb.ddbh&lt;&gt;0 then ltrim(rtrim(str(htmxb.ddbh))) +'-'+ ltrim(rtrim(str(htmxb.ddxh))) else '' end as ddh,
+		htmxb.khbh,
+		khxxb.khjc,
+		clbmb.plmth,
+		clbmb.plmtx,
+		wtjycssqmxb.fpsj,
+		wtjycssqmxb.jjd,
+		clwtjjdwh.jjdmc,
+		wtjycssqmxb.cszq,
+		wtjycssqmxb.cszj,
+		case when wtjycssqmxb.txrm is null or wtjycssqmxb.txrm = '' then wtjycssqmxb.jyrm else wtjycssqmxb.txrm end as jyrm_hz,
+		case when wtjycssqmxb.txsj is null or wtjycssqmxb.txsj = '' then wtjycssqmxb.jysj else wtjycssqmxb.txsj end as jysj_hz
+from wtjycssqmxb
+left outer join clwtjjdwh with(nolock) on clwtjjdwh.jjdxh=wtjycssqmxb.jjd
+left outer join wtjycssqclmxb with(nolock) on wtjycssqmxb.wtdh=wtjycssqclmxb.wtdh and wtjycssqmxb.wtxh=wtjycssqclmxb.wtxh
+left outer join wtjycssqb with(nolock) on wtjycssqb.wtdh=wtjycssqclmxb.wtdh
+left outer join wtsjlbb with(nolock) on wtsjlbb.lbbh=wtjycssqb.wtlb
+left outer join clbmb with(nolock) on clbmb.clhh=wtjycssqclmxb.clhh 
+left outer join csxxb with(nolock) on csxxb.csbh=wtjycssqb.csbh
+left outer join htmxb with(nolock) on htmxb.htbh=wtjycssqclmxb.htbh and htmxb.htxh=wtjycssqclmxb.htxh
+left outer join khxxb with(nolock) on khxxb.khbh=htmxb.khbh
+where 1=1 and wtjycssqb.sdbj=1
+<if test="gdbj!=null and gdbj!=''">
+and wtjycssqb.gdbj_pd=#{gdbj}
+</if>
+<if test="wtsjlb!=null and wtsjlb!=0">
+and left(wtjycssqb.wtlb,len(#{wtsjlb}))=#{wtsjlb}
+</if>
+<if test="qsrq!=null and jzrq!=null">
+	and wtjycssqb.czsj between #{qsrq} and #{jzrq}
+</if>
+and exists (select * from wtsjlb_qxb where (left(wtsjlb_qxb.lbbh,len(wtjycssqb.wtlb))=wtjycssqb.wtlb or wtsjlb_qxb.lbbh=left(wtjycssqb.wtlb,len(wtsjlb_qxb.lbbh))) and czy_gh=#{czy_gh})
+order by wtjycssqb.wtdh desc  
+</select>
+<select id="getWtsjlbqxb" parameterType="map" resultType="int">
+	select count(*) from wtsjlb_qxb 
+	where (left(lbbh,len(#{wtsjlb}))=#{wtsjlb} or lbbh=left(#{wtsjlb},len(lbbh)))	and czy_gh=#{czy_gh}
+</select>
+<select id="getInspectionCategory" parameterType="map" resultType="erp.erp.materialTestEvaluation.model.EntrustedInspectionCategory">
+	 SELECT wtsjlbb.lbmc,   
+         wtsjlbb.lbbh,
+         wtsjlbb.lbjc,
+         wtsjlbb.mjbz
+    FROM wtsjlbb  
+    where 1=1
+    <if test="node!=null and node==0">
+			and  wtsjlbb.lbjc=1
+		</if>
+		<if test="node!=null and node>0">
+		 	 and left(wtsjlbb.lbbh,len(#{node}))=#{node} and wtsjlbb.lbbh!=#{node}
+		</if>
+</select>
+<insert id="addMaterialTestEvaluation" parameterType="erp.erp.materialTestEvaluation.model.MaterialTestEvaluation" keyProperty="" useGeneratedKeys="true">
+	insert into wtjycssqmxb
+	(
+		wtdh,
+		wtlb,
+		wtbm,
+		wtrm,
+		wtrq,
+		ypwtrq,
+		csbh,
+		sdbj,
+		sdrm,
+		sdsj,
+		gdbj,
+		gdbj_pd,
+		czym,
+		czsj,
+		shbj,
+		shsj,
+		bzsm,
+		wtxh,
+		clhh,
+		htbh,
+		htxh,
+		hth,
+		sjsl,
+		dhdh,
+		dhxh,
+		dhh,
+		jldw,
+		llrq,
+		ckbh,
+		clmc,
+		wtsqxh,
+		csxm,
+		csbz,
+		bzsm,
+		jyjg,
+		wjmc,
+		wjlj,
+		cjrm,
+		cjrq,
+		csz,
+		yqjq,
+		psjq,
+		clrm,
+		psbj,
+		psrm,
+		csjg,
+		pssj,
+		jybj,
+		jysj,
+		jyrm,
+		ddh,
+		khbh,
+		plmth,
+		plmtx,
+		fpsj,
+		jjd,
+		cszq,
+		cszj
+	)
+	values
+	(
+		#{wtdh},
+		#{wtlb},
+		#{wtbm},
+		#{wtrm},
+		#{wtrq},
+		#{ypwtrq},
+		#{csbh},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{gdbj},
+		#{gdbj_pd},
+		#{czym},
+		#{czsj},
+		#{shbj},
+		#{shsj},
+		#{bzsm},
+		#{wtxh},
+		#{clhh},
+		#{htbh},
+		#{htxh},
+		#{hth},
+		#{sjsl},
+		#{dhdh},
+		#{dhxh},
+		#{dhh},
+		#{jldw},
+		#{llrq},
+		#{ckbh},
+		#{clmc},
+		#{wtsqxh},
+		#{csxm},
+		#{csbz},
+		#{bzsm},
+		#{jyjg},
+		#{wjmc},
+		#{wjlj},
+		#{cjrm},
+		#{cjrq},
+		#{csz},
+		#{yqjq},
+		#{psjq},
+		#{clrm},
+		#{psbj},
+		#{psrm},
+		#{csjg},
+		#{pssj},
+		#{jybj},
+		#{jysj},
+		#{jyrm},
+		#{ddh},
+		#{khbh},
+		#{plmth},
+		#{plmtx},
+		#{fpsj},
+		#{jjd},
+		#{cszq},
+		#{cszj}
+	)
+</insert>
+<update id="updateMaterialTestEvaluation" parameterType="erp.erp.materialTestEvaluation.model.MaterialTestEvaluation">
+	update wtjycssqmxb
+		set
+			wtdh = #{wtdh},
+			wtlb = #{wtlb},
+			wtbm = #{wtbm},
+			wtrm = #{wtrm},
+			wtrq = #{wtrq},
+			ypwtrq = #{ypwtrq},
+			csbh = #{csbh},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			gdbj = #{gdbj},
+			gdbj_pd = #{gdbj_pd},
+			czym = #{czym},
+			czsj = #{czsj},
+			shbj = #{shbj},
+			shsj = #{shsj},
+			bzsm = #{bzsm},
+			wtxh = #{wtxh},
+			clhh = #{clhh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			hth = #{hth},
+			sjsl = #{sjsl},
+			dhdh = #{dhdh},
+			dhxh = #{dhxh},
+			dhh = #{dhh},
+			jldw = #{jldw},
+			llrq = #{llrq},
+			ckbh = #{ckbh},
+			clmc = #{clmc},
+			wtsqxh = #{wtsqxh},
+			csxm = #{csxm},
+			csbz = #{csbz},
+			bzsm = #{bzsm},
+			jyjg = #{jyjg},
+			wjmc = #{wjmc},
+			wjlj = #{wjlj},
+			cjrm = #{cjrm},
+			cjrq = #{cjrq},
+			csz = #{csz},
+			yqjq = #{yqjq},
+			psjq = #{psjq},
+			clrm = #{clrm},
+			psbj = #{psbj},
+			psrm = #{psrm},
+			csjg = #{csjg},
+			pssj = #{pssj},
+			jybj = #{jybj},
+			jysj = #{jysj},
+			jyrm = #{jyrm},
+			ddh = #{ddh},
+			khbh = #{khbh},
+			plmth = #{plmth},
+			plmtx = #{plmtx},
+			fpsj = #{fpsj},
+			jjd = #{jjd},
+			cszq = #{cszq},
+			cszj = #{cszj}
+		where  = #{}
+</update>
+<delete id="deleteMaterialTestEvaluation" parameterType="erp.erp.materialTestEvaluation.model.MaterialTestEvaluation">
+	delete from wtjycssqmxb
+	where  = #{}
+</delete>
+</mapper>

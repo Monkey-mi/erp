@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.AgreementInfoMapper">
+
+
+<select id="getAgreementInfoList" parameterType="map" resultType="erp.erp.PayApply.model.AgreementInfo">
+	  SELECT cghtb.htbh,
+			cghtb.csbh,
+			csxxb.csmc,
+			cghtb.htze,
+			(select sum(sqje) from fksqsphtb a with (nolock) where a.htbh=cghtb.htbh) as sqze,
+         cghtb.htze - isnull((select sum(sqje) from fksqsphtb a with (nolock) where a.htbh=cghtb.htbh),0) as ksqze
+  from fksqsphtb with (nolock)
+  left outer join cghtb with (nolock) on cghtb.htbh=fksqsphtb.htbh
+  left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh 
+  where
+  1=1
+  <if test="sqbh!=null">
+  and fksqsphtb.sqbh=#{sqbh}
+  </if>     
+</select>
+</mapper>

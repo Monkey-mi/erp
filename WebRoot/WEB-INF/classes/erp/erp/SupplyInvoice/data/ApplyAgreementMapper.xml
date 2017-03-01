@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.SupplyInvoice.data.ApplyAgreementMapper">
+
+
+<select id="getApplyAgreementList" parameterType="map" resultType="erp.erp.SupplyInvoice.model.ApplyAgreement">
+  SELECT fksqsphtb.sqbh,   
+         fksqsphtb.sqxh,   
+         fksqsphtb.htbh,
+			left(fksqsphtb.hsbm,4) as hsbm,   
+         fksqsphtb.htze,   
+         fksqsphtb.sqje,
+			fksqsphtb.yfje,
+			(select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb where gyfphtyfb.fplb=#{fplb} and gyfphtyfb.fphm=#{fphm} and gyfphtyfb.htbh=fksqsphtb.htbh and gyfphtyfb.sqbh=fksqsphtb.sqbh and gyfphtyfb.sqxh=fksqsphtb.sqxh) as yfkje 
+    FROM fksqsphtb   
+  where fksqsphtb.htbh in (select htbh from rkdb_yl where rkdb_yl.fplb=#{fplb} and rkdb_yl.fphm=#{fphm})
+and (select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb where gyfphtyfb.fplb=#{fplb} and gyfphtyfb.fphm=#{fphm} and gyfphtyfb.htbh=fksqsphtb.htbh and gyfphtyfb.sqbh=fksqsphtb.sqbh and gyfphtyfb.sqxh=fksqsphtb.sqxh)>0
+   
+</select>
+</mapper>

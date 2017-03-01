@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.foreignCurrency.data.ForeignCurrencyMapper">
+
+
+<select id="getForeignCurrencyList" parameterType="map" resultType="erp.erp.master.foreignCurrency.model.ForeignCurrency">
+	select
+		dbo.wbmcb.wbbh,
+		dbo.wbmcb.wbdh,
+		dbo.wbmcb.wbfh,
+		dbo.wbmcb.wbmc
+	from
+		dbo.wbmcb
+	where 
+	   1=1	
+	<if test="wbbh!=null">
+		and wbmcb.wbbh = #{wbbh}
+	</if>	
+	<if test="wbdh!=null">
+		and wbmcb.wbdh = #{wbdh}
+	</if>
+</select>
+<insert id="addForeignCurrency" parameterType="erp.erp.master.foreignCurrency.model.ForeignCurrency" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.wbmcb
+	(
+		wbbh,
+		wbdh,
+		wbfh,
+		wbmc
+	)
+	values
+	(
+		#{wbbh},
+		#{wbdh},
+		#{wbfh},
+		#{wbmc}
+	)
+</insert>
+<update id="updateForeignCurrency" parameterType="erp.erp.master.foreignCurrency.model.ForeignCurrency">
+	update dbo.wbmcb
+		set
+			wbbh = #{wbbh},
+			wbdh = #{wbdh},
+			wbfh = #{wbfh},
+			wbmc = #{wbmc}
+		where  = #{}
+</update>
+<delete id="deleteForeignCurrency" parameterType="erp.erp.master.foreignCurrency.model.ForeignCurrency">
+	delete from dbo.wbmcb
+	where  = #{}
+</delete>
+</mapper>

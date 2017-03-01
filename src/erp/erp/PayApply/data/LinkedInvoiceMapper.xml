@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.LinkedInvoiceMapper">
+
+
+<select id="getLinkedInvoiceList" parameterType="map" resultType="erp.erp.PayApply.model.LinkedInvoice">
+	   SELECT 
+		gyfpb.fplb,   
+		gyfpb.fphm,   
+		gyfpb.jzrq,   
+		gyfpb.fpje,
+		gyfpb.sqje,
+		gyfpb.kprq,
+		(select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm and gyfphtyfb.sqbh=#{sqbh}) as yfkje,
+		(select isnull(sum(gyfphtyfb.yfwb),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm and gyfphtyfb.sqbh=#{sqbh}) as yfkwb
+ FROM gyfpb with (nolock)  
+ where (ltrim(rtrim(gyfpb.fplb))+'-'+ltrim(rtrim(gyfpb.fphm)) in (select ltrim(rtrim(rkdb_yl.fplb))+'-'+ltrim(rtrim(rkdb_yl.fphm)) from rkdb_yl with (nolock)
+where rkdb_yl.htbh in (select htbh from fksqsphtb with (nolock) where fksqsphtb.sqbh=#{sqbh}))) and
+(select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm)>0
+
+union all
+
+ SELECT 
+		gyfpb.fplb,   
+		gyfpb.fphm,   
+		gyfpb.jzrq,   
+		gyfpb.fpje,
+		gyfpb.sqje,
+		gyfpb.kprq,
+		(select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm and gyfpfyyfb.sqbh=#{sqbh}) as yfkje,
+		(select isnull(sum(gyfpfyyfb.yfwb),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm and gyfpfyyfb.sqbh=#{sqbh}) as yfkwb
+ FROM gyfpb with (nolock)
+where (ltrim(rtrim(gyfpb.fplb))+'-'+ltrim(rtrim(gyfpb.fphm)) in (select ltrim(rtrim(cgfyb.fplb))+'-'+ltrim(rtrim(cgfyb.fphm)) from cgfyb with (nolock)
+where ltrim(rtrim(str(cgfyb.fydh)))+'-'+ltrim(rtrim(str(cgfyb.fyxh))) in (select ltrim(rtrim(str(fksqspfyb.fydh)))+'-'+ltrim(rtrim(str(fksqspfyb.fyxh))) from fksqspfyb with (nolock) where fksqspfyb.sqbh=#{sqbh})))
+and (select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm)>0
+</select>
+</mapper>

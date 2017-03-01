@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseOrder.data.PurchaseFileMapper">
+
+
+<select id="getPurchaseFileList" parameterType="map" resultType="erp.erp.purchaseOrder.model.PurchaseFile">
+	select
+		dbo.cghtfjb.htbh,
+		dbo.cghtfjb.qxbj,
+		dbo.cghtfjb.wjbh,
+		dbo.cghtfjb.wjmc,
+		dbo.cghtfjb.wjlj,
+		dbo.cghtfjb.cjrm,
+		dbo.cghtfjb.fjlx,
+		dbo.cghtfjb.scrq,
+		dbo.cghtfjb.ptsc,
+		dbo.cghtfjb.fjzt
+	from
+		dbo.cghtfjb
+		where  cghtfjb.htbh=#{htbh}
+		<if test="fjzt!=null">
+		   and cghtfjb.fjzt = #{fjzt}
+		</if>
+		<if test="ptsc!=null">
+		   and cghtfjb.ptsc = #{ptsc}
+		</if>
+		<if test="htbh!=null">
+		   and cghtfjb.htbh = #{htbh}
+		 </if>
+</select>
+<insert id="addPurchaseFile" parameterType="erp.erp.purchaseOrder.model.PurchaseFile" >
+	insert into dbo.cghtfjb
+	(
+		htbh,
+		wjbh,
+		wjmc,
+		wjlj,
+		cjrm,
+		fjlx,
+		scrq,
+		ptsc,
+		fjzt
+	)
+	values
+	(
+		#{htbh},
+		#{wjbh},
+		#{wjmc},
+		#{wjlj},
+		#{cjrm},
+		#{fjlx},
+		getdate(),
+		#{ptsc},
+		#{fjzt}
+	)
+</insert>
+<update id="updatePurchaseFile" parameterType="erp.erp.purchaseOrder.model.PurchaseFile">
+	update dbo.cghtfjb
+		set
+			htbh = #{htbh},
+			wjbh = #{wjbh},
+			wjmc = #{wjmc},
+			wjlj = #{wjlj},
+			cjrm = #{cjrm},
+			fjlx = #{fjlx},
+			scrq = #{scrq},
+			ptsc = #{ptsc},
+			fjzt = #{fjzt}
+		where wjbh = #{wjbh}
+</update>
+<delete id="deletePurchaseFile" parameterType="erp.erp.purchaseOrder.model.PurchaseFile">
+	delete from dbo.cghtfjb
+	where wjbh = #{wjbh}
+</delete>
+
+<select id="getMaxWjbh" parameterType="map" resultType="int">
+    select isnull(max(wjbh)+1,1) from cghtfjb where htbh = #{htbh}
+</select>
+<update id="updateFjzt" parameterType="map">
+     update cghtfjb set fjzt = #{fjzt} where cghtfjb.htbh = #{htbh} and cghtfjb.wjbh = #{wjbh}
+</update>
+</mapper>

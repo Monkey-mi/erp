@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PrepayAdjustment.data.PrepayAdjustmentInfoMapper">
+
+
+	<select id="getPrepayAdjustmentList" parameterType="map"
+		resultType="erp.erp.PrepayAdjustment.model.PrepayAdjustmentInfo">
+		SELECT fksqyftzb.tzdh,
+		fksqyftzb.tzxh,
+		fksqyftzb.tzrq,
+		fksqyftzb.tzlx,
+		fksqyftzb.sqbh,
+		fksqyftzb.tzhtbh,
+		fksqyftzb.mbhtbh,
+		fksqyftzb.tzfydh,
+		fksqyftzb.mbfydh,
+		fksqyftzb.tzhsbm,
+		fksqyftzb.mbhsbm,
+		a.bmmc as bmmc1,
+		b.bmmc as bmmc2,
+		fksqyftzb.tzje,
+		fksqyftzb.tzfplb,
+		fksqyftzb.tzfphm,
+		fksqyftzb.yfhtbh,
+		fksqyftzb.yffydh,
+		fksqyftzb.tzyy,
+		fksqyftzb.bzsm,
+		fksqyftzb.sdbj,
+		fksqyftzb.sdrm,
+		fksqyftzb.sdsj,
+		fksqyftzb.czrm,
+		fksqyftzb.czsj,
+		case when isnull(fksqyftzb.tzfphm,'')&lt;&gt;'' then csxxb.wbbh else
+		fksqspb.wbbh end as wbbh,
+		case when isnull(fksqyftzb.tzfphm,'')&lt;&gt;'' then d.wbdh else
+		c.wbdh end as wbdh
+		FROM fksqyftzb
+		left outer join fksqspb with (nolock) on fksqspb.sqbh=fksqyftzb.sqbh
+		left outer join gyfpb with (nolock) on gyfpb.fphm=fksqyftzb.tzfphm and
+		gyfpb.fplb=fksqyftzb.tzfplb
+		left outer join csxxb with (nolock) on gyfpb.csbh = csxxb.csbh
+		left outer join hsbmb a with (nolock) on fksqyftzb.tzhsbm = a.bmbh
+		left outer join hsbmb b with (nolock) on fksqyftzb.mbhsbm = b.bmbh
+		left outer join wbmcb c with (nolock) on c.wbbh = fksqspb.wbbh
+		left outer join wbmcb d with (nolock) on d.wbbh = csxxb.wbbh
+		WHERE
+		1=1
+		<if test="fplb!=null">
+			and fksqyftzb.tzfplb=#{fplb}
+		</if>
+		<if test="fphm!=null">
+			and fksqyftzb.tzfphm=#{fphm}
+		</if>
+		<if test="begin_date!=null">
+			and fksqyftzb.tzrq &gt;= #{begin_date}
+		</if>
+		<if test="end_date!=null">
+			and fksqyftzb.tzrq &lt;= #{end_date}
+		</if>
+		<if test="condition!=null and condition!=''">
+			and ${condition}
+		</if>
+		<if test="tzdh!=null">
+			and fksqyftzb.tzdh=#{tzdh}
+		</if>
+	</select>
+
+	<select id="getPrepayAdjustmentOne" parameterType="map"
+		resultType="String">
+		select isnull(max ( tzdh ),0) from fksqyftzb where 1 =1
+	</select>
+	<insert id="addPrepayAdjustment" parameterType="erp.erp.PrepayAdjustment.model.PrepayAdjustmentInfo"
+		keyProperty="" useGeneratedKeys="true">
+
+		insert into fksqyftzb
+		(
+		tzhsbm,
+		tzdh,
+		tzxh,
+		tzrq,
+		tzlx,
+		sqbh,
+		tzhtbh,
+		mbhtbh,
+		tzfydh,
+		mbfydh,
+		tzje,
+		tzfplb,
+		tzfphm,
+		yfhtbh,
+		yffydh,
+		tzyy,
+		bzsm,
+		sdbj,
+		sdrm,
+		sdsj,
+		czrm,
+		czsj
+		<!-- wbbh -->
+		)
+		values
+		(
+		#{tzhsbm},
+		#{tzdh},
+		#{tzxh},
+		#{tzrq},
+		#{tzlx},
+		#{sqbh},
+		#{tzhtbh},
+		#{mbhtbh},
+		#{tzfydh},
+		#{mbfydh},
+		#{tzje},
+		#{tzfplb},
+		#{tzfphm},
+		#{yfhtbh},
+		#{yffydh},
+		#{tzyy},
+		#{bzsm},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{czrm},
+		#{czsj}
+		<!-- #{wbbh} -->
+		)
+	</insert>
+	<update id="updatePrepayAdjustment" parameterType="erp.erp.PrepayAdjustment.model.PrepayAdjustmentInfo">
+		update fksqyftzb
+		set
+		tzdh = #{tzdh},
+		tzxh = #{tzxh},
+		tzrq = #{tzrq},
+		tzlx = #{tzlx},
+		sqbh = #{sqbh},
+		tzhtbh = #{tzhtbh},
+		mbhtbh = #{mbhtbh},
+		tzfydh = #{tzfydh},
+		mbfydh = #{mbfydh},
+		tzje = #{tzje},
+		tzfplb = #{tzfplb},
+		tzfphm = #{tzfphm},
+		yfhtbh = #{yfhtbh},
+		yffydh = #{yffydh},
+		tzyy = #{tzyy},
+		bzsm = #{bzsm},
+		sdbj = #{sdbj},
+		sdrm = #{sdrm},
+		sdsj = #{sdsj},
+		czrm = #{czrm},
+		czsj = #{czsj}
+		<!-- wbbh = #{wbbh} -->
+		where 1=1
+		<if test="tzdh!=null">
+			and fksqyftzb.tzdh = #{tzdh}
+		</if>
+		<if test="tzxh!=null">
+			and fksqyftzb.tzxh = #{tzxh}
+		</if>
+	</update>
+	<update id="lockPrepayAdjustment" parameterType="map">
+		update fksqyftzb
+		set
+		sdbj = #{sdbj},
+		sdrm = #{sdrm},
+		sdsj = #{sdsj}
+		where 1=1
+		<if test="tzdh!=null">
+			and fksqyftzb.tzdh = #{tzdh}
+		</if>
+	</update>
+	<delete id="deletePrepayAdjustment" parameterType="erp.erp.PrepayAdjustment.model.PrepayAdjustmentInfo">
+		delete from fksqyftzb
+		where  fksqyftzb.tzdh = #{tzdh}
+	</delete>
+	<select id="getPrepayAdjustmentImpList" parameterType="map" resultType="erp.erp.PrepayAdjustment.model.PrepayAdjustmentImp">
+		SELECT fksqsphtb.sqbh,
+		fksqsphtb.sqxh,
+		fksqsphtb.hsbm,
+		hsbmb.bmmc,
+		fksqsphtb.htbh,
+		'' as fydh,
+		fksqsphtb.htze,
+		fksqsphtb.sqje,
+		fksqsphtb.wbze,
+		fksqsphtb.wbje,
+		csxxb.csmc as csbh,
+		fksqspb.wbbh,
+		wbmcb.wbdh,
+		(select sum(yfje) from gyfphtyfb where gyfphtyfb.htbh=fksqsphtb.htbh) as
+		hxje,
+		isnull(fksqsphtb.sqje,0) - isnull((select sum(yfje) from gyfphtyfb where
+		gyfphtyfb.htbh=fksqsphtb.htbh),0) as whxje,
+		isnull(fksqsphtb.wbje,0) - isnull((select sum(yfwb) from gyfphtyfb where
+		gyfphtyfb.htbh=fksqsphtb.htbh),0) as whxje_wb
+		FROM fksqsphtb
+		left outer join fksqspb with (nolock) on fksqspb.sqbh=fksqsphtb.sqbh
+		left outer join hsbmb with (nolock) on fksqsphtb.hsbm = hsbmb.bmbh
+		left outer join csxxb with (nolock) on fksqspb.csbh = csxxb.csbh
+		left outer join wbmcb with (nolock) on wbmcb.wbbh = fksqspb.wbbh
+		where fksqspb.spbj=1 and fksqsphtb.sqbh in (select sqbh from zjzffksqmxb)
+		<if test="hxfp!=null">
+			and ((#{hxfp}=1) or (#{hxfp}=0 and not exists (select rkdb_yl.htbh from
+			rkdb_yl where rkdb_yl.htbh=fksqsphtb.htbh and rkdb_yl.hxbj=1)))
+		</if>
+		and isnull(fksqsphtb.sqje,0) - isnull((select sum(yfje) from gyfphtyfb
+		where gyfphtyfb.htbh=fksqsphtb.htbh),0)&lt;&gt;0
+		<if test="htbh!=null and htdh!='' and htdh!=0">
+			and fksqsphtb.htbh=#{htbh}
+		</if>
+		<if test="fydh!=null and fydh!='' and fydh!=0">
+			and 1=0
+		</if>
+		union all
+		SELECT fksqspfyb.sqbh,
+		fksqspfyb.sqxh,
+		fksqspfyb.hsbm,
+		h.bmmc,
+		0 as htbh,
+		ltrim(rtrim(str(fksqspfyb.fydh)))+'-'+ltrim(rtrim(str(fksqspfyb.fyxh)))
+		as fyh,
+		fksqspfyb.fyje,
+		fksqspfyb.sqje,
+		fksqspfyb.wbje,
+		fksqspfyb.wbsq,
+		csxxb.csmc as csbh,
+		fksqspb.wbbh,
+		wbmcb.wbdh,
+		(select sum(yfje) from gyfpfyyfb where gyfpfyyfb.fydh=fksqspfyb.fydh and
+		gyfpfyyfb.fyxh=fksqspfyb.fyxh) as hxje,
+		isnull(fksqspfyb.sqje,0) - isnull((select sum(yfje) from gyfpfyyfb where
+		gyfpfyyfb.fydh=fksqspfyb.fydh and gyfpfyyfb.fyxh=fksqspfyb.fyxh),0) as
+		whxje,
+		isnull(fksqspfyb.wbje,0) - isnull((select sum(yfwb) from gyfpfyyfb where
+		gyfpfyyfb.fydh=fksqspfyb.fydh and gyfpfyyfb.fyxh=fksqspfyb.fyxh),0) as
+		whxje_wb
+		FROM fksqspfyb
+		left outer join fksqspb with (nolock) on fksqspb.sqbh=fksqspfyb.sqbh
+		left outer join hsbmb h with (nolock) on fksqspfyb.hsbm = h.bmbh
+		left outer join csxxb with (nolock) on fksqspb.csbh = csxxb.csbh
+		left outer join wbmcb with (nolock) on wbmcb.wbbh = fksqspb.wbbh
+		where fksqspb.spbj=1 and fksqspfyb.sqbh in (select sqbh from zjzffksqmxb)
+		<if test="hxfp!=null">
+			and ((#{hxfp}=1) or (#{hxfp}=0 and not exists (select
+			cgfyb.fydh,cgfyb.fyxh from cgfyb where cgfyb.fydh=fksqspfyb.fydh and
+			cgfyb.fyxh=fksqspfyb.fyxh and cgfyb.hxbj=1)))
+		</if>
+		and isnull(fksqspfyb.sqje,0) - isnull((select sum(yfje) from gyfpfyyfb
+		where gyfpfyyfb.fydh=fksqspfyb.fydh and
+		gyfpfyyfb.fyxh=fksqspfyb.fyxh),0)&lt;&gt;0
+		<if test="htbh!=null and htdh!='' and htdh!=0">
+			and htbh=#{htbh}
+		</if>
+		<if test="fydh!=null and fydh!='' and fydh!=0">
+			and fksqspfyb.fydh =#{fydh}
+		</if>
+	</select>
+	<select id="getAgreementChooseList" parameterType="map"
+		resultType="erp.erp.PrepayAdjustment.model.AgreementChoose">
+		SELECT cghtb.htbh,
+		hsbmb.bmmc as hsbm,
+		cghtb.cgrq,
+		csxxb.csmc as csbh,
+		cghtb.htzs,
+		cghtb.htze,
+		cghtb.wbze,
+		cglbb.lbmc as cglb,
+		(select sum(sqje) from fksqsphtb where
+		fksqsphtb.htbh=cghtb.htbh) as sqje
+		FROM cghtb with (nolock)
+		left outer join csxxb with (nolock) on csxxb.csbh= cghtb.csbh
+		left outer join htmxb with (nolock) on htmxb.htbh= cghtb.htbh
+		left outer join hsbmb with(nolock) on left(htmxb.hsbm,4)=hsbmb.bmbh
+		left outer join cglbb with (nolock) on cglbb.lbbh= cghtb.cglb
+		where not exists (select * from rkdb_yl where rkdb_yl.htbh=cghtb.htbh and
+		rkdb_yl.hxbj=1)
+		and isnull(cghtb.htze,0) - isnull((select sum(sqje) from fksqsphtb where
+		fksqsphtb.htbh=cghtb.htbh),0) > 0
+		<if test="tzhtbh!=null">
+			and cghtb.csbh=(select csbh from cghtb where htbh=#{tzhtbh})
+		</if>
+		<if test="htbh!=null">
+			and cghtb.htbh=#{htbh}
+		</if>
+	</select>
+	<select id="getPrepayAgreementChooseList" parameterType="map"
+		resultType="erp.erp.PrepayAdjustment.model.PrepayAgreementChoose">
+		SELECT cghtb.htbh,
+		hsbmb.bmmc as hsbm,
+		cghtb.cgrq,
+		csxxb.csmc as csbh,
+		cghtb.htzs,
+		cghtb.htze,
+		cghtb.wbze,
+		cglbb.lbmc as cglb,
+		csxxb.wbbh,
+		(select sum(sqje) from fksqsphtb where fksqsphtb.htbh=cghtb.htbh) as sqje,
+		(select sum(yfje) from gyfphtyfb where gyfphtyfb.htbh=cghtb.htbh) as
+		yfje,
+		isnull((select sum(sqje) from fksqsphtb where fksqsphtb.htbh=cghtb.htbh),0) -
+		isnull((select sum(yfje) from gyfphtyfb where
+		gyfphtyfb.htbh=cghtb.htbh),0) as wyfje,
+		case when isnull(csxxb.wbbh,'')='' or isnull(csxxb.wbbh,'')='60' then
+		0
+		else
+		isnull((select sum(wbje) from fksqsphtb where fksqsphtb.htbh=cghtb.htbh),0) -
+		isnull((select sum(yfwb) from gyfphtyfb where
+		gyfphtyfb.htbh=cghtb.htbh),0)
+		end as wyfje_wb
+		FROM cghtb with (nolock)
+		left outer join htmxb with (nolock) on htmxb.htbh= cghtb.htbh
+		left outer join csxxb with(nolock) on csxxb.csbh=cghtb.csbh
+		left outer join hsbmb with(nolock) on left(htmxb.hsbm,4)=hsbmb.bmbh
+		left outer join cglbb with (nolock) on cglbb.lbbh= cghtb.cglb
+		where (case when isnull(csxxb.wbbh,'')='' or isnull(csxxb.wbbh,'')='60'
+		then
+		isnull((select sum(sqje) from fksqsphtb where fksqsphtb.htbh=cghtb.htbh),0) -
+		isnull((select sum(yfje) from gyfphtyfb where
+		gyfphtyfb.htbh=cghtb.htbh),0)
+		else
+		isnull((select sum(wbje) from fksqsphtb where fksqsphtb.htbh=cghtb.htbh),0) -
+		isnull((select sum(yfwb) from gyfphtyfb where
+		gyfphtyfb.htbh=cghtb.htbh),0)
+		end) >0
+		and exists (select * from fksqsphtb where fksqsphtb.htbh=cghtb.htbh)
+		<if test="htbh!=null">
+			and cghtb.htbh=#{htbh}
+		</if>
+	</select>
+
+	<select id="getFeeChooseList" parameterType="map"
+		resultType="erp.erp.PrepayAdjustment.model.FeeChoose">
+		SELECT cgfyb.fydh,
+		hsbmb.bmmc as hsbm,
+		cgfyb.fyxh,
+		cgfyb.fyrq,
+		cgfyb.cglb,
+		cgfyb.csbh,
+		cgfyb.fysl,
+		cgfyb.fydj,
+		cgfyb.fyje,
+		ltrim(rtrim(str(cgfyb.fydh)))+'-'+ltrim(rtrim(str(cgfyb.fyxh))) as fyh,
+		(select sum(sqje) from fksqspfyb where fksqspfyb.fydh=cgfyb.fydh and
+		fksqspfyb.fyxh=cgfyb.fyxh) as sqje
+		FROM cgfyb with (nolock)
+		left outer join csxxb with(nolock) on csxxb.csbh=cgfyb.csbh
+		left outer join hsbmb with(nolock) on left(cgfyb.hsbm,4)=hsbmb.bmbh
+		where cgfyb.hxbj=0
+		<if test="tzfydh!=null">
+			and cgfyb.csbh=(select csbh from cgfyb where ltrim(rtrim(str(cgfyb.fydh)))+'-'+ltrim(rtrim(str(cgfyb.fyxh)))=#{tzfydh})
+		</if>
+		and isnull(cgfyb.fyje,0) - isnull((select sum(sqje) from fksqspfyb where
+		fksqspfyb.fydh=cgfyb.fydh and fksqspfyb.fyxh=cgfyb.fyxh),0)>0
+		
+		<if test="fydh!=null">
+			and cgfyb.fydh=#{fydh}
+		</if>
+	</select>
+	<select id="getPrepayFeeChooseList" parameterType="map"
+		resultType="erp.erp.PrepayAdjustment.model.PrepayFeeChoose">
+		SELECT cgfyb.fydh,
+		hsbmb.bmmc as hsbm,
+		cgfyb.fyxh,
+		cgfyb.fyrq,
+		cgfyb.cglb,
+		cgfyb.csbh,
+		cgfyb.fysl,
+		cgfyb.fydj,
+		cgfyb.fyje,
+		csxxb.wbbh,
+		ltrim(rtrim(str(cgfyb.fydh)))+'-'+ltrim(rtrim(str(cgfyb.fyxh))) as fyh,
+		(select sum(sqje) from fksqspfyb where fksqspfyb.fydh=cgfyb.fydh and
+		fksqspfyb.fyxh=cgfyb.fyxh) as sqje,
+		(select sum(yfje) from gyfpfyyfb where gyfpfyyfb.fydh=cgfyb.fydh and
+		gyfpfyyfb.fyxh=cgfyb.fyxh) as yfje,
+		isnull((select sum(sqje) from fksqspfyb where fksqspfyb.fydh=cgfyb.fydh and
+		fksqspfyb.fyxh=cgfyb.fyxh),0) - isnull((select sum(yfje) from
+		gyfpfyyfb where gyfpfyyfb.fydh=cgfyb.fydh and
+		gyfpfyyfb.fyxh=cgfyb.fyxh),0) as wyfje,
+		case when isnull(csxxb.wbbh,'')='' or isnull(csxxb.wbbh,'')='60' then
+		0
+		else
+		isnull((select sum(wbje) from fksqspfyb where fksqspfyb.fydh=cgfyb.fydh and
+		fksqspfyb.fyxh=cgfyb.fyxh),0) - isnull((select sum(yfwb) from
+		gyfpfyyfb where gyfpfyyfb.fydh=cgfyb.fydh and
+		gyfpfyyfb.fyxh=cgfyb.fyxh),0)
+		end as wyfje_wb
+		FROM cgfyb with (nolock)
+		left outer join csxxb with(nolock) on csxxb.csbh=cgfyb.csbh
+		left outer join hsbmb with(nolock) on left(cgfyb.hsbm,4)=hsbmb.bmbh
+		where (case when isnull(csxxb.wbbh,'')='' or isnull(csxxb.wbbh,'')='60'
+		then
+		isnull((select sum(sqje) from fksqspfyb where fksqspfyb.fydh=cgfyb.fydh and
+		fksqspfyb.fyxh=cgfyb.fyxh),0) - isnull((select sum(yfje) from
+		gyfpfyyfb where gyfpfyyfb.fydh=cgfyb.fydh and
+		gyfpfyyfb.fyxh=cgfyb.fyxh),0)
+		else
+		isnull((select sum(wbje) from fksqspfyb where fksqspfyb.fydh=cgfyb.fydh and
+		fksqspfyb.fyxh=cgfyb.fyxh),0) - isnull((select sum(yfwb) from
+		gyfpfyyfb where gyfpfyyfb.fydh=cgfyb.fydh and
+		gyfpfyyfb.fyxh=cgfyb.fyxh),0)
+		end) >0
+		and exists (select * from fksqspfyb where fksqspfyb.fydh=cgfyb.fydh and
+		fksqspfyb.fyxh=cgfyb.fyxh)
+
+		<if test="fydh!=null">
+			and cgfyb.fydh=#{fydh}
+		</if>
+	</select>
+	<select id="getInvoiceChooseList" parameterType="map"
+		resultType="erp.erp.PrepayAdjustment.model.InvoiceChoose">
+		SELECT fplxb.fplx,
+		gyfpb.fplb,
+		gyfpb.fphm,
+		gyfpb.kprq,
+		gyfpb.csbh,
+		gyfpb.csmc,
+		gyfpb.jzrq,
+		gyfpb.fpje,
+		gyfpb.csje,
+		gyfpb.wbhl,
+		gyfpb.wbje,
+		wbmcb.wbdh ,
+		isnull(sum(fksqspmxb.sqje),0) as sqje ,
+		isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb
+		and gyfphtyfb.fphm=gyfpb.fphm),0) + isnull((select sum(gyfpfyyfb.yfje)
+		from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and
+		gyfpfyyfb.fphm=gyfpb.fphm),0) as yfkje,
+		isnull(gyfpb.fpje,0) - isnull((select sum(gyfphtyfb.yfje) from gyfphtyfb where
+		gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm),0) -
+		isnull((select sum(gyfpfyyfb.yfje) from gyfpfyyfb where
+		gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm),0) -
+		isnull(sum(fksqspmxb.sqje),0) as wqje
+		FROM gyfpb
+		left outer join fksqspmxb with (nolock) on fksqspmxb.fplb=gyfpb.fplb and
+		fksqspmxb.fphm=gyfpb.fphm
+		left outer join csxxb with (nolock) on gyfpb.csbh = csxxb.csbh
+		left outer join fplxb with (nolock) on gyfpb.fplx = fplxb.lxbh
+		left outer join wbmcb with (nolock) on wbmcb.wbbh = csxxb.wbbh
+		where  gyfpb.shbj=1
+		<if test="yfhtbh!=null">
+			 and gyfpb.csbh=(select csbh from cghtb where
+			htbh=#{yfhtbh})
+		</if>
+		<if test="fphm!=null">
+			and gyfpb.fphm=#{fphm}
+		</if>
+		<if test="csmc!=null">
+			and gyfpb.csmc like '%#{csmc}%'
+		</if>
+		group by
+
+		fplxb.fplx,
+		gyfpb.fplb,
+		gyfpb.fphm,
+		gyfpb.kprq,
+		gyfpb.csbh,
+		gyfpb.csmc,
+		gyfpb.jzrq,
+		gyfpb.fpje,
+		gyfpb.csje,
+		gyfpb.wbhl,
+		gyfpb.wbje,
+		wbmcb.wbdh
+		having isnull(gyfpb.fpje,0) - isnull((select sum(gyfphtyfb.yfje) from
+		gyfphtyfb where gyfphtyfb.fplb=gyfpb.fplb and
+		gyfphtyfb.fphm=gyfpb.fphm),0) - isnull((select sum(gyfpfyyfb.yfje)
+		from gyfpfyyfb where gyfpfyyfb.fplb=gyfpb.fplb and
+		gyfpfyyfb.fphm=gyfpb.fphm),0) - isnull(sum(fksqspmxb.sqje),0) > 0
+
+
+
+	</select>
+</mapper>

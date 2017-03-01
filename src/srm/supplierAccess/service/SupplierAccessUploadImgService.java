@@ -1,0 +1,37 @@
+package srm.supplierAccess.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import srm.supplierAccess.data.SupplierAccessUploadImgMapper;
+import srm.supplierAccess.model.SupplierAccessUploadImg;
+
+
+@Service
+public class SupplierAccessUploadImgService {
+	@Autowired
+	private SupplierAccessUploadImgMapper mapper;
+
+
+	public List<SupplierAccessUploadImg> getSupplierAccessUploadImgList(Map<String,Object> params) {
+		return mapper.getSupplierAccessUploadImgList(params);
+	}
+	public void addSupplierAccessUploadImg(SupplierAccessUploadImg[] arr) {
+		for(SupplierAccessUploadImg obj: arr) {
+			mapper.addSupplierAccessUploadImg(obj);
+		}
+	}
+	public void updateSupplierAccessUploadImg(SupplierAccessUploadImg[] arr) {
+		for(SupplierAccessUploadImg obj: arr) {
+			mapper.updateSupplierAccessUploadImg(obj);
+		}
+	}
+	public void deleteSupplierAccessUploadImg(SupplierAccessUploadImg[] arr) {
+		for(SupplierAccessUploadImg obj: arr) {
+			mapper.deleteSupplierAccessUploadImg(obj);
+		}
+	}
+}

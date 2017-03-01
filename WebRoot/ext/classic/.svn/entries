@@ -1,0 +1,73 @@
+10
+
+dir
+2600
+https://192.168.1.100/svn/erp/erpForOut62/WebRoot/ext/classic
+https://192.168.1.100/svn/erp
+
+
+
+2017-02-20T10:31:57.222584Z
+2580
+wuqia
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+70d35baf-c61e-d24d-b330-644048e49734
+
+classic
+dir
+
+locale
+dir
+
+theme-aria
+dir
+
+theme-base
+dir
+
+theme-classic
+dir
+
+theme-classic-sandbox
+dir
+
+theme-crisp
+dir
+
+theme-crisp-touch
+dir
+
+theme-gray
+dir
+
+theme-neptune
+dir
+
+theme-neptune-touch
+dir
+
+theme-neutral
+dir
+
+theme-triton
+dir
+
+touch-sizing
+dir
+
+ux
+dir
+

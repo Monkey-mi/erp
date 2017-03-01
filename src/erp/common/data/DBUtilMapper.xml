@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.common.data.DBUtilMapper">
+
+<!-- 根据参数动态生成sql语句，包括表名、字段名、条件都是动态的 -->
+
+<!-- 数据的CURD操作相关-->
+<!-- 	
+    被插件取代，已经不再需要
+    <select id="getCountData" parameterType="map" resultType="int">
+	  select COUNT(*) from ${TABLE_NAME}
+		<where>
+			<choose>
+				<when test="WHERE_STR !=null">${WHERE_STR}</when>
+				<when test="WHERE_CONDITIONS !=null">
+					<foreach collection="WHERE_CONDITIONS" index="index" item="WHERE_CONDITION" open="" separator="" close="">
+                        WHERE_CONDITION["WHERE_JOIN"] ${WHERE_CONDITION["WHERE_FIELD"]}${WHERE_CONDITION["WHERE_OPR"]}${WHERE_CONDITION["WHERE_VALUE"]}
+					</foreach>
+				</when>
+			</choose>
+		</where>
+	</select>
+ -->
+ 
+ <select id="executeQuery" parameterType="map" resultType="map">
+    ${QUERY_SQL}
+ </select>
+ 
+ <select id="selectData" parameterType="map" resultType="map">
+    select 
+		<foreach collection="TABLE_FIELDS" index="index" item="tblfld" open="" separator="," close="">
+			${tblfld["FIELD_CODE"]}<!-- 此处tblfld引用了上面名称为tblfld的item -->
+		</foreach>
+    from ${TABLE_NAME}
+		<where>
+			<choose>
+				<when test="WHERE_STR !=null">${WHERE_STR}</when>
+				<when test="WHERE_CONDITIONS !=null">
+					<foreach collection="WHERE_CONDITIONS" index="index" item="WHERE_CONDITION" open="" separator="" close="">
+                        WHERE_CONDITION["WHERE_JOIN"] ${WHERE_CONDITION["WHERE_FIELD"]}${WHERE_CONDITION["WHERE_OPR"]}${WHERE_CONDITION["WHERE_VALUE"]}
+					</foreach>
+				</when>
+			</choose>
+		</where>
+ </select>
+ 
+<!-- chart表的聚合函数操作-->
+<select id="selectDateData" parameterType="map" resultType="map">
+	select ${GROUP_NAME} from ${TABLE_NAME}
+	<where>
+		<if test="COMPARE_TYPE!=null">
+			${COMPARE_TYPE} ${COMPARE_STR}
+		</if>
+	</where>
+</select>
+<select id="selectChartData" parameterType="map" resultType="map">
+    select 
+		<foreach collection="TABLE_FIELDS" index="index" item="tblfld" open="" separator="," close="">
+			${tblfld["FIELD_CODE"]}<!-- 此处tblfld引用了上面名称为tblfld的item -->
+		</foreach>
+    from ${TABLE_NAME}
+		<where>
+			<if test="WHERE_STR!=NULL">
+				${WHERE_STR}
+			</if>
+			<if test="GROUP_NAME!=NULL and GROUP_STR!=NULL">
+                and ${GROUP_NAME} IN(${GROUP_STR})		
+			</if>
+			<if test="COMPARE_TYPE!=NULL">
+			    and ${COMPARE_TYPE} ${COMPARE_STR}
+		    </if>
+		</where>
+		group by ${GROUP_NAME}
+</select>
+<insert id="insertData" parameterType="map" keyProperty="pk_id" useGeneratedKeys="true">
+    insert into ${TABLE_NAME}
+    <foreach collection="TABLE_FIELDS" index="index" item="TABLE_FIELD" open="(" separator="," close=")">
+        ${TABLE_FIELD["FIELD_CODE"]}
+    </foreach>
+     values
+    <foreach collection="TABLE_FIELDS" index="index" item="TABLE_FIELD" open="(" separator="," close=")">
+        '${TABLE_FIELD["FIELD_VALUE"]}'
+    </foreach>
+</insert>
+<!-- 
+            统一使用insertData,拦截器会处理key生成问题
+<insert id="insertData_ORACLE" parameterType="map">
+    <selectKey keyProperty="pk_id" resultType="int" order="BEFORE">
+        SELECT ${TABLE_NAME}_pkseq.NEXTVAL AS pk_id FROM DUAL
+    </selectKey>
+    insert into ${TABLE_NAME}
+    <foreach collection="TABLE_FIELDS" index="index" item="TABLE_FIELD" open="(" separator="," close=")">
+        ${TABLE_FIELD["FIELD_CODE"]}
+    </foreach>
+     values
+    <foreach collection="TABLE_FIELDS" index="index" item="TABLE_FIELD" open="(" separator="," close=")">
+        #{TABLE_FIELD[FIELD_VALUE]}  这个写法3.2以后版本居然不能正常使用了 
+    </foreach>
+</insert>
+ -->
+<update id="updateData" parameterType="map">
+    update ${TABLE_NAME}
+    <set>
+	    <foreach collection="TABLE_FIELDS" index="index" item="TABLE_FIELD" open="" separator="," close="">
+	        ${TABLE_FIELD["FIELD_CODE"]}='${TABLE_FIELD["FIELD_VALUE"]}'
+	    </foreach>
+	</set>    
+    <where>
+        <choose>
+            <when test="WHERE_STR !=null">${WHERE_STR}</when>
+            <when test="WHERE_CONDITIONS !=null">
+                <foreach collection="WHERE_CONDITIONS" index="index" item="WHERE_CONDITION" open="" separator="" close="">
+                    WHERE_CONDITION["WHERE_JOIN"] ${WHERE_CONDITION["WHERE_FIELD"]}${WHERE_CONDITION["WHERE_OPR"]}${WHERE_CONDITION["WHERE_VALUE"]}
+                </foreach>
+            </when>
+        </choose>
+    </where>
+</update>
+
+<delete id="deleteData" parameterType="map">
+    delete from ${TABLE_NAME}
+    <where>
+        <choose>
+            <when test="WHERE_STR !=null">${WHERE_STR}</when>
+            <when test="WHERE_CONDITIONS !=null">
+                <foreach collection="WHERE_CONDITIONS" index="index" item="WHERE_CONDITION" open="" separator="" close="">
+                    WHERE_CONDITION["WHERE_JOIN"] ${WHERE_CONDITION["WHERE_FIELD"]}${WHERE_CONDITION["WHERE_OPR"]}${WHERE_CONDITION["WHERE_VALUE"]}
+                </foreach>
+            </when>
+        </choose>
+    </where>
+</delete>
+
+<!-- 数据库定义(DML)语句相关 -->
+<select id="showTable" parameterType="map" resultType="string">
+<choose>
+    <when test="DB_TYPE=='MYSQL'">
+        show tables like '${tbl_name}'
+    </when>
+    <when test="DB_TYPE=='ORACLE'">
+        select table_name 
+        from user_tables
+        where table_name ='${tbl_name}'
+    </when>
+    <when test="DB_TYPE=='MSSQLSERVER'">
+        select name
+        from  sysobjects
+        where  id = object_id('$tbl_name')
+         and   type = 'U'
+    </when>
+</choose>
+</select>
+<insert id="createTable" parameterType="map">
+    create table ${TABLE_NAME}
+    <foreach collection="TABLE_FIELDS" index="index" item="TABLE_FIELD" open="(" separator="," close=")">
+        <!-- #{field[name]}  $field["name"]} 在提取属性时有是否加双引号是有区别的   -->
+        ${TABLE_FIELD["FIELD_CODE"]} ${TABLE_FIELD["FIELD_DATATYPE"]} ${TABLE_FIELD["FIELD_ATTR"]}
+    </foreach>
+    ;
+    <choose>
+        <when test="DB_TYPE=='ORACLE'">
+            create sequence ${TABLE_NAME}_pkseq;
+        </when>
+    </choose>
+</insert>
+
+<delete id="dropTable" parameterType="map">
+	<choose>
+	    <when test="DB_TYPE=='MYSQL'">
+	        drop table if exists ${tbl_name}
+	    </when>
+	    <when test="DB_TYPE=='ORACLE'">
+	        drop table ${tbl_name};
+	        drop sequence ${TABLE_NAME}_pkseq;
+	    </when>
+	    <when test="DB_TYPE=='MSSQLSERVER'">
+	        if exists (select 1
+	                  from  sysobjects
+	                 where  id = object_id('${tbl_name}')
+	                  and   type = 'U')
+	            drop table ${tbl_name}    
+	    </when>
+	</choose>
+</delete>
+
+<select id="testSelect" parameterType="map" resultType="map">
+         select * from code  where cid =#{cid}
+</select>
+
+</mapper>

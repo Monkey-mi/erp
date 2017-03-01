@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.SysmjbMapper">
+
+
+<select id="getsysmjbList" parameterType="map" resultType="erp.erp.PayApply.model.Sysmjb">
+	  SELECT sysmjb.mjbh,   
+         sysmjb.mjms as fkfs,   
+         sysmjb.mjxl,   
+         convert(numeric(10),sysmjb.mjxl) as xh,   
+         sysmjb.mjbz  
+    FROM sysmjb 
+  where mjbh='0501' and mjxl != '0'
+</select>
+</mapper>

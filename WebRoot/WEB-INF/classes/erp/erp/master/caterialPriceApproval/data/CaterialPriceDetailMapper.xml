@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.caterialPriceApproval.data.CaterialPriceDetailMapper">
+
+
+<select id="getCaterialPriceDetailList" parameterType="map" resultType="erp.erp.master.caterialPriceApproval.model.CaterialPriceDetail">
+	select
+		dbo.clspjg_jgb.jlbh,
+		dbo.clspjg_jgb.jlxh,
+		dbo.clspjg_jgb.spjg1,
+		dbo.clspjg_jgb.spjg2,
+		dbo.clspjg_jgb.spjg3,
+		dbo.clspjg_jgb.spjg4,
+		dbo.clspjg_jgb.spjg5
+	from
+		dbo.clspjg_jgb
+	<where>
+		<if test="jlbh!=null">
+			dbo.clspjg_jgb.jlbh=#{jlbh}
+		</if>
+	</where>
+</select>
+<insert id="addCaterialPriceDetail" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceDetail" keyProperty="jlbh,jlxh" useGeneratedKeys="true">
+	insert into dbo.clspjg_jgb
+	(
+		jlbh,
+		jlxh,
+		spjg1,
+		spjg2,
+		spjg3,
+		spjg4,
+		spjg5
+	)
+	values
+	(
+		#{jlbh},
+		#{jlxh},
+		#{spjg1},
+		#{spjg2},
+		#{spjg3},
+		#{spjg4},
+		#{spjg5}
+	)
+</insert>
+<update id="updateCaterialPriceDetail" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceDetail">
+	update dbo.clspjg_jgb
+		set
+			jlbh = #{jlbh},
+			jlxh = #{jlxh},
+			spjg1 = #{spjg1},
+			spjg2 = #{spjg2},
+			spjg3 = #{spjg3},
+			spjg4 = #{spjg4},
+			spjg5 = #{spjg5}
+		where jlbh = #{jlbh} and jlxh =#{jlxh}
+</update>
+<delete id="deleteCaterialPriceDetail" parameterType="erp.erp.master.caterialPriceApproval.model.CaterialPriceDetail">
+	delete from dbo.clspjg_jgb
+	where jlbh = #{jlbh} and jlxh =#{jlxh}
+</delete>
+</mapper>

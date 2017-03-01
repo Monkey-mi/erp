@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.arrivalRegister.data.PlanImpMapper" >
+	<select id="getPlanImpList" parameterType="map" resultType="erp.erp.arrivalRegister.model.PlanImp" >
+		  SELECT scjhb.jhbh, 
+			scjhb.jhlb,
+         jhmxb.jhxh,
+         ltrim(rtrim(jhmxb.jhbh))+'-'+ltrim(rtrim(jhmxb.jhxh)) as jhh,
+         jhmxb.cpbh,
+         jhmxb.jldw,
+         jhmxb.jhsl,
+         clbmb.clhh,
+         clbmb.clmc, 
+         clbmb.clth,
+         clbmb.fzzbj,
+			clbmb.txgz,
+			xqsqmxb.wkjq,
+         jhlbb.hsbm,
+         isnull(jhmxb.rksl,0) + isnull(jhmxb.bcps,0) as yrsl,
+         case when isnull(jhmxb.jhsl,0) - isnull(jhmxb.rksl,0) - isnull(jhmxb.bcps,0)>0 then isnull(jhmxb.jhsl,0) - isnull(jhmxb.rksl,0) - isnull(jhmxb.bcps,0) else 0 end as wrsl,
+			jhmxb.jhbz,
+			case when jhmxb.zjbh>0 and jhmxb.zjxh>0 then a.cpbh else null end as zcpbh,
+			clbmb.zjbj,
+         clbmb.plmth,
+	 		clbmb.plmtx
+    FROM scjhb with (nolock) 
+left outer join jhmxb with (nolock) on scjhb.jhbh=jhmxb.jhbh
+left outer join xqsqmxb with (nolock) on xqsqmxb.sqbh=jhmxb.sqbh and xqsqmxb.sqxh=jhmxb.sqxh
+left outer join jhlbb with (nolock) on jhlbb.lbbh=scjhb.jhlb
+left outer join cpbmb with (nolock)on cpbmb.cpbh=jhmxb.cpbh 
+left outer join clbmb with (nolock)on cpbmb.bcpbh=clbmb.clhh
+left outer join jhmxb a  with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh
+where scjhb.gdbj=0 and jhmxb.qfbj=1 and cpbmb.bcpbj=1 and jhmxb.zzbj=0 
+<if test="hsbm!=null">
+	and left(jhlbb.hsbm,len(#{hsbm}))=#{hsbm}
+</if>
+<if test="search!=null and search!=''">
+	and (clbmb.clmc like '%${search}%')
+</if>
+<if test="s1!=null and s1!=''">
+	and ${s1}
+</if>
+and isnull(jhmxb.jhsl,0) - isnull(jhmxb.rksl,0) - isnull(jhmxb.bcps,0)>0
+	</select>
+</mapper>

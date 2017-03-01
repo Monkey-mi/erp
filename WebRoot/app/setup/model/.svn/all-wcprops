@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model
+END
+RoleHelp.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/RoleHelp.js
+END
+OrgRelVersUpdated.js
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/OrgRelVersUpdated.js
+END
+Ddlstcol.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/Ddlstcol.js
+END
+SerialRule.js
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/SerialRule.js
+END
+OrgTreeNodeWithUnit.js
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/OrgTreeNodeWithUnit.js
+END
+Code.js
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/Code.js
+END
+HttpService.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/HttpService.js
+END
+Module.js
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/Module.js
+END
+ModuleTree.js
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/ModuleTree.js
+END
+CodeType.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/CodeType.js
+END
+ExtDataSource.js
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/ExtDataSource.js
+END
+DeptTreeNode.js
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/DeptTreeNode.js
+END
+OrgTreeNode.js
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/OrgTreeNode.js
+END
+SerialRuleDetail.js
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/SerialRuleDetail.js
+END
+ModuleTreeChk.js
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/ModuleTreeChk.js
+END
+Function.js
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/setup/model/Function.js
+END

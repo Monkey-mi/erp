@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.CkmcMapper">
+
+
+<select id="getCkmcList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Ckmc">
+	   select ckqx_yl.ckbh,ckmcb_yl.ckmc,ckqx_yl.czy_gh as czyh
+	   from  ckqx_yl,ckmcb_yl     
+	   where ckqx_yl.ckbh = ckmcb_yl.ckbh and ckmcb_yl.tybj = 0
+	   and ckqx_yl.czy_gh = #{czyh}   
+       <if test="ckbh !=null and ckbh != ''">
+        and ckqx_yl.ckbh = #{ckbh}
+       </if>
+       <if test="search != null and search !=''">
+        and (ckmcb_yl.ckbh like '%${search}%' or ckmcb_yl.ckmc like '%${search}%')
+        </if>		
+</select>
+<select id="getCkmc" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Ckmc">
+	   select ckmcb_yl.ckbh,ckmcb_yl.ckmc from ckmcb_yl where 1=1		
+	    <if test="ckbh !=null and ckbh != ''">
+        and ckmcb_yl.ckbh = #{ckbh}
+       </if>
+       <if test="search != null and search !=''">
+        and (ckmcb_yl.ckbh like '%${search}%' or ckmcb_yl.ckmc like '%${search}%')
+        </if>		
+</select>
+</mapper>

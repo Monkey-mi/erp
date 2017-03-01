@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.common.main.data.DailyReportMapper">
+	<select id="getDailyList" parameterType="map" resultType="DailyReport">
+	 	SELECT [pk_id]
+		      ,[line_code]
+		      ,[plan_id]
+		      ,[plan_no]
+		      ,[dept_name]
+		      ,[mission_no]
+		      ,[mission_code]
+		      ,[production_dt]
+		      ,[production_no]
+		      ,[customer_no]
+		      ,[customer_name]
+		      ,[product_id]
+		      ,[product_name]
+		      ,[drawing_no]
+		      ,[production_qty]
+		      ,[price]
+		      ,[process_no]
+		      ,[process_time]
+		      ,[create_dt]
+		      ,[creator]
+		      ,text as line_name
+  		FROM [t_userdefine_production_info]
+  		left outer join [t_rpt_current_tree] on line_code=nodeId and type='line_code'
+	 <where>
+	 	1=1
+	 	<if test="start_dt!=null">
+	 		and production_dt >= #{start_dt}
+	 	</if>
+	 	<if test="end_dt!=null">
+	 		and production_dt &lt;= #{end_dt}
+	 	</if>
+	 	<if test="plan_id!=null and plan_id!=''">
+	 		and  plan_id=#{plan_id}
+	 	</if>
+		<if test="line_code!=null and line_code!=''">
+			and line_code=#{line_code}
+		</if>
+	</where>
+	</select>
+	<insert id="addDailyReport" parameterType="DailyReport">
+		insert into t_userdefine_production_info(
+			   [line_code]
+		      ,[plan_id]
+		      ,[plan_no]
+		      ,[dept_name]
+		      ,[mission_no]
+		      ,[mission_code]
+		      ,[production_dt]
+		      ,[production_no]
+		      ,[customer_no]
+		      ,[customer_name]
+		      ,[product_id]
+		      ,[product_name]
+		      ,[drawing_no]
+		      ,[production_qty]
+		      ,[price]
+		      ,[process_no]
+		      ,[process_time]
+		      ,[create_dt]
+		      ,[creator]	
+		)values(
+			#{line_code},
+			#{plan_id}
+		   ,#{plan_no}
+		   ,#{dept_name}
+		   ,#{mission_no}
+		   ,#{mission_code}
+		   ,#{production_dt}
+		      ,#{production_no}
+		      ,#{customer_no}
+		      ,#{customer_name}
+		      ,#{product_id}
+		      ,#{product_name}
+		      ,#{drawing_no}
+		      ,#{production_qty}
+		      ,#{price}
+		      ,#{process_no}
+		      ,#{process_time}
+		      ,#{create_dt}
+		      ,#{creator}	
+		)
+	</insert>
+	<delete id="deleteDailyReport" parameterType="DailyReport">
+		delete from t_userdefine_production_info
+		where pk_id=#{pk_id}
+	</delete>
+	
+	<select id="getUserReportList" parameterType="map" resultType="UserDefineReport">
+	 	SELECT [rpt_id]
+		      ,[report_name]
+		      ,[report_year]
+		      ,[month]
+		      ,[report_content]
+		      ,[remark]
+		      ,[list_id]
+		      ,[create_dt]
+		      ,[cycle_data]
+  		FROM [t_rpt_userdefine]
+  	<where>
+  		<if test="list_id!=null">
+  			list_id=#{list_id}
+  		</if>
+  		<if test="report_year!=null">
+  			and report_year=#{report_year}
+  		</if>
+  		<if test="month!=null">
+  			and month=#{month}
+  		</if>
+  		<if test="cycle_data!=null">
+  			and cycle_data=#{cycle_data}
+  		</if>
+	</where>
+	</select>
+	
+	<insert id="addUserReport" parameterType="UserDefineReport">
+		insert into t_rpt_userdefine
+		(
+			[report_name]
+		    ,[report_year]
+		    ,[month]
+		    ,[report_content]
+		    ,[remark]
+		    ,[list_id]
+		    ,[create_dt]
+		    ,[cycle_data]
+		)
+		values(
+		  #{report_name},
+		  #{report_year},
+		  #{month},
+		  #{report_content},
+		  #{remark},
+		  #{list_id},
+		  #{create_dt},
+		  #{cycle_data}
+		)
+	</insert>
+	
+	
+	<update id="updateUserReport"  parameterType="UserDefineReport">
+		update t_rpt_userdefine
+		  set [report_name]=#{report_name}
+		      ,[report_year]=#{report_year}
+		      ,month=#{month}
+		      ,[report_content]=#{report_content}
+		      ,[remark]=#{remark}
+		      ,[list_id]=#{list_id}
+		      ,[cycle_data]=#{cycle_data}
+		where rpt_id=#{rpt_id}
+	</update>
+	
+	<delete id="deleteUserReport"  parameterType="UserDefineReport">
+		delete from t_rpt_userdefine
+			where rpt_id=#{rpt_id}
+	</delete>
+</mapper>

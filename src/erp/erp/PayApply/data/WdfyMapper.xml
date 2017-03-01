@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.WdfyMapper">
+
+
+<select id="getWdfyList" parameterType="map" resultType="erp.erp.PayApply.model.Wdfy">
+	 SELECT  cgfyb.fydh,
+			cgfyb.fyxh,
+			cgfyb.fyrq,
+			cgfyb.yhbh,
+			cgfyb.cglb,
+			csxxb.csmc as csbh,
+			cgfyb.fyzy,   
+			cgfyb.fysl,
+			cgfyb.fydj,
+			cgfyb.fyje,
+			cgfyb.zzsl,
+			cgfyb.csdj,
+			cgfyb.csje,
+			cgfyb.fyje - cgfyb.csje as zzse,
+			cgfyb.jhbh,
+			cgfyb.jhxh,
+         case when cgfyb.jhbh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,
+			cgfyb.htbh,
+			cgfyb.htxh,
+         case when cgfyb.htbh&lt;&gt;0 then
+            ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) end as hth,
+			cgfyb.bzsm,
+			cgfyb.hxbj,
+			cgfyb.fplb,
+			cgfyb.fphm,
+			cgfyb.sdbj,
+			cgfyb.sdrm,
+			cgfyb.sdsj,
+			cgfyb.czym,
+			cgfyb.czsj,
+			cgfyb.tzdh
+			
+    FROM cgfyb  
+left outer join csxxb with (nolock) on csxxb.csbh=cgfyb.csbh
+   where cgfyb.csbh=(select csbh  from fksqspb where sqbh = #{sqbh}) and ((cgfyb.hxrq>#{jzrq} and hxbj=1) or hxbj=0)
+       and fyrq&lt;=#{jzrq}
+</select>
+<insert id="addWdfy" parameterType="erp.erp.PayApply.model.Wdfy" keyProperty="" useGeneratedKeys="true">
+	insert into Wdfy
+	(
+		fydh,
+		fyxh,
+		fyrq,
+		yhbh,
+		cglb,
+		csbh,
+		fyzy,
+		fysl,
+		fydj,
+		fyje,
+		zzsl,
+		csdj,
+		csje,
+		zzse,
+		jhbh,
+		jhxh,
+		jhh,
+		htbh,
+		htxh,
+		hth,
+		bzsm,
+		hxbj,
+		fplb,
+		fphm,
+		sdbj,
+		sdrm,
+		sdsj,
+		czym,
+		czsj,
+		tzdh,
+		csmc
+	)
+	values
+	(
+		#{fydh},
+		#{fyxh},
+		#{fyrq},
+		#{yhbh},
+		#{cglb},
+		#{csbh},
+		#{fyzy},
+		#{fysl},
+		#{fydj},
+		#{fyje},
+		#{zzsl},
+		#{csdj},
+		#{csje},
+		#{zzse},
+		#{jhbh},
+		#{jhxh},
+		#{jhh},
+		#{htbh},
+		#{htxh},
+		#{hth},
+		#{bzsm},
+		#{hxbj},
+		#{fplb},
+		#{fphm},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{czym},
+		#{czsj},
+		#{tzdh},
+		#{csmc}
+	)
+</insert>
+<update id="updateWdfy" parameterType="erp.erp.PayApply.model.Wdfy">
+	update Wdfy
+		set
+			fydh = #{fydh},
+			fyxh = #{fyxh},
+			fyrq = #{fyrq},
+			yhbh = #{yhbh},
+			cglb = #{cglb},
+			csbh = #{csbh},
+			fyzy = #{fyzy},
+			fysl = #{fysl},
+			fydj = #{fydj},
+			fyje = #{fyje},
+			zzsl = #{zzsl},
+			csdj = #{csdj},
+			csje = #{csje},
+			zzse = #{zzse},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			jhh = #{jhh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			hth = #{hth},
+			bzsm = #{bzsm},
+			hxbj = #{hxbj},
+			fplb = #{fplb},
+			fphm = #{fphm},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			czym = #{czym},
+			czsj = #{czsj},
+			tzdh = #{tzdh},
+			csmc = #{csmc}
+		where  = #{}
+</update>
+<delete id="deleteWdfy" parameterType="erp.erp.PayApply.model.Wdfy">
+	delete from Wdfy
+	where  = #{}
+</delete>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.vendorfiles.data.VendorAttachmentMapper">
+
+
+<select id="getVendorAttachmentList" parameterType="map" resultType="erp.erp.master.vendorfiles.model.VendorAttachment">
+  SELECT csxx_fjb.csbh,   
+         csxx_fjb.wjbh,   
+         csxx_fjb.wjmc,   
+         csxx_fjb.wjlj,   
+         csxx_fjb.wjrq,   
+         csxx_fjb.cjrm  
+    FROM csxx_fjb   
+ where csbh=#{csbh}
+</select>
+<insert id="addVendorAttachment" parameterType="erp.erp.master.vendorfiles.model.VendorAttachment" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.csxx_fjb
+	(
+		csbh,
+		wjbh,
+		wjmc,
+		wjlj,
+		wjrq,
+		cjrm
+	)
+	values
+	(
+		#{csbh},
+		#{wjbh},
+		#{wjmc},
+		#{wjlj},
+		#{wjrq},
+		#{cjrm}
+	)
+</insert>
+<update id="updateVendorAttachment" parameterType="erp.erp.master.vendorfiles.model.VendorAttachment">
+	update dbo.csxx_fjb
+		set
+			csbh = #{csbh},
+			wjbh = #{wjbh},
+			wjmc = #{wjmc},
+			wjlj = #{wjlj},
+			wjrq = #{wjrq},
+			cjrm = #{cjrm}
+		where  = #{}
+</update>
+<delete id="deleteVendorAttachment" parameterType="erp.erp.master.vendorfiles.model.VendorAttachment">
+	delete from dbo.csxx_fjb
+	where  = #{}
+</delete>
+</mapper>

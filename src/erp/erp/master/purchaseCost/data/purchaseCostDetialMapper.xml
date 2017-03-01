@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.purchaseCostDetialMapper">
+
+
+<select id="getpurchaseCostDetialList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.purchaseCostDetial">
+  SELECT cgfy_fjb.fydh,   
+         cgfy_fjb.wjbh,   
+         cgfy_fjb.wjmc,   
+         cgfy_fjb.wjlj,   
+         cgfy_fjb.wjrq,    
+         cgfy_fjb.cjrm  
+    FROM cgfy_fjb   
+ where fydh= #{fydh}
+</select>
+<insert id="addpurchaseCostDetial" parameterType="erp.erp.master.purchaseCost.model.purchaseCostDetial" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.cgfy_fjb
+	(
+		fydh,
+		wjbh,
+		wjmc,
+		wjlj,
+		wjrq,
+		cjrm
+	)
+	values
+	(
+		#{fydh},
+		#{wjbh},
+		#{wjmc},
+		#{wjlj},
+		#{wjrq},
+		#{cjrm}
+	)
+</insert>
+<update id="updatepurchaseCostDetial" parameterType="erp.erp.master.purchaseCost.model.purchaseCostDetial">
+	update dbo.cgfy_fjb
+		set
+			fydh = #{fydh},
+			wjbh = #{wjbh},
+			wjmc = #{wjmc},
+			wjlj = #{wjlj},
+			wjrq = #{wjrq},
+			cjrm = #{cjrm}
+		where  = #{}
+</update>
+<delete id="deletepurchaseCostDetial" parameterType="erp.erp.master.purchaseCost.model.purchaseCostDetial">
+	delete from dbo.cgfy_fjb
+	where  wjbh= #{wjbh} and fydh = #{fydh}
+</delete>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.ManufacturerMapper">
+
+
+<select id="getManufacturerList" parameterType="map" resultType="erp.erp.PayApply.model.Manufacturer">
+	 SELECT CSXXB.CSBH,   
+         CSXXB.YHBH,   
+         CSXXB.CSJC,   
+         CSXXB.CSMC,   
+         CSXXB.CSDH,    
+         CSXXB.CSDZ,   
+         CSXXB.CSCZ,      
+         CSXXB.CSSH,      
+         CSXXB.CSZH,      
+         CSXXB.CSYB,            
+         CSXXB.LXRM,      
+         CSXXB.BZSM,   
+         CSXXB.FKTS,      
+         CSXXB.CSLB,   
+         CSXXB.GDBJ,
+			CSXXB.wbbh,
+			wbhlb.wbhl,
+			wbmcb.wbdh,
+			CSXXB.cslx,
+			CSXXB.cglb,
+			ztdwb.ztmc,
+			CSXXB.zgrd, 
+			CSXXB.tdrd,
+			CSXXB.ztdw,
+			CSXXB.fktj,
+			CSXXB.khyh
+    FROM CSXXB  
+    left  outer join ztdwb on CSXXB.ztdw = ztdwb.ztbh
+     left  outer join wbhlb on CSXXB.wbbh = wbhlb.wbbh
+       left  outer join wbmcb on CSXXB.wbbh = wbmcb.wbbh
+     where
+  	1=1
+  	<if test="year!=null">
+   and	 wbhlb.nf = #{year}
+   </if>
+   <if test="month!=null">
+   and	 wbhlb.yf = #{month}
+   </if>
+  <if test="csmc!=null">
+   and	 CSXXB.CSBH like '%${csmc}%' or CSXXB.CSMC like '%${csmc}%'
+   </if>
+   <if test="search !=null and search != ''">
+   and	 CSXXB.CSBH like '%${search}%' or CSXXB.CSMC like '%${search}%'
+   </if>
+</select>
+<select id="getWbhl" parameterType="map" resultType="String">
+ select wbhl from wbhlb where wbbh=#{wbbh} and nf=#{year} and yf=#{month}
+</select>
+</mapper>

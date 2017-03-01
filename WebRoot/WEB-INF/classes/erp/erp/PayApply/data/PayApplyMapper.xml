@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.PayApplyMapper">
+
+
+<select id="getPayApplyList" parameterType="map" resultType="erp.erp.PayApply.model.PayApply">
+      SELECT * FROM (
+	  SELECT fksqspb.sqbh,   
+         	fksqspb.sqrq,   
+         	fksqspb.sqbm,   
+         	fksqspb.sqrm,   
+         	fksqspb.sqje,   
+         	fksqspb.yotu,   
+         	fksqspb.fkfs,   
+         	fksqspb.fkqx,   
+         	fksqspb.bzsm,    
+         	fksqspb.spbj,   
+         	fksqspb.sprm,   
+         	fksqspb.spyj,    
+         	fksqspb.spsj,    
+         	fksqspb.yfbj,   
+         	fksqspb.qrrm,   
+         	fksqspb.qrsj,   
+         	fksqspb.gdbj,   
+			fksqspb.yhbh,  
+			fksqspb.csbh,
+			fksqspb.cszh,
+			fksqspb.khyh, 
+			fksqspb.fphm, 
+			fksqspb.htbh,
+			fksqspb.tjrm, 
+			fksqspb.tjbj,
+			fksqspb.tjsj,
+			dbo.f_paymentapply_tjdx(fksqspb.tjdx) as tjdx, 
+			fksqspb.yfje,
+			fksqspb.wbyf,
+			fksqspb.yfkbj,
+			fksqspb.ztdw,
+			case when LEN(fksqspb.ztdw)>= 6 then fksqspb.ztdw else (select ztmc from ztdwb where ztdwb.ztbh = fksqspb.ztdw) end as ztmc,
+			fksqspb.hsbm,
+			fksqspb.fhbj,
+			fksqspb.fhrm,
+			fksqspb.fhsj,
+			wbmcb.wbdh,
+			fksqspb.wbbh,
+			fksqspb.wbhl,
+			fksqspb.wbje,
+			fksqspb.hdbj,
+			csxxb.csmc,
+			fksqspb.skdw,
+			fksqspb.cgym,
+			cgyb.cgyxm,
+			a.csmc as skdwmc,
+			isnull(z.yfje,0) as yfkje,
+			isnull(z.yfwb,0) as yfkwb,
+			fksqspb.wcbj,
+			fksqspb.dybj,
+			fksqspb.dyrm,
+			fksqspb.dysj,
+			fksqspb.yzbj,
+			fksqspb.yzrm, 
+			fksqspb.yzsj,
+			fksqspb.zzbj,
+			fksqspb.fhyj,
+			fksqspb.sjly,
+			csxxb.fktj,
+			csxxb.fkts,
+			csxxb.kpdj,
+			y.zfrq,
+			isnull(zyhd.zyze,0) as zyze,
+			fksqspb.ywlx,
+			czybmlbb.lbbh as sqbmbh
+FROM fksqspb 
+left outer join csxxb with (nolock) on csxxb.csbh=fksqspb.csbh 
+left outer join cgyb with (nolock) on cgyb.cgybh=fksqspb.cgym 
+left outer join wbmcb with (nolock) on fksqspb.wbbh=wbmcb.wbbh 
+left outer join czyb with (nolock) on fksqspb.tjdx=czyb.czy_gh
+left outer join csxxb a with (nolock) on a.csbh=fksqspb.skdw
+left outer join ztdwb  with (nolock) on fksqspb.ztdw=ztdwb.ztbh
+left outer join czybmlbb with (nolock) on czybmlbb.lbmc=fksqspb.sqbm
+left outer join (select x.sqbh,zjzfb.zfrq from (select sqbh,max(zdsx) as zdsx  from zjzffksqmxb group by zjzffksqmxb.sqbh) x left outer join zjzfb with (nolock) on zjzfb.zdsx=x.zdsx) y on y.sqbh=fksqspb.sqbh
+left outer join (select sqbh,SUM(yfje) as yfje,SUM(yfwb) as yfwb  from (
+select gyfphtyfb.sqbh,isnull(sum(gyfphtyfb.yfje),0) as yfje,isnull(sum(gyfphtyfb.yfwb),0) as yfwb from gyfphtyfb with (nolock)
+left outer join gyfpb with (nolock) on gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm
+inner join (select sqbh  from fksqspb where fksqspb.gdbj=0) b  on b.sqbh=gyfphtyfb.sqbh
+where exists (select * from rkdb_yl with (nolock) where rkdb_yl.fplb=gyfpb.fplb and rkdb_yl.fphm=gyfpb.fphm and exists (select * from fksqsphtb with (nolock) where fksqsphtb.htbh=rkdb_yl.htbh and fksqsphtb.sqbh=b.sqbh))
+group by gyfphtyfb.sqbh
+union all
+ SELECT gyfpfyyfb.sqbh,isnull(sum(gyfpfyyfb.yfje),0) as yfje,isnull(sum(gyfpfyyfb.yfwb),0) as yfwb from gyfpfyyfb with (nolock)
+  left outer join gyfpb with (nolock) on gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm
+  inner join (select sqbh  from fksqspb where fksqspb.gdbj=0) c  on c.sqbh=gyfpfyyfb.sqbh
+  where exists (select * from cgfyb with (nolock) where cgfyb.fplb=gyfpb.fplb and cgfyb.fphm=gyfpb.fphm and exists (select * from fksqspfyb with (nolock) where fksqspfyb.fydh=cgfyb.fydh and fksqspfyb.fyxh=cgfyb.fyxh and fksqspfyb.sqbh=c.sqbh))
+  group by gyfpfyyfb.sqbh
+  ) a group by sqbh) z  on z.sqbh=fksqspb.sqbh
+left outer join 
+(
+	select csbh,sum(zyje) as zyze
+	from zyhd_csb 
+	left outer join zyhdb on zyhd_csb.hdbh=zyhdb.hdbh
+	where zyhdb.spbj=1 and zyhd_csb.hkbj=0
+	group by csbh
+) zyhd on zyhd.csbh=fksqspb.csbh
+where
+1=1
+<if test="sqrm!=null">
+	and fksqspb.sqrm = #{sqrm}
+</if>
+<if test="gdbj!=null">
+		and fksqspb.gdbj=#{gdbj}
+</if>
+<if test="condition!=null and condition!=''">
+		and ${condition}
+</if>
+) sf <where> 1=1
+ <if test="filterSearch!=null">
+	${filterSearch}
+ </if>
+</where>
+<if test="sort==null">
+		order by sqbh desc 
+</if>
+<if test="sort!=null">
+	order by ${sort}
+</if>
+</select>
+<select id="getPayApplyOne" parameterType="map"
+		resultType="String">
+		select isnull(max ( sqbh ),0) from fksqspb where 1 =1
+</select>
+<insert id="addPayApply" parameterType="erp.erp.PayApply.model.PayApply"
+		keyProperty="sqbh" useGeneratedKeys="true">
+    <selectKey keyProperty="sqbh" resultType="int" order="BEFORE">
+		select isnull(max(sqbh),0)+1  from fksqspb	
+	</selectKey>
+		insert into fksqspb
+		(
+		sqbh,
+		sjly,
+		sqrq,
+		sqje,
+		wbbh,
+		wbhl,
+		wbje,
+		yotu,
+		csbh,
+		skdw,
+		hdbj,
+		khyh,
+		cszh,
+		yfkbj,
+		fkfs,
+		fkqx,
+		<!-- fktj, -->
+		<!-- fkts, -->
+		bzsm,
+		sqrm,
+		sqbm,
+		tjdx,
+		ztdw,
+		ywlx
+		)
+		values
+		(
+		#{sqbh},
+		#{sjly},
+		#{sqrq},
+		#{sqje},
+		#{wbbh},
+		#{wbhl},
+		#{wbje},
+		#{yotu},
+		#{csbh},
+		#{skdw},
+		#{hdbj},
+		#{khyh},
+		#{cszh},
+		#{yfkbj},
+		#{fkfs},
+		#{fkqx},
+		<!-- #{fktj}, -->
+		<!-- #{fkts}, -->
+		#{bzsm},
+		#{sqrm},
+		#{sqbm},
+		#{tjdx},
+		#{ztdw},
+		#{ywlx}	
+		)
+	</insert>
+	<update id="updatePayApply" parameterType="erp.erp.PayApply.model.PayApply">
+		update fksqspb
+		set
+		sqbh = #{sqbh},
+		sjly = #{sjly},
+		sqrq = #{sqrq},
+		sqje = #{sqje},
+		wbbh = #{wbbh},
+		wbhl = #{wbhl},
+		wbje = #{wbje},
+		yotu = #{yotu},
+		csbh = #{csbh},
+		skdw = #{skdw},
+		hdbj = #{hdbj},
+		khyh = #{khyh},
+		cszh = #{cszh},
+		yfkbj = #{yfkbj},
+		fkfs = #{fkfs},
+		fkqx = #{fkqx},
+		bzsm = #{bzsm},
+		sqrm = #{sqrm},
+		sqbm = #{sqbm},
+		tjdx = #{tjdx},
+		ztdw = #{ztdw},
+		ywlx = #{ywlx}
+		<!-- wbbh = #{wbbh} -->
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspb.sqbh = #{sqbh}
+		</if>
+	</update>
+	<update id="submitPayApply" parameterType="map">
+		update fksqspb
+		set
+		tjbj = #{tjbj},
+		tjrm = #{tjrm},
+		tjsj = #{tjsj},
+		tjdx = #{tjdx}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspb.sqbh = #{sqbh}
+		</if>
+	</update>
+	<update id="archivePayApply" parameterType="map">
+		update fksqspb
+		set
+		gdbj = #{gdbj}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspb.sqbh = #{sqbh}
+		</if>
+	</update>
+	<update id="reviewPayApply" parameterType="map">
+		update fksqspb
+		set
+		fhbj = #{fhbj},
+		fhrm = #{fhrm},
+		fhsj = #{fhsj}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspb.sqbh = #{sqbh}
+		</if>
+	</update>
+	<update id="approvalPayApply" parameterType="map">
+		update fksqspb
+		set
+		spbj = #{spbj},
+		sprm = #{sprm},
+		spsj = #{spsj}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspb.sqbh = #{sqbh}
+		</if>
+	</update>
+	<update id="transferredPayApply" parameterType="map">
+		update fksqspb
+		set
+		yzbj = #{yzbj},
+		yzrm = #{yzrm},
+		yzsj = #{yzsj}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspb.sqbh = #{sqbh}
+		</if>
+	</update>
+	<update id="stopPayApply" parameterType="map">
+		update fksqspb
+		set
+		zzbj = #{zzbj}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspb.sqbh = #{sqbh}
+		</if>
+	</update>
+	<delete id="deletePayApply" parameterType="erp.erp.PayApply.model.PayApply">
+		delete from fksqspb
+		where  sqbh = #{sqbh}
+	</delete>
+	<delete id="deleteSupplyInvoice" parameterType="erp.erp.PayApply.model.PayApply">
+		delete from fksqspmxb
+		where  sqbh = #{sqbh}
+	</delete>
+	<delete id="deletePurchaseAgreement" parameterType="erp.erp.PayApply.model.PayApply">
+		delete from fksqsphtb
+		where  sqbh = #{sqbh}
+	</delete>
+	<delete id="deleteSaleFee" parameterType="erp.erp.PayApply.model.PayApply">
+		delete from fksqspxsfyb
+		where  sqbh = #{sqbh}
+	</delete>
+	<delete id="deletePurchaseFee" parameterType="erp.erp.PayApply.model.PayApply">
+		delete from fksqspfyb
+		where  sqbh = #{sqbh}
+	</delete>
+	<delete id="deleteFeeReimbursement" parameterType="erp.erp.PayApply.model.PayApply">
+		delete from fksqspfybxb
+		where  sqbh = #{sqbh}
+	</delete>
+	<delete id="deleteEmployeeSalary" parameterType="erp.erp.PayApply.model.PayApply">
+		delete from fksqspgzb
+		where  sqbh = #{sqbh}
+	</delete>
+	<select id="getAllEmployeeDept" parameterType="map" resultType="erp.erp.PayApply.model.EmployeeDept">
+	SELECT rlzy_zzjgb.bmbh,   
+         rlzy_zzjgb.bmmc,
+			rlzy_zzjgb.bmjc
+    FROM rlzy_zzjgb 
+	
+	where 1=1 
+	<if test="node!=null and node==0">
+		and  rlzy_zzjgb.bmjc&gt;=1
+	</if>
+	<if test="node!=null and node!=0">
+	 	 and left(rlzy_zzjgb.bmbh,len(#{node}))=#{node} and rlzy_zzjgb.bmbh!=#{node}
+	</if>
+</select>
+<insert id="insertOa" parameterType="map">
+	insert into t_inf_payment_hdr 
+		(id,requestid,ftriggerflag,stateflag,opt_id,opt_date,sqbh,sqlb,fykbj,fklx,sqrq,sqje,wbmc,wbhl,wbje,yotu,csmc,skdwmc,ztdw,fktj,fkts,khyh,cszh,fkfs,fkqx,bzsm,sqrm,sqbm,tjdx_id,splx,ywlx)
+		select #{id},0,0,-1,#{gzgw_tj},getdate(),sqbh,
+		'',case when yfkbj =  0 then '否' else '是' end,'',sqrq,sqje,w.wbmc,wbhl,wbje,yotu,
+		c.csmc,s.csmc,z.ztmc,c.fktj,c.fkts,i.khyh,i.cszh,i.fkfs,i.fkqx,i.bzsm,i.sqrm,i.sqbm,#{gzgw_tjdx},#{gzgw_tj_xm} + '-->'+#{gzgw_tjdx_xm},ywlx
+		from fksqspb i
+		left outer join wbmcb w on w.wbbh=i.wbbh
+		left outer join csxxb c on c.csbh=i.csbh and c.gdbj=0  
+		left outer join csxxb s on s.csbh=i.skdw and s.gdbj=0
+		left outer join ztdwb z on z.ztbh=i.ztdw and z.gdbj=0
+		where sqbh = #{sqbh};
+</insert>
+<select id="getId" 
+		resultType="Integer">
+		select (isnull(max(id),0)+1)  from t_inf_payment_hdr;
+</select>
+<select id="getTjdx" parameterType="map"
+		resultType="map">
+		select gzgw,czy_xm  from czyb where czy_gh = #{tjdx};
+</select>
+<select id="getLLcount" parameterType="map" resultType="Integer">
+select count(*)  from 
+	(
+	 SELECT rkdb_yl.ckbh,     
+         rkdb_yl.rkdh,     
+         rkdb_yl.rkxh,     
+         rkdb_yl.rkrq,     
+         rkdb_yl.csbh,     
+         rkdb_yl.clhh,      
+         rkdb_yl.cltx1,     
+         rkdb_yl.cltx2,        
+         rkdb_yl.cltx3,      
+         rkdb_yl.jldw,     
+         htmxb.cgsl,     
+         dhdjb_yl.dhsl,     
+         rkdb_yl.rksl,      
+         rkdb_yl.rkdj,  
+         rkdb_yl.rkje,  
+   		rkdb_yl.wbbh,       
+         rkdb_yl.wbhl,     
+         rkdb_yl.wbdj,     
+         rkdb_yl.wbje,   
+         rklbb.rklb,  
+         case when rkdb_yl.HTBH &lt;&gt; 0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,     
+         rkdb_yl.hcdh,     
+         rkdb_yl.hcxh,     
+         rkdb_yl.czym,     
+         rkdb_yl.czsj,     
+         rkdb_yl.bzsm,  
+   clbmb.clmc,   
+   csxxb.yhbh,   
+   csxxb.cglb,  
+   csxxb.csmc,  
+   dhdjb_yl.dhrq,  
+   '入库单'  as sjly,  
+   rkdb_yl.fzdw,  
+   rkdb_yl.fzsl,  
+   rkdb_yl.shdh,  
+   rkdb_yl.shsj  
+    from rkdb_yl with (nolock)  
+  left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh  
+  left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh  
+  left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh  
+  left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh  
+  left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb  
+where exists (select fplb,fphm from fksqspmxb with (nolock) where fksqspmxb.fplb=rkdb_yl.fplb and fksqspmxb.fphm=rkdb_yl.fphm and fksqspmxb.sqbh=#{sqbh})   
+union all  
+ SELECT rkdb_yl.ckbh,     
+         rkdb_yl.rkdh,     
+         rkdb_yl.rkxh,     
+         rkdb_yl.rkrq,     
+         rkdb_yl.csbh,     
+         rkdb_yl.clhh,      
+         rkdb_yl.cltx1,     
+         rkdb_yl.cltx2,        
+         rkdb_yl.cltx3,     
+         rkdb_yl.jldw,     
+         htmxb.cgsl,     
+         dhdjb_yl.dhsl,     
+         rkdb_yl.rksl,      
+         rkdb_yl.rkdj,  
+         rkdb_yl.rkje,  
+   		rkdb_yl.wbbh,       
+         rkdb_yl.wbhl,     
+         rkdb_yl.wbdj,     
+         rkdb_yl.wbje,   
+         rklbb.rklb,  
+         case when rkdb_yl.HTBH &lt;&gt; 0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,     
+         rkdb_yl.hcdh,     
+         rkdb_yl.hcxh,     
+         rkdb_yl.czym,     
+         rkdb_yl.czsj,     
+         rkdb_yl.bzsm,  
+   clbmb.clmc,   
+   csxxb.yhbh,   
+   csxxb.cglb,  
+   csxxb.csmc,  
+   dhdjb_yl.dhrq,  
+   '入库单'  as sjly,  
+   rkdb_yl.fzdw,  
+   rkdb_yl.fzsl,  
+   rkdb_yl.shdh,  
+   rkdb_yl.shsj  
+    from rkdb_yl with (nolock)  
+  left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh  
+  left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh  
+  left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh  
+  left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh  
+  left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb  
+where rkdb_yl.htbh in (select htbh from fksqsphtb with (nolock) where fksqsphtb.sqbh=#{sqbh})  
+union all  
+ SELECT  '' as ckbh,  
+   cgfyb.fydh,  
+   cgfyb.fyxh,  
+   cgfyb.fyrq,  
+   cgfyb.csbh,  
+   '' as clhh,  
+   '' as cltx1,  
+   '' as cltx2,  
+   '' as cltx3,  
+   '' as jldw,  
+   0 as cgsl,  
+   0 as dhsl,  
+   cgfyb.fysl,  
+   cgfyb.fydj,  
+   cgfyb.fyje,  
+   '' as wbbh,  
+   0 as wbhl,  
+   0 as wbdj,  
+   0 as wbje,  
+   '' as lbmc,  
+         case when cgfyb.jhbh &lt;&gt;0 then ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,  
+   0 as hcdh,  
+   0 as hcxh,  
+   cgfyb.czym,  
+   cgfyb.czsj,  
+   cgfyb.bzsm,  
+   cgfyb.fyzy,  
+   cgfyb.yhbh,  
+   cgfyb.cglb,  
+   csxxb.csmc,  
+   null as dhrq,  
+   '费用单' as djly,   
+   '',  
+   0,  
+   '',  
+   null  
+    FROM cgfyb with (nolock)    
+	left outer join csxxb with (nolock) on csxxb.csbh=cgfyb.csbh  
+    where  (ltrim(rtrim(cgfyb.fplb))+'-'+ltrim(rtrim(cgfyb.fphm)) in (select ltrim(rtrim(fksqspmxb.fplb))+'-'+ltrim(rtrim(fksqspmxb.fphm)) from fksqspmxb with (nolock)  where fksqspmxb.sqbh=#{sqbh})) 
+	 or (cgfyb.htbh in (select htbh from fksqsphtb with (nolock) where fksqsphtb.sqbh=#{sqbh}))) as a  
+ left outer join ckmcb_yl b on a.ckbh=b.ckbh  
+ left outer join wbmcb w on a.wbbh=w.wbbh
+ </select>
+ 
+ <insert id="insertPaymentInfo" parameterType="map">
+ insert into  t_inf_payment_info(  
+		 mainid  
+			,sjly  
+			,htbh  
+			,shdh  
+			,shrq  
+			,ckmc  
+			,rkdh  
+			,rkxh  
+			,rkrq  
+			,clhh  
+			,clmc  
+			,ggcc  
+			,jldw  
+			,cgsl  
+			,dhsl  
+			,rksl  
+			,rkdj  
+			,rkje  
+			,wbmc  
+			,wbhl  
+			,wbdj  
+			,wbje  
+			,fzdw  
+			,fzsl  
+			,rklb  
+			,bzsm)  
+			select #{id},sjly,hth,shdh,shsj,ckmc,rkdh,rkxh,rkrq,clhh,clmc,cltx1,jldw,  
+	  cgsl,dhsl,rksl,rkdj,rkje,wbmc,wbhl,wbdj,wbje,fzdw,fzsl,rklb,bzsm  
+	  from (  
+	  SELECT 
+			rkdb_yl.ckbh,     
+			rkdb_yl.rkdh,     
+			rkdb_yl.rkxh,     
+			rkdb_yl.rkrq,     
+			rkdb_yl.csbh,     
+			rkdb_yl.clhh,      
+			rkdb_yl.cltx1,     
+			rkdb_yl.cltx2,        
+			rkdb_yl.cltx3,      
+			rkdb_yl.jldw,     
+			htmxb.cgsl,     
+			dhdjb_yl.dhsl,     
+			rkdb_yl.rksl,      
+			rkdb_yl.rkdj,  
+			rkdb_yl.rkje,  
+			rkdb_yl.wbbh,       
+			rkdb_yl.wbhl,     
+			rkdb_yl.wbdj,     
+			rkdb_yl.wbje,   
+			rklbb.rklb,  
+			case when rkdb_yl.HTBH&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,     
+			rkdb_yl.hcdh,     
+			rkdb_yl.hcxh,     
+			rkdb_yl.czym,     
+			rkdb_yl.czsj,     
+			rkdb_yl.bzsm,  
+		clbmb.clmc,   
+		csxxb.yhbh,   
+		csxxb.cglb,  
+		csxxb.csmc,  
+		dhdjb_yl.dhrq,  
+		'入库单'  as sjly,  
+		rkdb_yl.fzdw,  
+		rkdb_yl.fzsl,  
+		rkdb_yl.shdh,  
+		rkdb_yl.shsj  
+		 from rkdb_yl with (nolock)  
+	  left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh  
+	  left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh  
+	  left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh  
+	  left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh  
+	  left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb  
+	where exists (select fplb,fphm from fksqspmxb with (nolock) where fksqspmxb.fplb=rkdb_yl.fplb and fksqspmxb.fphm=rkdb_yl.fphm and fksqspmxb.sqbh=#{sqbh})   
+	union all  
+	 SELECT 
+			rkdb_yl.ckbh,     
+			rkdb_yl.rkdh,     
+			rkdb_yl.rkxh,     
+			rkdb_yl.rkrq,     
+			rkdb_yl.csbh,     
+			rkdb_yl.clhh,      
+			rkdb_yl.cltx1,     
+			rkdb_yl.cltx2,        
+			rkdb_yl.cltx3,     
+			rkdb_yl.jldw,     
+			htmxb.cgsl,     
+			dhdjb_yl.dhsl,     
+			rkdb_yl.rksl,      
+			rkdb_yl.rkdj,  
+			rkdb_yl.rkje,  
+			rkdb_yl.wbbh,       
+			rkdb_yl.wbhl,     
+			rkdb_yl.wbdj,     
+			rkdb_yl.wbje,   
+			rklbb.rklb,  
+			case when rkdb_yl.HTBH&lt;&gt;0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,     
+			rkdb_yl.hcdh,     
+			rkdb_yl.hcxh,     
+			rkdb_yl.czym,     
+			rkdb_yl.czsj,     
+			rkdb_yl.bzsm,  
+			clbmb.clmc,   
+			csxxb.yhbh,   
+			csxxb.cglb,  
+			csxxb.csmc,  
+			dhdjb_yl.dhrq,  
+			'入库单'  as sjly,  
+			rkdb_yl.fzdw,  
+			rkdb_yl.fzsl,  
+			rkdb_yl.shdh,  
+			rkdb_yl.shsj  
+	from rkdb_yl with (nolock)  
+	left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh  
+	left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh  
+	left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh  
+	left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh  
+	left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb  
+	where rkdb_yl.htbh in (select htbh from fksqsphtb with (nolock) where fksqsphtb.sqbh=#{sqbh})  
+	union all  
+	 SELECT  '' as ckbh,  
+		cgfyb.fydh,  
+		cgfyb.fyxh,  
+		cgfyb.fyrq,  
+		cgfyb.csbh,  
+		'' as clhh,  
+		'' as cltx1,  
+		'' as cltx2,  
+		'' as cltx3,  
+		'' as jldw,  
+		0 as cgsl,  
+		0 as dhsl,  
+		cgfyb.fysl,  
+		cgfyb.fydj,  
+		cgfyb.fyje,  
+		'' as wbbh,  
+		0 as wbhl,  
+		0 as wbdj,  
+		0 as wbje,  
+		'' as lbmc,  
+		case when cgfyb.jhbh&lt;&gt;0 then ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,  
+		0 as hcdh,  
+		0 as hcxh,  
+		cgfyb.czym,  
+		cgfyb.czsj,  
+		cgfyb.bzsm,  
+		cgfyb.fyzy,  
+		cgfyb.yhbh,  
+		cgfyb.cglb,  
+		csxxb.csmc,  
+		null as dhrq,  
+		'费用单' as djly,  
+		'',  
+		0,  
+		'',  
+		null  
+		FROM cgfyb with (nolock)    
+		left outer join csxxb with (nolock) on csxxb.csbh=cgfyb.csbh  
+		where  (ltrim(rtrim(cgfyb.fplb))+'-'+ltrim(rtrim(cgfyb.fphm)) in (select ltrim(rtrim(fksqspmxb.fplb))+'-'+ltrim(rtrim(fksqspmxb.fphm)) from fksqspmxb with (nolock)  
+		where fksqspmxb.sqbh=#{sqbh})) or (cgfyb.htbh in (select htbh from fksqsphtb with (nolock) where fksqsphtb.sqbh=#{sqbh}))) as a  
+		left outer join ckmcb_yl b on a.ckbh=b.ckbh  
+		left outer join wbmcb w on a.wbbh=w.wbbh
+ </insert>
+ <insert id="insertPaymentFee" parameterType="map">
+ insert into t_inf_payment_fee  
+	(mainid  
+		,fydh  
+		,fyrq  
+		,csmc  
+		,fyzy  
+		,cgsl  
+		,fydj  
+		,hsje  
+		,zzsl  
+		,csdj  
+		,csje  
+		,zzse  
+		,wbmc  
+		,wbje  
+		,jhh  
+		,scdh  
+		,htbh  
+		,bzsm)  
+		select #{id},fydh,fyrq,csmc,fyzy,fysl,fydj,fyje,zzsl,csdj,csje,zzse,wbmc,  
+		wbje,jhh,hsh,hth,bzsm  
+		from 
+		( 
+		SELECT  cgfyb.fydh,  
+		cgfyb.fyxh,  
+		cgfyb.fyrq,  
+		cgfyb.yhbh,  
+		cgfyb.cglb,  
+		cgfyb.csbh,    
+		cgfyb.fyzy,  
+		cgfyb.fysl,  
+		cgfyb.fydj,  
+		cgfyb.fyje,  
+		cgfyb.zzsl,  
+		cgfyb.csdj,  
+		cgfyb.csje,  
+		cgfyb.fyje -  cgfyb.csje as zzse,  
+		cgfyb.jhbh,  
+		cgfyb.jhxh,  
+		case when cgfyb.jhbh&lt;&gt;0 then  
+			ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,  
+		cgfyb.htbh,  
+		cgfyb.htxh,  
+		case when cgfyb.htbh&lt;&gt;0 then  
+			ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) end as hth,  
+		cgfyb.bzsm,  
+		cgfyb.hxbj,  
+		cgfyb.fplb,  
+		cgfyb.fphm,  
+		cgfyb.sdbj,  
+		cgfyb.sdrm,  
+		cgfyb.sdsj,  
+		cgfyb.czym,  
+		cgfyb.czsj,  
+		cgfyb.tzdh,  
+		csxxb.csmc,  
+		cgfyb.hsdh,  
+		cgfyb.hsxh,  
+		cgfyb.hsbm,  
+		cgfyb.spbj,  
+		cgfyb.sprm,  
+		cgfyb.spyj,  
+		cgfyb.spsj,  
+		cgfyb.tjbj,  
+		cgfyb.tjrm,  
+		cgfyb.tjsj,  
+		cgfyb.tjdx,  
+		cgfyb.fylx,  
+		cgfyb.cybh,   
+		 case when cgfyb.hsdh&lt;&gt;0 then  
+					ltrim(rtrim(str(cgfyb.hsdh)))+'-'+ltrim(rtrim(str(cgfyb.hsxh))) end as hsh,  
+		cgfyb.fpdx,  
+		cgfyb.fyxz,  
+		cgfyb.wbbh,  
+		cgfyb.wbhl,   
+		cgfyb.wbje,  
+		cgfyb.wxdh,  
+		cgfyb.wxxh,  
+		case when cgfyb.wxdh&lt;&gt;0 then  
+			ltrim(rtrim(str(cgfyb.wxdh)))+'-'+ltrim(rtrim(str(cgfyb.wxxh))) end as wxh  
+		FROM cgfyb  
+		left outer join fksqspfyb with (nolock)  on cgfyb.fydh=fksqspfyb.fydh and  cgfyb.fyxh=fksqspfyb.fyxh   
+		left outer join csxxb with (nolock)  on csxxb.csbh=cgfyb.csbh  
+		where fksqspfyb.sqbh=#{sqbh} 
+	  
+	union all  
+	  
+	 SELECT  
+		cgfyb.fydh,  
+		cgfyb.fyxh,  
+		cgfyb.fyrq,  
+		cgfyb.yhbh,  
+		cgfyb.cglb,  
+		cgfyb.csbh,    
+		cgfyb.fyzy,  
+		cgfyb.fysl,  
+		cgfyb.fydj,  
+		cgfyb.fyje,  
+		cgfyb.zzsl,  
+		cgfyb.csdj,  
+		cgfyb.csje,  
+		cgfyb.fyje -  cgfyb.csje as zzse,  
+		cgfyb.jhbh,  
+		cgfyb.jhxh,  
+		case when cgfyb.jhbh&lt;&gt;0 then  
+			ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,  
+		cgfyb.htbh,  
+		cgfyb.htxh,  
+		case when cgfyb.htbh&lt;&gt;0 then  
+				ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) end as hth,  
+		cgfyb.bzsm,  
+		cgfyb.hxbj,  
+		cgfyb.fplb,  
+		cgfyb.fphm,  
+		cgfyb.sdbj,  
+		cgfyb.sdrm,  
+		cgfyb.sdsj,  
+		cgfyb.czym,  
+		cgfyb.czsj,  
+		cgfyb.tzdh,  
+		csxxb.csmc,  
+		cgfyb.hsdh,  
+		cgfyb.hsxh,  
+		cgfyb.hsbm,  
+		cgfyb.spbj,  
+		cgfyb.sprm,  
+		cgfyb.spyj,  
+		cgfyb.spsj,  
+		cgfyb.tjbj,  
+		cgfyb.tjrm,  
+		cgfyb.tjsj,  
+		cgfyb.tjdx,  
+		cgfyb.fylx,  
+		cgfyb.cybh,   
+		case when cgfyb.hsdh&lt;&gt;0 then  
+			  ltrim(rtrim(str(cgfyb.hsdh)))+'-'+ltrim(rtrim(str(cgfyb.hsxh))) end as hsh,  
+		cgfyb.fpdx,  
+		cgfyb.fyxz,  
+		cgfyb.wbbh,  
+		cgfyb.wbhl,   
+		cgfyb.wbje,  
+		cgfyb.wxdh,  
+		cgfyb.wxxh,  
+		case when cgfyb.wxdh&lt;&gt;0 then  
+			  ltrim(rtrim(str(cgfyb.wxdh)))+'-'+ltrim(rtrim(str(cgfyb.wxxh))) end as wxh  
+	 FROM cgfyb  
+	 left outer join fksqspfyb with (nolock)  on cgfyb.fydh=fksqspfyb.fydh and  cgfyb.fyxh=fksqspfyb.fyxh   
+	 left outer join csxxb with (nolock)  on csxxb.csbh=cgfyb.csbh  
+	 inner join fksqspmxb with (nolock) on fksqspmxb.fplb=cgfyb.fplb and fksqspmxb.fphm=cgfyb.fphm and fksqspmxb.sqbh=#{sqbh} ) as a  
+	 left outer join wbmcb w on a.wbbh=w.wbbh
+ </insert>
+</mapper>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseDetail.data.PurchaseContractMapper">
+
+
+<select id="getPurchaseContractList" parameterType="map" resultType="erp.erp.master.purchaseDetail.model.PurchaseContract">
+	SELECT   cghtb.htbh,   
+         cghtb.cglb,   
+         cghtb.csbh,    
+         cghtb.cgrq,   
+         cghtb.cgbz,   
+         cghtb.httk,   
+         cghtb.cgyq,   
+         cghtb.cgym,         
+         cghtb.czym,   
+         cghtb.czsj,
+         cghtb.qfbj,
+         cghtb.cslxr, 
+		 cghtb.ztdw,
+		 cghtb.http,
+		 cghtb.rksl,
+		 cghtb.cglx,
+		 cghtb.htgz,
+		 cghtb.qzgz,
+		 cghtb.jhrq,
+		 cghtb.ggzs
+    FROM cghtb 
+    <where>
+    	<if test="htbh!=null">
+    		cghtb.htbh = #{htbh}
+    	</if>
+    </where> 
+</select>
+<insert id="addPurchaseContract" parameterType="erp.erp.purchaseOrder.model.ProcurementOrder" keyProperty="htbh" useGeneratedKeys="true">
+	<selectKey keyProperty="htbh" resultType="int" order="BEFORE">
+		select isnull(max(htbh),0)+1  from cghtb	
+	</selectKey>
+	insert into cghtb
+	(
+		htbh,
+		cglb,
+		csbh,
+		cgrq,
+		cgbz,
+		httk,
+		cgyq,
+		cgym,
+		czym,
+		czsj,
+		qfbj,
+		cslxr,
+		ztdw,
+		http,
+		rksl,
+		cglx,
+		htgz,
+		qzgz,
+		jhrq,
+		ggzs,
+		xkxj,
+		cglx_fk,
+		zlbj,
+		zlcsbh
+	)
+	values
+	(
+		#{htbh},
+		#{cglb},
+		#{csbh},
+		#{cgrq},
+		#{cgbz},
+		#{httk},
+		#{cgyq},
+		#{cgym},
+		#{czym},
+		#{czsj},
+		#{qfbj},
+		#{cslxr},
+		#{ztdw},
+		#{http},
+		#{rksl},
+		#{cglx},
+		#{htgz},
+		#{qzgz},
+		#{jhrq},
+		#{ggzs},
+		#{xkxj},
+		#{cglx_fk},
+		#{zlbj},
+		#{zlcsbh}
+	)
+</insert>
+<update id="updateContractDetailXzbj" parameterType="map">
+	update htmxb set xzbj=0 where htbh = #{htbh};
+</update>
+<update id="updateContractDetailScbj" parameterType="map">
+	update htmxb set scbj = 
+(case when (select COUNT(1) from htmxb a with (nolock) left outer join cghtb b with (nolock) on b.htbh=a.htbh 
+			where b.csbh=#{csbh} and a.htbh&lt;&gt;#{htbh} and a.clhh=htmxb.clhh and a.cgrq&lt;htmxb.cgrq) &gt; 0 then 0 else 1 end)
+where htbh=#{htbh}; 
+</update>
+<update id="updatePurchaseContract" parameterType="erp.erp.purchaseOrder.model.ProcurementOrder">
+	update cghtb
+		set
+			htbh = #{htbh},
+			cglb = #{cglb},
+			csbh = #{csbh},
+			cgrq = #{cgrq},
+			cgbz = #{cgbz},
+			httk = #{httk},
+			cgyq = #{cgyq},
+			cgym = #{cgym},
+			czym = #{czym},
+			czsj = #{czsj},
+			qfbj = #{qfbj},
+			cslxr = #{cslxr},
+			ztdw = #{ztdw},
+			http = #{http},
+			rksl = #{rksl},
+			cglx = #{cglx},
+			htgz = #{htgz},
+			qzgz = #{qzgz},
+			jhrq = #{jhrq},
+			ggzs = #{ggzs},
+			xkxj = #{xkxj},
+			cglx_fk = #{cglx_fk},
+			zlbj = #{zlbj},
+			zlcsbh = #{zlcsbh}
+		where htbh = #{htbh}
+</update>
+<delete id="deletePurchaseContract" parameterType="erp.erp.master.purchaseDetail.model.PurchaseContract">
+	delete from cghtb
+	where htbh = #{htbh}
+</delete>
+</mapper>

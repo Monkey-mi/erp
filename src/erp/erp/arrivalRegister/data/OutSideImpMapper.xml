@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.arrivalRegister.data.OutSideImpMapper">
+	<select id="getOutSideImpList" parameterType="map" resultType="erp.erp.arrivalRegister.model.OutSideImp">
+	 SELECT wxtzdmxb.wxdh,   
+         wxtzdmxb.wxxh,
+         case when wxtzdmxb.wxdh&lt;&gt;0 then ltrim(rtrim(str(wxtzdmxb.wxdh)))+'-'+ltrim(rtrim(str(wxtzdmxb.wxxh))) else null end as wxh,  
+         wxtzdmxb.jhbh,   
+         wxtzdmxb.jhxh,   
+         case when wxtzdmxb.jhbh&lt;&gt;0 then ltrim(rtrim(str(wxtzdmxb.jhbh)))+'-'+ltrim(rtrim(str(wxtzdmxb.jhxh))) else null end as jhh,  
+         wxtzdmxb.cpbh,   
+         wxtzdmxb.jldw,   
+         wxtzdmxb.tcsl,   
+         wxtzdmxb.jsbl,   
+         wxtzdmxb.jgsl,    
+         wxtzdmxb.jgdj,   
+         wxtzdmxb.dhrk,
+         isnull(wxtzdmxb.jgsl,0) - isnull(wxtzdmxb.dhrk,0) as wdsl,
+         wxtzdb.wxrq,   
+         wxtzdb.wcrq,   
+         wxtzdb.csbh,
+         wxtzdb.bzsm,
+         wxtzdmxb.clhh,
+			wxtzdmxb.cltx1,
+			wxtzdmxb.cltx2,
+			wxtzdmxb.cltx3,
+			wxtzdmxb.fzdw,
+			wxtzdmxb.fzsl,
+         clbmb.clmc,
+         clbmb.zjbj,
+         jhlbb.hsbm,
+			cpbmb.cpmc,
+			b.cpmc as zcpmc,
+			jhmx_ddxxb.khxh,
+			jhmxb.jhbz,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+	 		csxxb.csmc
+    FROM wxtzdmxb with (nolock) 
+  left outer join clbmb  with (nolock) on clbmb.clhh=wxtzdmxb.clhh
+  left outer join wxtzdb with (nolock) on wxtzdmxb.wxdh=wxtzdb.wxdh
+  left outer join csxxb with (nolock) on csxxb.csbh = wxtzdb.csbh  
+  left outer join jhlbb with (nolock) on jhlbb.lbbh=wxtzdb.jhlb
+  left outer join jhmxb with (nolock) on jhmxb.jhbh=wxtzdmxb.jhbh and jhmxb.jhxh=wxtzdmxb.jhxh
+  left outer join cpbmb with (nolock) on cpbmb.cpbh=jhmxb.cpbh
+  left outer join jhmxb a with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh
+  left outer join cpbmb b with (nolock) on cpbmb.cpbh=a.cpbh
+  left outer join jhmx_ddxxb with (nolock) on jhmx_ddxxb.jhbh=jhmxb.jhbh and jhmx_ddxxb.jhxh=jhmxb.jhxh
+  where wxtzdb.gdbj=0 and wxtzdb.qfbj=1 and wxtzdmxb.zzbj=0 and clbmb.zjbj=1 
+  <if test="hsbm!=null and hsbm!=''">
+	and left(jhlbb.hsbm,len(#{hsbm}))=#{hsbm}
+  </if>
+  <if test="search!=null and search!=''">
+	and (clbmb.clmc like '%${search}%')
+  </if>
+  <if test="jhh!=null and jhh!=''">
+	and ${s1}
+  </if>
+  <if test="wxh!=null and wxh!=''">
+	and ${s2}
+  </if>
+  and isnull(wxtzdmxb.jgsl,0) - isnull(wxtzdmxb.dhrk,0)>0
+	</select>
+</mapper>

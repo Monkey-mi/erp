@@ -1,0 +1,30 @@
+Ext.define('erp.view.purchaseOrder.model.PurchaseChange', {
+	extend: 'Ext.data.Model',
+	idProperty: 'htbh',
+	fields: [
+		{ name: 'ggdh', type: 'int' },
+		{ name: 'ggxh', type: 'int' },
+		{ name: 'htbh', type: 'int' },
+		{ name: 'htxh', type: 'int' },
+		{ name: 'clhh' },
+		{ name: 'cltx1' },
+		{ name: 'cltx2' },
+		{ name: 'cltx3' },
+		{ name: 'jldw' },
+		{ name: 'gqsl', type: 'float' },
+		{ name: 'ggsl', type: 'float' },
+		{ name: 'ghsl', type: 'float' },
+		{ name: 'djxz' },
+		{ name: 'gqdj', type: 'float' },
+		{ name: 'ggdj', type: 'float' },
+		{ name: 'ghdj', type: 'float' },
+		{ name: 'gqje', type: 'float' },
+		{ name: 'ggje', type: 'float' },
+		{ name: 'ghje', type: 'float' },
+		{ name: 'ggyy' },
+		{ name: 'clmc' },
+		{ name: 'hth' },
+		{ name: 'plmth' },
+		{ name: 'plmtx' }
+	]
+});

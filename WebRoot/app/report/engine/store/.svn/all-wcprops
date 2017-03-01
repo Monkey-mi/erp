@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/report/engine/store
+END
+ReportScripts.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/report/engine/store/ReportScripts.js
+END
+CustomReportResult.js
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/report/engine/store/CustomReportResult.js
+END
+CommonCustomQuery.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/report/engine/store/CommonCustomQuery.js
+END
+CustomQueryCdtion.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/report/engine/store/CustomQueryCdtion.js
+END
+UserDefineReports.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/report/engine/store/UserDefineReports.js
+END
+SysPrintModel.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/report/engine/store/SysPrintModel.js
+END

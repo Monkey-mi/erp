@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.ProTaskMapper">
+
+
+<select id="getProTaskList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.ProTask">
+  SELECT scrwdmxb.rwdh,   
+         scrwdmxb.rwxh, 
+         case when scrwdmxb.rwdh&lt;&gt;0 then ltrim(rtrim(scrwdmxb.rwdh))+'-'+ltrim(rtrim(scrwdmxb.rwxh)) else null end as wxh,  
+         scrwdmxb.jhbh,   
+         scrwdmxb.jhxh,
+         case when scrwdmxb.jhbh&lt;&gt;0 then ltrim(rtrim(scrwdmxb.jhbh))+'-'+ltrim(rtrim(scrwdmxb.jhxh)) else null end as jhh,
+         scrwdmxb.cpbh,   
+         scrwdmxb.jldw,   
+         scrwdmxb.fcsl, 
+  			isnull(scrwdmxb.fysl,0) as yrsl, 
+         scrwdmxb.fcsl - isnull(scrwdmxb.fysl,0) as drsl,
+         scrwdmxb.jsbl,   
+			scrwdmxb.zybh,
+			scrwdmxb.zyxh,
+			case when scrwdmxb.zybh&lt;&gt;0 then ltrim(rtrim(scrwdmxb.zybh))+'-'+ltrim(rtrim(scrwdmxb.zyxh)) else null end as zyh,
+         round(scrwdmxb.fcsl*scrwdmxb.jsdj,2) as jgje,
+			case when jhmxb.zjbh&lt;&gt;0 then ltrim(rtrim(jhmxb.zjbh))+'-'+ltrim(rtrim(jhmxb.zjxh)) else null end as zjh,
+			#cpth.cpth as cpth,
+			#cpth.ybbh as ybbh,
+         scrwdmxb.bzgj,
+			scrwdmxb.jsdj,
+         scrwdmxb.gjxs,
+			scrwdmxb.bzsm,
+         scrwdb.csbh,
+			case when jhmxb.zjbh&lt;&gt;0 then ltrim(rtrim(jhmxb.zjbh))+'-'+ltrim(rtrim(jhmxb.zjxh)) else null end as zjh,
+			jhmxb.zcpbh as zcpbh,
+			jhmxb.jhbz,
+		   #khmc.khmc as khmc,
+	
+			csxxb.csmc,
+         cpbmb.cpmc,
+			scrwdb.gxbh,
+			lsx_gxmcb.kjbj,
+			b.cpmc,
+			scrwdb.jhlb,
+			0 as xzbj,
+			cpbmb.plmth,
+			cpbmb.plmtx
+    FROM scrwdmxb with (nolock) 
+	 
+	 left outer join scrwdb with (nolock) on scrwdmxb.rwdh=scrwdb.rwdh 
+    left outer join csxxb with (nolock) on csxxb.csbh=scrwdb.csbh 
+    left outer join cpbmb with (nolock) on cpbmb.cpbh=scrwdmxb.cpbh
+    left outer join jhmxb with (nolock) on jhmxb.jhbh=scrwdmxb.jhbh and jhmxb.jhxh=scrwdmxb.jhxh 
+	 left outer join cpbmb b with (nolock) on b.cpbh=jhmxb.zcpbh
+	 left outer join jhlbb with (nolock) on jhlbb.lbbh=scrwdb.jhlb
+	 left outer join lsx_gxmcb with (nolock) on lsx_gxmcb.gxbh=scrwdb.gxbh
+	 left outer join #cpth with (nolock) on #cpth.rwdh=scrwdmxb.rwdh and #cpth.rwxh=scrwdmxb.rwxh
+	 left outer join #khmc with (nolock) on #khmc.rwdh=scrwdmxb.rwdh and #khmc.rwxh=scrwdmxb.rwxh
+    where  scrwdb.qfbj=1 and (scrwdmxb.fcsl - isnull(scrwdmxb.fysl,0))>0 and  scrwdb.gdbj=0 and scrwdb.scfs='外协' and (jhlbb.hsbm=:dw_hsbm or #{hsbm}='')
+	  and not exists (select * from #cgfygl_rwdr where #cgfygl_rwdr.rwdh=scrwdmxb.rwdh  and   #cgfygl_rwdr.rwxh = scrwdmxb.rwxh )
+</select>
+
+</mapper>

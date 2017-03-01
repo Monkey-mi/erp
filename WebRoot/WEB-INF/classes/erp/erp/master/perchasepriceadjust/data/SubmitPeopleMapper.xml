@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.perchasepriceadjust.data.SubmitPeopleMapper">
+
+
+<select id="getSubmitPeopleList" parameterType="map" resultType="erp.erp.master.perchasepriceadjust.model.SubmitPeople">
+	select
+		tjdxwhb.ssbm,
+		tjdxwhb.czy_gh,
+		tjdxwhb.czy_xm,
+		czyb.gzgw,
+		czybmlbb.lbmc
+	from
+		tjdxwhb
+	left outer join czyb on  czyb.czy_gh = tjdxwhb.czy_gh
+	left outer join czybmlbb on  czybmlbb.lbbh = tjdxwhb.ssbm
+	<where>
+		<if test="tjdx!=null">
+			and (tjdxwhb.czy_gh like '%${tjdx}%' or tjdxwhb.czy_xm like '%${tjdx}%')
+		</if>
+		<if test="ssbm!=null">
+			and left(tjdxwhb.ssbm,len(#{ssbm}))=#{ssbm}
+		</if>
+	</where>
+</select>
+<insert id="addSubmitPeople" parameterType="erp.erp.master.perchasepriceadjust.model.SubmitPeople" keyProperty="" useGeneratedKeys="true">
+	insert into tjdxwhb
+	(
+		ssbm,
+		czy_gh,
+		czy_xm,
+		gzgw
+	)
+	values
+	(
+		#{ssbm},
+		#{czy_gh},
+		#{czy_xm},
+		#{gzgw}
+	)
+</insert>
+<update id="updateSubmitPeople" parameterType="erp.erp.master.perchasepriceadjust.model.SubmitPeople">
+	update tjdxwhb
+		set
+			ssbm = #{ssbm},
+			czy_xm = #{czy_xm},
+			gzgw = #{gzgw}
+		where  czy_gh = #{czy_gh}
+</update>
+<delete id="deleteSubmitPeople" parameterType="erp.erp.master.perchasepriceadjust.model.SubmitPeople">
+	delete from tjdxwhb
+	where  czy_gh = #{czy_gh}
+</delete>
+
+<select id="getAllCzybmList" parameterType="map" resultType="erp.erp.master.perchasepriceadjust.model.Czybmlbb">
+	SELECT czybmlbb.lbbh,   
+         czybmlbb.lbmc,
+			czybmlbb.lbjc,
+			czybmlbb.mjbz
+    FROM czybmlbb
+	
+	where 1=1 
+	<if test="node!=null and node==0">
+		and  czybmlbb.lbjc&gt;=1
+	</if>
+	<if test="node!=null and node!=0">
+	 	 and left(czybmlbb.lbbh,len(#{node}))=#{node} and czybmlbb.lbbh!=#{node}
+	</if>
+</select>
+<select id="getLl_id" parameterType="map"  resultType="int">
+   select (isnull(max(id),0)+1) from t_inf_cgjgtzd_hdr
+</select>
+<select id="getLs_gzgw_tj" parameterType="map" resultType="String">
+   select gzgw from czyb where czy_gh = #{czygh}
+</select>
+<select id="getLsGzgwTjdx" parameterType="map" resultType="String">
+   select gzgw from czyb where czy_gh = #{czygh}
+</select>
+<!-- 根据sql获取对应值 -->
+<select id="getIntFromSql" parameterType="map">
+	${sql}
+</select>
+</mapper>

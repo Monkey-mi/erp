@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialDistributeAccount.data.MaterialAccountDetailMapper">
+
+
+<select id="getMaterialAccountDetailList" parameterType="map" resultType="erp.erp.materialDistributeAccount.model.MaterialAccountDetail">
+	select view_kchz.ckbh,
+	   ckmcb_yl.ckmc,
+       sum(view_kchz.kcsl) as kcsl,
+       sum(view_kchz.kcsl_fcp) as kcsl_fcp,
+       sum(view_kchz.kcsl) - sum(view_kchz.kcsl_fcp) as kykc,
+       sum(view_djdrdt_hz.djsl) as djsl,
+       sum(view_djdrdt_hz.drsl) as drsl,
+       sum(view_djdrdt_hz.dtsl) as dtsl
+from view_kchz 
+left outer join view_djdrdt_hz on view_djdrdt_hz.ckbh=view_kchz.ckbh and view_djdrdt_hz.clhh=view_kchz.clhh 
+and view_djdrdt_hz.cltx1=view_kchz.cltx1 and view_djdrdt_hz.cltx2=view_kchz.cltx2 and view_djdrdt_hz.cltx3=view_kchz.cltx3
+left outer join ckmcb_yl on ckmcb_yl.ckbh=view_kchz.ckbh
+where view_kchz.clhh=#{clhh} and view_kchz.cltx1=#{cltx1} and view_kchz.cltx2=#{cltx2} and view_kchz.cltx3=#{cltx3}
+group by  view_kchz.ckbh,ckmcb_yl.ckmc
+</select>
+<insert id="addMaterialAccountDetail" parameterType="erp.erp.materialDistributeAccount.model.MaterialAccountDetail" keyProperty="" useGeneratedKeys="true">
+	insert into view_kchz
+	(
+		ckbh,
+		kcsl,
+		kcsl_fcp,
+		kykc,
+		djsl,
+		drsl,
+		dtsl
+	)
+	values
+	(
+		#{ckbh},
+		#{kcsl},
+		#{kcsl_fcp},
+		#{kykc},
+		#{djsl},
+		#{drsl},
+		#{dtsl}
+	)
+</insert>
+<update id="updateMaterialAccountDetail" parameterType="erp.erp.materialDistributeAccount.model.MaterialAccountDetail">
+	update view_kchz
+		set
+			ckbh = #{ckbh},
+			kcsl = #{kcsl},
+			kcsl_fcp = #{kcsl_fcp},
+			kykc = #{kykc},
+			djsl = #{djsl},
+			drsl = #{drsl},
+			dtsl = #{dtsl}
+		where  = #{}
+</update>
+<delete id="deleteMaterialAccountDetail" parameterType="erp.erp.materialDistributeAccount.model.MaterialAccountDetail">
+	delete from view_kchz
+	where  = #{}
+</delete>
+</mapper>

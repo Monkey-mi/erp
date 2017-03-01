@@ -1,0 +1,35 @@
+Ext.define('erp.materialInspection.model.MaterialDetail', {
+	extend: 'Ext.data.Model',
+	idProperty: 'wtdh,wtxh,wtsqxh',//testStore.add(nrec)明细粘贴时保证能新增
+	fields: [
+		{ name: 'wtdh', type: 'float' },
+		{ name: 'wtxh', type: 'float' },
+		{ name: 'wtsqxh', type: 'float' },
+		{ name: 'csxm' },
+		{ name: 'csbz' },
+		{ name: 'bzsm' },
+		{ name: 'jyjg' },
+		{ name: 'wjmc' },
+		{ name: 'wjlj' },
+		{ name: 'cjrq', type: 'date', dateFormat: 'Y-m-d H:i:s' },
+		{ name: 'cjrm' },
+		{ name: 'csz' },
+		{ name: 'psbj', type: 'int' },
+		{ name: 'psjq', type: 'date', dateFormat: 'Y-m-d H:i:s' },
+		{ name: 'yqjq', type: 'date', dateFormat: 'Y-m-d H:i:s' },
+		{ name: 'psrm' },
+		{ name: 'pssj', type: 'date', dateFormat: 'Y-m-d H:i:s' },
+		{ name: 'clrm' },
+		{ name: 'jjcd' },
+		{ name: 'jyrm' },
+		{ name: 'txrm' },
+		{ name: 'csjg', type: 'float' },
+		{ name: 'jjd', type: 'int' },
+		{ name: 'jybj', type: 'int' },
+		{ name: 'cszq', type: 'int' },
+		{ name: 'cszj', type: 'float' },
+		{ name: 'fpsj', type: 'date', dateFormat: 'Y-m-d H:i:s' },
+		{ name: 'jysj', type: 'date', dateFormat: 'Y-m-d H:i:s' },
+		{ name: 'txsj', type: 'date', dateFormat: 'Y-m-d H:i:s' }
+	]
+});

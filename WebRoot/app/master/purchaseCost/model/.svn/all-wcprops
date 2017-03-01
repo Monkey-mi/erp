@@ -1,0 +1,143 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model
+END
+TransportCostImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/TransportCostImp.js
+END
+Payfs.js
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/Payfs.js
+END
+OutMaterial.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/OutMaterial.js
+END
+TimeQueryParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/TimeQueryParam.js
+END
+purchaseCostShare.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/purchaseCostShare.js
+END
+WarehouseCp.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/WarehouseCp.js
+END
+purchaseCostDetial.js
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/purchaseCostDetial.js
+END
+PurchaseCost.js
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/PurchaseCost.js
+END
+ProductEntrustImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/ProductEntrustImp.js
+END
+CallinImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/CallinImp.js
+END
+TaskImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/TaskImp.js
+END
+PayCategory.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/PayCategory.js
+END
+SendoutImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/SendoutImp.js
+END
+MainCost.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/MainCost.js
+END
+QueryParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/QueryParam.js
+END
+MaterialEntrustImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/MaterialEntrustImp.js
+END
+SendImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/SendImp.js
+END
+AbnormalImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/AbnormalImp.js
+END
+PatentImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/PatentImp.js
+END
+LoadingCostsImp.js
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/LoadingCostsImp.js
+END
+SaleType.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/SaleType.js
+END
+purchaseCostSum.js
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/purchaseCostSum.js
+END
+BenefitDept.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/erp/!svn/ver/2573/erpForOut62/WebRoot/app/master/purchaseCost/model/BenefitDept.js
+END

@@ -1,0 +1,33 @@
+Ext.define('erp.master.materialArchive.model.Plan', {
+	extend: 'Ext.data.Model',
+	idProperty: '',
+	fields: [
+	  {name : 'jhbh',xtype: 'float'},
+	  {name : 'jhxh',xtype: 'float'},
+	  {name : 'jhh'},
+	  {name : 'sxrq', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+	  {name : 'wcrq', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+	  {name : 'cpbh'},
+	  {name : 'cptx1'},
+	  {name : 'cptx2'},
+	  {name : 'cptx3'},
+	  {name : 'jldw'},
+	  {name : 'jhsl',type:'int'},
+	  {name : 'wcbj',type:'int'},
+	  {name : 'qfbj',type:'int'},
+	  {name : 'sdbj',type:'int'},
+	  {name : 'jhbz'},
+	  {name : 'cltx1'},
+	  {name : 'cpmc'},
+	  {name : 'khbh'},
+	  {name : 'jhlb'},
+	  {name : 'zcpbh'},
+	  {name : 'jhyl'},
+	  {name : 'czsj', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+	  {name : 'plmth'},
+	  {name : 'plmtx'},
+	  {name: 'khmc'},
+	  {name: 'zcpmc'},
+	  {name: 'jhlbmc'}
+	]
+});

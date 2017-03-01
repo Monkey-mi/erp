@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseOrder.data.OfpopinfoMapper">
+
+
+<select id="getOfpopinfoList" parameterType="map" resultType="erp.erp.purchaseOrder.model.Ofpopinfo">
+	select
+		ofpopinfo.loginid,
+		ofpopinfo.infotitle,
+		ofpopinfo.infosubject,
+		ofpopinfo.infourl,
+		ofpopinfo.sendtime
+	from
+		ofpopinfo
+</select>
+<insert id="addOfpopinfo" parameterType="erp.erp.purchaseOrder.model.Ofpopinfo">
+	insert into ofpopinfo
+	(
+		loginid,
+		infotitle,
+		infosubject,
+		infourl,
+		sendtime
+	)
+	values
+	(
+		#{loginid},
+		#{infotitle},
+		#{infosubject},
+		#{infourl},
+		#{sendtime}
+	)
+</insert>
+<update id="updateOfpopinfo" parameterType="erp.erp.purchaseOrder.model.Ofpopinfo">
+	update ofpopinfo
+		set
+			loginid = #{loginid},
+			infotitle = #{infotitle},
+			infosubject = #{infosubject},
+			infourl = #{infourl},
+			sendtime = #{sendtime}
+		where loginid = #{loginid}
+</update>
+<delete id="deleteOfpopinfo" parameterType="erp.erp.purchaseOrder.model.Ofpopinfo">
+	delete from ofpopinfo
+	where loginid = #{loginid}
+</delete>
+</mapper>

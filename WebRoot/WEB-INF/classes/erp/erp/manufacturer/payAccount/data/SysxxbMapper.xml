@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.SysxxbMapper">
+  <select id = "getSysxxb" parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.Sysxxb">
+      SELECT sysxxb.yhbh,   
+             sysxxb.yhjc  
+             FROM sysxxb  
+  </select>
+</mapper>

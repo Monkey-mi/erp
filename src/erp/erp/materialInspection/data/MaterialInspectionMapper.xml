@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialInspection.data.MaterialInspectionMapper">
+
+<select id="getJjdxs" parameterType="map" resultType="double">
+   select jjdxs from clwtjjdwh where jjdxh = #{jjcd}
+</select>
+<!-- 原料仓 -->
+<select id="getWareHouseTrList" parameterType="map" resultType="erp.erp.materialInspection.model.InspectionWareHouse">
+	select ckqx_yl.ckbh,ckmcb_yl.ckmc
+	from ckqx_yl,ckmcb_yl
+	where ckqx_yl.czy_gh=#{czy_gh} and ckqx_yl.ckbh = ckmcb_yl.ckbh and ckmcb_yl.tybj = 0
+	order by ckqx_yl.ckbh
+</select>
+<select id="getInspectionWareHouseList" parameterType="map" resultType="erp.erp.materialInspection.model.InspectionWareHouse">
+	select
+		ckmcb_cp.ckbh,
+		ckmcb_cp.ckmc,
+		ckmcb_cp.tybj,
+		ckmcb_cp.qynf,
+		ckmcb_cp.yhbh,
+		ckmcb_cp.hsbm,
+		ckmcb_cp.scbj,
+		ckmcb_cp.fscbj,
+		ckmcb_cp.wmsqy,
+		ckmcb_cp.wmsrm,
+		ckmcb_cp.wmssj,
+		ckmcb_cp.fpcbj
+	from
+		ckmcb_cp,ckqx_cp
+	where ckqx_cp.ckbh = ckmcb_cp.ckbh and CKMCB_CP.tybj = 0
+	<if test="czy_gh!=null and czy_gh!=''">
+	 	and ckqx_cp.czy_gh=#{czy_gh} 
+	</if>
+	<if test="node!=null and node>0">
+	 	 and left(ckbh,len(#{node}))=#{node} and ckbh!=#{node}
+	</if>
+	<if test="ckbh!=null">
+		and ckbh like '%${ckbh}%' or ckmc like '%${ckmc}%'
+	</if>
+	<if test="orderBySQL!=null and orderBySQL!=''">
+		order by ${orderBySQL} 
+	</if>
+</select>
+<select id="getCostCount" parameterType="map" resultType="int">
+    select count(*) from cgfyb where cpwtdh=#{wtdh}; 
+</select>
+<select id="getMaterialInspectionList" parameterType="map" resultType="erp.erp.materialInspection.model.MaterialInspection">
+select 
+		wtjycssqb.wtdh,
+		wtjycssqb.wtlb,		
+		wtjycssqb.wtbm,		
+		wtjycssqb.wtrm,		
+		wtjycssqb.wtrq,	
+		wtjycssqb.csbh, 
+		wtjycssqb.csjg,
+		wtjycssqb.cslx,   			
+		wtjycssqb.sdbj,   
+		wtjycssqb.sdrm,    	
+		wtjycssqb.sdsj,
+      wtjycssqb.jysj,     	
+		wtjycssqb.jybj,	
+		wtjycssqb.gdbj,		
+		wtjycssqb.czym,    
+		wtjycssqb.czsj,
+		wtjycssqb.qfbj,   
+		wtjycssqb.qfrm,    	
+		wtjycssqb.qfsj,
+      wtjycssqb.csmd,
+      wtjycssqb.bzsm,
+		wtjycssqclmxb.wtxh,				
+		wtjycssqclmxb.clhh,		
+		wtjycssqclmxb.htbh,    
+		wtjycssqclmxb.htxh,
+		case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.htbh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.htxh))) else '' end as hth,   		
+		wtjycssqclmxb.sjsl,
+		wtjycssqclmxb.dhdh,
+		wtjycssqclmxb.dhxh,
+		case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.dhdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.dhxh))) else '' end as dhh, 
+		wtjycssqclmxb.jldw,
+		wtjycssqclmxb.llrq,
+		wtjycssqclmxb.ckbh,
+		wtjycssqclmxb.cghtyq,
+		clbmb.clmc,
+		clbmb.plmth,
+		clbmb.plmtx,
+		csxxb.csmc as csjgmc,
+		a.csmc as csmc,
+		wtsjlbb.lbmc as wtlbmc
+from wtjycssqclmxb
+left outer join wtjycssqb with(nolock) on wtjycssqb.wtdh=wtjycssqclmxb.wtdh
+left outer join clbmb with(nolock) on clbmb.clhh=wtjycssqclmxb.clhh
+left outer join csxxb with(nolock) on csxxb.csbh = wtjycssqb.csjg
+left outer join csxxb a with(nolock) on a.csbh = wtjycssqb.csbh
+left outer join wtsjlbb with(nolock) on wtsjlbb.lbbh = wtjycssqb.wtlb
+where
+   1 = 1
+   <if test="gdbj!=null">
+       and wtjycssqb.gdbj = #{gdbj}
+    </if>
+    <if test="wtlb!=null">
+       and left(wtjycssqb.wtlb,len(#{wtlb})) = #{wtlb}
+    </if>
+    <if test="qsrq!=null">
+        and wtjycssqb.wtrq &gt;= #{qsrq}
+    </if>
+    <if test="jzrq!=null">
+        and wtjycssqb.wtrq &lt;= #{jzrq}
+    </if>
+    and exists (select * from wtsjlb_qxb where (left(wtsjlb_qxb.lbbh,len(wtjycssqb.wtlb))=wtjycssqb.wtlb or wtsjlb_qxb.lbbh=left(wtjycssqb.wtlb,len(wtsjlb_qxb.lbbh))) and czy_gh=#{czy_gh})
+order by wtjycssqb.wtdh desc    
+</select>
+<insert id="addMaterialInspection" parameterType="erp.erp.materialInspection.model.MaterialInspection" keyProperty="wtdh" useGeneratedKeys="true">
+	<selectKey keyProperty="wtdh" resultType="float" order="BEFORE">
+	    select isnull(max(wtdh)+1,1) from wtjycssqb
+	</selectKey>
+	insert into dbo.wtjycssqb
+	(
+		wtdh,
+		wtbm,
+		wtlb,
+		wtrm,
+		wtrq,
+		clhh,
+		htbh,
+		htxh,
+		csbh,
+		llrq,
+		sjsl,
+		jldw,
+		sdbj,
+		sdrm,
+		sdsj,
+		jybj,
+		gdbj,
+		gdbj_pd,
+		czym,
+		czsj,
+		shbj,
+		ckbh,
+		dhdh,
+		dhxh,
+		bzsm,
+		jysj,
+		shsj,
+		csmd,
+		csjg,
+		cslx,
+		qfbj,
+		qfrm,
+		qfsj,
+		jjcd
+	)
+	values
+	(
+		#{wtdh},
+		#{wtbm},
+		#{wtlb},
+		#{wtrm},
+		#{wtrq},
+		#{clhh},
+		#{htbh},
+		#{htxh},
+		#{csbh},
+		#{llrq},
+		#{sjsl},
+		#{jldw},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{jybj},
+		#{gdbj},
+		#{gdbj_pd},
+		#{czym},
+		#{czsj},
+		#{shbj},
+		#{ckbh},
+		#{dhdh},
+		#{dhxh},
+		#{bzsm},
+		#{jysj},
+		#{shsj},
+		#{csmd},
+		#{csjg},
+		#{cslx},
+		#{qfbj},
+		#{qfrm},
+		#{qfsj},
+		#{jjcd}
+	)
+</insert>
+<update id="updateMaterialInspection" parameterType="erp.erp.materialInspection.model.MaterialInspection">
+	update dbo.wtjycssqb
+		set
+			wtdh = #{wtdh},
+			wtbm = #{wtbm},
+			wtlb = #{wtlb},
+			wtrm = #{wtrm},
+			wtrq = #{wtrq},
+			clhh = #{clhh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			csbh = #{csbh},
+			llrq = #{llrq},
+			sjsl = #{sjsl},
+			jldw = #{jldw},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			jybj = #{jybj},
+			gdbj = #{gdbj},
+			gdbj_pd = #{gdbj_pd},
+			czym = #{czym},
+			czsj = #{czsj},
+			shbj = #{shbj},
+			ckbh = #{ckbh},
+			dhdh = #{dhdh},
+			dhxh = #{dhxh},
+			bzsm = #{bzsm},
+			jysj = #{jysj},
+			shsj = #{shsj},
+			csmd = #{csmd},
+			csjg = #{csjg},
+			cslx = #{cslx},
+			qfbj = #{qfbj},
+			qfrm = #{qfrm},
+			qfsj = #{qfsj},
+			jjcd = #{jjcd}
+		where  wtdh= #{wtdh}
+</update>
+<delete id="deleteMaterialInspection" parameterType="map">
+	delete from dbo.wtjycssqb
+	where  wtdh = #{wtdh}
+</delete>
+<delete id="deleteMaterialInspectionDetele" parameterType="map">
+   delete from wtjycssqclmxb where wtdh = #{wtdh}
+</delete>
+<delete id="deleteMaterialDetail" parameterType="map">
+	delete from dbo.wtjycssqmxb
+	where  wtdh = #{wtdh}
+</delete>
+<update id="updateLoadingPlanBj" parameterType="erp.erp.materialInspection.model.MaterialInspection">
+     update dbo.wtjycssqb
+        set
+           sdbj = #{sdbj},
+           sdrm = #{sdrm},
+           sdsj = #{sdsj},
+           qfbj = #{qfbj},
+           qfrm = #{qfrm},
+           qfsj = #{qfsj},
+           gdbj = #{gdbj}
+      <where>
+           <if test="wtdh!=null">
+               wtdh = #{wtdh}
+           </if>
+      </where>     
+</update>
+<select id="getArriveList" parameterType="map" resultType="erp.erp.materialInspection.model.ArriveList">
+       SELECT dhdjb_yl.ckbh,   
+         dhdjb_yl.dhdh,   
+         dhdjb_yl.dhxh,
+         case when dhdh&lt;&gt;0 then ltrim(rtrim(str(dhdjb_yl.dhdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.dhxh))) else null end as dhh,   
+			case when dhdjb_yl.htbh&lt;&gt;0 then ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh))) else null end as hth,   
+         dhdjb_yl.dhrq,   
+         dhdjb_yl.pjrq,     
+         dhdjb_yl.zzrq,   
+         dhdjb_yl.csbh,   
+         dhdjb_yl.clhh,   
+         dhdjb_yl.cltx1,    
+         dhdjb_yl.cltx2,   
+         dhdjb_yl.cltx3,    
+         dhdjb_yl.pcbh,   
+         dhdjb_yl.ghpc,   
+         dhdjb_yl.dhsl,   
+         dhdjb_yl.yrsl, 
+			isnull(dhdjb_yl.dhsl,0) - isnull(dhdjb_yl.yrsl,0)  as wrsl,
+         dhdjb_yl.jldw,   
+         dhdjb_yl.jkrm,   
+			dhdjb_yl.shdh,
+         dhdjb_yl.htbh,   
+         dhdjb_yl.htxh,   
+         dhdjb_yl.wxdh,   
+         dhdjb_yl.wxxh,   
+         dhdjb_yl.bzsm,   
+         dhdjb_yl.czym,    
+         dhdjb_yl.czsj,   
+         dhdjb_yl.zjbj,   
+         dhdjb_yl.jjbj,   
+         dhdjb_yl.ztbj,   
+         dhdjb_yl.jyjg,   
+         dhdjb_yl.zjdh,   
+         dhdjb_yl.zjrq,   
+         dhdjb_yl.zjbz,   
+         dhdjb_yl.dpyy,   
+         dhdjb_yl.dybj,  
+         dhdjb_yl.wxbj,  
+         dhdjb_yl.jhbh,   
+         dhdjb_yl.jhxh,   
+         case when dhdjb_yl.htbh&lt;&gt;0 and dhdjb_yl.htxh&lt;&gt;0 then (case when htmxb.cgdj&lt;&gt;0 then htmxb.cgdj else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end )
+              when dhdjb_yl.wxdh&lt;&gt;0 and dhdjb_yl.wxxh&lt;&gt;0 then (case when wxtzdmxb.jgdj&lt;&gt;0 then wxtzdmxb.jgdj else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end )
+              else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end as rkdj, 
+         case when dhdjb_yl.htbh&lt;&gt;0 and dhdjb_yl.htxh&lt;&gt;0 then (case when htmxb.wbdj&lt;&gt;0 then htmxb.wbdj else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end )
+				  when dhdjb_yl.wxdh&lt;&gt;0 and dhdjb_yl.wxxh&lt;&gt;0 then (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end)
+              else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end as wbdj, 
+         clbmb.clth,   
+         clbmb.clmc,   
+         clbmb.fzzbj,
+			clbmb.txgz,   
+         csxxb.csmc,
+			dhdjb_yl.ckbh,
+	      jhmxb.jhbz,
+         case when jhmxb.zjbh>0 and jhmxb.zjxh>0 then a.cpbh else null end as zcpbh,
+			dhdjb_yl.fzsl,
+			dhdjb_yl.fzdw,
+			htmxb.kjlx,
+         0 as xzbj,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+	 		ckmcb_yl.ckmc
+    FROM dhdjb_yl with (nolock)   
+	 left outer join clbmb  with (nolock)   on  dhdjb_yl.clhh=clbmb.clhh 
+ 	 left outer join csxxb  with (nolock)   on  dhdjb_yl.csbh=csxxb.csbh
+    left outer join csjjb   with (nolock)  on  csjjb.csbh=dhdjb_yl.csbh and csjjb.clhh=dhdjb_yl.clhh
+ 	 left outer join htmxb  with (nolock)	  on  dhdjb_yl.htbh=htmxb.htbh and dhdjb_yl.htxh=htmxb.htxh
+	 left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+    left outer join jhmxb a with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh
+ 	 left outer join ckmcb_yl with (nolock) on  ckmcb_yl.ckbh=dhdjb_yl.ckbh
+ 	 left outer join wxtzdmxb with (nolock) on  dhdjb_yl.wxdh=wxtzdmxb.wxdh and dhdjb_yl.wxxh=wxtzdmxb.wxxh
+	 WHERE  isnull(dhdjb_yl.dhsl,0)>0  and dhdjb_yl.csbh=#{csbh}  and ztbj&lt;&gt;2 and ztbj&lt;&gt;3
+	 <if test="ckbh!=null and ckbh!=0">
+	 and dhdjb_yl.ckbh=#{ckbh} 
+	 </if>
+	 <if test="condition!=null">
+	 and ${condition}   
+	 </if>
+</select>
+<select id="getStringFromSql" parameterType="map" resultType="String">
+  ${sql}
+</select>
+<select id="getMaterialTestProList" parameterType="map" resultType="erp.erp.materialInspection.model.MaterialTestPro">
+      SELECT xmbh,   
+             xmmc,
+			 cslb,
+			 csjg  
+       FROM csxmwhb  
+       where 1=1
+       <if test="query!=null and query !=''">
+       and csxmwhb.xmmc like '%${query}%'
+       </if>
+</select>
+<!-- <select id ="getWarehouseList" parameterType="map" resultType="erp.erp.arrivalRegister.model.Warehouse">
+	select ckqx_yl.ckbh,ckmcb_yl.ckmc
+	from ckqx_yl,ckmcb_yl
+    where ckqx_yl.czy_gh=#{czy_gh} and ckqx_yl.ckbh = ckmcb_yl.ckbh and ckmcb_yl.tybj = 0
+    order by ckqx_yl.ckbh;
+</select> -->
+<select id="getXmbh" parameterType="map" resultType="int">
+    select isnull(xmbh,0) from csxmwhb where xmmc=#{xmmc};
+</select>
+<select id = "getTestMethod" parameterType="map" resultType="erp.erp.materialInspection.model.TestMethod">
+      SELECT xmbh,   
+         jlxh,   
+         xmbz,
+			csjg,
+			xsjbj  
+    FROM csbzjffwhb 
+where xmbh=#{xmbh} 
+and 
+(
+	exists
+	(
+		select csbzjffwh_jgb.xmbh
+		from csbzjffwh_jgb
+		where csbzjffwh_jgb.xmbh=csbzjffwhb.xmbh
+		and csbzjffwh_jgb.jlxh=csbzjffwhb.jlxh	
+		and (csbzjffwh_jgb.csbh=#{csjg})
+	)
+	or
+	#{csjg}=''
+)
+</select>
+<select id="getTgb" parameterType="map" resultType="erp.erp.materialInspection.model.Csjgxsj">
+select csbzjffwh_jgb.csjg,csbzjffwh_jgb.xsjbj  from csbzjffwh_jgb with (nolock)
+left outer join csbzjffwhb on csbzjffwhb.xmbh=csbzjffwh_jgb.xmbh and csbzjffwhb.jlxh=csbzjffwh_jgb.jlxh
+left outer join csxmwhb on csxmwhb.xmbh=csbzjffwh_jgb.xmbh
+where xmmc=#{csxm} and xmbz=#{csbz} and csbh=#{csjg};
+</select>
+<select id="getZeroTgb" parameterType="map" resultType="erp.erp.materialInspection.model.Csjgxsj">
+select csbzjffwhb.csjg,csbzjffwhb.xsjbj from csbzjffwhb with (nolock)
+left outer join csxmwhb on csxmwhb.xmbh=csbzjffwhb.xmbh
+where xmmc=#{csxm} and xmbz=#{csbz};
+</select>
+<select id="getTestProject" parameterType="map" resultType="erp.erp.materialInspection.model.TestProject">
+      SELECT xmbh,   
+         xmmc  
+    FROM csxmwhb_cp  
+</select>
+<select id="getWtbmList" parameterType="map" resultType="erp.erp.materialInspection.model.InspectionWtbm">
+	select
+		wtsjlbb.lbbh,
+		wtsjlbb.lbmc,
+		wtsjlbb.lbjc,		
+		wtsjlbb.mjbz,		
+		wtsjlbb.bzsm		
+	from
+		wtsjlbb		
+		where 1=1
+        <if test="node!=null and node==0">
+			and  wtsjlbb.lbjc=1
+		</if>
+		<if test="node!=null and node>0">
+		 	 and left(wtsjlbb.lbbh,len(#{node}))=#{node} and wtsjlbb.lbbh!=#{node}
+		</if>
+		<if test="lbbh!=null">
+			and (wtsjlbb.lbbh like '${lbbh}%' or wtsjlbb.lbmc like '${lbbh}%')
+		</if>
+		<if test="czy_gh!=null and czy_gh!=''">
+			and  exists(select 1 from wtsjlb_qxb where wtsjlb_qxb.czy_gh=#{czy_gh} and wtsjlb_qxb.lbbh=left(wtsjlbb.lbbh,len(wtsjlb_qxb.lbbh)) )
+		</if> 
+		<!-- <if test="czy_gh!=null and czy_gh!=''">
+		    and lbbh in (
+		       select lbbh
+		         from wtsjlb_qxb
+		       where  wtsjlb_qxb.czy_gh=#{czy_gh}
+		    )
+		</if> -->
+		<!-- <if test="orderBySQL!=null and orderBySQL!=''">
+			order by ${orderBySQL} 
+		</if> -->
+</select>
+</mapper>

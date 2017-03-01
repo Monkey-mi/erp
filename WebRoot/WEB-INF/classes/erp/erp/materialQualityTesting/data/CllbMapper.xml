@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.CllbMapper">
+<!-- 获取类别名称 -->
+<select id="getCllbName" parameterType="map" resultType="String">
+	select lbmc  from cllbb  where  lbbh=#{lbbh};
+</select>
+<!-- 获取序号 -->
+<select id="getCllbOne" parameterType="map" resultType="String">
+	select isnull(max ( lbbh ),0)+4 from cllbb where lbjc =1
+</select>
+<select id="getCllbTwo" parameterType="map" resultType="String">
+	select max ( substring ( lbbh , LEN(lbbh)-1 , 2 ) ) from cllbb where lbjc =#{lbjc} and lbbh like '${lbbh}%'
+</select>
+<select id="getCllbList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Wtbm">
+	select
+		cllbb.lbbh,
+		cllbb.lbmc,
+		cllbb.lbjc,
+		cllbb.mjbz		
+	from
+		cllbb		
+		where 1=1
+		<if test="node!=null and node==0">
+			and  cllbb.lbjc=1
+		</if>
+		<if test="node!=null and node>0">
+		 	 and left(cllbb.lbbh,len(#{node}))=#{node} and cllbb.lbbh!=#{node}
+		</if>
+		<if test="lbbh!=null">
+			and (cllbb.lbbh like '${lbbh}%' or cllbb.lbmc like '${lbbh}%')
+		</if>
+		<if test="mjbz!=null">
+			and cllbb.mjbz=#{mjbz}
+		</if>
+		<if test="czy_gh!=null and czy_gh!=''">
+			and  exists(select 1 from cglb_qxb where cglb_qxb.czy_gh=#{czy_gh} and cglb_qxb.lbbh=left(lbbh,len(cllbb.lbbh)))
+		</if>
+		<if test="orderBySQL!=null and orderBySQL!=''">
+			order by ${orderBySQL} 
+		</if>
+</select>
+
+</mapper>

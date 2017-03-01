@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.arrivalRegister.data.ContractImpMapper">
+	
+	<select id = "getContractImpList" parameterType="map" resultType="erp.erp.arrivalRegister.model.ContractImp">
+		SELECT cghtb.htbh, 
+         cghtb.csbh,  
+         htmxb.htxh,
+         htmxb.clhh,
+			htmxb.cltx1,
+			htmxb.cltx2,   
+			htmxb.cltx3,
+         htmxb.jldw,
+         htmxb.cgsl, 
+         htmxb.dhrk,
+         isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) as wdsl,
+         htmxb.cgdj,
+         htmxb.cgbh,
+         htmxb.cgxh, 
+         htmxb.jhbh,
+         htmxb.jhxh,
+         case when htmxb.jhbh&lt;&gt;0 then ltrim(rtrim(htmxb.jhbh))+'-'+ltrim(rtrim(htmxb.jhxh)) else null end as jhh,
+         case when htmxb.htbh&lt;&gt;0 then ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) else null end as hth,
+         htmxb.bzsm,
+			htmxb.fzdw, 
+			htmxb.fzsl,
+			case when htmxb.wkjq is null then xqsqmxb.wkjq else htmxb.wkjq end as wkjq,
+         jhmxb.sxrq,
+         clbmb.zjbj,
+         clbmb.clmc,
+			clbmb.fzzbj,
+         cglbb.hsbm,
+			cpbmb.cpmc,
+			b.cpmc as zcpmc,
+			jhmx_ddxxb.khxh,
+			jhmxb.jhbz,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+			jhmxb.zjbh,
+			jhmxb.zjxh,
+			csxxb.csmc,
+			case when jhmxb.zjbh &lt;&gt;0 then ltrim(rtrim(jhmxb.zjbh))+'-'+ltrim(rtrim(jhmxb.zjxh)) else null end as zjhh
+    FROM cghtb with (nolock)
+left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh
+left outer join htmxb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join xqsqmxb with (nolock) on xqsqmxb.sqbh=htmxb.sqbh and xqsqmxb.sqxh=htmxb.sqxh
+left outer join cglbb with (nolock) on cglbb.lbbh=cghtb.cglb
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+left outer join jhmx_ddxxb with (nolock) on jhmx_ddxxb.jhbh=jhmxb.jhbh and jhmx_ddxxb.jhxh=jhmxb.jhxh
+left outer join cpbmb with (nolock) on cpbmb.cpbh=jhmxb.cpbh
+left outer join jhmxb a with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh
+left outer join cpbmb b with (nolock) on b.cpbh=a.cpbh
+where cghtb.gdbj=0 and cghtb.qfbj=1 and htmxb.zzbj=0 and clbmb.zjbj = 1 and htmxb.wcbj=0 
+<if test="csbh!=null and csbh!=''">
+	and cghtb.csbh = #{csbh}
+</if>
+    and left(htmxb.hsbm,len(#{hsbm}))=#{hsbm}
+<if test="search!=null and search!=''">
+	and (clbmb.clmc like '%${search}%')
+</if>
+<if test="hth!=null and hth!=''" >
+	and ${s2}
+</if>
+<if test="jhh!=null and jhh!=''">
+	and ${s1}
+</if>
+</select>
+
+<select id="getHsbm" parameterType="map" resultType="String">
+	select hsbm from ckmcb_yl where ckbh=#{ckbh};
+</select>
+	
+</mapper>

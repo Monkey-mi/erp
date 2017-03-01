@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.materialArchive.data.MaterialMapper">
+
+
+<select id="getMaterialList" parameterType="map" resultType="erp.erp.master.materialArchive.model.Material">
+select aa.* from  (	
+	select
+		dbo.clbmb.clhh,
+		dbo.clbmb.lbbh,
+		dbo.clbmb.clmc,
+		dbo.clbmb.jldw,
+		dbo.clbmb.fzdw,
+		dbo.clbmb.yshh,
+		dbo.clbmb.ysmc,
+		dbo.clbmb.zdcgl,
+		dbo.clbmb.zxbzl,
+		dbo.clbmb.zhxs,
+		dbo.clbmb.cbdj,
+		dbo.clbmb.jhdj,
+		dbo.clbmb.kzdj,
+		dbo.clbmb.fzkj,
+		dbo.clbmb.cgbl,
+		dbo.clbmb.ylbl,
+		dbo.clbmb.yhyl,
+		dbo.clbmb.shbl,
+		dbo.clbmb.yxqx,
+		dbo.clbmb.bcpbh,
+		dbo.clbmb.cltp,
+		dbo.clbmb.clth,
+		dbo.clbmb.ghzq,
+		dbo.clbmb.aqlbj,
+		dbo.clbmb.cgtqq,
+		dbo.clbmb.zjbj,
+		dbo.clbmb.fzzbj,
+		dbo.clbmb.bzxssx,
+		dbo.clbmb.bzxsxx,
+		dbo.clbmb.cgbj,
+		dbo.clbmb.cgym,
+		dbo.clbmb.bcpbj,
+		dbo.clbmb.gdbj,
+		dbo.clbmb.sqrm,
+		dbo.clbmb.txgz,
+		dbo.clbmb.czym,
+		dbo.clbmb.czsj,
+		dbo.clbmb.lkcbj,
+		dbo.clbmb.zhbj,
+		dbo.clbmb.zhgs,
+		dbo.clbmb.gsbh,
+		dbo.clbmb.spbj,
+		dbo.clbmb.sprm,
+		dbo.clbmb.spsj,
+		dbo.clbmb.gdsj,
+		dbo.clbmb.gdrm,
+		dbo.clbmb.scys,
+		dbo.clbmb.clzc,
+		dbo.clbmb.yzws,
+		dbo.clbmb.zzhxs,
+		dbo.clbmb.djyz,
+		dbo.clbmb.cgzh,
+		dbo.clbmb.yxbj,
+		dbo.clbmb.plmth,
+		dbo.clbmb.plmtx,
+		cllbb.lbmc,
+		cgzmb.cgzm,
+		cgyb.cgyxm,
+		cljgcswhb.csmc as zhgsmc,
+		a.csmc as yygsmc,
+		cltxgzb.gzmc as txgzmc
+	from
+		dbo.clbmb
+	left outer join cllbb  with (nolock) on cllbb.lbbh = clbmb.lbbh
+	left outer join cgyb   with (nolock) on cgyb.cgybh = clbmb.cgym
+    left outer join cljgcswhb with (nolock) on cljgcswhb.csbh = clbmb.zhgs
+    left outer join cljgcswhb a with (nolock) on a.csbh = clbmb.gsbh
+    left outer join cgzmb with (nolock) on cgzmb.cgzh = clbmb.cgzh
+    left outer join cltxgzb with (nolock) on cltxgzb.gzbh = clbmb.txgz
+    where 1=1 
+    <if test = "gdbj==null">
+    	and clbmb.gdbj=0
+    </if>
+    <if test = "gdbj!=null">
+    	and clbmb.gdbj=#{gdbj}
+    </if>
+    <if test="lbbh!=null">
+  	and  left(clbmb.lbbh,len(#{lbbh}))=#{lbbh}
+    </if>	
+    <if test="search!=null">
+        and (clbmb.clmc like '%${search}%' or clbmb.clhh = '${search}')
+    </if>
+     <if test="condition!=null and condition!=''">
+	 and ${condition}
+     </if>
+     ) aa
+   where
+      1=1 
+    <if test="filterSearch!=null">
+	${filterSearch}
+    </if>
+</select>
+<insert id="addMaterial" parameterType="erp.erp.master.materialArchive.model.Material" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.clbmb
+	(
+		clhh,
+		lbbh,
+		clmc,
+		jldw,
+		cbdj,
+		jhdj,
+		kzdj,
+		fzkj,
+		cgbl,
+		ylbl,
+		shbl,
+		yxqx,
+		ghzq,
+		cgtqq,
+		zjbj,
+		cgbj,
+		cgym,
+		bcpbj,
+		gdbj,
+		sqrm,
+		czym,
+		czsj,
+		lkcbj,
+		zhbj,
+		zhgs,
+		gsbh,
+		spbj,
+		sprm,
+		spsj,
+		yzws,
+		djyz,
+		cgzh,
+		yxbj,
+		zdcgl,
+		zxbzl
+	)
+	values
+	(
+		#{clhh},
+		#{lbbh},
+		#{clmc},
+		#{jldw},
+		#{cbdj},
+		#{jhdj},
+		#{kzdj},
+		#{fzkj},
+		#{cgbl},
+		#{ylbl},
+		#{shbl},
+		#{yxqx},
+		#{ghzq},
+		#{cgtqq},
+		#{zjbj},
+		#{cgbj},
+		#{cgym},
+		#{bcpbj},
+		#{gdbj},
+		#{sqrm},
+		#{czym},
+		#{czsj},
+		#{lkcbj},
+		#{zhbj},
+		#{zhgs},
+		#{gsbh},
+		#{spbj},
+		#{sprm},
+		#{spsj},
+		#{yzws},
+		#{djyz},
+		#{cgzh},
+		#{yxbj},
+		#{zdcgl},
+		#{zxbzl}
+	)
+</insert>
+<update id="updateMaterial" parameterType="erp.erp.master.materialArchive.model.Material">
+	update dbo.clbmb
+		set
+			clhh = #{clhh},
+			lbbh = #{lbbh},
+			clmc = #{clmc},
+			jldw = #{jldw},
+			cbdj = #{cbdj},
+			jhdj = #{jhdj},
+			kzdj = #{kzdj},
+			fzkj = #{fzkj},
+			cgbl = #{cgbl},
+			ylbl = #{ylbl},
+			shbl = #{shbl},
+			yxqx = #{yxqx},
+			ghzq = #{ghzq},
+			aqlbj = #{aqlbj},
+			cgtqq = #{cgtqq},
+			zjbj = #{zjbj},
+			cgbj = #{cgbj},
+			cgym = #{cgym},
+			bcpbj = #{bcpbj},
+			gdbj = #{gdbj},
+			sqrm = #{sqrm},
+			czym = #{czym},
+			czsj = #{czsj},
+			lkcbj = #{lkcbj},
+			zhbj = #{zhbj},
+			zhgs = #{zhgs},
+			gsbh = #{gsbh},
+			spbj = #{spbj},
+			sprm = #{sprm},
+			spsj = #{spsj},
+			yzws = #{yzws},
+			djyz = #{djyz},
+			cgzh = #{cgzh},
+			yxbj = #{yxbj},
+			txgz = #{txgz},
+			zdcgl = #{zdcgl},
+			zxbzl = #{zxbzl}
+		where  clhh = #{clhh}
+</update>
+<delete id="deleteMaterial" parameterType="erp.erp.master.materialArchive.model.Material">
+	delete from dbo.clbmb
+	where  clhh = #{clhh}
+</delete>
+<select id="getProductList" parameterType="map" resultType="erp.erp.master.materialArchive.model.Product">
+	 select aa.* from ( select   0 as ggdh,		
+			cpbomb.bbbh,
+			cpbomb.cpbh,
+			cpbmb.cpmc,
+			cpbmb.gdbj,
+			cpbmb.plmth,
+			cpbmb.plmtx
+from cpbomb with (nolock) 
+left outer join cpbmb with (nolock) on cpbomb.cpbh=cpbmb.cpbh
+where cpbomb.clhh=#{clhh}
+
+union all
+
+select   0 as ggdh,		
+			cpbomb_flb.bbbh,
+			cpbomb_flb.cpbh,
+			cpbmb.cpmc,
+			cpbmb.gdbj,
+			cpbmb.plmth,
+			cpbmb.plmtx
+from cpbomb_flb with (nolock) 
+left outer join cpbmb with (nolock) on cpbomb_flb.cpbh=cpbmb.cpbh
+where cpbomb_flb.clhh=#{clhh}
+
+union all
+
+SELECT   bomggb.ggdh,   
+         bomggb.ggbb,   
+         bomggb.ggcp,
+         cpbmb.cpmc,   
+			cpbmb.gdbj,
+			cpbmb.plmth,
+			cpbmb.plmtx
+    FROM bomggb with (nolock) 
+left outer join cpbmb with (nolock) on cpbmb.cpbh=bomggb.ggcp
+where gqcl=#{clhh} and bomggb.qfbj=1 
+)aa
+</select>
+<select id="getPlanList" statementType="CALLABLE"  parameterType="map" resultType="erp.erp.master.materialArchive.model.Plan">
+	 <![CDATA[  
+           exec proc_referencedplan  @f_clhh = #{clhh}
+      ]]> 
+</select>
+<select id="getCtrlPriceList" parameterType="map" resultType="erp.erp.master.materialArchive.model.CtrlPrice"> 
+	  SELECT csjjb.clhh,   
+         csjjb.csbh,   
+         csjjb.zdcgl,   
+         csjjb.zxbzl,   
+         csjjb.ghzq,   
+         csjjb.kzdj,        
+         csjjb.csxh,   
+         csjjb.bzsm,
+         csjjb.czym,
+         csjjb.czsj,
+         b.csmc,  
+         b.wbbh,   
+         b.yhbh,  
+         b.cglb,
+		 clbmb.fzdw,
+		 clbmb.jldw,
+		 csjjb.fzkj,
+		 csjjb.qssxsj,
+		 csjjb.jzsxsj,
+		 csjjb.spbj_kj,
+		 csjjb.sprm_kj,
+		 csjjb.spsj_kj,
+		 wbmcb.wbmc as wbmc  
+    FROM csjjb 
+ left outer join csxxb b with (nolock) on b.csbh=csjjb.csbh
+ left outer join wbmcb with (nolock) on wbmcb.wbbh= b.wbbh
+ left outer join clbmb with (nolock) on clbmb.clhh=csjjb.clhh
+ where csjjb.clhh=#{clhh}  
+</select>
+<select id = "getHisPriceList" parameterType="map" resultType="erp.erp.master.materialArchive.model.HisPrice">
+	  SELECT clkzdjjlb.jlbh,   
+             clkzdjjlb.clhh,   
+             clkzdjjlb.kzdj,   
+             clkzdjjlb.jlrq,
+		     clkzdjjlb.fzkj  
+     FROM clkzdjjlb   
+    where clhh=#{clhh}
+</select> 
+<select id = "getJgcsList" parameterType="map" resultType="erp.erp.master.materialArchive.model.PriceParameter">
+	  SELECT 
+	clbm_gscsb.clhh,
+	clbm_gscsb.jlxh,
+	clbm_gscsb.csbh,
+	clbm_gscsb.gscs,
+	clbm_gscsb.gycs,
+	cljgcswhb.csmc as csmc,
+	csxxb.csmc as gycsmc
+    FROM clbm_gscsb  
+   left outer join cljgcswhb with (nolock) on cljgcswhb.csbh = clbm_gscsb.csbh
+   left outer join csxxb with (nolock) on csxxb.csbh = clbm_gscsb.gycs
+   where clhh=#{clhh} 
+</select>
+<insert id="addJgcs" parameterType="erp.erp.master.materialArchive.model.PriceParameter" keyProperty="" useGeneratedKeys="true">
+	insert into clbm_gscsb 
+	(
+	clhh,
+	jlxh,
+	csbh,
+	gscs,
+	gycs
+	)
+	values
+	(
+	#{clhh},
+	#{jlxh},
+	#{csbh},
+	#{gscs},
+	#{gycs}
+	)
+</insert>
+<update id="updateJgcs"  parameterType="erp.erp.master.materialArchive.model.PriceParameter">
+	update  clbm_gscsb 
+	set 
+	  csbh = #{csbh},
+	  gscs = #{gscs},
+	  gycs = #{gycs}
+	where clhh = #{clhh} and jlxh = #{jlxh}
+</update>
+<delete id="deleteJgcs" parameterType="erp.erp.master.materialArchive.model.PriceParameter">
+	delete from  clbm_gscsb 
+	where clhh=#{clhh} and jlxh = #{jlxh}
+</delete>
+<select id="getJldwList"  parameterType="map" resultType="erp.erp.master.materialArchive.model.Jldw">
+	SELECT jldwb.jldw  
+    FROM jldwb   
+</select>	
+<select id="getRuleList" parameterType="map" resultType="erp.erp.master.materialArchive.model.Rule">
+	select cltxgzb.gzbh,
+	       cltxgzb.gzmc
+    from cltxgzb	       
+</select>
+<update id = "doAppro" parameterType="map">
+	update clbmb
+	  set spbj=#{spbj},spsj=#{spsj},sprm = #{sprm}
+	  where clhh = #{clhh}
+</update>
+
+<select id="getMaxjlxh" parameterType="map" resultType="int">
+	 select isnull(max (jlxh),0) from clbm_gscsb  where clhh=#{clhh}
+</select>
+<select id="getCount" parameterType="map" resultType="int">
+	select count(*) from  clbm_gscsb where gycs=#{gycs} and clhh=#{clhh}
+</select> 
+<select id="getUserMaterialList" parameterType="map" resultType="erp.erp.master.materialArchive.model.UserMaterial">
+     select 
+         dbo.czy_cllb.id,
+         dbo.czy_cllb.czy_gh,
+         dbo.czy_cllb.lbbh
+     from 
+         dbo.czy_cllb  
+     where 
+        1 = 1
+     <if test="czy_gh!=null">
+        and dbo.czy_cllb.czy_gh = #{czy_gh}
+     </if>           
+     <if test="lbbh!=null">
+        and dbo.czy_cllb.lbbh = #{lbbh}
+     </if>
+</select>  
+<insert id="addUserMaterial" parameterType="erp.erp.master.materialArchive.model.UserMaterial">
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+        select isnull(max(id),0)+1  from czy_cllb
+    </selectKey>
+    insert into czy_cllb
+    (
+      id,
+      czy_gh,
+      lbbh
+    )
+    values 
+    (
+     #{id},
+     #{czy_gh},
+     #{lbbh}
+    )
+</insert>
+<delete id="deleteUserMaterial" parameterType="erp.erp.master.materialArchive.model.UserMaterial">
+   delete from czy_cllb
+   where czy_gh = #{czy_gh} and lbbh = #{lbbh}
+</delete>
+</mapper>

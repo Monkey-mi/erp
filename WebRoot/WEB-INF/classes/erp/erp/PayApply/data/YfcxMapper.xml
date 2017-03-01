@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.YfcxMapper">
+
+
+<select id="getYfcxList" parameterType="map" resultType="erp.erp.PayApply.model.Yfcx">
+	SELECT c.csbh,fpyfye,
+case when fpyfye&lt;0 then fpyfye else null end as yfkje,
+
+case when fpyfye&gt;0 then 
+	case when fpyfye&gt;qjye1
+		  then case when qjye1>0 then qjye1 else null end
+		  else fpyfye
+	end
+else
+	null 
+end as qjye1,
+
+case when fpyfye&gt;0 then 
+	case when fpyfye&gt;(qjye1+qjye2)
+		  then case when qjye2&gt;0 then qjye2 else null end
+		  else case when (fpyfye - qjye1)&gt;0 then fpyfye - qjye1 else null end
+   end
+else
+	null
+end as qjye2,
+
+case when fpyfye&gt;0 then 
+	case when fpyfye&gt;(qjye1+qjye2+qjye3)
+		  then case when qjye3&gt;0 then qjye3 else null end
+		  else case when (fpyfye - qjye1 - qjye2)&gt;0 then fpyfye - qjye1 - qjye2 else null end
+   end
+else
+	null
+end as qjye3,
+
+case when fpyfye&gt;0 then 
+	case when fpyfye&gt;(qjye1+qjye2+qjye3+qjye4)
+		  then case when qjye4&gt;0 then qjye4 else null end
+		  else case when (fpyfye - qjye1 - qjye2 - qjye3)&gt;0 then fpyfye - qjye1 - qjye2 - qjye3 else null end
+	end
+else
+	null
+end as qjye4,
+c.csmc,
+c.fkts,
+c.fpwd,
+c.wkfy,
+c.xyed,
+c.fpyfye + c.fpwd + c.wkfy as yfye,
+case when c.fpyfye + c.fpwd + c.wkfy &gt; xyed then c.fpyfye + c.fpwd + c.wkfy - xyed else 0 end cxyf
+
+FROM (SELECT b.csbh,fpyfye,rkyfye,fpwd,wkfy,csxxb.yhbh,csxxb.cglb,csxxb.csmc,csxxb.cslb,csxxb.xyed,csxxb.fkts
+ from (select a.csbh,
+sum(a.ncyf) + sum(a.fpje) - sum(a.zfje)+sum(a.hldz) as fpyfye,
+sum(a.wbncyf) + sum(a.wbfpje) - sum(a.wbzfje) as wbfpyfye,
+sum(a.rknc) + sum(a.rkje) - sum(a.zfje) as rkyfye,
+sum(a.wbrknc) + sum(a.wbrkje) - sum(a.wbzfje) as wbrkyfye,
+sum(a.fpwd) as fpwd,sum(a.wbfpwd) as wbfpwd,
+sum(a.wkfy) as wkfy
+from (select csbh,ncyf,wbnc as wbncyf,0 as zfje,0 as wbzfje,0 as fpje,0 as wbfpje,0 as rknc,0 as wbrknc,0 as rkje,0 as wbrkje,0 as hldz,0 as fpwd,0 as wbfpwd,0 as wkfy
+FROM ncyfb where nd=#{nf} and csbh = (select csbh  from fksqspb where sqbh = #{sqbh})
+union all
+select csbh,0,0,zfje,wbje,0,0,0,0,0,0,0,0,0,0
+from zjzfb where year(zfrq)=#{nf} and csbh =(select csbh  from fksqspb where sqbh = #{sqbh})
+union all
+select csbh,0,0,0,0,fpje,wbje,0,0,0,0,0,0,0,0
+from gyfpb where year(jzrq)=#{nf} and csbh = (select csbh  from fksqspb where sqbh = #{sqbh}) and yfbj=1
+union all
+select csbh,0,0,0,0,0,0,ncyf,wbnc,0,0,0,0,0,0
+FROM hwncyfb where nd=#{nf} and csbh = (select csbh  from fksqspb where sqbh = #{sqbh})
+union all
+select csbh,0,0,0,0,0,0,0,0,rkje,wbje,0,0,0,0
+from rkdb_yl where year(rkrq)=#{nf} and csbh = (select csbh  from fksqspb where sqbh = #{sqbh})
+union all
+select csbh,0,0,0,0,0,0,0,0,0,0,dzce,0,0,0
+from wbyfhldzmxb left outer join wbyfhldzb on wbyfhldzmxb.dzbh=wbyfhldzb.dzbh
+where year(dzny)=#{nf} and qfbj=1 and csbh = (select csbh  from fksqspb where sqbh = #{sqbh})
+union all
+select csbh,0,0,0,0,0,0,0,0,0,0,0,rkje,wbje,0
+from rkdb_yl where ((hxrq>#{jzrq} and hxbj=1)  or hxbj=0) and csbh = (select csbh  from fksqspb where sqbh = #{sqbh})
+union all
+select csbh,0,0,0,0,0,0,0,0,0,0,0,0,0,fyje 
+from cgfyb with (nolock) where ((hxrq>#{jzrq} and hxbj=1)  or hxbj=0) and csbh = (select csbh  from fksqspb where sqbh = #{sqbh})) a  group by a.csbh   ) b
+left outer join csxxb on csxxb.csbh=b.csbh   
+) c
+left outer join view_yfzlfx_qjhz on  c.csbh=view_yfzlfx_qjhz.csbh
+where fpyfye&lt;&gt;0
+</select>
+<insert id="addYfcx" parameterType="erp.erp.PayApply.model.Yfcx" keyProperty="" useGeneratedKeys="true">
+	insert into Yfcx
+	(
+		csbh,
+		fpyfye,
+		yfkje,
+		qjye1,
+		qjye2,
+		qjye3,
+		qjye4,
+		csmc,
+		fkts,
+		fpwd,
+		wkfy,
+		xyed,
+		yfye,
+		cxyf
+	)
+	values
+	(
+		#{csbh},
+		#{fpyfye},
+		#{yfkje},
+		#{qjye1},
+		#{qjye2},
+		#{qjye3},
+		#{qjye4},
+		#{csmc},
+		#{fkts},
+		#{fpwd},
+		#{wkfy},
+		#{xyed},
+		#{yfye},
+		#{cxyf}
+	)
+</insert>
+<update id="updateYfcx" parameterType="erp.erp.PayApply.model.Yfcx">
+	update Yfcx
+		set
+			csbh = #{csbh},
+			fpyfye = #{fpyfye},
+			yfkje = #{yfkje},
+			qjye1 = #{qjye1},
+			qjye2 = #{qjye2},
+			qjye3 = #{qjye3},
+			qjye4 = #{qjye4},
+			csmc = #{csmc},
+			fkts = #{fkts},
+			fpwd = #{fpwd},
+			wkfy = #{wkfy},
+			xyed = #{xyed},
+			yfye = #{yfye},
+			cxyf = #{cxyf}
+		where  = #{}
+</update>
+<delete id="deleteYfcx" parameterType="erp.erp.PayApply.model.Yfcx">
+	delete from Yfcx
+	where  = #{}
+</delete>
+</mapper>

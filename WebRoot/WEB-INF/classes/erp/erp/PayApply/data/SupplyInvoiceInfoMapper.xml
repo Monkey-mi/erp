@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.SupplyInvoiceInfoMapper">
+
+
+<select id="getSupplyInvoiceList" parameterType="map" resultType="erp.erp.PayApply.model.SupplyInvoiceInfo">
+	  SELECT fksqspmxb.sqbh,   
+         fksqspmxb.sqxh,
+         fksqspmxb.fplb, 
+         fksqspmxb.wbsq,  
+         fksqspmxb.fphm, 
+			fksqspmxb.hsbm,  
+			hsbmb.bmmc,
+         fksqspmxb.jzrq,   
+         fksqspmxb.fpje,
+			fksqspmxb.sqje,
+			fksqspmxb.wbbh,
+			wbmcb.wbdh,
+			fksqspmxb.wbhl,
+			fksqspmxb.wbje,
+			gyfpb.kprq,
+			gyfpb.ycbj
+    FROM fksqspmxb  
+left outer join gyfpb on gyfpb.fphm=fksqspmxb.fphm and gyfpb.fplb=fksqspmxb.fplb 
+left outer join hsbmb with (nolock) on hsbmb.bmbh = fksqspmxb.hsbm
+left outer join wbmcb with (nolock) on fksqspmxb.wbbh = wbmcb.wbbh
+   WHERE
+   1=1
+   <if test="sqbh!=null">
+   	 and sqbh=#{sqbh}
+   </if>
+</select>
+<insert id="addSupplyInvoice" parameterType="erp.erp.PayApply.model.SupplyInvoiceInfo">
+
+		insert into fksqspmxb
+		(
+		sqbh,
+		sqxh,
+		<!-- ycbj, -->
+		fplb,
+		fphm,
+		hsbm,
+		jzrq,
+		<!-- kprq, -->
+		fpje,
+		wbbh,
+		wbhl,
+		wbje,
+		sqje,
+		wbsq
+		)
+		values
+		(
+		#{sqbh},
+		#{sqxh},
+		<!-- #{ycbj}, -->
+		#{fplb},
+		#{fphm},
+		#{hsbm},
+		#{jzrq},
+		<!-- #{kprq}, -->
+		#{fpje},
+		#{wbbh},
+		#{wbhl},
+		#{wbje},
+		#{sqje},
+		#{wbsq}
+		)
+	</insert>
+	<update id="updateSupplyInvoice" parameterType="erp.erp.PayApply.model.SupplyInvoiceInfo">
+		update fksqspmxb
+		set
+		sqbh = #{sqbh},
+		sqxh = #{sqxh},
+		fplb = #{fplb},
+		fphm = #{fphm},
+		hsbm = #{hsbm},
+		jzrq = #{jzrq},
+		fpje = #{fpje},
+		wbbh = #{wbbh},
+		wbhl = #{wbhl},
+		wbje = #{wbje},
+		sqje = #{sqje},
+		wbsq = #{wbsq}
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspmxb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspmxb.sqxh = #{sqxh}
+		</if>
+	</update>
+	<delete id="deleteSupplyInvoice" parameterType="erp.erp.PayApply.model.SupplyInvoiceInfo">
+		delete from fksqspmxb
+		where 1=1
+		<if test="sqbh!=null">
+			and fksqspmxb.sqbh = #{sqbh}
+		</if>
+		<if test="sqxh!=null">
+			and fksqspmxb.sqxh = #{sqxh}
+		</if>
+	</delete>
+<select id="getSupplyInvoiceImpList" parameterType="map" resultType="erp.erp.PayApply.model.SupplyInvoiceImp">
+	  SELECT distinct gyfpb.fplb,   
+         gyfpb.fphm,   
+         gyfpb.csbh, 
+         (select sum(view_gyfpmx_hsbm.rkje) from view_gyfpmx_hsbm where view_gyfpmx_hsbm.fplb = gyfpb.fplb and  view_gyfpmx_hsbm.fphm=gyfpb.fphm) as  fpje,  
+			(select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm) +
+			(select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm) as yfkje,
+			(select isnull(sum(fksqspmxb.sqje),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = gyfpb.fplb and fksqspmxb.fphm = gyfpb.fphm) as sqje ,
+         gyfpb.fpje - (select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm) -
+			(select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm) 
+			- (select isnull(sum(fksqspmxb.sqje),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = gyfpb.fplb and fksqspmxb.fphm = gyfpb.fphm) as wqje,
+         gyfpb.bzsm,   
+         gyfpb.jzrq, 
+			gyfpb.kprq,  
+         '恒丰皮革' as yhbh,
+         csxxb.csmc,
+         csxxb.fktj,
+         csxxb.fkts,
+         csxxb.cszh,
+         csxxb.khyh,
+         csxxb.csmc as skdw,
+         csxxb.csmc as mrdw,
+			csxxb.cglb,
+			gyfpb.ztdw,
+			ztdwb.ztmc,
+			gyfpb.hsbm,
+			csxxb.wbbh,
+			wbmcb.wbdh,
+			gyfpb.wbhl,
+			gyfpb.wbje,
+			(select isnull(sum(gyfphtyfb.yfwb),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm) + 
+			(select isnull(sum(gyfpfyyfb.yfwb),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm) as yfwb,
+			(select isnull(sum(fksqspmxb.wbsq),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = gyfpb.fplb and fksqspmxb.fphm = gyfpb.fphm) as wbsq,
+			gyfpb.wbje - (select isnull(sum(gyfphtyfb.yfwb),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm) -
+			(select isnull(sum(gyfpfyyfb.yfwb),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm)
+			- (select isnull(sum(fksqspmxb.wbsq),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = gyfpb.fplb and fksqspmxb.fphm = gyfpb.fphm) as wqwb,
+			gyfpb.fptt as fpttbh,
+			d.csmc as fptt,
+			gyfpb.cgym,
+			gyfpb.ycbj,
+			0 as xzbj
+    FROM gyfpb with (nolock)
+   left outer join csxxb with (nolock) on gyfpb.csbh = csxxb.csbh
+   left outer join csxxb d with (nolock) on d.csbh = gyfpb.fptt
+   left outer join ztdwb with (nolock) on ztdwb.ztbh = gyfpb.ztdw
+	left outer join wbmcb with (nolock) on csxxb.wbbh = wbmcb.wbbh
+	left outer join view_gyfpmx_hsbm a with (nolock) on a.fplb = gyfpb.fplb and  a.fphm=gyfpb.fphm
+ where  gyfpb.shbj=1  and gyfpb.djbj=0 and
+         abs(gyfpb.fpje) - (select abs(isnull(sum(gyfphtyfb.yfje),0)) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=gyfpb.fplb and gyfphtyfb.fphm=gyfpb.fphm) - 
+			(select abs(isnull(sum(gyfpfyyfb.yfje),0)) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=gyfpb.fplb and gyfpfyyfb.fphm=gyfpb.fphm)
+			- (select abs(isnull(sum(fksqspmxb.sqje),0)) from fksqspmxb with (nolock) where fksqspmxb.fplb = gyfpb.fplb and fksqspmxb.fphm = gyfpb.fphm) > 0
+		<if test="csbh!=null and csbh!=''">
+			and  gyfpb.csbh=#{csbh}
+		</if>
+		<if test="fphm!=null">
+			and  gyfpb.fphm=#{fphm}
+		</if>
+</select>
+<select id="getSupplyInvoiceImpDetailList" parameterType="map" resultType="erp.erp.PayApply.model.SupplyInvoiceImp">
+	  SELECT view_gyfpmx_hsbm.fplb,   
+         view_gyfpmx_hsbm.fphm, 
+         gyfpb.wbhl,  
+         gyfpb.ycbj,    
+  		 hsbmb.bmmc ,
+  		 gyfpb.kprq,
+         gyfpb.jzrq, 
+         gyfpb.fpje,
+		 (select isnull(sum(fksqspmxb.sqje),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = gyfpb.fplb and fksqspmxb.fphm = gyfpb.fphm) as sqje ,
+  		 view_gyfpmx_hsbm.hsbm,
+         view_gyfpmx_hsbm.rkje,     
+         view_gyfpmx_hsbm.csje,  
+         view_gyfpmx_hsbm.wbje, 
+			(select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=view_gyfpmx_hsbm.fplb and gyfphtyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfphtyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) +
+			(select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=view_gyfpmx_hsbm.fplb and gyfpfyyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfpfyyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) as yfkje,
+			(select isnull(sum(fksqspmxb.sqje),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = view_gyfpmx_hsbm.fplb and fksqspmxb.fphm = view_gyfpmx_hsbm.fphm and fksqspmxb.hsbm = view_gyfpmx_hsbm.hsbm) as sqje ,
+			view_gyfpmx_hsbm.rkje - (select isnull(sum(gyfphtyfb.yfje),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=view_gyfpmx_hsbm.fplb and gyfphtyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfphtyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) -
+			(select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=view_gyfpmx_hsbm.fplb and gyfpfyyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfpfyyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) 
+			- (select isnull(sum(fksqspmxb.sqje),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = view_gyfpmx_hsbm.fplb and fksqspmxb.fphm = view_gyfpmx_hsbm.fphm and fksqspmxb.hsbm=view_gyfpmx_hsbm.hsbm) as wqje,
+
+			(select isnull(sum(gyfphtyfb.yfwb),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=view_gyfpmx_hsbm.fplb and gyfphtyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfphtyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) + 
+			(select isnull(sum(gyfpfyyfb.yfwb),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=view_gyfpmx_hsbm.fplb and gyfpfyyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfpfyyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) as yfwb,
+			(select isnull(sum(fksqspmxb.wbsq),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = view_gyfpmx_hsbm.fplb and fksqspmxb.fphm = view_gyfpmx_hsbm.fphm and fksqspmxb.hsbm=view_gyfpmx_hsbm.hsbm) as wbsq,
+			view_gyfpmx_hsbm.wbje - (select isnull(sum(gyfphtyfb.yfwb),0) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=view_gyfpmx_hsbm.fplb and gyfphtyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfphtyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) -
+			(select isnull(sum(gyfpfyyfb.yfwb),0) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=view_gyfpmx_hsbm.fplb and gyfpfyyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfpfyyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm)
+			- (select isnull(sum(fksqspmxb.wbsq),0) from fksqspmxb with (nolock) where fksqspmxb.fplb = view_gyfpmx_hsbm.fplb and fksqspmxb.fphm = view_gyfpmx_hsbm.fphm and fksqspmxb.hsbm=view_gyfpmx_hsbm.hsbm) as wqwb,
+			0 as xzbj 
+    FROM view_gyfpmx_hsbm  
+    left outer join hsbmb with (nolock) on hsbmb.bmbh = view_gyfpmx_hsbm.hsbm
+    left outer join gyfpb with (nolock) on gyfpb.fplb = view_gyfpmx_hsbm.fplb and gyfpb.fphm = view_gyfpmx_hsbm.fphm
+   WHERE 1=1
+   <if test="fplb!=null">
+   and view_gyfpmx_hsbm.fplb=#{fplb}
+   </if>
+   <if test="fphm!=null">
+   and view_gyfpmx_hsbm.fphm=#{fphm} 
+   </if>
+   and abs(view_gyfpmx_hsbm.rkje) - (select abs(isnull(sum(gyfphtyfb.yfje),0)) from gyfphtyfb with (nolock) where gyfphtyfb.fplb=view_gyfpmx_hsbm.fplb and gyfphtyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfphtyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm) - 
+		(select abs(isnull(sum(gyfpfyyfb.yfje),0)) from gyfpfyyfb with (nolock) where gyfpfyyfb.fplb=view_gyfpmx_hsbm.fplb and gyfpfyyfb.fphm=view_gyfpmx_hsbm.fphm and left(gyfpfyyfb.hsbm,4)=view_gyfpmx_hsbm.hsbm)
+		- (select abs(isnull(sum(fksqspmxb.sqje),0)) from fksqspmxb with (nolock) where fksqspmxb.fplb = view_gyfpmx_hsbm.fplb and fksqspmxb.fphm = view_gyfpmx_hsbm.fphm and fksqspmxb.hsbm = view_gyfpmx_hsbm.hsbm) > 0
+
+</select>
+</mapper>

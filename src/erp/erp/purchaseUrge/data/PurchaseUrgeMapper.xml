@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseUrge.data.PurchaseUrgeMapper">
+<select id="getPurchaseUrgeCollectCount" parameterType="map" resultType="erp.erp.purchaseUrge.model.PurchaseUrgeCollect">
+select sum(cgsl) as cgsl,
+		<!-- sum(cgje) as cgje, -->
+		   sum(cgww) as cgww,
+		   <!-- sum(cgwwje) as cgwwje, -->
+		   <!-- sum(zhsl) as zhsl, -->
+		   sum(dhrk) as dhrk,
+		   sum(fzsl) as fzsl,
+		   sum(djsl) as djsl,
+		   sum(drsl) as drsl,
+		   sum(dtsl) as dtsl,
+		   sum(rksl) as rksl
+		   <!-- sum(rkzs) as rkzs, -->
+		   <!-- sum(wdzs) as wdzs -->  from (
+	 SELECT 
+	     htmxb.htbh, 
+		 htmxb.htxh,
+         htmxb.clhh,     
+         htmxb.jldw,   
+         sum(htmxb.CGSL) as cgsl,     
+		 sum(htmxb.dhrk) as dhrk, 
+         sum(case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end) as cgww,
+		 htmxb.cltx1,
+		 htmxb.cltx2,
+		 htmxb.cltx3,  
+		 htmxb.fzdw,
+         htmxb.bzsm,
+         convert (varchar(3000),htmxb.zczy) as zczy,
+         htmxb.qrjq,
+		 sum(htmxb.fzsl) as fzsl,
+         cghtb.csbh,
+         cghtb.dysj,
+         csxxb.csmc,
+         cghtb.cgbz,   
+         cghtb.cgrq,
+         cghtb.gdbj,
+		 cghtb.cgym,
+		 htmxb.sdck,
+         clbmb.lbbh,
+         clbmb.clmc,
+		 clbmb.clth,
+		 clbmb.fzzbj,
+         sum(view_cgrkhz.rksl) as rksl,
+         sum(case when isnull(htmxb.cgsl,0) - isnull(view_cgrkhz.rksl,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(view_cgrkhz.rksl,0) else 0 end) as rkww,
+		 sum(view_djdrdt_cghz.djsl) as djsl,
+		 sum(view_djdrdt_cghz.drsl) as drsl,
+		 sum(view_djdrdt_cghz.dtsl) as dtsl,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+	 	 cgyb.cgyxm,
+		 ckmcb_yl.ckmc as sdckmc
+    FROM htmxb with (nolock)
+left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join csxxb with (nolock) on cghtb.csbh=csxxb.csbh 
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+left outer join cgjhmxb with (nolock) on cgjhmxb.cgbh=htmxb.cgbh and cgjhmxb.cgxh=htmxb.cgxh 
+left outer join view_cgrkhz with (nolock) on view_cgrkhz.htbh=htmxb.htbh and view_cgrkhz.htxh=htmxb.htxh
+left outer join view_djdrdt_cghz with (nolock) on view_djdrdt_cghz.htbh=htmxb.htbh and view_djdrdt_cghz.htxh=htmxb.htxh
+left outer join cgyb with (nolock) on cgyb.cgybh=cghtb.cgym
+left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=htmxb.sdck
+where 1=1 
+	<if test="lbqx!=null">
+		${lbqx}
+	</if>
+	<if test="cglb!=null">
+		and left(cghtb.cglb,len('${cglb}'))='${cglb}'
+	</if>
+	<if test="gdbj!=null and gdbj ==0 ">
+		and (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="gdbj!=null and gdbj !=0 ">
+		and not (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="search!=null">
+		  ${search}
+	</if>
+	<if test="lbbh!=null">
+		  and clbmb.lbbh like '${lbbh}%'
+	</if>
+	<if test="islczc!=null">
+		${islczc}
+	</if>
+	group by 
+	htmxb.HTBH, 
+	htmxb.htxh,     
+	htmxb.CLHH,     
+	htmxb.JLDW,
+	htmxb.cltx1,
+	htmxb.cltx2,
+	htmxb.cltx3, 
+	htmxb.fzdw,
+	htmxb.bzsm,
+	convert (varchar(3000),htmxb.zczy),
+	htmxb.qrjq,
+	cghtb.csbh,
+	csxxb.csmc, 
+	clbmb.lbbh,
+	clbmb.clmc,
+	clbmb.clth,
+	clbmb.fzzbj,
+	cghtb.cgbz,   
+	cghtb.cgrq,
+	cghtb.gdbj,
+	cghtb.cgym,
+	cghtb.dysj,
+	htmxb.sdck,
+	clbmb.plmth,
+	clbmb.plmtx,
+	cgyb.cgyxm,
+	ckmcb_yl.ckmc
+	) aa 
+</select>
+<select id="getPurchaseUrgeCount" parameterType="map" resultType="erp.erp.purchaseUrge.model.PurchaseUrge">
+	select sum(cgsl) as cgsl,
+		   sum(cgje) as cgje,
+		   sum(cgww) as cgww,
+		   sum(cgwwje) as cgwwje,
+		   sum(zhsl) as zhsl,
+		   sum(dhrk) as dhrk,
+		   sum(fzsl) as fzsl,
+		   sum(djsl) as djsl,
+		   sum(drsl) as drsl,
+		   sum(dtsl) as dtsl,
+		   sum(rksl) as rksl,
+		   sum(rkzs) as rkzs,
+		   sum(wdzs) as wdzs
+	 from (
+	  SELECT  
+		 cghtb.qfbj,
+		 cgjhb.jhlb,   
+         htmxb.htxh,    
+         htmxb.clhh,      
+         htmxb.jldw,   
+         case when kjlx=0 then htmxb.CGSL else htmxb.fzsl end as cgsl,
+         <!-- htmxb.cgsl, -->     
+		 htmxb.dhrk, 
+		 htmxb.jhbh,
+		 htmxb.jhxh,
+         case when htmxb.jhbh&lt;&gt;0 then ltrim(rtrim(str(htmxb.jhbh)))+'-'+ltrim(rtrim(str(htmxb.jhxh))) else null end as jhh,  
+         case when htmxb.cgbh&lt;&gt;0 then ltrim(rtrim(str(htmxb.cgbh)))+'-'+ltrim(rtrim(str(htmxb.cgxh))) else null end as cgh,  
+         case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end as cgww,
+         htmxb.cgdj,
+         htmxb.kzdj,
+         round((case when htmxb.kjlx=1 then htmxb.fzsl else htmxb.cgsl end) * htmxb.CGDJ,2) as cgje,
+		 case when kjlx=0 then (case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then round((isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0))*htmxb.cgdj,2) else 0 end)
+		 else (case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then round((isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0))/htmxb.cgsl*round(htmxb.fzsl*htmxb.cgdj,2),2) else 0 end) end as cgwwje,
+         htmxb.wcbj,
+		 htmxb.cltx1,
+		 htmxb.cltx2,
+		 htmxb.cltx3,
+		 htmxb.jhrq,
+         htmxb.qdbj,
+         htmxb.qdsj,
+         htmxb.qdrm,
+		 htmxb.qrjq,
+		 htmxb.hqjq,
+		 htmxb.zzbj,
+		 htmxb.sdck,
+		 htmxb.fzdw,
+		 htmxb.fzsl,
+         htmxb.bzsm, 
+         htmxb.zczy,
+		 htmxb.hsbm,
+		 htmxb.wkjq,  
+		 htmxb.gxsj,
+		 cghtfzb.zhsl,
+         cghtb.htbh,
+         cghtb.cgym,
+         cghtb.czym,
+         cghtb.czsj,
+         cghtb.dysj,
+         cghtb.csbh,
+         csxxb.csmc,
+         cghtb.cgbz,   
+         cghtb.cgrq,
+         cghtb.gdbj,
+         clbmb.lbbh,
+         clbmb.clmc,
+		 clbmb.clth,
+		 clbmb.fzzbj,
+		 clbmb.zzhxs,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+         htmxb.cjjhrq,
+		 view_djdrdt_cghz.djsl,
+		 view_djdrdt_cghz.drsl,
+		 view_djdrdt_cghz.dtsl,
+		 jhmxb.jhbz,
+		 cghtfzb.dgyl,
+		 0.00 as rkzs,
+		 0.00 as wdzs,
+		 htmxb.khbh,
+		 khxxb.khmc,
+		 htmxb.cpbh,
+		 cpbmb.cpmc,
+		 case when htmxb.qrjq is null  then 
+         case when htmxb.hqjq is null then htmxb.jhrq else htmxb.hqjq end else htmxb.qrjq end as jq,
+	     case when getdate()&gt;htmxb.jhrq and getdate()&gt;htmxb.qrjq then 1 else 0 end as bj,
+			case when cghtfzb.dgyl&gt;0 then dbo.f_szzh(cghtfzb.dgyl)+'*'+dbo.f_szzh(cghtfzb.gjsl) else null end as dlgg,
+			case when rwsxsjb.rwsx is not null then rwsxsjb.rwsx else case when rwsxsjb.zysx is not null then rwsxsjb.zysx else rwsxsjb.jhsx end end as sxrq,
+			case when rwsxsjb.rwsx is not null then '任务' else case when rwsxsjb.zysx is not null then '车间' else case when rwsxsjb.jhsx is not null then '计划' end end end as lyxz,
+			htmxb.sdbj,
+			htmxb.rksl,
+			htmxb.mjh,
+			htmxb.kjlx,
+			htmxb.zzlx,
+			htmxb.zzyx,
+			isnull(a.jlsl,0) as jlsl,
+			case when htmxb.wcbj=0 and cghtb.qfbj=1 and datediff(day,dateadd(day,isnull(htmxb.ghzq,0),cghtb.qfsj),htmxb.wkjq)&gt;0 then 1 else 0 end as lsbj,
+			case when htmxb.wcbj=0 and datediff(day,htmxb.wkjq,getdate())&gt;0 then 1 else 0 end as wkww,
+			case when htmxb.wcbj=0 and datediff(day,getdate(),htmxb.wkjq)&gt;=0 and datediff(day,getdate(),htmxb.wkjq)&lt;7 then 1 else 0 end as wkwwyz,
+			<if test="rkrqsync==null">
+				case when 1=0 then cghtb.czsj else null end as rkrq,
+			</if>
+			<if test="rkrqsync!=null">
+				dbo.f_rkrq(htmxb.htbh,htmxb.clhh) as rkrq,
+			</if>
+			<!-- qtqljlmxb.hfjl,
+			qtqljlmxb.yqjh, -->
+			cgjhmxb.qfsj,
+			htmxb.zxqrsj,
+			htmxb.zxqrrm,
+			htmxb.zxwksj,
+			htmxb.zxwkrm,
+			jhlbb.lbmc as jhlbmc,
+			cgyb.cgyxm,
+			khxxb.khjc,
+			hsbmb.bmmc as hsbmmc,
+			ckmcb_yl.ckmc as sdckmc
+    FROM htmxb with (nolock)
+left outer join cghtfzb with (nolock) on cghtfzb.htbh=htmxb.htbh and cghtfzb.htxh=htmxb.htxh and jlxh=1
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join cpbmb with (nolock) on cpbmb.cpbh=htmxb.cpbh
+left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh 
+left outer join khxxb with (nolock) on khxxb.khbh=htmxb.khbh
+left outer join cgjhb with (nolock) on cgjhb.cgbh=htmxb.cgbh 
+left outer join cgjhmxb with (nolock) on cgjhmxb.cgbh=htmxb.cgbh and cgjhmxb.cgxh=htmxb.cgxh
+left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+left outer join rwsxsjb with (nolock) on rwsxsjb.htbh=htmxb.htbh and rwsxsjb.htxh=htmxb.htxh
+left outer join view_djdrdt_cghz with (nolock) on view_djdrdt_cghz.htbh=htmxb.htbh and view_djdrdt_cghz.htxh=htmxb.htxh
+left outer join (
+	select count(*) as jlsl,jhbh,jhxh,clhh,cltx1 
+ from scbomgzmxb with (nolock) ,scbomgzb  with (nolock) where scbomgzmxb.gzdh=scbomgzb.gzdh  
+  group by jhbh,jhxh,clhh,cltx1
+ ) a on a.jhbh=htmxb.jhbh and a.jhxh=htmxb.jhxh and a.clhh=htmxb.clhh and a.cltx1=htmxb.cltx1 
+<!-- left outer join (
+	select htbh,htxh,max(qldh*100000+qlxh) as qlh from qtqljlmxb with (nolock) group by htbh,htxh
+) b on b.htbh=htmxb.htbh and b.htxh=htmxb.htxh
+left outer join qtqljlmxb with (nolock) on qtqljlmxb.qldh*100000+qlxh=b.qlh -->
+left outer join jhlbb with (nolock) on jhlbb.lbbh=cgjhb.jhlb
+left outer join cgyb with (nolock) on cgyb.cgybh=cghtb.cgym
+left outer join hsbmb with (nolock) on hsbmb.bmbh=htmxb.hsbm
+left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=htmxb.sdck
+where 1=1 
+	<if test="historyParams!=null">
+		${historyParams}
+	</if>
+	<if test="lbqx!=null">
+		${lbqx}
+	</if>
+	<if test="cglb!=null">
+		and left(cghtb.cglb,len('${cglb}'))='${cglb}'
+	</if>
+	<if test="gdbj!=null and gdbj ==0 ">
+		and (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="gdbj!=null and gdbj !=0 ">
+		and not (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="search!=null">
+		  ${search}
+	</if>
+	<if test="lbbh!=null">
+		  and clbmb.lbbh like '${lbbh}%'
+	</if>
+	<if test="islczc!=null">
+		${islczc}
+	</if>
+	) htmxb1
+	<where>
+		1=1
+		<if test="filterSearch!=null">
+			${filterSearch}
+		</if>
+	</where>
+</select>
+<!-- 刷新合同明细表 返回交期 -->
+<update id="updatePurchaseOrderTime" parameterType="map">
+	update htmxb
+		set hqjq = #{hqjq}
+		where htbh=#{htbh} and htxh =#{htxh}
+</update>
+<!-- 根据条件获得合同序号 -->
+<select id="getHtxhList" parameterType="map" resultType="String">
+	select htxh 
+	from htmxb  with (nolock)
+	left join clbmb  with (nolock) on htmxb.clhh=clbmb.clhh 
+	where 1=1
+	and zzbj = 0
+	and htbh=#{htbh}
+	and clbmb.clmc=#{clmc}
+	and htmxb.cltx1=#{cltx1}
+	and htmxb.clhh=#{clhh}
+	and htmxb.jldw=#{jldw}
+	<if test="hths!=null">
+	and ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh))  in (${hths})
+	</if>
+</select>
+<!-- 回填po-平台中间表 -->
+<update id="updatePoWithPlatform" parameterType="map">
+	update po_out_htmxb
+		set
+			tzbj = #{tzbj}
+		where 1=1
+		<if test="hths!=null">
+			and ltrim(rtrim(htbh))+'-'+ltrim(rtrim(htxh))  in (${hths})
+		</if>
+		<if test="htbh!=null">
+			and htbh=#{htbh} and htxh=#{htxh}
+		</if>		
+</update>
+<!-- 追催发送相关信息 -->
+<select id="getSynergyUrgeList" parameterType="map" resultType="erp.erp.purchaseUrge.model.SynergyUrge">
+	 	  select		
+	  		htmxb.htbh
+	  	   ,min(htmxb.htxh) htxh
+		   ,clmc 
+		   ,htmxb.jldw
+		   ,cltx1    
+		   ,sum(cgsl) cgsl
+		   ,jhrq
+		   ,po_out_htmxb.order_detail_id
+	   	   ,po_out_htmxb.pur_order_id
+	   	   ,po_out_htmxb.tzbj
+	   	   ,htmxb.clhh
+	   	   ,ckmc
+	   	   ,cgdj
+	  from htmxb    
+	   left join clbmb  with (nolock) on htmxb.clhh=clbmb.clhh
+	   left join( select MAX(pur_order_id) pur_order_id,htbh,htxh from po_out_htmxb  with (nolock) group  by htbh,htxh ) 
+	   as po  on htmxb.htbh=po.htbh and htmxb.htxh=po.htxh  
+	   left join po_out_htmxb with (nolock) on po_out_htmxb.pur_order_id=po.pur_order_id 
+	   and po.htxh=po_out_htmxb.htxh and po_out_htmxb.htbh=htmxb.htbh  
+	   left join ckmcb_yl as ck on htmxb.sdck=ck.ckbh
+	   where  1=1
+	       and htmxb.zzbj = 0
+	       <if test="hths!=null or htbhs!=null">  
+			and ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh))  in (${hths})
+			or ( htmxb.htbh in(${htbhs}) and po_out_htmxb.tzbj=2)
+	       </if> 
+	      <if test = "htbh!=null and htbh!=''">
+	       and ltrim(rtrim(htmxb.htbh)) = #{htbh}
+	      </if>
+	   group by 
+	  	  htmxb.htbh
+	  	 
+		 ,clmc 
+		  ,htmxb.jldw
+		  ,cltx1    
+		  ,jhrq
+		  ,po_out_htmxb.order_detail_id
+	   	   ,po_out_htmxb.pur_order_id
+	   	   ,po_out_htmxb.tzbj
+	   	   ,htmxb.clhh
+           ,ckmc
+           ,cgdj
+	 <!--  select		
+	  		htmxb.htbh
+	  	   ,htmxb.htxh
+		   ,clmc 
+		   ,htmxb.jldw
+		   ,cltx1    
+		   ,sum(cgsl) cgsl
+		   ,jhrq
+		   ,po_out_htmxb.order_detail_id
+	   	   ,po_out_htmxb.pur_order_id
+	   	   ,po_out_htmxb.tzbj
+	   	   ,htmxb.clhh
+	   	   ,ckmc
+	   	   ,cgdj
+	  from htmxb    
+	   left join clbmb  with (nolock) on htmxb.clhh=clbmb.clhh
+	   left join( select MAX(pur_order_id) pur_order_id,htbh,htxh from po_out_htmxb  with (nolock) group  by htbh,htxh ) 
+	   as po  on htmxb.htbh=po.htbh and htmxb.htxh=po.htxh  
+	   left join po_out_htmxb with (nolock) on po_out_htmxb.pur_order_id=po.pur_order_id 
+	   and po.htxh=po_out_htmxb.htxh and po_out_htmxb.htbh=htmxb.htbh  
+	   left join ckmcb_yl as ck on htmxb.sdck=ck.ckbh
+	   where  1=1
+	       and htmxb.zzbj = 0
+	   <if test="hths!=null or htbhs!=null">  
+			and ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh))  in (${hths})
+			or ( htmxb.htbh in(${htbhs}) and po_out_htmxb.tzbj=2)
+	   </if> 
+	   <if test = "htbh!=null and htbh!=''">
+	       and ltrim(rtrim(htmxb.htbh)) = #{htbh}
+	   </if>
+	   group by 
+	  	  htmxb.htbh
+	  	 ,htmxb.htxh 
+		 ,clmc 
+		  ,htmxb.jldw
+		  ,cltx1    
+		  ,jhrq
+		  ,po_out_htmxb.order_detail_id
+	   	   ,po_out_htmxb.pur_order_id
+	   	   ,po_out_htmxb.tzbj
+	   	   ,htmxb.clhh
+           ,ckmc
+           ,cgdj -->
+	  <!-- select		
+	  		htmxb.htbh 
+		   ,clmc 
+		   ,htmxb.jldw
+		   ,cltx1    
+		   ,case when htmxb.cgsl - htmxb.dhrk>0 then htmxb.cgsl - htmxb.dhrk else 0 end as cgww
+		   ,wkjq
+		   ,po_out_htmxb.order_detail_id
+	   	   ,po_out_htmxb.pur_order_id
+	   	   ,po_out_htmxb.tzbj
+	   	   ,htmxb.clhh
+	   	   ,htmxb.htxh 
+	   	   ,case when ISNULL(htmxb.qrjq,'')=''  then 0 else 1 end as is_edit 
+	  from htmxb    
+	   left join clbmb  with (nolock) on htmxb.clhh=clbmb.clhh
+	   left join( select MAX(pur_order_id) pur_order_id,htbh,htxh from po_out_htmxb  with (nolock) group  by htbh,htxh ) as po  on htmxb.htbh=po.htbh and htmxb.htxh=po.htxh  
+	   left join po_out_htmxb with (nolock) on po_out_htmxb.pur_order_id=po.pur_order_id  and po.htxh=po_out_htmxb.htxh and po_out_htmxb.htbh=htmxb.htbh  
+	   where  1=1
+	   <if test="hths!=null or htbhs!=null">  
+	   (
+			and ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh))  in (${hths})
+			or ( htmxb.htbh in(${htbhs}) and po_out_htmxb.tzbj=2)
+	   )
+	   </if> 
+	   <if test = "htbh!=null and htbh!=''">
+	       and ltrim(rtrim(htmxb.htbh)) = #{htbh}
+	   </if> -->
+</select>
+<!-- 加工费用 -->
+<select id="getProcessCostList" parameterType="map" resultType="erp.erp.purchaseUrge.model.ProcessCost">
+	SELECT gjjjbomb.htbh,
+		 	gjjjbomb.htxh,
+			ltrim(rtrim(gjjjbomb.htbh))+'-'+ltrim(rtrim(gjjjbomb.htxh)) as hth,
+			sum(gjjjbomb.clje) as clje,
+			htmxb.cgsl,
+			round(htmxb.cgsl*sum(gjjjbomb.clje),2) as jgje,
+			htmxb.clhh,
+			htmxb.jldw,
+			clbmb.clmc, 
+			htmxb.cltx1,
+         	clbmb.plmth,
+	 		clbmb.plmtx
+    FROM gjjjbomb 
+	left outer join htmxb on htmxb.htbh=gjjjbomb.htbh and htmxb.htxh=gjjjbomb.htxh
+	left outer join clbmb on clbmb.clhh=htmxb.clhh
+	where gjjjbomb.clmc='外协加工费' and ltrim(rtrim(gjjjbomb.htbh))+'-'+ltrim(rtrim(gjjjbomb.htxh))  in (${hths})
+	group by 
+		gjjjbomb.htbh,
+		gjjjbomb.htxh,
+        htmxb.clhh,
+		htmxb.jldw,
+		htmxb.cgsl,
+		clbmb.clmc,
+		htmxb.cltx1,
+        clbmb.plmth,
+	 	clbmb.plmtx
+</select>
+<!-- 钢架明细 -->
+<select id="getSteelFrameDetailList" parameterType="map" resultType="erp.erp.purchaseUrge.model.SteelFrameDetail">
+	 SELECT gjjjbomb.clhh,
+			ltrim(rtrim(gjjjbomb.clmc)) as clmc,
+         gjjjbomb.cltx1,   
+         gjjjbomb.cltx2,   
+         gjjjbomb.cltx3,   
+         gjjjbomb.jldw,
+		 clbmb.lbbh,  
+		 csxxb.csmc,
+		 isnull(sum(gjjjbomb.djyl*isnull(case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end,0)),0) as wwsl,
+		 isnull(sum(gjjjbomb.clje*isnull(case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end,0)),0) as wwje,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+	 	 cllbb.lbmc
+    FROM gjjjbomb 
+	left outer join htmxb with (nolock) on htmxb.htbh=gjjjbomb.htbh and htmxb.htxh=gjjjbomb.htxh
+	left outer join cghtb with (nolock) on cghtb.htbh=gjjjbomb.htbh 
+	left outer join csxxb with (nolock) on cghtb.csbh=csxxb.csbh
+	left outer join clbmb with (nolock) on gjjjbomb.clhh=clbmb.clhh
+	left outer join CLLBB with (nolock) on CLLBB.lbbh=clbmb.lbbh
+	where ltrim(rtrim(gjjjbomb.htbh))+'-'+ltrim(rtrim(gjjjbomb.htxh))  in (${hths})
+	group by 
+			gjjjbomb.clhh,
+			gjjjbomb.clmc,
+         gjjjbomb.cltx1,   
+         gjjjbomb.cltx2,   
+         gjjjbomb.cltx3,   
+         gjjjbomb.jldw,
+		 csxxb.csmc,
+		 clbmb.lbbh,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+	 	 cllbb.lbmc
+</select>
+<!-- 入库单表引入 -->
+<select id="getCalForNumberList" parameterType="map" resultType="erp.erp.purchaseUrge.model.CalForNumber">
+	select cltx1,fzsl from rkdb_yl  with (nolock) where 
+	htbh=#{htbh} and htxh=#{htxh};
+</select>
+<!-- 滚动输出One -->
+<select id="getRollOutputOneList" parameterType="map" resultType="erp.erp.purchaseUrge.model.RollOutput">
+  SELECT 
+		 htmxb.htbh,   
+         htmxb.htxh,    
+         htmxb.clhh,      
+         htmxb.jldw,   
+         case when kjlx=0 then htmxb.CGSL else htmxb.fzsl end as cgsl,     
+		 htmxb.dhrk, 
+         case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end as cgww,
+         htmxb.wcbj,
+		 htmxb.cltx1,
+		 htmxb.cltx2,
+		 htmxb.cltx3,
+         htmxb.bzsm, 
+		 isnull(convert(char(10),htmxb.wkjq,102),'') as wkjq,  
+         cghtb.htbh,
+         cghtb.cgym,
+         cghtb.csbh,
+         csxxb.csmc, 
+         cghtb.cgbz,   
+         clbmb.lbbh,
+         clbmb.clmc,
+		 isnull(convert(char(10),htmxb.qrjq,102),'') as qrjq,
+		 space(100) as zczy,
+		 ${jltj} as jltj,
+         clbmb.plmth,
+	 	 clbmb.plmtx
+    FROM htmxb with (nolock)
+left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh 
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join view_qtqljlmx_maxht with (nolock) on view_qtqljlmx_maxht.htbh=htmxb.htbh and view_qtqljlmx_maxht.htxh=htmxb.htxh
+left outer join qtqljlmxb with (nolock) on qtqljlmxb.qldh=view_qtqljlmx_maxht.qldh and qtqljlmxb.qlxh=view_qtqljlmx_maxht.qlxh 
+where cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0 and cghtb.cgym=#{cgym} 
+and ((${jltj}=0 and ((qtqljlmxb.hfyj is null and qrjq is not null) or qtqljlmxb.hfyj='')) or (${jltj}=1 and ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) in (${hths})))
+</select>
+<!-- 滚动输出 -->
+<select id="getRollOutputList" parameterType="map" resultType="erp.erp.purchaseUrge.model.RollOutput">
+	SELECT 
+		 htmxb.htbh, 
+		 0 as htxh,  
+         htmxb.clhh,      
+         htmxb.jldw,   
+         sum(case when kjlx=0 then htmxb.CGSL else htmxb.fzsl end) as cgsl,     
+		 sum(htmxb.dhrk) as dhrk, 
+         sum(case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end) as cgww,
+		 htmxb.cltx1,
+		 htmxb.cltx2,
+		 htmxb.cltx3,
+		 isnull(convert(char(10),htmxb.wkjq,102),'') as wkjq,  
+         cghtb.cgym,
+         cghtb.csbh,
+         csxxb.csmc,
+         cghtb.cgbz,    
+         clbmb.lbbh,
+         clbmb.clmc,
+		 isnull(convert(char(10),min(qrjq),102),'') as qrjq,
+		 space(100) as zczy,
+		 ${jltj} as jltj,
+         clbmb.plmth,
+	 	 clbmb.plmtx
+    FROM htmxb with (nolock)
+left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh 
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join view_qtqljlmx_maxht with (nolock) on view_qtqljlmx_maxht.htbh=htmxb.htbh and view_qtqljlmx_maxht.htxh=htmxb.htxh
+left outer join qtqljlmxb with (nolock) on qtqljlmxb.qldh=view_qtqljlmx_maxht.qldh and qtqljlmxb.qlxh=view_qtqljlmx_maxht.qlxh 
+where cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0 and cghtb.cgym=#{cgym} and 
+((${jltj}=0 and ((qtqljlmxb.hfyj is null and qrjq is not null) or qtqljlmxb.hfyj='')) or (${jltj}=1 and ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) in (${hths})   ))
+group by
+		htmxb.HTBH,   
+        htmxb.CLHH,      
+        htmxb.JLDW,  
+	    htmxb.cltx1,
+		htmxb.cltx2,
+		htmxb.cltx3,
+		htmxb.fzdw,
+		convert(char(10),htmxb.wkjq,102),  
+        cghtb.cgym,
+        cghtb.csbh,
+        csxxb.csmc,
+        cghtb.cgbz,   
+        clbmb.lbbh,
+        clbmb.clmc,
+        clbmb.plmth,
+	 	clbmb.plmtx
+</select>
+<!-- 修改确认时间 -->
+<update id="updateConfirmTime" parameterType="erp.erp.purchaseUrge.model.ConfirmTime">
+	update htmxb
+		set
+			qrjq = #{qrjq},
+			zczy = #{zczy},
+			zxqrsj = getdate(),
+			zxqrrm = #{zxqrrm}
+		where htbh = #{htbh} and htxh=#{htxh}
+</update>
+<!-- 确认交期 -->
+<select id="getConfirmTimeList" parameterType="map" resultType="erp.erp.purchaseUrge.model.ConfirmTime">
+  SELECT htmxb.htbh,
+		 htmxb.htxh,
+		 ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) as hth,
+		 clbmb.clmc,
+		 htmxb.cltx1,
+		 htmxb.cgsl,
+		 htmxb.wkjq,
+		 cghtb.csbh,
+		 case when rwsxsjb.rwsx is not null then rwsxsjb.rwsx else case when rwsxsjb.zysx is not null then rwsxsjb.zysx else rwsxsjb.jhsx end end as sxrq,
+		 case when htmxb.qrjq is null then (case when rwsxsjb.rwsx is not null then rwsxsjb.rwsx else case when rwsxsjb.zysx is not null then rwsxsjb.zysx else rwsxsjb.jhsx end end) else htmxb.qrjq end as qrjq,
+		 htmxb.zczy,
+		 csxxb.csmc
+    FROM htmxb
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join rwsxsjb with (nolock) on rwsxsjb.htbh=htmxb.htbh and rwsxsjb.htxh=htmxb.htxh
+left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh
+where ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) in ${hths}
+</select>
+<!-- 确认标记 -->
+<update id="updateAogState" parameterType="map">
+	update htmxb 
+	set qdbj=#{qdbj},
+	qdsj=getdate(),
+	qdrm=#{czym},
+	wcbj=#{wcbj} 
+	where ltrim(rtrim(htbh))+'-'+ltrim(rtrim(htxh))  in  ${hths}
+</update>
+<!-- 确认同步数据刷新 -->
+<update id="updateAogSyncState" parameterType="map">
+	update cghtb set wcbj=(case when (select count(*) from htmxb with (nolock) where htbh=cghtb.htbh and not (zzbj=1 or wcbj=1))=0 then 1 else 0 end),
+	gdbj=(case when (select count(*) from htmxb with (nolock) where htbh=cghtb.htbh and not (zzbj=1 or wcbj=1))=0 then 1 else 0 end)
+	from cghtb
+	where cghtb.htbh in ${htbhs};
+</update>
+
+<!-- 回复物控 -->
+<select id="getPurchaseUrgeOthList" parameterType="map" resultType="erp.erp.purchaseUrge.model.PurchaseUrgeOth">
+	SELECT qtqljlmxb.qldh,
+			qtqljlmxb.qlxh,
+			qtqljlmxb.jhbh,
+			qtqljlmxb.jhxh,
+			case when qtqljlmxb.jhbh &lt;&gt;0 then
+			ltrim(rtrim(qtqljlmxb.jhbh))+'-'+ltrim(rtrim(qtqljlmxb.jhxh)) else null
+			end as jhh,
+			qtqljlmxb.htbh,
+			qtqljlmxb.htxh,
+			case when qtqljlmxb.htbh &lt;&gt;0 then
+			ltrim(rtrim(qtqljlmxb.htbh))+'-'+ltrim(rtrim(qtqljlmxb.htxh)) else null
+			end as hth,
+			qtqljlmxb.wxdh,
+			qtqljlmxb.wxxh,
+			case when qtqljlmxb.wxdh &lt;&gt;0 then
+			ltrim(rtrim(qtqljlmxb.wxdh))+'-'+ltrim(rtrim(qtqljlmxb.wxxh)) else null
+			end as wxh,
+			qtqljlmxb.clhh,
+			qtqljlmxb.cltx1,
+			qtqljlmxb.cltx2,
+			qtqljlmxb.cltx3,
+			qtqljlmxb.jldw,
+			qtqljlmxb.cgsl,
+			qtqljlmxb.jhrq,
+			qtqljlmxb.qlrq,
+			qtqljlmxb.tqts,
+			qtqljlmxb.wkjq,
+			qtqljlmxb.scwkjq,
+			qtqljlmxb.yqjh,
+			qtqljlmxb.hfjl,
+			qtqljlmxb.hfrm,
+			qtqljlmxb.hfsj,
+			qtqljlmxb.hfyj,
+			qtqljlmxb.bzsm,
+			clbmb.clmc
+			FROM qtqljlmxb
+		left outer join qtqljlb with (nolock) on qtqljlb.qldh=qtqljlmxb.qldh
+		left outer join clbmb with (nolock) on clbmb.clhh=qtqljlmxb.clhh
+		WHERE htbh = #{htbh} and htxh=#{htxh} and qtqljlb.qfbj=1
+</select>
+<!-- 获取追催记录 -->
+<select id="getPurchaseUrgeDetailList" parameterType="map" resultType="erp.erp.purchaseUrge.model.PurchaseUrgeDetail">
+	  SELECT cgzcjlb.htbh,   
+         cgzcjlb.htxh,   
+         cgzcjlb.jlxh,   
+         cgzcjlb.ztsl,   
+         cgzcjlb.yjdh,   
+         cgzcjlb.qrjq,   
+         cgzcjlb.lxbh,   
+         cgzcjlb.ycyy,   
+         cgzcjlb.czrm,   
+         cgzcjlb.czsj  
+    FROM cgzcjlb   
+	WHERE cgzcjlb.htbh=#{htbh} and cgzcjlb.htxh=#{htxh}
+</select>
+<!-- 合并追催-->
+<select id="getPurchaseUrgeCollectList" parameterType="map" resultType="erp.erp.purchaseUrge.model.PurchaseUrgeCollect">
+select  *  from (
+	 SELECT 
+	     htmxb.htbh, 
+		 htmxb.htxh,
+         htmxb.clhh,     
+         htmxb.jldw,   
+         sum(htmxb.CGSL) as cgsl,     
+		 sum(htmxb.dhrk) as dhrk, 
+         sum(case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end) as cgww,
+		 htmxb.cltx1,
+		 htmxb.cltx2,
+		 htmxb.cltx3,  
+		 htmxb.fzdw,
+         htmxb.bzsm,
+         convert (varchar(3000),htmxb.zczy) as zczy,
+         htmxb.qrjq,
+		 sum(htmxb.fzsl) as fzsl,
+         cghtb.csbh,
+         cghtb.dysj,
+         csxxb.csmc,
+         cghtb.cgbz,   
+         cghtb.cgrq,
+         cghtb.gdbj,
+		 cghtb.cgym,
+		 htmxb.sdck,
+         clbmb.lbbh,
+         clbmb.clmc,
+		 clbmb.clth,
+		 clbmb.fzzbj,
+         sum(view_cgrkhz.rksl) as rksl,
+         sum(case when isnull(htmxb.cgsl,0) - isnull(view_cgrkhz.rksl,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(view_cgrkhz.rksl,0) else 0 end) as rkww,
+		 sum(view_djdrdt_cghz.djsl) as djsl,
+		 sum(view_djdrdt_cghz.drsl) as drsl,
+		 sum(view_djdrdt_cghz.dtsl) as dtsl,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+	 	 cgyb.cgyxm,
+		 ckmcb_yl.ckmc as sdckmc
+    FROM htmxb with (nolock)
+left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join csxxb with (nolock) on cghtb.csbh=csxxb.csbh 
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+left outer join cgjhmxb with (nolock) on cgjhmxb.cgbh=htmxb.cgbh and cgjhmxb.cgxh=htmxb.cgxh 
+left outer join view_cgrkhz with (nolock) on view_cgrkhz.htbh=htmxb.htbh and view_cgrkhz.htxh=htmxb.htxh
+left outer join view_djdrdt_cghz with (nolock) on view_djdrdt_cghz.htbh=htmxb.htbh and view_djdrdt_cghz.htxh=htmxb.htxh
+left outer join cgyb with (nolock) on cgyb.cgybh=cghtb.cgym
+left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=htmxb.sdck
+where 1=1 
+	<if test="lbqx!=null">
+		${lbqx}
+	</if>
+	<if test="cglb!=null">
+		and left(cghtb.cglb,len('${cglb}'))='${cglb}'
+	</if>
+	<if test="gdbj!=null and gdbj ==0 ">
+		and (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="gdbj!=null and gdbj !=0 ">
+		and not (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="search!=null">
+		  ${search}
+	</if>
+	<if test="lbbh!=null">
+		  and clbmb.lbbh like '${lbbh}%'
+	</if>
+	<if test="islczc!=null">
+		${islczc}
+	</if>
+	group by 
+	htmxb.HTBH, 
+	htmxb.htxh,     
+	htmxb.CLHH,     
+	htmxb.JLDW,
+	htmxb.cltx1,
+	htmxb.cltx2,
+	htmxb.cltx3, 
+	htmxb.fzdw,
+	htmxb.bzsm,
+	convert (varchar(3000),htmxb.zczy),
+	htmxb.qrjq,
+	cghtb.csbh,
+	csxxb.csmc, 
+	clbmb.lbbh,
+	clbmb.clmc,
+	clbmb.clth,
+	clbmb.fzzbj,
+	cghtb.cgbz,   
+	cghtb.cgrq,
+	cghtb.gdbj,
+	cghtb.cgym,
+	cghtb.dysj,
+	htmxb.sdck,
+	clbmb.plmth,
+	clbmb.plmtx,
+	cgyb.cgyxm,
+	ckmcb_yl.ckmc
+	) aa 
+	<if test="sort==null">
+		order by htbh desc,htxh
+	</if>
+	<if test="sort!=null">
+		order by  ${sort}
+	</if>
+</select>
+<select id="getPurchaseUrgeList" parameterType="map" resultType="erp.erp.purchaseUrge.model.PurchaseUrge">
+	select * from (
+	  SELECT  
+		 cghtb.qfbj,
+		 cgjhb.jhlb, 
+		 htmxb.cfbj,  
+		 htmxb.gxbj,
+         htmxb.htxh,    
+         htmxb.clhh,      
+         htmxb.jldw,   
+         case when kjlx=0 then htmxb.CGSL else htmxb.fzsl end as cgsl,
+         <!-- htmxb.cgsl, -->     
+		 htmxb.dhrk, 
+		 htmxb.jhbh,
+		 htmxb.jhxh,
+		 htmxb.ghzq,   
+         case when htmxb.jhbh&lt;&gt;0 then ltrim(rtrim(str(htmxb.jhbh)))+'-'+ltrim(rtrim(str(htmxb.jhxh))) else null end as jhh,  
+         case when htmxb.cgbh&lt;&gt;0 then ltrim(rtrim(str(htmxb.cgbh)))+'-'+ltrim(rtrim(str(htmxb.cgxh))) else null end as cgh,  
+         case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) else 0 end as cgww,
+         htmxb.cgdj,
+         htmxb.kzdj,
+         round((case when htmxb.kjlx=1 then htmxb.fzsl else htmxb.cgsl end) * htmxb.CGDJ,2) as cgje,
+		 case when kjlx=0 then (case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then round((isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0))*htmxb.cgdj,2) else 0 end)
+		 else (case when isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0)&gt;0 then round((isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0))/htmxb.cgsl*round(htmxb.fzsl*htmxb.cgdj,2),2) else 0 end) end as cgwwje,
+         htmxb.wcbj,
+		 htmxb.cltx1,
+		 htmxb.cltx2,
+		 htmxb.cltx3,
+		 htmxb.jhrq,
+         htmxb.qdbj,
+         htmxb.qdsj,
+         htmxb.qdrm,
+		 htmxb.qrjq,
+		 htmxb.hqjq,
+		 htmxb.zzbj,
+		 htmxb.sdck,
+		 htmxb.fzdw,
+		 htmxb.fzsl,
+         htmxb.bzsm, 
+         htmxb.zczy,
+		 htmxb.hsbm,
+		 htmxb.wkjq,  
+		 htmxb.gxsj,
+		 cghtfzb.zhsl,
+         cghtb.htbh,
+         cghtb.cgym,
+         cghtb.czym,
+         cghtb.czsj,
+         cghtb.dysj,
+         cghtb.csbh,
+         csxxb.csmc,
+         cghtb.cgbz,   
+         cghtb.cgrq,
+         cghtb.cgrq_top,
+         cghtb.gdbj,
+         clbmb.lbbh,
+         clbmb.clmc,
+		 clbmb.clth,
+		 clbmb.fzzbj,
+		 clbmb.zzhxs,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+         htmxb.cjjhrq,
+		 view_djdrdt_cghz.djsl,
+		 view_djdrdt_cghz.drsl,
+		 view_djdrdt_cghz.dtsl,
+		 jhmxb.jhbz,
+		 cghtfzb.dgyl,
+		 0.00 as rkzs,
+		 0.00 as wdzs,
+		 htmxb.khbh,
+		 khxxb.khmc,
+		 htmxb.cpbh,
+		 cpbmb.cpmc,
+		 case when htmxb.qrjq is null  then 
+         case when htmxb.hqjq is null then htmxb.jhrq else htmxb.hqjq end else htmxb.qrjq end as jq,
+	     case when getdate()&gt;htmxb.jhrq and getdate()&gt;htmxb.qrjq then 1 else 0 end as bj,
+			case when cghtfzb.dgyl&gt;0 then dbo.f_szzh(cghtfzb.dgyl)+'*'+dbo.f_szzh(cghtfzb.gjsl) else null end as dlgg,
+			case when rwsxsjb.rwsx is not null then rwsxsjb.rwsx else case when rwsxsjb.zysx is not null then rwsxsjb.zysx else rwsxsjb.jhsx end end as sxrq,
+			case when rwsxsjb.rwsx is not null then '任务' else case when rwsxsjb.zysx is not null then '车间' else case when rwsxsjb.jhsx is not null then '计划' end end end as lyxz,
+			htmxb.sdbj,
+			htmxb.rksl,
+			htmxb.mjh,
+			htmxb.kjlx,
+			htmxb.zzlx,
+			htmxb.zzyx,
+			isnull(a.jlsl,0) as jlsl,
+			case when htmxb.wcbj=0 and cghtb.qfbj=1 and datediff(day,dateadd(day,isnull(htmxb.ghzq,0),cghtb.qfsj),htmxb.wkjq)&gt;0 then 1 else 0 end as lsbj,
+			case when htmxb.wcbj=0 and datediff(day,htmxb.wkjq,getdate())&gt;0 then 1 else 0 end as wkww,
+			case when htmxb.wcbj=0 and datediff(day,getdate(),htmxb.wkjq)&gt;=0 and datediff(day,getdate(),htmxb.wkjq)&lt;7 then 1 else 0 end as wkwwyz,
+			<if test="rkrqsync==null">
+				case when 1=0 then cghtb.czsj else null end as rkrq,
+			</if>
+			<if test="rkrqsync!=null">
+				dbo.f_rkrq(htmxb.htbh,htmxb.clhh) as rkrq,
+			</if>
+			<!-- qtqljlmxb.hfjl,
+			qtqljlmxb.yqjh, -->
+			cgjhmxb.qfsj,
+			htmxb.zxqrsj,
+			htmxb.zxqrrm,
+			htmxb.zxwksj,
+			htmxb.zxwkrm,
+			jhlbb.lbmc as jhlbmc,
+			cgyb.cgyxm,
+			khxxb.khjc,
+			hsbmb.bmmc as hsbmmc,
+			ckmcb_yl.ckmc as sdckmc,
+			cllbb.lbmc as cllbmc,<!-- 2084 1.采购最催管理，材料号前增加材料类别，取1级类别，操作日期之后，增加合同类型字段! -->
+    		cghtb.cglx
+    FROM htmxb with (nolock)
+left outer join cghtfzb with (nolock) on cghtfzb.htbh=htmxb.htbh and cghtfzb.htxh=htmxb.htxh and jlxh=1
+left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+left outer join cllbb with (nolock) on cllbb.lbbh = left(clbmb.lbbh,2)
+left outer join cpbmb with (nolock) on cpbmb.cpbh=htmxb.cpbh
+left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+left outer join csxxb with (nolock) on csxxb.csbh=cghtb.csbh 
+left outer join khxxb with (nolock) on khxxb.khbh=htmxb.khbh
+left outer join cgjhb with (nolock) on cgjhb.cgbh=htmxb.cgbh 
+left outer join cgjhmxb with (nolock) on cgjhmxb.cgbh=htmxb.cgbh and cgjhmxb.cgxh=htmxb.cgxh
+left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+left outer join rwsxsjb with (nolock) on rwsxsjb.htbh=htmxb.htbh and rwsxsjb.htxh=htmxb.htxh
+left outer join view_djdrdt_cghz with (nolock) on view_djdrdt_cghz.htbh=htmxb.htbh and view_djdrdt_cghz.htxh=htmxb.htxh
+left outer join (
+	select count(*) as jlsl,jhbh,jhxh,clhh,cltx1 
+ from scbomgzmxb with (nolock) ,scbomgzb  with (nolock) where scbomgzmxb.gzdh=scbomgzb.gzdh  
+  group by jhbh,jhxh,clhh,cltx1
+ ) a on a.jhbh=htmxb.jhbh and a.jhxh=htmxb.jhxh and a.clhh=htmxb.clhh and a.cltx1=htmxb.cltx1 
+<!-- left outer join (
+	select htbh,htxh,max(qldh*100000+qlxh) as qlh from qtqljlmxb with (nolock) group by htbh,htxh
+) b on b.htbh=htmxb.htbh and b.htxh=htmxb.htxh
+left outer join qtqljlmxb with (nolock) on qtqljlmxb.qldh*100000+qlxh=b.qlh -->
+left outer join jhlbb with (nolock) on jhlbb.lbbh=cgjhb.jhlb
+left outer join cgyb with (nolock) on cgyb.cgybh=cghtb.cgym
+left outer join hsbmb with (nolock) on hsbmb.bmbh=htmxb.hsbm
+left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=htmxb.sdck
+where 1=1 
+	<if test="historyParams!=null">
+		${historyParams}
+	</if>
+	<if test="lbqx!=null">
+		${lbqx}
+	</if>
+	<if test="cglb!=null">
+		and left(cghtb.cglb,len('${cglb}'))='${cglb}'
+	</if>
+	<if test="gdbj!=null and gdbj ==0 ">
+		and (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="gdbj!=null and gdbj !=0 ">
+		and not (cghtb.gdbj=0 and htmxb.wcbj=0 and htmxb.zzbj=0 and htmxb.qdbj=0)
+	</if>
+	<if test="search!=null">
+		  ${search}
+	</if>
+	<if test="lbbh!=null">
+		  and clbmb.lbbh like '${lbbh}%'
+	</if>
+	<if test="islczc!=null">
+		${islczc}
+	</if>
+	) htmxb1
+	<where>
+		1=1
+		<if test="filterSearch!=null">
+			${filterSearch}
+		</if>
+	</where>
+	<if test="sort==null">
+		  order by htbh desc,htxh
+	</if>
+	<if test="sort!=null">
+		  order by  ${sort}
+	</if>
+</select>
+</mapper>

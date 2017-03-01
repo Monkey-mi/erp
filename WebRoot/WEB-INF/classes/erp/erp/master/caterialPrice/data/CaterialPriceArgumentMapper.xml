@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.caterialPrice.data.CaterialPriceArgumentMapper">
+
+<!-- 判断参数名称是否相同-->
+<select id="getArgumentIsExist" parameterType="String" resultType="int">
+	select isnull(count(*),0)  from cljgcswhb where csmc=#{csmc};
+</select>
+<select id="getCaterialPriceArgumentList" parameterType="map" resultType="erp.erp.master.caterialPrice.model.CaterialPriceArgument">
+	select
+		dbo.cljgcswhb.csbh,
+		dbo.cljgcswhb.csmc,
+		dbo.cljgcswhb.spbj
+	from
+		dbo.cljgcswhb
+		<where>
+			<if test="csbh!=null">
+				dbo.cljgcswhb.csbh=#{csbh}
+			</if>
+			<if test="csmc!=null">
+				and dbo.cljgcswhb.csmc=#{csmc}
+			</if>
+			<if test="query!=null">
+				and (dbo.cljgcswhb.csmc like '%${query}%' or dbo.cljgcswhb.csbh =#{query})
+			</if>
+		</where>
+</select>
+<insert id="addCaterialPriceArgument" parameterType="erp.erp.master.caterialPrice.model.CaterialPriceArgument" keyProperty="csbh" useGeneratedKeys="true">
+	<selectKey keyProperty="csbh" resultType="int" order="BEFORE">
+		select isnull ( max ( csbh ) , 0 ) + 1 from cljgcswhb 
+	</selectKey>
+	insert into dbo.cljgcswhb
+	(
+		csbh,
+		csmc,
+		spbj
+	)
+	values
+	(
+		#{csbh},
+		#{csmc},
+		#{spbj}
+	)
+</insert>
+<update id="updateCaterialPriceArgument" parameterType="erp.erp.master.caterialPrice.model.CaterialPriceArgument">
+	update dbo.cljgcswhb
+		set
+			csbh = #{csbh},
+			csmc = #{csmc},
+			spbj = #{spbj}
+		where csbh = #{csbh}
+</update>
+<delete id="deleteCaterialPriceArgument" parameterType="erp.erp.master.caterialPrice.model.CaterialPriceArgument">
+	delete from dbo.cljgcswhb
+	where csbh = #{csbh}
+</delete>
+</mapper>

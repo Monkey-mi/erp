@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.ViewCsyfMapper">
+<!-- exec dbo.manuf_bykc @qcqs = #{qcqs}, @qsrq = #{qsrq}, @s_jzrq = #{s_jzrq},@nf = #{nf}, @tjlb = #{tjlb}, @wbbj = #{wbbj}, @hsbm = #{hsbm}, @yhbh = #{yhbh},@gdbj = #{gdbj}, @condition = #{condition},@start = #{start},@limit = #{limit},@count=#{count} 
+<parameterMap type="java.util.Map" id="ManuMap"> 
+    <parameter property="qcqs" jdbcType="VARCHAR"  mode="IN"/> 
+    <parameter property="qsrq" jdbcType="VARCHAR"  mode="IN"/> 
+    <parameter property="s_jzrq" jdbcType="VARCHAR"  mode="IN"/> 
+    <parameter property="nf" jdbcType="VARCHAR"  mode="IN"/> 
+    <parameter property="tjlb" jdbcType="INTEGER"  mode="IN"/> 
+    <parameter property="wbbj" jdbcType="INTEGER"  mode="IN"/> 
+    <parameter property="hsbm" jdbcType="VARCHAR"  mode="IN"/>  
+    <parameter property="yhbh" jdbcType="VARCHAR" mode="IN"/> 
+    <parameter property="gdbj" jdbcType="VARCHAR" mode="IN"/> 
+    <parameter property="condition" jdbcType="VARCHAR" mode="IN"/> 
+    <parameter property="start" jdbcType="INTEGER" mode="IN"/> 
+    <parameter property="limit" jdbcType="INTEGER" mode="IN"/> 
+    <parameter property="count" jdbcType="INTEGER" mode="OUT"/> 
+</parameterMap> 
+-->
+<select id="getmanufAccountDetial" statementType="CALLABLE"  parameterType="map" resultType="erp.erp.manufacturer.payAccount.model.Viewcsyf">    
+    <![CDATA[  
+         exec dbo.manuf_bykc
+          #{qcqs,jdbcType=VARCHAR,mode=IN},
+          #{qsrq,jdbcType=VARCHAR,mode=IN},
+          #{s_jzrq,jdbcType=VARCHAR,mode=IN},
+          #{nf,jdbcType=VARCHAR,mode=IN},
+          #{tjlb,jdbcType=INTEGER,mode=IN},
+          #{wbbj,jdbcType=INTEGER,mode=IN},
+          #{hsbm,jdbcType=VARCHAR,mode=IN},
+          #{yhbh,jdbcType=VARCHAR,mode=IN},
+          #{gdbj,jdbcType=VARCHAR,mode=IN},
+          #{condition,jdbcType=VARCHAR,mode=IN},
+          #{start,jdbcType=INTEGER,mode=IN},
+          #{limit,jdbcType=INTEGER,mode=IN},
+          #{count,jdbcType=INTEGER,mode=OUT}         
+          
+        ]]> 
+</select>
+
+<insert id="addmanufAccountDetial" parameterType="erp.erp.manufacturer.payAccount.model.Viewcsyf">
+   insert into view_csyf(csbh,hsbm,fpqcye) values (#{csbh},#{hsbm},#{fpqcye})
+</insert>
+<update id="updatemanufAccountDetial" parameterType="erp.erp.manufacturer.payAccount.model.Viewcsyf">
+   update view_csyf 
+   set csbh = #{csbh},
+       hsbm = #{hsbm},
+       fpqcye = #{fpqcye}
+   where  = #{} 
+</update>
+
+<delete id = "deletemanufAccountDetial" parameterType="erp.erp.manufacturer.payAccount.model.Viewcsyf">
+delete from view_csyf where = #{}
+</delete>
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.CheckSFMapper">
+<select id="getZyze" parameterType="map" resultType="Double">
+		select sum(zyje)
+		from zyhd_csb 
+		left outer join zyhdb on zyhd_csb.hdbh=zyhdb.hdbh
+		where csbh=#{csbh}
+		and zyhdb.spbj=1
+		and zyhd_csb.hkbj=0
+</select>
+<select id="update_oainfo" statementType="CALLABLE"  parameterType="Integer" > 
+    <![CDATA[  
+           exec proc_update_oa @requestid = #{ll_requestid}
+      ]]> 
+</select>
+<select id="getJznf" parameterType="map" resultType="Double">
+		select max(nd) from yfjzb where jzzt=1
+</select>
+<select id="getYsqje" parameterType="map" resultType="Double">
+		select sum(sqje - yfje) from fksqspb 
+		where csbh=#{csbh} and sqje-yfje &gt; 0 and sqbh &lt;&gt; #{sqbh}
+</select>
+<select id="getCsyfze" parameterType="map" resultType="Double">
+		select sum(ncyf) + sum(fpje) - sum(zfje) + sum(hldz) + sum(fpwd) as fpyfze       
+       from
+       (select csbh,ncyf,wbnc as wbncyf,0 as zfje,0 as wbzfje,0 as fpje,0 as wbfpje,0 as pjnc,0 as kcpj,0 as yfpj,0 as hldz,0 as fpwd,0 as wbfpwd
+        FROM ncyfb  with (nolock) where nd=#{ls_jznf}  and csbh!=''
+        
+        union all
+        select csbh,0,0,zfje,wbje,0,0,0,0,0,0,0,0
+        from zjzfb  with (nolock) where zfrq  &lt;= #{ls_jzrq} and year(zfrq) &gt;= #{ls_jznf} and csbh!=''
+        
+        union all
+        select csbh,0,0,0,0,fpje,wbje,0,0,0,0,0,0
+        from gyfpb  with (nolock) where jzrq &lt;= #{ls_jzrq} and year(jzrq) &gt;= #{ls_jznf} and yfbj=1 and csbh!=''
+        
+        union all 
+        select csbh,0,0,0,0,0,0,ncye as pjnc,0,0,0,0,0
+        FROM yfpjncb  with (nolock) where nf= #{ls_jznf} and csbh!=''
+        
+        union all
+        select csbh,0,0,0,0,0,0,0,zfje,0,0,0,0
+        from zjzfb with (nolock)
+        where zfrq &lt;= #{ls_jzrq} and year(zfrq) &gt;= #{ls_jznf} and yfpjbj=1 and csbh!=''
+        
+        union all
+        select csbh,0,0,0,0,0,0,0,0,zzje,0,0,0
+        from zjnbzzb with (nolock)
+        where zzrq &lt;= #{ls_jzrq} and year(zzrq) &gt;= #{ls_jznf} and yfpjbj=1 and csbh!=''
+        
+        union all
+        select csbh,0,0,0,0,0,0,0,0,zzje*-1,0,0,0
+        from zjnbzzb with (nolock)
+        where zzrq &lt;= #{ls_jzrq} and year(zzrq) &gt;= #{ls_jznf} and yfpjbj=1 and csbh!=''
+        
+        union all
+        select csbh,0,0,0,0,0,0,0,0,0,dzce,0,0
+        from wbyfhldzmxb  with (nolock) left outer join wbyfhldzb  with (nolock) on wbyfhldzmxb.dzbh=wbyfhldzb.dzbh
+        where dzny &lt;= #{ls_jzrq} and year(dzny) &gt;= #{ls_jznf} and qfbj=1 and csbh!=''
+        
+        union all
+        select
+        a.csbh,0,0,0,0,0,0,0,0,0,0,cgjgtzmxb.thje,cgjgtzmxb.wbje from cgjgtzmxb
+        left outer join cgjgtzb on cgjgtzb.tjdh = cgjgtzmxb.tjdh
+        left outer join rkdb_yl a on cgjgtzmxb.ckbh=a.ckbh AND cgjgtzmxb.rkdh=a.rkdh AND cgjgtzmxb.rkxh=a.rkxh
+        left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=a.ckbh
+        where cgjgtzb.qfbj=1
+        and not exists
+        ( SELECT b.ckbh FROM rkdb_yl b WHERE b.ckbh=a.ckbh AND b.hcdh = a.rkdh AND b.hcxh = a.rkxh)
+        and (a.hxbj = 0 OR (a.hxrq  &gt; #{ls_jzrq} AND a.hxbj = 1)) AND isnull(a.csbh, '') != '' AND a.rkrq  &lt;= #{ls_jzrq}
+               
+        union all
+        select
+        a.csbh,0,0,0,0,0,0,0,0,0,0,a.rkje,a.wbje from rkdb_yl a
+        left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=a.ckbh
+        where
+        ( a.hxbj = 0 OR (a.hxrq  &gt; #{ls_jzrq} AND a.hxbj = 1)) AND isnull(a.csbh, '') != '' AND a.rkrq  &lt;= #{ls_jzrq}
+        and ( exists ( SELECT b.ckbh FROM rkdb_yl b WHERE b.ckbh=a.ckbh AND b.hcdh = a.rkdh AND b.hcxh = a.rkxh ) or
+        not exists ( select c.tjdh from cgjgtzmxb c left outer join cgjgtzb d on d.tjdh = d.tjdh
+        where c.ckbh=a.ckbh AND c.rkdh=a.rkdh AND c.rkxh=a.rkxh ) )
+        
+        union all
+        select csbh,0,0,0,0,0,0,0,0,0,0,fyje,wbje
+        from cgfyb with (nolock) where ((hxrq &gt; #{ls_jzrq}  and hxbj=1)  or hxbj=0) and fyrq&lt;= #{ls_jzrq}  and csbh !='' ) a
+        where a.csbh= #{csbh}
+  
+</select>
+<select id="getHddw" parameterType="map" resultType="erp.erp.PayApply.model.Hddw">
+    select csmc,csbh from csxxb where csbh=(select top 1 hddw from zyhd_csb where csbh=#{csbh} and hkbj=0)
+    <!-- 
+    select csmc from csxxb where csbh=(select hddw from csxxb where csbh=#{csbh})
+     -->
+</select>
+<select id="getHddw2" parameterType="map" resultType="String">
+    select csmc from csxxb where csbh=(select hddw from csxxb where csmc like %${csmc}%)
+</select>
+<select id="getCsmc" parameterType="map" resultType="String">
+    select csmc from csxxb where csbh=#{csbh}
+</select>
+<select id="getLLcount" parameterType="map" resultType="int">
+    select count(*) from t_inf_payment_hdr where sqbh = #{sqbh} 
+</select>
+<select id="getLsSpbj" parameterType="map" resultType="Integer">
+    select spbj from t_inf_payment_hdr
+	where exists
+		(
+			select max(a.id) from t_inf_payment_hdr a
+			where a.sqbh = #{sqbh}
+			having
+			max(a.id)=t_inf_payment_hdr.id
+		)
+</select>
+<select id="getStringFromSql" parameterType="map" resultType="String">
+  ${sql}
+</select>
+<select id="getSyyfbj" parameterType="map" resultType="int">
+ select (case when count(*)>0 then 1 else 0 end) from gyfphtyfb where sqbh=#{sqbh}
+</select>
+<select id="getLSyyfbj" parameterType="map" resultType="int">
+ select (case when count(*)>0 then 1 else 0 end) from gyfpfyyfb where sqbh=#{sqbh}
+</select>
+<select id="getZtdwList" parameterType="map" resultType="erp.erp.PayApply.model.ZtdwPayApply">
+  select wbbh,wbdh,wbmc from wbmcb where 1=1
+  <if test="wbbh != null and wbbh != ''">
+  and wbmcb.wbbh = #{wbbh}
+  </if>
+  <if test="wbdh != null and wbdh != ''">
+  and wbmcb.wbdh = #{wbdh}
+  </if>
+</select>
+<select id="getSkdwLists" parameterType="map" resultType="erp.erp.PayApply.model.Hddw">
+  select csmc,csbh,hddw,hddw2 from csxxb where 1=1
+  <if test="csbh !=null and csbh !=''">
+    and csbh=#{csbh}
+  </if> 
+</select>
+<select id="getContractDetailList" parameterType="map" resultType="erp.erp.PayApply.model.ContractDetail2">
+  SELECT htmxb.htbh,
+         htmxb.htxh,
+         case when htmxb.jhbh&lt;&gt;0 then ltrim(rtrim(htmxb.jhbh))+'-'+ltrim(rtrim(htmxb.jhxh)) else null end as jhh,
+         case when htmxb.htbh&lt;&gt;0 then ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) else null end as hth,
+         htmxb.clhh,
+         htmxb.cltx1,
+         htmxb.cltx2,
+         htmxb.cltx3,
+         htmxb.jldw, 
+         htmxb.cgsl,
+		 htmxb.dhrk,
+         isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) as wrsl, 
+		 view_jhdhrkhz.jhyl,
+		 view_jhdhrkhz.dhrk as jhdh,
+		 isnull(view_jhdhrkhz.jhyl,0) - isnull(view_jhdhrkhz.dhrk,0) as jhwd,
+         htmxb.cgbh,
+         htmxb.cgxh,
+         htmxb.jhbh,
+         htmxb.jhxh,
+         jhmxb.sxrq,
+		 jhmxb.jhbz,
+         cghtb.csbh, 
+         csxxb.csmc,
+         clbmb.clth,
+         clbmb.clmc,
+         clbmb.zjbj,
+         clbmb.fzzbj,
+		 clbmb.txgz,
+         cglbb.hsbm,
+		 htmxb.fzdw,
+		 htmxb.fzsl,
+		 htmxb.kjlx,
+		 htmxb.cgdj,  
+         round(htmxb.CGSL*htmxb.CGDJ,2) as cgje,
+         htmxb.wbhl,
+         htmxb.wbbh,
+         wbmcb.wbdh,
+         htmxb.wbdj,  
+         round(htmxb.cgsl*htmxb.wbdj,2) as wbje,
+         clbmb.plmth,
+	 	 clbmb.plmtx   
+    FROM fksqsphtb with (nolock)
+    left outer join htmxb with (nolock) on fksqsphtb.htbh=htmxb.htbh
+	left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+	left outer join cglbb with (nolock) on cglbb.lbbh=cghtb.cglb
+	left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+	left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+	left outer join view_jhdhrkhz with (nolock) on view_jhdhrkhz.jhbh=htmxb.jhbh and view_jhdhrkhz.jhxh=htmxb.jhxh and view_jhdhrkhz.clhh=htmxb.clhh
+    left outer join csxxb with (nolock) on csxxb.csbh = cghtb.csbh
+    left outer join wbmcb with (nolock) on wbmcb.wbbh = htmxb.wbbh
+   where fksqsphtb.htbh=#{htbh} 
+</select>
+ <!-- 删除头表及明细 -->
+ <select id="getDeletePayApply" statementType="CALLABLE" parameterType="map" resultType="int">
+   <![CDATA[  
+           exec deletePayApply @sqbh='${sqbh}',@sjly='${sjly}'
+       ]]> 
+ </select>
+ 
+</mapper>

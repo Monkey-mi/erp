@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.caterialPricePurchase.data.CaterialPricePurchaseMapper">
+
+
+<select id="getCaterialPricePurchaseList" parameterType="map" resultType="erp.erp.master.caterialPricePurchase.model.CaterialPricePurchase">
+ SELECT clbmb.clhh,     
+         clbmb.clmc,   
+         clbmb.jldw,   
+         clbmb.cbdj,   
+         clbmb.jhdj,   
+         clbmb.kzdj,   
+         clbmb.zdcgl,    
+         clbmb.zxbzl,    
+         clbmb.ylbl,     
+         clbmb.ghzq,      
+         clbmb.zjbj,   
+         clbmb.cgbj,     
+         clbmb.gdbj,   
+         clbmb.czym,   
+         clbmb.czsj,
+		 clbmb.lbbh,
+	     clbmb.fzkj,
+		 clbmb.fzdw,
+		 CLBMB.gsbh,
+		 nbclxsjgb.jsdj,
+		 clbmb.jjczym,
+		 clbmb.jjczsj,
+		 clbmb.qssxsj,
+		 clbmb.jzsxsj,
+		 clbmb.spbj_kj,
+		 clbmb.spsj_kj,
+		 clbmb.sprm_kj,
+		 cljggswhb.gsmc
+    FROM clbmb with (nolock)   
+  left outer join nbclxsjgb with (nolock) on nbclxsjgb.clhh = clbmb.clhh
+  left outer join cljggswhb with (nolock) on cljggswhb.gsbh = clbmb.gsbh
+  where
+   1=1
+  <if test="lbbh!=null and lbbh!=''">
+  	and  left(clbmb.lbbh,len(#{lbbh}))=#{lbbh}
+  </if>
+  <if test='clhh!=null'>
+  	   and clbmb.clhh = #{clhh}  
+  </if>
+  <if test="lbqx!=null">
+	  		${lbqx}
+  </if>
+  <if test="search!=null">
+        ${search}
+  </if>
+  <if test="gdbj!=null">
+  	    and clbmb.gdbj = #{gdbj}
+  </if>
+  <if test="condition!=null and condition!=''">
+	 and ${condition}
+  </if>
+</select>
+<insert id="addCsjjxxb" parameterType="map" >
+	insert csjjxxb(clhh,csbh,kzdj,fzkj,ghzq,zxbzl,zdcgl,csxh,bzsm,xgsj) 
+		select clhh,csbh,kzdj,fzkj,ghzq,zxbzl,zdcgl,csxh,bzsm,GETDATE() from csjjb where csbh=#{csbh} and clhh=#{clhh};
+</insert>
+<insert id="addCaterialPricePurchase" parameterType="erp.erp.master.caterialPricePurchase.model.CaterialPricePurchase" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.clbmb
+	(
+		clhh,
+		lbbh,
+		clmc,
+		jldw,
+		zhxs,
+		yshh,
+		ysmc,
+		cbdj,
+		jhdj,
+		kzdj,
+		fzkj,
+		cgbl,
+		ylbl,
+		shbl,
+		yxqx,
+		ghzq,
+		cgtqq,
+		zjbj,
+		cgbj,
+		aqlbj,
+		yhyl,
+		clth,
+		cgym,
+		bzsm,
+		bcpbj,
+		bcpbh,
+		bcplb,
+		cltp,
+		gdbj,
+		sqrm,
+		czym,
+		czsj,
+		lkcbj,
+		bmgz,
+		fzzbj,
+		zhbj,
+		zhgs,
+		gsbh,
+		spbj_kj,
+		sprm,
+		spsj,
+		yzws,
+		djyz,
+		cgzh,
+		free,
+		yxbj,
+		gdrm,
+		gdsj,
+		jjczym,
+		jjczsj,
+		qssxsj,
+		jzsxsj,
+		gxbh,
+		hbdj,
+		scys,
+		clzc,
+		sprm_kj,
+		spsj_kj,
+		gjfdxs,
+		plmtx
+	)
+	values
+	(
+		#{clhh},
+		#{lbbh},
+		#{clmc},
+		#{jldw},
+		#{zhxs},
+		#{yshh},
+		#{ysmc},
+		#{cbdj},
+		#{jhdj},
+		#{kzdj},
+		#{fzkj},
+		#{cgbl},
+		#{ylbl},
+		#{shbl},
+		#{yxqx},
+		#{ghzq},
+		#{cgtqq},
+		#{zjbj},
+		#{cgbj},
+		#{aqlbj},
+		#{yhyl},
+		#{clth},
+		#{cgym},
+		#{bzsm},
+		#{bcpbj},
+		#{bcpbh},
+		#{bcplb},
+		#{cltp},
+		#{gdbj},
+		#{sqrm},
+		#{czym},
+		#{czsj},
+		#{lkcbj},
+		#{bmgz},
+		#{fzzbj},
+		#{zhbj},
+		#{zhgs},
+		#{gsbh},
+		#{spbj_kj},
+		#{sprm},
+		#{spsj},
+		#{yzws},
+		#{djyz},
+		#{cgzh},
+		#{free},
+		#{yxbj},
+		#{gdrm},
+		#{gdsj},
+		#{jjczym},
+		#{jjczsj},
+		#{qssxsj},
+		#{jzsxsj},
+		#{gxbh},
+		#{hbdj},
+		#{scys},
+		#{clzc},
+		#{sprm_kj},
+		#{spsj_kj},
+		#{gjfdxs},
+		#{plmtx}
+	)
+</insert>
+<update id="updateCaterialPricePurchase" parameterType="erp.erp.master.caterialPricePurchase.model.CaterialPricePurchase">
+	update dbo.clbmb
+		set
+			clhh = #{clhh},
+			lbbh = #{lbbh},
+			clmc = #{clmc},
+			jldw = #{jldw},
+			zhxs = #{zhxs},
+			yshh = #{yshh},
+			ysmc = #{ysmc},
+			cbdj = #{cbdj},
+			jhdj = #{jhdj},
+			kzdj = #{kzdj},
+			fzkj = #{fzkj},
+			cgbl = #{cgbl},
+			ylbl = #{ylbl},
+			shbl = #{shbl},
+			yxqx = #{yxqx},
+			ghzq = #{ghzq},
+			cgtqq = #{cgtqq},
+			zjbj = #{zjbj},
+			cgbj = #{cgbj},
+			aqlbj = #{aqlbj},
+			yhyl = #{yhyl},
+			clth = #{clth},
+			cgym = #{cgym},
+			bzsm = #{bzsm},
+			bcpbj = #{bcpbj},
+			bcpbh = #{bcpbh},
+			bcplb = #{bcplb},
+			cltp = #{cltp},
+			gdbj = #{gdbj},
+			sqrm = #{sqrm},
+			czym = #{czym},
+			czsj = #{czsj},
+			lkcbj = #{lkcbj},
+			bmgz = #{bmgz},
+			fzzbj = #{fzzbj},
+			zhbj = #{zhbj},
+			zhgs = #{zhgs},
+			gsbh = #{gsbh},
+			spbj_kj = #{spbj_kj},
+			sprm = #{sprm},
+			spsj = #{spsj},
+			yzws = #{yzws},
+			djyz = #{djyz},
+			cgzh = #{cgzh},
+			free = #{free},
+			yxbj = #{yxbj},
+			gdrm = #{gdrm},
+			gdsj = #{gdsj},
+			jjczym = #{jjczym},
+			jjczsj = #{jjczsj},
+			qssxsj = #{qssxsj},
+			jzsxsj = #{jzsxsj},
+			gxbh = #{gxbh},
+			hbdj = #{hbdj},
+			scys = #{scys},
+			clzc = #{clzc},
+			sprm_kj = #{sprm_kj},
+			spsj_kj = #{spsj_kj},
+			gjfdxs = #{gjfdxs},
+			plmtx = #{plmtx}
+		where  clhh= #{clhh}
+</update>
+<delete id="deleteCaterialPricePurchase" parameterType="erp.erp.master.caterialPricePurchase.model.CaterialPricePurchase">
+	delete from dbo.clbmb
+	where clhh = #{clhh}
+</delete>
+<select id="getMaterialClassList" parameterType="map" resultType="erp.erp.master.caterialPricePurchase.model.MaterialClass">
+	select
+		a.lbbh,
+		a.lbmc,
+		a.lbjc,
+		case a.mjbz when 1 then 'true' else 'false' end as mjbz,
+		a.kjbj,
+		a.pjbj,
+		a.clbl,
+		a.xqlx,
+		a.cgbl,
+		a.qjgd,
+		a.ylms,
+		a.zcbj
+	from
+		dbo.cllbb a
+	where
+	    1=1
+	 <if test="node!=null and node==0">
+		and  a.lbjc=1
+	 </if>
+	 <if test="node!=null and node!=0">
+	 	 and left(a.lbbh,len(#{node}))=#{node} and a.lbbh!=#{node}
+	 </if>
+	 <if test="bmmc!=null">
+		and lbmc = #{lbmc}
+	 </if>		
+</select>
+<update id="doAppro" parameterType="map" >
+    	update clbmb
+    	   set spbj_kj=#{spbj_kj},spsj_kj=#{spsj_kj},sprm_kj = #{sprm_kj}
+    	 where  clhh = #{clhh} 
+ </update>
+ <update id="doVpAppro" parameterType="map">
+ 	    update csjjb 
+ 	    set spbj_kj=#{spbj_kj},spsj_kj=#{spsj_kj},sprm_kj=#{sprm_kj} 
+ 	    where clhh=#{clhh} and csbh=#{csbh};
+ </update> 
+ <update id="doCompanyAppro" parameterType="map" >
+    	update csjjb
+    	   set spbj_kj=#{spbj_kj},spsj_kj=#{spsj_kj},sprm_kj = #{sprm_kj}
+    	 where  csbh = #{csbh} and clhh=#{clhh}
+ </update>
+ <select id="getCaterialHistoryPriceCtlList" parameterType="map"  resultType="erp.erp.master.caterialPricePurchase.model.CaterialHistoryPriceCtl">
+ 	   SELECT clkzdjjlb.jlbh,   
+         clkzdjjlb.clhh,   
+         clkzdjjlb.kzdj,   
+         clkzdjjlb.jlrq ,
+         clbmb.clmc  
+        FROM clkzdjjlb 
+       left outer join clbmb with (nolock) on clbmb.clhh=clkzdjjlb.clhh  
+       where 1=1
+       <if test="clhh!=null">
+       and clkzdjjlb.clhh=#{clhh}
+       </if>
+       order by jlrq desc
+ </select>
+ <select id="getVendorHistoryPriceCtlList" parameterType="map"  resultType="erp.erp.master.caterialPricePurchase.model.VendorHistoryPriceCtl">
+ 	 SELECT
+ 	     csjjxxb.jlxh,  
+ 	     csjjxxb.clhh,   
+         csjjxxb.csbh,   
+         csjjxxb.zdcgl,   
+         csjjxxb.zxbzl,   
+         csjjxxb.ghzq,   
+         csjjxxb.kzdj,     
+         csjjxxb.csxh,   
+         csjjxxb.bzsm,
+         csjjxxb.xgsj,
+         csxxb.csmc,  
+         csxxb.wbbh,   
+         csxxb.yhbh,  
+         csxxb.cglb,  
+         wbmcb.wbdh
+    FROM csjjxxb with (nolock) 
+      left outer join csxxb with (nolock) on csxxb.csbh=csjjxxb.csbh
+      left outer join wbmcb with (nolock) on wbmcb.wbbh=csxxb.wbbh
+      where 1=1
+      <if test="clhh!=null">
+      and csjjxxb.clhh=#{clhh}
+      </if>
+      order by xgsj desc
+ </select>
+ <select id="getHistoryPurchasePriceList" parameterType="map"  resultType="erp.erp.master.caterialPricePurchase.model.PurchasePrice">
+ 	 SELECT rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.csbh,   
+         rkdb_yl.rksl,
+         rkdb_yl.rkdj,
+         rkdb_yl.wbbh,   
+         rkdb_yl.wbdj,    
+         rkdb_yl.hxbj,   
+         rkdb_yl.bzsm,
+			rkdb_yl.jldw,
+			ltrim(rtrim(rkdb_yl.htbh))+'-'+ltrim(rtrim(rkdb_yl.htxh)) as hth,
+			csxxb.csmc,
+			cghtb.cgym,
+			wbmcb.wbdh,
+			cgyb.cgyxm
+    from rkdb_yl with (nolock) 
+     left outer join wbmcb with (nolock) on wbmcb.wbbh = rkdb_yl.wbbh
+	 left outer join csxxb  with (nolock) on csxxb.csbh=rkdb_yl.csbh
+	 left outer join cghtb with (nolock) on cghtb.htbh=rkdb_yl.htbh
+	 left outer join cgyb with (nolock) on cgyb.cgybh = cghtb.cgym
+	 <if test="clhh!=null">
+	 where clhh = #{clhh}
+	 </if>
+	 order by rkrq desc
+ </select>
+ <select id="getHistroyQuoteList" parameterType="map" resultType="erp.erp.master.caterialPricePurchase.model.HistroyQuote">
+ 	  SELECT csbjdb.bjdh,   
+         csbjdb.bjrq,   
+         csbjdb.csbh,   
+         csbjdb.csmc,   
+         csbjdb.czym,   
+         csbjdb.gdbj,   
+         csbjdb.czsj,  
+		 csbjmxb.csbj,
+	     csbjmxb.wbbh,
+	     csbjmxb.wbbj,   
+         csbjdb.bzsm,
+         wbmcb.wbdh
+    FROM csbjdb,csbjmxb  
+   left outer join wbmcb with (nolock) on wbmcb.wbbh = csbjmxb.wbbh
+   WHERE csbjdb.bjdh = csbjmxb.bjdh and csbjmxb.clhh=#{clhh}
+   order by bjrq desc
+ </select>
+ <select id = "getHistoryPriceCtlList" parameterType="map" resultType="erp.erp.master.caterialPricePurchase.model.HistoryPriceCtl">
+ 	 SELECT csxxb.csbh,   
+            csxxb.csmc,
+			csjjb.kzdj,      
+     		csxxb.wbbh,
+            csjjb.bzsm,
+            csjjb.czym,
+            csjjb.czsj,
+			clbmb.fzdw,
+			csjjb.fzkj,
+			clbmb.jldw,
+			wbmcb.wbdh
+    FROM csxxb with (nolock),csjjb with (nolock)
+	left outer join clbmb with (nolock) on clbmb.clhh=csjjb.clhh
+	left outer join wbmcb with (nolock) on wbmcb.wbbh = wbbh
+    WHERE csxxb.csbh = csjjb.csbh and csxxb.gdbj = 0 and csjjb.clhh = #{clhh}
+    order by czsj desc
+ </select>
+ <update id="refreshCtlPrice" parameterType="map" >
+ 	update clbmb set jhdj=kzdj where kzdj!=0;
+ </update>
+ <update id="refreshNewPrice" parameterType="map">
+ 	update clbmb set jhdj=cbdj where cbdj!=0;
+ </update>
+ <select id="getCsmc" parameterType="map" resultType="String">
+ 	select csmc from csxxb where csbh=#{csbh};
+ </select>
+ <select id="getScount" parameterType="map"  resultType="int">
+ 	select count(*)  from csjjb where clhh=#{clhh};
+ </select>
+ <select id="getKzdj" parameterType="map" resultType="float">
+ 	select isnull(kzdj,0) from csjjb where clhh=#{clhh};
+ </select>
+ <select id="getKzdjold" parameterType="map" resultType="float">
+ 	select isnull(kzdj,0) as kzdjold from clbmb where clhh=#{clhh};
+ </select>
+ <update id="updateKzdj" parameterType="map">
+ 	update clbmb set kzdj=#{kzdj} where clhh=#{clhh};
+ </update>
+ <insert id="insertClkzdjjlb" parameterType="map">
+ 	insert into clkzdjjlb(clhh,kzdj) values(#{clhh},#{kzdj});
+ </insert>
+ <select id="getClmc"  parameterType="map" resultType="String">
+     select clmc from clbmb where clhh=#{clhh}; 
+ </select>
+ <select id="getClhh" parameterType="map" resultType="String">
+ 	select clhh from clbmb where clmc=#{clmc};
+ </select>
+ <select id="getClqx" parameterType="map"  resultType="String">
+ 	select lbbh from cllb_qxb 
+	where czy_gh=#{czy_gh};
+ </select>
+</mapper>

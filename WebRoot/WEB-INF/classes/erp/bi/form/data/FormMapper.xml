@@ -1,0 +1,953 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.bi.form.data.FormMapper">
+
+
+ <sql id="frmRegColumns">
+        freg_id    ,
+        code       ,
+        name       ,
+        fr_type    ,
+        status     ,
+        freg_desc  ,
+        create_code,
+        create_name,
+        create_dtm ,
+        modify_code,
+        modify_name,
+        modify_dtm ,
+        remark ,
+        type,
+        idx,
+        is_prj,
+        user_type ,
+        isprivate
+    </sql>
+	<select id="getFrmRegList" parameterType="map" resultType="FrmReg" >
+	    select 
+           <include refid="frmRegColumns"/> 
+	    from t_sys_frm_reg
+		<where>
+		    <if test="freg_id != null">freg_id =#{freg_id}</if>
+		    <if test="code != null">and code =#{code}</if>
+		    <if test="fr_type!=null">and fr_type=#{fr_type}</if>
+		    <if test="user_type!=null">user_type=#{user_type}</if>
+		</where> 
+	</select>
+	<select id="getFrmRegListByRefDef" parameterType="map" resultType="FrmReg">
+	select f.freg_id,f.code,f.name from t_sys_frm_reg f, t_sys_frm_rel_def frd
+	<where>
+	f.freg_id=frd.s_freg_id
+	<if test="freg_id!=null">
+	and frd.freg_id=#{freg_id}
+	</if>
+	<if test="direction!=null">
+	and frd.direction=#{direction}
+	</if>
+	</where>
+	</select>
+	<insert id="addFrmReg"  parameterType="FrmReg">
+	    <selectKey keyProperty="freg_id" resultType="int" order="BEFORE">
+	       select isnull(max(freg_id)+1,1) from t_sys_frm_reg
+	    </selectKey>
+	    insert into frm_reg(<include refid="frmRegColumns"/>)
+	    values(#{freg_id    },
+			#{code       },
+			#{name       },
+			#{fr_type   },
+			#{status     },
+			#{freg_desc  },
+			#{create_code},
+			#{create_name},
+			#{create_dtm },
+			#{modify_code},
+			#{modify_name},
+			#{modify_dtm },
+			#{remark     },
+			#{type},
+			#{idx},
+			#{is_prj},
+			#{user_type},
+			#{isprivate}
+            )
+	</insert>
+	<update id="updateFrmReg"  parameterType="FrmReg">
+	    update t_sys_frm_reg 
+	    set freg_id    =#{freg_id    },
+			code       =#{code       },
+			name       =#{name       },
+			fr_type    =#{fr_type    },
+			status     =#{status     },
+			freg_desc  =#{freg_desc  },
+			create_code=#{create_code},
+			create_name=#{create_name},
+			create_dtm =#{create_dtm },
+			modify_code=#{modify_code},
+			modify_name=#{modify_name},
+			modify_dtm =#{modify_dtm },
+			remark     =#{remark     },
+			type       =#{type       },
+			idx        =#{idx        },
+			is_prj     =#{is_prj     },
+			user_type  =#{user_type  },
+			isprivate  =#{isprivate	 }
+	    where freg_id=#{freg_id}
+	</update>
+	<delete id="deleteFrmReg"  parameterType="FrmReg">
+	    delete from t_sys_frm_reg
+	    where freg_id=#{freg_id}
+	</delete>
+<select id="getCusReportResult" parameterType="map" resultType="CustomReportResult">
+		with tree as 
+		 ( 
+	
+		 select [nodeId] from [t_rpt_current_tree] a where [nodeId]=#{docId} 
+	
+		 union all  
+	
+		 select c.[nodeId]  from [t_rpt_current_tree] c inner join tree t on t.[nodeId] = c.parentId 
+	
+		 ) 
+		
+		SELECT a.*,b.login_id AS userName FROM 
+		t_rpt_custom_query_list a 
+		INNER JOIN t_user_info b
+		on a.creater = b.u_id
+		<where>
+	      <!-- <choose>
+		       <when test="orgunit == null">
+		            a.orgunit = ''
+		       </when>
+		       <when test="orgunit!='all'">
+		           a.orgunit = #{orgunit}
+		       </when>
+	       </choose>-->
+	       <if test="query!=null">
+	       list_id ${query}
+	       </if>
+	       <if test="docId!=null">
+  	           and docId in (select * from tree)
+           </if>
+           <if test="creater!=null">
+  	           and ( creater = #{creater} 
+  	           or
+           	   list_id in (
+				   select cp_table_key from ( select cp.cp_table_key,case cp.tar_type 
+							when 'U' then 
+								(case cp.tar_id when u.login_id then 'true' else 'false' end)
+							when 'R' then 
+							    (select (case COUNT(*) when 0 then 'false' else 'true' end)	
+							      from dbo.t_user_role_ref rf
+							       inner join t_user_info ui on ui.u_id=rf.u_id
+							       inner join dbo.t_user_role ur on rf.role_id=ur.role_id
+							      where ui.u_id=#{creater}
+							        and ur.role_id=cp.tar_id) 
+							end	 as is_valid
+						 from t_rpt_content_permit cp 
+						 left outer join t_user_info u
+						 on u.login_id=cp.tar_id and u.u_id=#{creater}
+						 where cp.cp_view='true'
+						) as aa
+						where aa.is_valid='true'
+					)	
+				)	
+           </if>
+	       <if test="freg_id!=null">
+  	           and freg_id = #{freg_id}
+           </if>
+	       <if test="list_id!=null">
+  	           and list_id = #{list_id}
+           </if>
+           <if test="mylist!=null">
+  	           and list_id in #{mylist}
+           </if>
+	    </where> 
+</select>
+
+<select id="getListId"  parameterType="map" resultType="int">
+    select Max(list_id) from  t_rpt_custom_query_list 
+    where report_type=#{report_type}
+</select>
+
+<select id="getCustReportCount"  parameterType="map" resultType="int">
+    select count(*) from  t_rpt_custom_query_commonlist 
+    <where>
+    	<if test="list_id!=null">
+			l_id=#{list_id}    		
+    	</if>
+    </where>
+</select>
+
+
+<select id="getDatagridTplXml" parameterType="map" resultType="String">
+	select
+		tpl_xml
+	from
+		t_rpt_custom_query_list 
+	where list_id = #{list_id}
+</select>
+
+<insert id="addCusReportResult" parameterType="CustomReportResult" keyProperty="list_id" useGeneratedKeys="true">
+insert into t_rpt_custom_query_list (name,description,creater,creatTime,orgunit,report_type,ope,default_style,level,freg_id,docId,dsId,tpl_type,tpl_xml,is_active,cycle) 
+ values (#{name},#{description},#{creater},#{creatTime},#{orgunit},#{report_type},#{ope},#{default_style},#{level},#{freg_id},#{docId},#{dsId},#{tpl_type},#{tpl_xml},#{is_active},#{cycle})
+</insert>
+<delete id="deleteCusReportResult" parameterType="CustomReportResult">
+  DELETE FROM t_rpt_custom_query_list  WHERE list_id = #{list_id}
+</delete>
+<update id="updateCusReportResult"  parameterType="CustomReportResult">
+    update t_rpt_custom_query_list 
+    set name           =#{name      },
+    	description	   =#{description		},
+		creater        =#{creater   },
+		creatTime      =#{creatTime },
+		orgunit        =#{orgunit   },
+		ope            =#{ope       },
+		default_style  =#{default_style},
+		level          =#{level     },
+		freg_id        =#{freg_id   },
+		dsId		  = #{dsId},
+		tpl_type	  =#{tpl_type},
+		report_type	  =#{report_type},
+		tpl_xml		  =#{tpl_xml},
+		is_active	  =#{is_active},
+		cycle		 =#{cycle}
+    where list_id = #{list_id}
+</update>
+
+
+<update id="updateCusReportByID"  parameterType="int">
+    update t_rpt_custom_query_list 
+    set is_active	  ='false'
+    where list_id = #{list_id}
+</update>
+
+<select id="setDatagridTplXml" parameterType="map">
+	update t_rpt_custom_query_list
+	set tpl_xml = #{tpl_xml}
+	where list_id = #{list_id}
+</select>
+
+<select id="getCommonCustomQuery" parameterType="map" resultType="CustomQueryUse">
+    SELECT a.* , b.name as l_name,b.description as l_desc FROM 
+      t_rpt_custom_query_commonlist a
+    LEFT JOIN 
+      t_rpt_custom_query_list b
+    ON
+       a.l_id = b.list_id
+    <where>
+	       <if test="user_type!=null">
+	       	a.user_type = #{user_type}
+	       </if>
+	       <if test="user_id!=null">
+	       	and a.user_id = #{user_id}
+	       </if>
+	        <if test="l_id!=null">
+	       	and a.l_id = #{l_id}
+	       </if>
+	</where>
+</select>
+
+
+<insert id="addCommonCustomQuery" parameterType="CustomQueryUse" keyProperty="use_id" useGeneratedKeys="true">
+  insert into t_rpt_custom_query_commonlist (l_id,user_id,user_type,sequence) 
+  values (#{l_id},#{user_id},#{user_type},#{sequence})
+</insert>
+<delete id="deleteCommonCustomQuery" parameterType="CustomQueryUse">
+  DELETE FROM t_rpt_custom_query_commonlist  
+  WHERE  use_id = #{use_id}
+</delete>
+
+<delete id="deleteCommonCustomQueryByLid" parameterType="CustomQueryUse">
+  DELETE FROM t_rpt_custom_query_commonlist  
+   <where>
+	       <if test="user_type!=null">
+	       	user_type = #{user_type}
+	       </if>
+	       <if test="user_id!=null">
+	       	and user_id = #{user_id}
+	       </if>
+	        <if test="l_id!=null">
+	       	and l_id = #{l_id}
+	       </if>
+	</where>
+</delete>
+
+<update id="updateCommonCustomQuery" parameterType="CustomQueryUse">
+   update t_rpt_custom_query_commonlist 
+    set l_id       =#{l_id      },
+		user_id    =#{user_id   },
+		user_type  =#{user_type },
+		sequence   =#{sequence  }
+    WHERE use_id = #{use_id}
+</update>
+
+
+   <!-- ************************* 自定义查询 ************************** -->
+   <select id="cusFromQuery" parameterType="map" resultType="map">
+    select 
+        <foreach collection="fields" index="index" item="field" open="" separator="," close="">
+	        ${field}
+	    </foreach> 
+     from 
+        ${ftName} 
+     <if test="cdtions != null">  
+	    <foreach collection="cdtions" index="index" item="cdtion" open="where" separator=" and " close="">
+	        ${cdtion}
+	    </foreach> 
+    </if>
+</select>
+
+
+
+<!-- ****************************自定义查询条件*************************************************** -->
+<select id="getCustomQueryCdtion" parameterType="map" resultType="map">
+		SELECT * FROM t_rpt_custom_query_cdtion
+		 <where>
+	       <if test="l_id!=null">
+	       	l_id=#{l_id}
+	       </if>
+	    </where>
+</select>
+<insert id="addCustomQueryCdtion" parameterType="CustomQueryCdtion" keyProperty="c_id" useGeneratedKeys="true">
+  insert into t_rpt_custom_query_cdtion (c_id,l_id,ope,opeVal,field_type,ft_ff_id,cd_type) 
+  values (#{c_id},#{l_id},#{ope},#{opeVal},#{field_type},#{ft_ff_id},#{cd_type})
+</insert>
+<delete id="deleteCustomQueryCdtion" parameterType="CustomQueryCdtion">
+  DELETE FROM t_rpt_custom_query_cdtion  
+  WHERE  l_id = #{l_id}
+  <if test="c_id!=null">
+  	 and c_id = #{c_id}
+  </if>
+</delete>
+<update id="updateCustomQueryCdtion"  parameterType="CustomQueryCdtion">
+    update t_rpt_custom_query_cdtion 
+    set l_id       =#{l_id      },
+		ope        =#{ope       },
+		opeVal     =#{opeVal    },
+		field_type =#{field_type      },
+        ft_ff_id   =#{ft_ff_id  },
+        cd_type    =#{cd_type   }
+    WHERE c_id = #{c_id}
+</update>
+
+
+<sql id="frmRenderColumns">
+		fr_id       ,
+		freg_id     ,
+		code        ,
+		name        ,
+		fr_desc     ,
+		render_type ,
+		master_xml  ,
+        detail_xml  ,
+        print_xml  ,
+		use_type    ,
+		master_ftid ,
+		detail_ftids as detail_ftidsStr ,
+		create_code ,
+		create_name ,
+		create_dtm  ,
+		modify_code ,
+		modify_name ,
+		modify_dtm  ,
+		remark,
+		proc_id
+    </sql>
+    <select id="getFrmRenderList" parameterType="map" resultType="FrmRender" >
+        select 
+           <include refid="frmRenderColumns"/> 
+        from t_sys_frm_render
+    <where>
+        <if test="freg_id != null">freg_id =#{freg_id}</if>
+        <if test="use_type != null">and use_type =#{use_type}</if>
+        <if test="master_ftid!=null">and master_ftid=#{master_ftid}</if>
+        <if test="detail_ftidsStr!=null">and detail_ftids=#{detail_ftidsStr}</if>
+    </where> 
+    </select>
+    
+    <select id="getFrmRenderCountByFregId" parameterType="int" resultType="int" >
+        select count(*)
+        from t_sys_frm_render
+        where freg_id =#{value}
+    </select>
+    
+    <insert id="addFrmRender" parameterType="FrmRender">
+        <selectKey keyProperty="fr_id" resultType="int" order="BEFORE">
+            select isnull(max(fr_id)+1,1) from frm_render
+        </selectKey>
+        insert into t_sys_frm_render(
+            fr_id       ,
+	        freg_id     ,
+	        code        ,
+	        name        ,
+	        fr_desc     ,
+	        render_type ,
+	        master_xml  ,
+	        detail_xml  ,
+	        print_xml  ,
+	        use_type    ,
+	        master_ftid ,
+	        detail_ftids ,
+	        create_code ,
+	        create_name ,
+	        create_dtm  ,
+	        modify_code ,
+	        modify_name ,
+	        modify_dtm  ,
+	        remark,
+	        proc_id
+        )
+        values(#{fr_id       },
+			#{freg_id     },
+			#{code        },
+			#{name        },
+			#{fr_desc     },
+			#{render_type },
+            #{master_xml  },
+            #{detail_xml  },
+            #{print_xml  },
+            #{use_type},
+            #{master_ftid} ,
+            #{detail_ftidsStr} ,
+			#{create_code },
+			#{create_name },
+			#{create_dtm  },
+			#{modify_code },
+			#{modify_name },
+			#{modify_dtm  },
+			#{remark      },
+			#{proc_id     }
+         )
+    </insert>
+    <update id="updateFrmRender" parameterType="FrmRender">
+	update t_sys_frm_render
+	set fr_id =#{fr_id },
+	freg_id =#{freg_id },
+	code =#{code },
+	name =#{name },
+	fr_desc =#{fr_desc },
+	render_type =#{render_type },
+	master_xml =#{master_xml },
+	detail_xml =#{detail_xml },
+	print_xml =#{print_xml },
+	use_type =#{use_type },
+	master_ftid =#{master_ftid} ,
+	detail_ftids =#{detail_ftidsStr},
+	create_code =#{create_code },
+	create_name =#{create_name },
+	create_dtm =#{create_dtm },
+	modify_code =#{modify_code },
+	modify_name =#{modify_name },
+	modify_dtm =#{modify_dtm },
+	remark =#{remark },
+	proc_id =#{proc_id }
+	where fr_id=#{fr_id}
+    </update>
+	<delete id="deleteFrmRender" parameterType="FrmRender">
+		delete from t_sys_frm_render
+		where fr_id=#{fr_id}
+    </delete>
+	
+	<sql id="reportScriptColumn">
+	 sp_id,sp_name,remark,content,create_date,modify_date,list_id
+	</sql>
+	
+	<sql id="reportScriptValue">
+		#{sp_id},#{sp_name},#{remark},#{content},#{create_date},#{modify_date},#{list_id}
+	</sql>
+	
+	<select id="getReportScript" parameterType="map" resultType="ReportScript">
+		select <include refid="reportScriptColumn"/>
+		 from t_rpt_script_list
+		<where>
+		   <if test="list_id!=null">
+		   		list_id=#{list_id}		   
+		   </if>
+			<if test="sp_id">
+			  and	sp_id=#{sp_id}
+			</if>
+		</where>
+	</select>
+	<insert id="addReportScript" parameterType="ReportScript" >
+		 <selectKey keyProperty="sp_id" resultType="int" order="BEFORE">
+            select isnull(max(sp_id)+1,1) from t_rpt_script_list
+         </selectKey>
+		
+		insert into t_rpt_script_list (<include refid="reportScriptColumn" />)
+		values (<include refid="reportScriptValue"/>)
+		
+	</insert>
+	
+	<update id="updateReportScript" parameterType="ReportScript">
+		update t_rpt_script_list
+		  set sp_name=#{sp_name},
+		  	  remark=#{remark},
+		  	  content=#{content},
+		  	  modify_date=#{modify_date},
+		  	  list_id=#{list_id}
+		  	where sp_id=#{sp_id}
+	</update>
+	
+	<delete id="deleteReportScript"  parameterType="ReportScript">
+		delete from t_rpt_script_list
+		where sp_id=#{sp_id}
+	</delete>	
+	
+	<!-- 字段模板 -->
+	<sql id="fldTplCols">
+		id,
+		fld_code,
+		fld_alias,
+		fld_name,
+		datatype,
+		len,
+		prec,
+		nullable,
+		default_value,
+		tpl_type,
+		code_type
+  </sql>
+	<select id="getFldTplList" parameterType="map" resultType="FldTpl">
+		select
+		<include refid="fldTplCols" />
+		from t_sys_fld_tpl
+		<where>
+			<if test="id!=null">id=#{id}</if>
+			<if test="fld_code!=null">and fld_code=#{fld_code}</if>
+			<if test="fld_alias!=null">and fld_alias=#{fld_alias}</if>
+			<if test="fld_name!=null">and fld_name=#{fld_name}</if>
+			<if test="tpl_type!=null">and tpl_type=#{tpl_type}</if>
+		</where>
+	</select>
+	<insert id="addFldTpl">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select isnull(max(id)+1,1) from t_sys_fld_tpl
+        </selectKey>
+		insert into t_sys_fld_tpl(
+		<include refid="fldTplCols" />
+		)
+		values(
+		#{id},
+		#{fld_code},
+		#{fld_alias},
+		#{fld_name},
+		#{datatype},
+		#{len},
+		#{prec},
+		#{nullable},
+		#{default_value},
+		#{tpl_type},
+		#{code_type}
+		)
+	</insert>
+	<update id="updateFldTpl">
+		update t_sys_fld_tpl set
+		fld_code =#{fld_code},
+		fld_alias =#{fld_alias},
+		fld_name =#{fld_name},
+		datatype =#{datatype},
+		len =#{len},
+		prec =#{prec},
+		nullable =#{nullable},
+		default_value=#{default_value},
+		tpl_type =#{tpl_type},
+		code_type =#{code_type}
+
+		where id =#{id}; 
+  </update>
+	<delete id="deleteFldTpl">
+		delete from t_sys_fld_tpl where id =#{id};
+  </delete>
+  
+   <select id="getFrmFldList" parameterType="map" resultType="FrmFld" >
+        select 
+           <include refid="frmFldColumns"/> 
+        from t_sys_frm_fld
+    <where>
+        <if test="ft_id != null">ft_id =#{ft_id}</if>
+        <if test="ff_id != null">and ff_id =#{ff_id}</if>
+        <if test="code !=null">and code=#{code}</if>
+        <if test="isbuildin !=null">and isbuildin=#{isbuildin}</if>
+    </where>
+        order by order_seq asc
+    </select>
+     <select id="getFrmFldLists" parameterType="map" resultType="FrmFld" >
+        select 
+           <include refid="frmFldColumns"/> 
+        from t_sys_frm_fld
+    <where>
+        <if test="ft_id != null">ft_id =#{ft_id}</if>
+        <if test="ff_id != null">and ff_id =#{ff_id}</if>
+        <if test="code !=null">
+        	and code not in 
+        	<foreach collection="code" index="index" item="item" open="(" separator="," close=")"> 
+               #{item} 
+            </foreach>
+        </if>
+        <if test="isbuildin !=null">and isbuildin=#{isbuildin}</if>
+    </where>
+        order by order_seq asc
+    </select>
+    <select id="getCountFrmFld" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM t_sys_frm_fld
+    	<where>
+    		<if test="ft_id!=null">ft_id=#{ft_id}</if>
+    		<if test="ff_id!=null">and ff_id=#{ff_id}</if>
+    		<if test="code!=null">and code=#{code}</if>
+    	</where>
+    </select>
+    <select id="getPKFrmFldCountByFtblId" parameterType="int" resultType="int" >
+        select count(*)
+        from t_sys_frm_fld
+        where ft_id =#{value} and iskey='true'
+    </select>
+    <select id="getFrmFldCountByFtblId" parameterType="int" resultType="int" >
+        select count(*)
+        from t_sys_frm_fld
+        where ft_id =#{value}
+    </select>
+    <insert id="addFrmFld" parameterType="FrmFld" keyProperty="ff_id" useGeneratedKeys="true">
+        insert into t_sys_frm_fld(<include refid="frmFldColumns1"/>)
+        values(<include refid="frmFldValueColumns"/>)
+    </insert>
+    <insert id="addFrmFld_Oracle" parameterType="FrmFld">
+        <selectKey keyProperty="ff_id" resultType="int" order="BEFORE">
+            SELECT frm_fld_pkseq.NEXTVAL FROM DUAL        
+        </selectKey>
+        insert into t_sys_frm_fld(<include refid="frmFldColumns"/>)
+        values(<include refid="frmFldValueColumns"/>)
+    </insert>    
+    <update id="updateFrmFld" parameterType="FrmFld">
+        update t_sys_frm_fld 
+        set 
+			name         =#{name         },
+			code         =#{code         },
+			alias        =#{alias        },
+			datatype     =#{datatype     },
+			len       =#{len       },
+			prec         =#{prec         },
+			ispk         =#{ispk         },
+            isfk         =#{isfk         },
+            isidx        =#{isidx        },
+			nullable     =#{nullable     },
+			default_value=#{default_value},
+			ishide       =#{ishide},
+            editable     =#{editable},
+            value_gen    =#{value_gen},
+            isbuildin    =#{isbuildin},
+			order_seq    =#{order_seq    },
+			code_type    =#{code_type    }
+        where ff_id=#{ff_id}
+    </update>
+    <delete id="deleteFrmFld" parameterType="FrmFld">
+        delete from t_sys_frm_fld
+        where ff_id=#{ff_id}
+    </delete>
+    <delete id="deleteFrmFldByFtId" parameterType="int">
+        delete from t_sys_frm_fld
+        where ft_id=#{value}
+    </delete>
+     <delete id="updateFrmFldFK" parameterType="int">
+        update t_sys_frm_fld
+     		set isfk='true'
+        where ff_id=#{value}
+    </delete>
+    
+    <select id="getFrmFldsByTblName" parameterType="map" resultType="FrmFld">
+       select  f.ff_id        ,
+			f.ft_id        ,
+			f.name         ,
+			f.code         ,
+			f.alias        ,
+			f.datatype     ,
+			f.len          ,
+			f.prec         ,
+			f.ispk         ,
+			f.isfk         ,
+			f.isidx        ,
+			f.nullable     ,
+			f.default_value,
+			f.ishide,
+			f.editable,
+			f.value_gen,
+			f.isbuildin,
+            f.order_seq,
+            f.code_type    from t_sys_frm_fld f,t_sys_t_sys_frm_tbl t where t.freg_id=#{freg_id} and t.ft_id=f.ft_id 
+    </select>
+   <sql id="frmFldColumns">
+            ff_id        ,
+			ft_id        ,
+			name         ,
+			code         ,
+			alias        ,
+			datatype     ,
+			len          ,
+			prec         ,
+			ispk         ,
+			isfk         ,
+			isidx        ,
+			nullable     ,
+			default_value,
+			ishide,
+			editable,
+			value_gen,
+			isbuildin,
+            order_seq,
+            code_type    
+    </sql>
+     <sql id="frmFldColumns1">
+			ft_id        ,
+			name         ,
+			code         ,
+			alias        ,
+			datatype     ,
+			len          ,
+			prec         ,
+			ispk         ,
+			isfk         ,
+			isidx        ,
+			nullable     ,
+			default_value,
+			ishide,
+			editable,
+			value_gen,
+			isbuildin,
+            order_seq,
+            code_type    
+    </sql>
+    <sql id="frmFldValueColumns">
+            #{ft_id        },
+            #{name         },
+            #{code         },
+            #{alias        },
+            #{datatype     },
+            #{len       },
+            #{prec         },
+            #{ispk         },
+            #{isfk         },
+            #{isidx        },
+            #{nullable     },
+            #{default_value},
+            #{ishide},
+            #{editable},
+            #{value_gen},
+            #{isbuildin},
+            #{order_seq    },
+            #{code_type}   
+    </sql>
+    
+    <!-- ================================单据数据表 =============================== -->
+    <sql id="frmTblColumns">
+		    ft_id    ,
+		    freg_id  ,
+		    from_attr,
+		    dscode,
+		    type     ,
+		    name     ,
+		    code     ,
+		    bo_def_id
+    </sql>
+    <resultMap id="FrmTblMap" type="FrmTbl">
+        <id property="ft_id" column="ft_id" />
+        <result property="freg_id" column="freg_id"></result>
+        <result property="from_attr" column="from_attr"></result>
+        <result property="dscode" column="dscode"></result>
+        <result property="type" column="type"></result>
+        <result property="name" column="name"></result>
+        <result property="code" column="code"></result>
+        <result property="bo_def_id" column="bo_def_id"></result>
+        <collection property="FrmFlds" ofType="FrmFld" >
+            <id property="ff_id" column="ff_id"></id>
+            <result property="ft_id" column="ft_id"></result>
+            <result property="name" column="fld_name"></result>
+            <result property="code" column="fld_code"></result>
+            <result property="alias" column="fld_alias"></result>
+            <result property="datatype" column="datatype"></result>
+            <result property="len" column="len"></result>
+            <result property="prec" column="prec"></result>
+            <result property="ispk" column="ispk"></result>
+            <result property="isfk" column="isfk"></result>
+            <result property="isidx" column="isidx"></result>
+            <result property="nullable" column="nullable"></result>
+            <result property="default_value" column="default_value"></result>
+            <result property="ishide" column="ishide"></result>
+            <result property="editable" column="editable"></result>
+            <result property="value_gen" column="value_gen"></result>
+            <result property="isbuildin" column="isbuildin"></result>
+            <result property="order_seq" column="order_seq"></result>
+            <result property="code_type" column="code_type"></result>
+        </collection>
+    </resultMap>
+    
+    <select id="getFrmTblList" parameterType="map" resultMap="FrmTblMap" >
+        select 
+            a.ft_id     as ft_id,
+            a.freg_id   as freg_id,
+            a.from_attr as from_attr,
+            a.dscode    as dscode,
+            a.type      as type,
+            a.name      as name,
+            a.code      as code,
+            a.bo_def_id as bo_def_id,
+            b.ff_id         as ff_id        ,
+			b.name          as fld_name     ,
+			b.code          as fld_code     ,
+			b.alias         as fld_alias    ,
+			b.datatype      as datatype     ,
+			b.len           as len          ,
+			b.prec          as prec         ,
+			b.ispk          as ispk         ,
+			b.isfk          as isfk         ,
+			b.isidx         as isidx        ,
+			b.nullable      as nullable     ,
+			b.default_value as default_value,
+			b.ishide        as ishide,
+			b.editable      as editable,
+			b.value_gen     as value_gen,
+			b.isbuildin     as isbuildin,
+			b.order_seq     as order_seq,
+			b.code_type     as code_type
+        from t_sys_frm_tbl a
+        left outer join t_sys_frm_fld b
+    	 on a.ft_id = b.ft_id
+	    <where>
+	        1=1
+	        <if test="freg_id != null">and a.freg_id =#{freg_id}</if>
+	        <if test="type != null">and a.type = #{type}</if>
+	        <if test="ft_id != null">and a.ft_id =#{ft_id}</if>
+	        <if test="code != null">and a.code =#{code}</if>
+	        <if test="bo_def_id">and a.bo_def_id=#{bo_def_id}</if>
+	    </where>
+    </select>
+    <select id="getFrmTblCodeByBoDefId" parameterType="int" resultType="string" >
+    	select 	code 
+    	from	t_sys_frm_tbl
+    	where	bo_def_id = #{bo_def_id}
+    </select>
+    <select id="getFrmTblCountByFregId" parameterType="int" resultType="int" >
+        select count(*)
+        from t_sys_frm_tbl
+        where freg_id =#{value}
+    </select>
+    <insert id="addFrmTbl"  parameterType="FrmTbl">
+        <selectKey keyProperty="ft_id" resultType="int" order="BEFORE">
+            select isnull(max(ft_id)+1,1) from t_sys_frm_tbl
+        </selectKey>
+        insert into t_sys_frm_tbl(<include refid="frmTblColumns"/>)
+        values(#{ft_id    },
+		    #{freg_id  },
+		    #{from_attr},
+		    #{dscode},
+		    #{type     },
+		    #{name     },
+		    #{code     },
+		    #{bo_def_id}
+           )
+    </insert>
+    <update id="updateFrmTbl" parameterType="FrmTbl">
+        update t_sys_frm_tbl 
+        set ft_id    =#{ft_id    },
+		    freg_id  =#{freg_id  },
+		    from_attr=#{from_attr},
+		    dscode   =#{dscode   },
+		    type     =#{type     },
+		    name     =#{name     },
+		    code     =#{code     },
+		    bo_def_id=#{bo_def_id}
+        where ft_id=#{ft_id}
+    </update>
+    <delete id="deleteFrmTbl" parameterType="FrmTbl">
+        delete from t_sys_frm_tbl
+        where ft_id=#{ft_id}
+    </delete>
+    <delete id="deleteFrmTblByFregId" parameterType="int">
+        delete from t_sys_frm_tbl
+        where freg_id=#{value}
+    </delete>
+    
+    <!-- 商业对象取相关字段 -->
+    <resultMap type="BuzFrmField" id="Fieldmap">
+    		<result property="obj_id" column="freg_id" />
+    		<result property="obj_id" column="freg_id" />
+    		<result property="ft_id"  column="ft_id" />
+    		<result property="attr_name"  column="name" />
+    		<result property="fd_name"  column="code" />
+    		<result property="ispk"  column="ispk" />
+    		<result property="fd_type"  column="datatype" />
+    		<result property="default_value"  column="default_value" />
+    		<result property="allow_blank"  column="nullable" />
+    		<result property="tbl_name"  column="tbl_name" />
+    		<result property="org_ff_id"  column="ff_id" />
+    		<result property="order_type"  column="isidx" />
+    </resultMap>
+    
+    <select id="getUnSelectionFieldList"  parameterType="map" resultMap="Fieldmap">
+   		select  ROW_NUMBER() OVER(ORDER BY f.ff_id desc) attr_id,t.ft_id,t.freg_id,f.name,f.code,f.ispk,f.nullable,f.datatype fd_type,f.default_value,case f.isidx when 'false' then '' else 'ASC' end isidx,t.code tbl_name,f.ff_id
+		 from t_sys_frm_tbl t
+		inner join t_sys_frm_fld f on t.ft_id=f.ft_id
+		 <if test="type!=null">
+		 	and t.type=#{type}
+		 </if>
+		where not exists (
+			select *
+			from t_sys_buzobj_attr a 
+			where a.obj_id=t.freg_id
+			  and a.org_ff_id=f.ff_id) 
+    	<if test="freg_id">
+    			and t.freg_id=#{freg_id}
+    	</if>
+    </select>
+        <!-- 表关联关系表 -->
+    <select id="getFrmtblRelationshipList" parameterType="map" resultType="erp.bi.form.model.FrmtblRelationship">
+	select fs.id,fs.pk_tbl,fs.pk_fld,fs.fk_tbl,fs.fk_fld
+			,ft.name fk_tblname,ff.name fk_fldname  
+			from t_sys_frmtbl_relationship fs
+		left outer join t_sys_frm_tbl ft on ft.ft_id=fs.fk_tbl
+		left outer join t_sys_frm_fld ff on ff.ff_id=fs.fk_fld
+ 	<where>
+  		<if test="pk_tbl">
+  			 fs.pk_tbl=#{pk_tbl}
+  		</if>
+  		<if test="pk_fld">
+  			and fs.pk_fld=#{pk_fld}
+  		</if>
+	</where>	 	
+</select>
+<insert id="addFrmtblRelationship" parameterType="erp.bi.form.model.FrmtblRelationship"  keyProperty="id" useGeneratedKeys="true">
+ 	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+            select isnull(max(id)+1,1) from t_sys_frmtbl_relationship
+    </selectKey>
+	insert into t_sys_frmtbl_relationship
+	(
+		id,
+		pk_tbl,
+		pk_fld,
+		fk_tbl,
+		fk_fld
+	)
+	values
+	(
+		#{id},
+		#{pk_tbl},
+		#{pk_fld},
+		#{fk_tbl},
+		#{fk_fld}
+	)
+</insert>
+<update id="updateFrmtblRelationship" parameterType="erp.bi.form.model.FrmtblRelationship">
+	update t_sys_frmtbl_relationship
+		set
+			id = #{id},
+			pk_tbl = #{pk_tbl},
+			pk_fld = #{pk_fld},
+			fk_tbl = #{fk_tbl},
+			fk_fld = #{fk_fld}
+		where id = #{id}
+</update>
+<delete id="deleteFrmtblRelationship" parameterType="erp.bi.form.model.FrmtblRelationship">
+	delete from t_sys_frmtbl_relationship
+	where id = #{id}
+</delete>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.SupplyInvoice.data.ApplyFeeMapper">
+
+
+<select id="getApplyFeeList" parameterType="map" resultType="erp.erp.SupplyInvoice.model.ApplyFee">
+	 SELECT fksqspfyb.sqbh,   
+         fksqspfyb.sqxh,
+			left(fksqspfyb.hsbm,4) as hsbm,    
+         fksqspfyb.fydh,  
+			fksqspfyb.fyxh,
+			ltrim(rtrim(str(fksqspfyb.fydh)))+'-'+ltrim(rtrim(str(fksqspfyb.fyxh))) as fyh,  
+         fksqspfyb.fyje,   
+         fksqspfyb.sqje,
+			fksqspfyb.yfje,
+			(select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb where gyfpfyyfb.fplb=#{fplb} and gyfpfyyfb.fphm=#{fphm} and gyfpfyyfb.fydh=fksqspfyb.fydh and gyfpfyyfb.fyxh=fksqspfyb.fyxh and gyfpfyyfb.sqbh=fksqspfyb.sqbh and gyfpfyyfb.sqxh=fksqspfyb.sqxh) as yfkje
+    FROM fksqspfyb   
+where ltrim(rtrim(fksqspfyb.fydh))+'-'+ltrim(rtrim(fksqspfyb.fyxh)) in (select ltrim(rtrim(fydh))+'-'+ltrim(rtrim(fyxh)) from cgfyb where cgfyb.fplb=#{fplb} and cgfyb.fphm=#{fphm})
+and (select isnull(sum(gyfpfyyfb.yfje),0) from gyfpfyyfb where gyfpfyyfb.fplb=#{fplb} and gyfpfyyfb.fphm=#{fphm} and gyfpfyyfb.fydh=fksqspfyb.fydh and gyfpfyyfb.fyxh=fksqspfyb.fyxh and gyfpfyyfb.sqbh=fksqspfyb.sqbh and gyfpfyyfb.sqxh=fksqspfyb.sqxh)>0
+
+</select>
+</mapper>

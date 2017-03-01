@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.companyQuot.data.QuotDetailMapper">
+
+
+<select id="getQuotDetailList" parameterType="map" resultType="erp.erp.companyQuot.model.QuotDetail">
+	SELECT csbjmxb.bjdh,   
+         csbjmxb.bjxh,   
+         csbjmxb.clhh,   
+         csbjmxb.jldw,   
+         csbjmxb.wbbj,   
+         csbjmxb.csbj,   
+         csbjmxb.mxbz,    
+         csbjmxb.clmc,  
+         csbjdb.csbh,   
+         csbjdb.csmc, 
+         csbjdb.bjrq,
+         csbjdb.spbj,
+         csbjmxb.shbj,   
+         csbjmxb.wbbh,   
+         csbjmxb.shrm,   
+         csbjmxb.shsj,
+		 csbjmxb.sdbj,    
+         csbjmxb.sdrm,   
+         csbjmxb.sdsj,
+		 csbjmxb.fzkj,
+		 csbjmxb.jzj,
+		 csbjmxb.jzj_str,
+		 clbmb.fzdw,
+         clbmb.plmth,
+	 	 clbmb.plmtx,
+		 csbjmxb.gxbj_jg,
+		 wbmcb.wbdh
+    FROM csbjmxb  
+    left outer join csbjdb with (nolock) on csbjdb.bjdh=csbjmxb.bjdh
+	left outer join clbmb with (nolock) on   clbmb.clhh=csbjmxb.clhh
+    left outer join wbmcb with (nolock) on   wbmcb.wbbh=csbjmxb.wbbh
+   WHERE 1 = 1
+   <if test="bjdh!=null">
+   and csbjmxb.bjdh = #{bjdh}     
+   </if>
+   <if test="sort!=null">
+	order by  ${sort}
+   </if>
+</select>
+<insert id="firaddQuotDetail" parameterType="erp.erp.companyQuot.model.QuotDetail" keyProperty="bjdh" useGeneratedKeys="true">
+	<selectKey keyProperty="bjdh" resultType="int" order="BEFORE">
+		select isnull(max(bjdh),0)+1  from csbjmxb	
+	</selectKey>
+	insert into dbo.csbjmxb
+	(
+		bjdh,
+		bjxh,
+		shbj,
+		clhh,
+		clmc,
+		jldw,
+		csbj,
+		wbbh,
+		wbbj,
+		mxbz,
+		shrm,
+		shsj,
+		fzkj,
+		jzj,
+		sdbj,
+		sdrm,
+		sdsj,
+		jzj_str
+	)
+	values
+	(
+		#{bjdh},
+		#{bjxh},
+		#{shbj},
+		#{clhh},
+		#{clmc},
+		#{jldw},
+		#{csbj},
+		#{wbbh},
+		#{wbbj},
+		#{mxbz},
+		#{shrm},
+		#{shsj},
+		#{fzkj},
+		#{jzj},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{jzj_str}
+	)
+</insert>
+<insert id="addQuotDetail" parameterType="erp.erp.companyQuot.model.QuotDetail" keyProperty="" useGeneratedKeys="false">
+	insert into dbo.csbjmxb
+	(
+		bjdh,
+		bjxh,
+		shbj,
+		clhh,
+		clmc,
+		jldw,
+		csbj,
+		wbbh,
+		wbbj,
+		mxbz,
+		shrm,
+		shsj,
+		fzkj,
+		jzj,
+		sdbj,
+		sdrm,
+		sdsj,
+		jzj_str
+	)
+	values
+	(
+		#{bjdh},
+		#{bjxh},
+		#{shbj},
+		#{clhh},
+		#{clmc},
+		#{jldw},
+		#{csbj},
+		#{wbbh},
+		#{wbbj},
+		#{mxbz},
+		#{shrm},
+		#{shsj},
+		#{fzkj},
+		#{jzj},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{jzj_str}
+	)
+</insert>
+<update id="updateQuotDetail" parameterType="erp.erp.companyQuot.model.QuotDetail">
+	update dbo.csbjmxb
+		set
+			shbj = #{shbj},
+			clhh = #{clhh},
+			clmc = #{clmc},
+			jldw = #{jldw},
+			jzj_str=#{jzj_str},
+			csbj = #{csbj},
+			wbbh = #{wbbh},
+			wbbj = #{wbbj},
+			mxbz = #{mxbz},
+			shrm = #{shrm},
+			shsj = #{shsj},
+			fzkj = #{fzkj},
+			jzj = #{jzj},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj}
+		where bjdh = #{bjdh} and bjxh = #{bjxh}
+</update>
+<delete id="deleteQuotDetail" parameterType="erp.erp.companyQuot.model.QuotDetail">
+	delete from dbo.csbjmxb
+	where  bjdh = #{bjdh} and bjxh = #{bjxh}
+</delete>
+</mapper>

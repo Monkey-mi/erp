@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erp.erp.manufacturer.payAccount.data.QynfMapper">
+<select id="getQynf" parameterType="map" resultType="int">
+select year(qyrq) from sysxxb where 1= 1
+</select>
+<select id="getJzzt" parameterType="map" resultType="Integer">
+select jzzt from yfjzb where nd=#{nd} and yf=12;
+</select>
+<select id="getYhmc" parameterType="map" resultType="String">
+SELECT sysxxb.yhjc FROM sysxxb where 1=1
+<if test="yhbh !=null and yhbh !=''">
+  and yhbh=#{yhbh}
+</if>
+</select>
+<select id="getBmmc" parameterType="map" resultType="String">
+SELECT hsbmb.bmmc FROM hsbmb where 1=1
+<if test="hsbm != null and hsbm != ''">
+  and  bmbh=#{hsbm}
+</if>
+</select>
+<!-- 根据wbbh获取外币名称wbdh -->
+<select id="getWbdh" parameterType="map" resultType="String">
+select
+		dbo.wbmcb.wbdh
+	from
+		dbo.wbmcb
+	where 
+	   wbmcb.wbbh = #{wbbh}
+</select>
+</mapper>

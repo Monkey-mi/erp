@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.plasticPartsPledge.data.PlasticPartsPledgeMapper">
+
+<select id="getStringFromSql" parameterType="map" resultType="String">
+  ${sql}
+</select>
+<select id="getPlasticPartsPledgeList" parameterType="map" resultType="erp.erp.plasticPartsPledge.model.PlasticPartsPledge">
+	select
+		sljzyb.zydh,
+		sljzyb.zylx,
+		sljzyb.czrm,
+		sljzyb.czrq,
+		sljzyb.csbh,
+		sljzyb.zyje,
+		sljzyb.dqrq,
+		sljzyb.bzsm,
+		sljzyb.sdrm,
+		sljzyb.sdsj,
+		sljzyb.shrm,
+		sljzyb.shsj,
+		sljzyb.jyrm,
+		sljzyb.jysj,
+		sljzyb.sdbj,
+		sljzyb.shbj,
+		sljzyb.jybj,
+		csxxb.csmc
+	from sljzyb
+	left outer join csxxb on csxxb.csbh=sljzyb.csbh
+	<where>
+		<if test="zydh!=null">
+			sljzyb.zydh=#{zydh}
+		</if>
+		<if test="search!=null">
+			${search}
+		</if>
+	</where>
+	<if test="sort!=null">
+		order by ${sort}
+	</if>
+	<if test="sort==null">
+		order by zydh
+	</if>
+</select>
+<insert id="addPlasticPartsPledge" parameterType="erp.erp.plasticPartsPledge.model.PlasticPartsPledge" keyProperty="zydh" useGeneratedKeys="true">
+	<selectKey keyProperty="zydh" resultType="int" order="BEFORE">
+		select isnull(max(zydh),0)+1  from sljzyb	
+	</selectKey>
+	insert into sljzyb
+	(
+		zydh,
+		zylx,
+		czrm,
+		czrq,
+		csbh,
+		zyje,
+		dqrq,
+		bzsm,
+		sdrm,
+		sdsj,
+		shrm,
+		shsj,
+		jyrm,
+		jysj,
+		sdbj,
+		shbj,
+		jybj
+	)
+	values
+	(
+		#{zydh},
+		#{zylx},
+		#{czrm},
+		#{czrq},
+		#{csbh},
+		#{zyje},
+		#{dqrq},
+		#{bzsm},
+		#{sdrm},
+		#{sdsj},
+		#{shrm},
+		#{shsj},
+		#{jyrm},
+		#{jysj},
+		#{sdbj},
+		#{shbj},
+		#{jybj}
+	)
+</insert>
+<update id="updatePlasticPartsPledge" parameterType="erp.erp.plasticPartsPledge.model.PlasticPartsPledge">
+	update sljzyb
+		set
+			zydh = #{zydh},
+			zylx = #{zylx},
+			czrm = #{czrm},
+			czrq = #{czrq},
+			csbh = #{csbh},
+			zyje = #{zyje},
+			dqrq = #{dqrq},
+			bzsm = #{bzsm},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			shrm = #{shrm},
+			shsj = #{shsj},
+			jyrm = #{jyrm},
+			jysj = #{jysj},
+			sdbj = #{sdbj},
+			shbj = #{shbj},
+			jybj = #{jybj}
+		where zydh = #{zydh}
+</update>
+<update id="updatePlasticPartsPledgeState" parameterType="map">
+	update sljzyb
+		set
+			${fieldstate} =#{state},
+			${fieldczym} =#{czym},
+			${fielddate} =getDate()
+		where zydh in  (${zydh})
+</update>
+<delete id="deletePlasticPartsPledge" parameterType="erp.erp.plasticPartsPledge.model.PlasticPartsPledge">
+	delete from sljzyb
+	where zydh = #{zydh}
+</delete>
+<delete id="deletePlasticPartsPledgeByZydh" parameterType="map">
+	delete from sljzyb
+	where zydh in (${zydh})
+</delete>
+</mapper>

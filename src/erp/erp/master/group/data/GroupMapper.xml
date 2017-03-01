@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.group.data.GroupMapper">
+	
+	<select id="getGroupList" parameterType="map" resultType="erp.erp.master.group.model.Group">
+		  select cgzmb.cgzh,   
+                 cgzmb.cgzm,   
+                 cgzmb.bzsm  
+          from   cgzmb   
+	</select>
+	<insert id="addGroup" parameterType="erp.erp.master.group.model.Group"  keyProperty="cgzh" useGeneratedKeys="true">
+		  insert into cgzmb
+		  (
+		         cgzh,
+		         cgzm,
+		         bzsm
+		   )
+		   values
+		   (
+		         #{cgzh},
+		         #{cgzm},
+		         #{bzsm}
+		   )      
+	</insert>
+	<update id="updateGroup" parameterType="erp.erp.master.group.model.Group"  >
+		update cgzmb
+		   set cgzm = #{cgzm},
+		       bzsm = #{bzsm}
+		where 
+		    cgzh = #{cgzh}       
+	</update>
+	<delete id="deleteGroup" parameterType="erp.erp.master.group.model.Group">
+	    delete from cgzmb
+	    where 
+		    cgzh = #{cgzh} 
+	</delete>
+	<delete id="deleteCzy" parameterType="erp.erp.master.group.model.Group">
+		delete from cgzm_qxb where cgzh=#{cgzh};
+	</delete>
+	 	<!-- 判断操作员是否存在 -->
+    <select id="getOperatorIsExist" parameterType="map" resultType="int">
+	select isnull(count(*),0)  from cgzm_qxb where czy_gh=#{czy_gh} and cgzh=#{cgzh};
+    </select>
+    <!-- 获取序号 -->
+    <select id="getGroupOne" parameterType="map" resultType="String">
+	select isnull(max ( cgzh ),0) from cgzmb where 1 =1
+    </select>
+    <select id="beforeDel"  parameterType="erp.erp.master.group.model.Group" resultType="int">
+    select count(*)  from clbmb where cgzh=#{cgzh}; 	
+    </select>
+</mapper>

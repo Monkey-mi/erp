@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.SubmitObjectMapper">
+
+
+<select id="getSubmitObjectList" parameterType="map" resultType="erp.erp.PayApply.model.SubmitObject">
+	  SELECT tjdxwhb.ssbm,  
+	  		czybmlbb.lbmc, 
+         tjdxwhb.czy_gh,   
+         tjdxwhb.czy_xm,
+			czyb.gzgw  
+    FROM tjdxwhb  
+ left outer join czyb on  czyb.czy_gh = tjdxwhb.czy_gh
+ left outer join czybmlbb on  czybmlbb.lbbh = tjdxwhb.ssbm
+ where 1=1
+ <if test="ssbm!=null">
+ 	and left(tjdxwhb.ssbm,len(#{ssbm}))=#{ssbm}
+ </if>
+ <if test="submitobject!=null">
+ and tjdxwhb.czy_gh like '%${submitobject}%' or tjdxwhb.czy_xm like '%${submitobject}%' or czybmlbb.lbmc like '%${submitobject}%'
+ </if>
+</select>
+<select id="getOperatorList" parameterType="map" resultType="erp.erp.PayApply.model.SubmitObject">
+	  SELECT czyb.czy_xm,   
+         czyb.czy_gh,
+         czybmlbb.lbmc, 
+			czyb.ssbm,
+			czyb.gzgw,
+			0 as xzbj   
+    FROM czyb   
+     left outer join czybmlbb on  czybmlbb.lbbh = czyb.ssbm
+where tybj=0 
+ <if test="czy!=null">
+ and czy_gh=#{czy} or czy_xm like '%${czy}%'
+ </if>
+</select>
+<insert id="addSubmitObject" parameterType="erp.erp.PayApply.model.SubmitObject" keyProperty="" useGeneratedKeys="true">
+	insert into tjdxwhb
+	(
+		ssbm,
+		czy_gh,
+		czy_xm,
+		gzgw
+	)
+	values
+	(
+		#{ssbm},
+		#{czy_gh},
+		#{czy_xm},
+		#{gzgw}
+	)
+</insert>
+<update id="updateSubmitObject" parameterType="erp.erp.PayApply.model.SubmitObject">
+	update tjdxwhb
+		set
+			ssbm = #{ssbm},
+			czy_gh = #{czy_gh},
+			czy_xm = #{czy_xm},
+			gzgw = #{gzgw}
+		where  czy_gh= #{czy_gh}
+</update>
+<delete id="deleteSubmitObject" parameterType="erp.erp.PayApply.model.SubmitObject">
+	delete from tjdxwhb
+	where  czy_gh= #{czy_gh}
+</delete>
+</mapper>

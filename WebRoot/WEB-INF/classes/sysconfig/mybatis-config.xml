@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration 
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>  
+        <setting name="cacheEnabled" value="false" />  
+    </settings>
+    <plugins>
+        <plugin interceptor="erp.util.db.PagingInterceptor" />
+    </plugins>
+    <!--  
+    <mappers>
+    	<mapper resource="tps/common/login/data/LoginMapper.xml" />	
+    </mappers>
+    -->
+</configuration>  

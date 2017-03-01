@@ -1,0 +1,1349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PurchaseClearing.data.NoticeMapper">
+
+
+<select id="getNoticeList" parameterType="map" resultType="erp.erp.PurchaseClearing.model.Notice">
+select aa.* from  (
+  SELECT kptzb.tzdh,   
+         kptzb.tzrq,   
+         kptzb.csbh,   
+         kptzb.bzsm,   
+         kptzb.ysbj,   
+         kptzb.yfbj,   
+         kptzb.sprq,   
+         kptzb.fcrq,
+		 kptzb.fcrm,   
+         kptzb.czym,   
+         kptzb.czsj,
+         kptzb.gdbj,
+         kptzb.qsrq,
+         kptzb.jzrq,
+         kptzb.sjrm,
+		 kptzb.hsbm,
+	     kptzb.dsbj,
+         csxxb.csmc,
+         hsbmb.bmmc as hsbmmc,
+         (select min(hxbj) from view_kptzhx where view_kptzhx.tzdh=kptzb.tzdh) as hxbj
+    FROM kptzb   
+left outer join csxxb with(nolock) on csxxb.csbh=kptzb.csbh
+left outer join hsbmb with(nolock) on hsbmb.bmbh=kptzb.hsbm
+where
+   1=1 
+<if  test="gdbj==null" >
+ and kptzb.gdbj=0	
+</if>
+	 
+<if test="gdbj!=null" >
+and kptzb.gdbj=#{gdbj} 
+</if>
+and isnull(kptzb.tzdh,0)!=0
+<if test="hsbm!=null">
+and kptzb.hsbm='' or (left(kptzb.hsbm,len(#{hsbm})) = #{hsbm})
+</if>
+<if test="condition!=null and condition!=''">
+	 and ${condition}
+</if>
+<if test="search!=null">
+		  ${search}
+</if>
+<if test="bmqx!=null">
+	  		${bmqx}
+</if>
+) aa
+where
+   1=1 
+<if test="filterSearch!=null">
+	${filterSearch}
+</if>
+order by tzdh desc
+</select>
+<insert id="addNotice" parameterType="erp.erp.PurchaseClearing.model.Notice" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.kptzb
+	(
+		tzdh,
+		tzrq,
+		csbh,
+		bzsm,
+		ysbj,
+		yfbj,
+		sprq,
+		fcrq,
+		czym,
+		czsj,
+		gdbj,
+		qsrq,
+		jzrq,
+		sjrm,
+		hsbm,
+		fcrm,
+		dsbj
+	)
+	values
+	(
+		#{tzdh},
+		#{tzrq},
+		#{csbh},
+		#{bzsm},
+		#{ysbj},
+		#{yfbj},
+		#{sprq},
+		#{fcrq},
+		#{czym},
+		#{czsj},
+		#{gdbj},
+		#{qsrq},
+		#{jzrq},
+		#{sjrm},
+		#{hsbm},
+		#{fcrm},
+		#{dsbj}
+	)
+</insert>
+<update id="updateNotice" parameterType="erp.erp.PurchaseClearing.model.Notice">
+	update dbo.kptzb
+		set
+			tzdh = #{tzdh},
+			tzrq = #{tzrq},
+			csbh = #{csbh},
+			bzsm = #{bzsm},
+			ysbj = #{ysbj},
+			yfbj = #{yfbj},
+			sprq = #{sprq},
+			fcrq = #{fcrq},
+			czym = #{czym},
+			czsj = #{czsj},
+			gdbj = #{gdbj},
+			qsrq = #{qsrq},
+			jzrq = #{jzrq},
+			sjrm = #{sjrm},
+			hsbm = #{hsbm},
+			fcrm = #{fcrm},
+			dsbj = #{dsbj}
+		where tzdh = #{tzdh}
+</update>
+<delete id="deleteNotice" parameterType="erp.erp.PurchaseClearing.model.Notice">
+	delete from dbo.kptzb
+	where  tzdh = #{tzdh}
+</delete>
+
+<update id="afterDelRk" parameterType="erp.erp.PurchaseClearing.model.Notice" >
+	update rkdb_yl set tzdh=0 where tzdh=#{tzdh};
+</update>
+<update id="DelRk" parameterType="map" >
+	update rkdb_yl set tzdh=0 where tzdh=#{tzdh};
+</update>
+
+<update id="afterDelCg" parameterType="erp.erp.PurchaseClearing.model.Notice">
+	update cgfyb set tzdh=0 where tzdh=#{tzdh};
+</update>
+<update id="DelCg" parameterType="map">
+	update cgfyb set tzdh=0 where tzdh=#{tzdh};
+</update>
+
+<insert id="addRkdb" parameterType="map" keyProperty="" useGeneratedKeys="true">
+	insert into view_rkdb_yl_tzdh(ckbh,rkdh,rkxh) values(#{ckbh},#{rkdh},#{rkxh});
+</insert>
+
+<update id="updateRkdhy" parameterType="map">
+	 update rkdb_yl set tzdh=#{tzdh}  where ckbh=#{ckbh} and rkdh=#{rkdh} and rkxh=#{rkxh} 
+</update>
+
+<update id = "updateFzhm" parameterType="map">
+	update rkdb_yl set fzhm = #{fzhm}  where ckbh=#{ckbh} and rkdh=#{rkdh} and rkxh=#{rkxh} 
+</update>
+
+<update id = "updateFyFzhm" parameterType="map">
+	update cgfyb set fzhm = #{fzhm} where fydh = #{fydh} and fyxh = #{fyxh}
+</update>
+
+<update id="updateCgfyb"  parameterType="map">
+	 update cgfyb set tzdh = #{tzdh} where fydh = #{fydh} and fyxh = #{fyxh};
+</update>
+
+<select id= "getCostBillsList" parameterType="map" resultType = "erp.erp.PurchaseClearing.model.CostBills">
+	 select aa.* from ( SELECT rkdb_yl.ckbh,   
+         rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.csbh,   
+         rkdb_yl.clhh,    
+         rkdb_yl.cltx1,   
+         rkdb_yl.cltx2,       
+         rkdb_yl.cltx3,   
+         rkdb_yl.jldw,   
+         htmxb.cgsl,    
+         dhdjb_yl.dhsl,   
+         rkdb_yl.rksl,   
+			(select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh) as bj,
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thdj else rkdb_yl.rkdj end as rkdj,
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thje else rkdb_yl.rkje end as rkje,
+			rkdb_yl.wbbh,     
+         rkdb_yl.wbhl,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbdj else rkdb_yl.wbdj end as wbdj,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbje else rkdb_yl.wbje end as wbje, 
+         rklbb.rklb,
+         case when rkdb_yl.HTBH!=0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,   
+         rkdb_yl.hcdh,   
+         rkdb_yl.hcxh,   
+         rkdb_yl.czym,   
+         rkdb_yl.czsj,   
+         rkdb_yl.bzsm,
+			clbmb.clmc, 
+			csxxb.yhbh, 
+			csxxb.cglb,
+			csxxb.csmc,
+			dhdjb_yl.dhrq,
+			'入库单'  as sjly,
+			rkdb_yl.fzdw,
+			rkdb_yl.fzsl,
+			rkdb_yl.shdh,
+			rkdb_yl.shsj,
+			rkdb_yl.fplb,
+			rkdb_yl.fphm,
+			case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 then 1 else 0 end as tjbj,
+			rkdb_yl.hxbj,
+			'' as fyxz,
+			0 as cybh,
+            clbmb.plmth,
+	 		clbmb.plmtx,
+			rkdb_yl.sxdy09,
+			ckmcb_yl.ckmc,
+			wbmcb.wbmc
+    from rkdb_yl with (nolock)
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh
+	 left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh
+	 left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh
+	 left outer join rklbb  with (nolock)on rklbb.lbbh=rkdb_yl.rklb
+	 left outer join cgjgtzmxb with (nolock) on cgjgtzmxb.ckbh=rkdb_yl.ckbh and cgjgtzmxb.rkdh=rkdb_yl.rkdh and cgjgtzmxb.rkxh=rkdb_yl.rkxh and (select qfbj from cgjgtzb where cgjgtzb.tjdh=cgjgtzmxb.tjdh)=1
+     left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh = rkdb_yl.ckbh
+     left outer join wbmcb  with (nolock) on wbmcb.wbbh = rkdb_yl.wbbh
+    where rkdb_yl.tzdh=#{tzdh} 
+union all
+ SELECT  '' as ckbh,
+			cgfyb.fydh,
+			cgfyb.fyxh,
+			cgfyb.fyrq,
+			cgfyb.csbh,
+			'' as clhh,
+			'' as cltx1,
+			'' as cltx2,
+			'' as cltx3,
+			'' as jldw,
+			0 as cgsl,
+			0 as dhsl,
+			cgfyb.fysl,
+			0 as bj,
+			cgfyb.fydj,
+			cgfyb.fyje,
+			cgfyb.wbbh,
+			cgfyb.wbhl,
+			case when cgfyb.fysl!=0 then round(cgfyb.wbje/cgfyb.fysl,6) else 0 end as wbdj,
+			cgfyb.wbje,
+			'',
+         case when cgfyb.jhbh!=0 then ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,
+			0 as hcdh,
+			0 as hcxh,
+			cgfyb.czym,
+			cgfyb.czsj,
+			cgfyb.bzsm,
+			cgfyb.fyzy,
+			cgfyb.yhbh,
+			cgfyb.cglb,
+			csxxb.csmc,
+			null as dhrq,
+			'费用单' as djly,
+			'',
+			0,
+			'',
+			null,
+			cgfyb.fplb,
+			cgfyb.fphm,
+			0,
+			cgfyb.hxbj,
+			cgfyb.fyxz,
+			cgfyb.cybh,
+            '' ,
+	 		'' ,
+	 		'' ,
+	 		'',
+	 		wbmcb.wbmc
+    FROM cgfyb with (nolock) 
+left outer join csxxb with (nolock) on csxxb.csbh=cgfyb.csbh
+left outer join wbmcb with (nolock) on wbmcb.wbbh=cgfyb.wbbh
+where cgfyb.tzdh=#{tzdh}
+)aa
+</select>
+<select id = "getMaxTzdh" parameterType="map" resultType = "float">
+	select isnull(max(tzdh),0) from kptzb 
+</select>
+<select id ="getRkd" parameterType="map" resultType = "erp.erp.PurchaseClearing.model.CostBills">
+	  SELECT rkdb_yl.ckbh,   
+         rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.csbh,   
+         rkdb_yl.clhh,    
+         rkdb_yl.cltx1,   
+         rkdb_yl.cltx2,        
+         rkdb_yl.cltx3,   
+         rkdb_yl.jldw,   
+         htmxb.cgsl,   
+         dhdjb_yl.dhsl,   
+         rkdb_yl.rksl,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thdj else rkdb_yl.rkdj end as rkdj,
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thje else rkdb_yl.rkje end as rkje,
+		 rkdb_yl.wbbh,     
+         rkdb_yl.wbhl,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbdj else rkdb_yl.wbdj end as wbdj,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbje else rkdb_yl.wbje end as wbje, 
+         rkdb_yl.rklb,
+         case when rkdb_yl.HTBH!=0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,   
+         rkdb_yl.HTBH,
+			rkdb_yl.HTXH,
+			rkdb_yl.hcdh,   
+         rkdb_yl.hcxh,   
+         rkdb_yl.czym,   
+         rkdb_yl.czsj,   
+         rkdb_yl.bzsm,
+			rkdb_yl.cgbh,
+			rkdb_yl.cgxh,
+			rkdb_yl.glht,
+			case when rkdb_yl.cgbh!=0 then ltrim(rtrim(str(rkdb_yl.cgbh)))+'-'+ltrim(rtrim(str(rkdb_yl.cgxh))) else '' end as cgh,
+			clbmb.clmc,
+         clbmb.plmth,
+	 		clbmb.plmtx, 
+			csxxb.yhbh, 
+			csxxb.cglb,
+			csxxb.csmc,
+			dhdjb_yl.dhrq,
+			rkdb_yl.fzdw,
+			rkdb_yl.fzsl,
+			rkdb_yl.shdh,
+			rkdb_yl.shsj,
+			rkdb_yl.tzdh,
+			isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.clmc = '外协加工费'),0) as jgdj,
+			round(isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.clmc = '外协加工费')*rkdb_yl.rksl,0),2) as jgje,
+
+			isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 1),0) as wjdj,
+			round(isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 1)*rkdb_yl.rksl,0),2) as wjje,
+
+			isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 2),0) as gcdj,
+			round(isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 2)*rkdb_yl.rksl,0),2) as gcje,
+			case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 then 1 else 0 end as tjbj,
+			rkdb_yl.sxdy09,
+			ckmcb_yl.ckmc,
+			rklbb.rklb as rklbmc,
+			wbmcb.wbdh as wbmc
+    from rkdb_yl
+     left outer join wbmcb with (nolock) on wbmcb.wbbh=rkdb_yl.wbbh
+     left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh
+	 left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh
+	 left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh
+	 left outer join cgjgtzmxb with (nolock) on cgjgtzmxb.ckbh=rkdb_yl.ckbh and cgjgtzmxb.rkdh=rkdb_yl.rkdh and cgjgtzmxb.rkxh=rkdb_yl.rkxh and (select qfbj from cgjgtzb where cgjgtzb.tjdh=cgjgtzmxb.tjdh)=1
+     left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh = rkdb_yl.ckbh
+    where 1=1
+    <if test="tzdh!=null">
+    and tzdh=#{tzdh}
+    </if>
+</select>
+
+<insert id="addRkd" parameterType="erp.erp.PurchaseClearing.model.CostBills" keyProperty="" useGeneratedKeys="true">
+	insert into  rkdb_yl
+	   (
+	     htbh,
+	     htxh,
+	     ckbh,
+	     rkdh,
+	     rkxh,
+	     rkrq,
+	     clhh,
+	     cltx1,
+	     jldw,
+	     rksl,
+	     rkdj, 
+	     rkje, 
+	     wbbh, 
+	     wbhl, 
+	     wbdj, 
+	     wbje, 
+	     fzdw, 
+	     fzsl, 
+	     rklb, 
+	     shdh,
+	     shsj, 
+	     bzsm, 
+	     czym, 
+	     czsj, 
+	     cgbh, 
+	     cgxh,
+	     glht, 
+	     sxdy09
+	   )
+	   values(
+	     #{htbh},
+	     #{htxh},
+	     #{ckbh},
+	     #{rkdh},
+	     #{rkxh},
+	     #{rkrq},
+	     #{clhh},
+	     #{cltx1},
+	     #{jldw},
+	     #{rksl},
+	     #{rkdj}, 
+	     #{rkje}, 
+	     #{wbbh}, 
+	     #{wbhl}, 
+	     #{wbdj}, 
+	     #{wbje}, 
+	     #{fzdw}, 
+	     #{fzsl}, 
+	     #{rklb}, 
+	     #{shdh},
+	     #{shsj}, 
+	     #{bzsm}, 
+	     #{czym}, 
+	     #{czsj}, 
+	     #{cgbh}, 
+	     #{cgxh}, 
+	     #{glht}, 
+	     #{sxdy09}
+	   )
+</insert>
+<delete id = "deleteRkd" parameterType="erp.erp.PurchaseClearing.model.CostBills">
+	delete from rkdb_yl
+	where  rkdh = #{rkdh} and rkxh = #{rkxh} 
+</delete>
+<select id="getFyd" parameterType="map" resultType = "erp.erp.PurchaseClearing.model.Cost">
+	 SELECT  cgfyb.fydh,
+			cgfyb.fyxh,
+			cgfyb.fyrq,
+			cgfyb.yhbh,
+			cglbb.lbmc as cglb,
+			cgfyb.csbh,
+			cgfyb.fyzy,
+			cgfyb.fysl,
+			cgfyb.fydj,
+			cgfyb.fyje,
+			cgfyb.jhbh,
+			cgfyb.jhxh,
+         case when cgfyb.jhbh!=0 then
+            ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,
+			cgfyb.bzsm,
+			cgfyb.hxbj,
+			cgfyb.fplb,
+			cgfyb.fphm,
+			cgfyb.sdbj,
+			cgfyb.sdrm,
+			cgfyb.sdsj,
+			cgfyb.czym,
+			cgfyb.czsj,
+			cgfyb.tzdh,
+			csxxb.csmc,
+			cgfyb.cybh,
+			cgfyb.wbbh,
+			cgfyb.wbhl,
+		 case when cgfyb.wbhl!=0 then	
+			cgfyb.fydj/cgfyb.wbhl end as wbdj,
+			cgfyb.wbje,
+			cgfyb.hsbm,
+			cgfyb.fyxz,
+			cgfyb.ftms,
+			cgfyb.ftxs,
+			cgfyb.fsbm,
+			wbmcb.wbdh,
+			hsbmb.bmmc
+    FROM cgfyb  
+left outer join csxxb on csxxb.csbh=cgfyb.csbh
+left outer join cglbb on cglbb.lbbh=cgfyb.cglb
+left outer join wbmcb on wbmcb.wbbh = cgfyb.wbbh
+left outer join hsbmb  with (nolock) on hsbmb.bmbh=cgfyb.hsbm
+where cgfyb.tzdh=#{tzdh}
+</select>
+<select id="ifYfbj" parameterType="map"  resultType = "int">
+	select ysyfbj  from hsbmb where bmbh=#{hsbm};
+</select>
+<update id="doLock" parameterType="map">
+	update kptzb set yfbj = #{yfbj},fcrm=#{czym},fcrq=#{czsj} where tzdh = #{tzdh};
+</update>
+<update id = "doSend" parameterType="map">
+	update kptzb set dsbj = #{dsbj} where tzdh = #{tzdh} 
+</update>
+<update id = "doArc" parameterType="map">
+	 update kptzb set gdbj=1,
+	 ysbj=1 - ysbj where tzdh=#{tzdh} 
+	 <if test="hsbm!=null and hsbm!=''">
+	 and left(kptzb.hsbm,len(#{hsbm})) = #{hsbm};
+	 </if>
+</update>
+<update id = "doAllArc" parameterType="map" >
+	update kptzb 
+	set gdbj=1,
+	ysbj=1 - ysbj 
+	where gdbj=0 
+	and (select min(hxbj) from view_kptzhx where view_kptzhx.tzdh=kptzb.tzdh)=1 
+	<if test="hsbm!=null and hsbm!=''">
+	and left(kptzb.hsbm,len(#{hsbm})) = #{hsbm};
+    </if>
+</update>
+<select id="getWdfy"  parameterType="map"  resultType ="erp.erp.PurchaseClearing.model.Cost">
+ SELECT  cgfyb.fydh,
+			cgfyb.fyxh,
+			cgfyb.fyrq,
+			cgfyb.yhbh,
+			cglbb.lbmc as cglb,
+			cgfyb.csbh,
+			cgfyb.fyzy,   
+			cgfyb.fysl,
+			cgfyb.fydj,
+			cgfyb.fyje,
+			cgfyb.zzsl,
+			cgfyb.csdj,
+			cgfyb.csje,
+			cgfyb.fyje - cgfyb.csje as zzse,
+			cgfyb.jhbh,
+			cgfyb.jhxh,
+         case when cgfyb.jhbh!=0 then
+            ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,
+			cgfyb.htbh,
+			cgfyb.htxh,
+         case when cgfyb.htbh!=0 then
+            ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) end as hth,
+			cgfyb.bzsm,
+			cgfyb.hxbj,
+			cgfyb.fplb,
+			cgfyb.fphm,
+			cgfyb.sdbj,
+			cgfyb.sdrm,
+			cgfyb.sdsj,
+			cgfyb.czym,
+			cgfyb.czsj,
+			cgfyb.tzdh,
+			csxxb.csmc
+    FROM cgfyb  
+left outer join csxxb with (nolock) on csxxb.csbh=cgfyb.csbh
+left outer join cglbb on cglbb.lbbh=cgfyb.cglb
+   where cgfyb.csbh=#{csbh} and ((cgfyb.hxrq&gt;#{jzrq} and hxbj=1) or hxbj=0)
+       and fyrq&lt;=#{jzrq}
+</select>    
+<select id="getWdrk"   parameterType="map"  resultType ="erp.erp.PurchaseClearing.model.CostBills">
+	  SELECT rkdb_yl.ckbh,   
+         rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.clhh,      
+         rkdb_yl.cltx1,   
+         rkdb_yl.cltx2,   
+         rkdb_yl.cltx3,   
+         rkdb_yl.jldw,   
+         rkdb_yl.rksl,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thdj else rkdb_yl.rkdj end as rkdj,
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thje else rkdb_yl.rkje end as rkje, 
+         rkdb_yl.zzsl,
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.csdj else rkdb_yl.csdj end as csdj,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.csje else rkdb_yl.csje end as csje,    
+			(case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thje else rkdb_yl.rkje end)
+			 -  (case when cgjgtzmxb.tjdh is not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.csje else rkdb_yl.csje end) as zzse,
+         rkdb_yl.wbbh,   
+         rkdb_yl.wbhl,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbdj else rkdb_yl.wbdj end as wbdj,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbje else rkdb_yl.wbje end as wbje, 
+         rklbb.rklb,   
+         rkdb_yl.hxbj,   
+			clbmb.clmc,
+			rkdb_yl.fzdw,
+			rkdb_yl.fzsl,
+			ckmcb_yl.ckmc
+    from rkdb_yl with (nolock) 
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join cgjgtzmxb with (nolock) on cgjgtzmxb.ckbh=rkdb_yl.ckbh and cgjgtzmxb.rkdh=rkdb_yl.rkdh and cgjgtzmxb.rkxh=rkdb_yl.rkxh and (select qfbj from cgjgtzb where cgjgtzb.tjdh=cgjgtzmxb.tjdh)=1
+     left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh = rkdb_yl.ckbh
+     left outer join rklbb  with (nolock)on rklbb.lbbh=rkdb_yl.rklb
+    where rkdb_yl.csbh=#{csbh} and ((rkdb_yl.hxrq&gt;#{jzrq} and hxbj=1) or hxbj=0)
+      and rkrq&lt;=#{jzrq}
+</select>   
+<select id="getYfbj" parameterType="map" resultType="int">
+   	   select ysyfbj as ysyfbj from hsbmb where bmbh=#{hsbm};
+</select>
+
+<insert id = "addHtbh"  parameterType="map" keyProperty="" useGeneratedKeys="true">
+	insert into view_htbh (htbh) values (#{htbh});
+</insert>
+
+<insert id = "addGlht" parameterType="map" keyProperty="" useGeneratedKeys="true">
+	insert into view_glht (cgbh,glht) values (#{cgbh},#{glht})
+</insert>
+
+<select id="getHtbhCount" parameterType="map" resultType="int">
+	select count(*)  from cgjhb where glht=#{htbh}
+	and not exists (select cgbh,glht from cgjhb where cgjhb.cgbh =#{cgbh} and cgjhb.glht=#{glht});
+</select>
+
+<select id="getCgjhCount" parameterType="map" resultType="int">
+	select COUNT(*) from cgjhb where cgjhb.cgbh =#{cgbh} and cgjhb.glht=#{glht}
+</select>
+
+<select id="getGlhtCount" parameterType="map" resultType="int">
+	select count(*) from view_htbh where htbh=#{glht};
+</select>
+
+<select id="ifHxkp" parameterType="map" resultType="int">
+	select isnull(max(hxbj),0)  from view_kptzhx where view_kptzhx.tzdh=#{tzdh};
+</select>
+
+<select id="getJsRkdbImp" parameterType="map" resultType="erp.erp.PurchaseClearing.model.JsRkdbImp">
+	 select aa.* from (select rkdb_yl.ckbh,   
+         rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.pjrq,   
+         rkdb_yl.csbh,   
+         rkdb_yl.clhh,      
+         rkdb_yl.cltx1,   
+         rkdb_yl.cltx2,    
+         rkdb_yl.cltx3,   
+         rkdb_yl.jldw,    
+         rkdb_yl.hwbh,   
+         rkdb_yl.pcbh,   
+         rkdb_yl.ghpc,   
+         rkdb_yl.rksl,   
+         rkdb_yl.rkdj,   
+         rkdb_yl.rkje,   
+         rkdb_yl.zzsl,   
+         rkdb_yl.csdj,
+			rkdb_yl.csje,    
+         rkdb_yl.wbbh,   
+         rkdb_yl.wbhl,
+			rkdb_yl.wbdj,
+			rkdb_yl.wbje,    
+			(select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh) as bj,
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thdj else rkdb_yl.rkdj end as rkdj_hx,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thje else rkdb_yl.rkje end as rkje_hx,   
+         rkdb_yl.zzsl as zzsl_hx,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.csdj else rkdb_yl.csdj end as csdj_hx,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.csje else rkdb_yl.csje end as csje_hx,   
+         (case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thje else rkdb_yl.rkje end)
+			 -  (case when cgjgtzmxb.tjdh is not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.csje else rkdb_yl.csje end) as zzse_hx,
+         rkdb_yl.wbhl as wbhl_hx,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbdj else rkdb_yl.wbdj end as wbdj_hx,   
+         case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbje else rkdb_yl.wbje end as wbje_hx, 
+          
+         rkdb_yl.jhbh,   
+         rkdb_yl.jhxh,   
+         rkdb_yl.htbh,   
+         rkdb_yl.htxh,   
+         rkdb_yl.dhdh,   
+         rkdb_yl.dhxh,
+			case when rkdb_yl.htbh!=0 then ltrim(rtrim(str(rkdb_yl.htbh)))+'-'+ltrim(rtrim(str(rkdb_yl.htxh))) else null end as hth  ,
+			case when rkdb_yl.wxdh!=0 then ltrim(rtrim(str(rkdb_yl.wxdh)))+'-'+ltrim(rtrim(str(rkdb_yl.wxxh))) else null end as wxh  ,
+			dhdjb_yl.dhrq, 
+			dhdjb_yl.dhsl,  
+         rkdb_yl.sdbj,   
+         rkdb_yl.sdsj,   
+         rkdb_yl.sdrm,   
+         rkdb_yl.czym,   
+         rkdb_yl.czsj,   
+         rkdb_yl.dybj,   
+         rkdb_yl.dysj,   
+         rkdb_yl.jkrm,   
+         rkdb_yl.zzrq,   
+         rkdb_yl.bzsm,   
+         rkdb_yl.hcbj,   
+         rkdb_yl.hcdh,   
+         rkdb_yl.hcxh,   
+         rkdb_yl.hxbj, 
+			rkdb_yl.wgbj,  
+         rkdb_yl.fzhm,   
+         rkdb_yl.wxbj,   
+         rkdb_yl.wxdh,   
+         rkdb_yl.wxxh,   
+         rkdb_yl.fplb,   
+         rkdb_yl.fphm,   
+         rkdb_yl.hxrq,   
+         rkdb_yl.hxrm,   
+         rkdb_yl.hxsj,   
+         rkdb_yl.cfxh,  
+         rkdb_yl.tzdh,
+			rkdb_yl.shdh,  
+			rkdb_yl.shsj,
+			rkdb_yl.zsbj,
+			rkdb_yl.cgbh,
+			rkdb_yl.cgxh,
+			rkdb_yl.glht,
+			case when rkdb_yl.cgbh!=0 then ltrim(rtrim(str(rkdb_yl.cgbh)))+'-'+ltrim(rtrim(str(rkdb_yl.cgxh))) else '' end as cgh,
+			case when isnull(rkdb_yl.rkdj,0)=0 and isnull(rkdb_yl.zsbj,0)=0 then 1 else 0 end gjbj,
+         jzztb_yl.jzzt,   
+			clbmb.clmc,  
+			b.yhbh, 
+			b.cglb, 
+			b.csmc, 
+         case when hxbj=1 then 1 else 0 end as xzbj,
+         0 as scbj,
+			rkdb_yl.fzdw,
+			rkdb_yl.fzsl,
+			case when cgjgtzmxb.tjdh  is  not null and cgjgtzmxb.tjdh!=0 then 
+				case when rkdb_yl.fzsl>0 then  round(cgjgtzmxb.thje/rkdb_yl.fzsl,4) else 0 end  
+			else 
+				case when rkdb_yl.fzsl>0 then  round(rkdb_yl.rkje/rkdb_yl.fzsl,4) else 0 end 
+			end as fzdj,
+			ISNULL(cgjgtzmxb.tjdh,0) AS TJDH,
+			htmxb.cgsl,
+			jhmx_ddxxb.htbz,
+			jhmx_ddxxb.cpbh,
+			view_wxjght.clje,
+			round(rkdb_yl.rksl*view_wxjght.clje,2) as wxjgje,
+			cpbmb.cpmc,  
+ 			c.cgym,
+			rkdb_yl.sxdy09,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+			cpbmb.plmth as plmth_cp,
+			cpbmb.plmtx as plmtx_cp,
+			cgyb.cgyxm,
+			cglbb.lbmc as cglbmc,
+			rklbb.rklb as rklbmc,
+			rkdb_yl.rklb,
+			ckmcb_yl.ckmc,
+			wbmcb.wbdh
+    FROM rkdb_yl  
+     left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb
+     left outer join wbmcb with (nolock) on wbmcb.wbbh=rkdb_yl.wbbh
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join csxxb b with (nolock) on b.csbh=rkdb_yl.csbh
+	 left outer join cglbb with (nolock) on cglbb.lbbh=b.cglb
+	 left outer join cghtb c with (nolock) on c.htbh=rkdb_yl.htbh
+	 left outer join cgyb  with (nolock) on cgyb.cgybh=c.cgym
+	 left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=rkdb_yl.ckbh
+	 left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh
+	 left outer join jhmx_ddxxb with (nolock) on htmxb.jhbh=jhmx_ddxxb.ddbh and htmxb.jhxh=jhmx_ddxxb.jhxh
+    left outer join cpbmb with (nolock) on cpbmb.cpbh=jhmx_ddxxb.cpbh
+	 left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh
+    left outer join cgjgtzmxb with (nolock) on cgjgtzmxb.ckbh=rkdb_yl.ckbh and cgjgtzmxb.rkdh=rkdb_yl.rkdh and cgjgtzmxb.rkxh=rkdb_yl.rkxh and (select qfbj from cgjgtzb where cgjgtzmxb.tjdh=cgjgtzb.tjdh)=1
+  	 left outer join jzztb_yl with (nolock) on year(rkdb_yl.rkrq) = nd and month(rkdb_yl.rkrq) = yd and rkdb_yl.ckbh = jzztb_yl.ckbh
+	 left outer join view_wxjght with (nolock) on view_wxjght.htbh=rkdb_yl.htbh and view_wxjght.htxh=rkdb_yl.htxh 
+	 where 
+	 (hxbj=0 and rkdb_yl.rklb!=4 and rkdb_yl.csbh=#{csbh})  and isnull(rkdb_yl.tzdh,0)=0
+	  <if test="ckbh!=null">
+	  and rkdb_yl.ckbh in (#{ckbh})
+	  </if> 
+	  and left(ltrim(rtrim(ckmcb_yl.hsbm)),len(#{hsbm}))=#{hsbm}
+	  <if test="tablename!=null">
+	  and not exists(select * from ${tablename} a  where a.rkdh = rkdb_yl.rkdh and a.rkxh = rkdb_yl.rkxh)
+	  </if> 
+	  <if test="condition!=null and condition!=''">
+	 and ${condition}
+     </if>
+     <if test="shdh!=null">
+     and rkdb_yl.shdh like '%${shdh}%'	
+     </if>
+     <if test="shdhx!=null">
+     and  rkdb_yl.shdh &gt;= #{shdhx}
+     </if>
+     <if test="shdhd!=null">
+     and  rkdb_yl.shdh &lt;= #{shdhd}
+     </if>
+     <if test="qsshrq!=null and qsshrq!=''">
+     and rkdb_yl.shsj &gt;= #{qsshrq} 
+     </if>
+     <if test="jzqsrq!=null and jzqsrq!=''">
+     and rkdb_yl.shsj &lt;= #{jzqsrq} 
+     </if>
+     <if test="ckqx!=null">
+	 ${ckqx}	
+	 </if>
+     )aa
+     where
+        1=1 
+     <if test="filterSearch!=null">
+	  ${filterSearch}
+     </if>
+     <if test="sort==null">
+	    order by shsj ASC
+	 </if>
+     <if test="sort!=null">
+	  order by  ${sort}
+     </if>
+</select>
+
+<select id="getJsFydbImp"  parameterType="map" resultType="erp.erp.PurchaseClearing.model.JsFydbImp">
+	 select aa.* from  (
+	 SELECT  cgfyb.fydh,
+			cgfyb.fyxh,
+			cgfyb.fyrq,
+			cgfyb.yhbh,
+			cgfyb.cglb,
+			cgfyb.csbh,    
+			cgfyb.fyzy,
+			cgfyb.fysl,
+			cgfyb.fydj as fydj_hx,
+			cgfyb.fyje as fyje_hx,
+			cgfyb.zzsl as zzsl_hx,
+			cgfyb.csdj as csdj_hx,
+			cgfyb.csje as csje_hx,
+         cgfyb.fyje - cgfyb.csje as zzse_hx,
+         0 as wbhl_hx,
+         0 as wbdj_hx,
+         0 as wbje_hx,
+			cgfyb.fydj,
+			cgfyb.fyje,
+			cgfyb.zzsl,
+			cgfyb.hsbm,
+			cgfyb.csdj,
+			cgfyb.csje,
+			cgfyb.jhbh,
+			cgfyb.jhxh,
+         case when cgfyb.jhbh!=0 then
+            ltrim(rtrim(str(cgfyb.jhbh)))+'-'+ltrim(rtrim(str(cgfyb.jhxh))) end as jhh,
+		   cgfyb.htbh,
+			cgfyb.htxh,
+         case when cgfyb.htbh!=0 then
+            ltrim(rtrim(str(cgfyb.htbh)))+'-'+ltrim(rtrim(str(cgfyb.htxh))) end as hth,
+			cgfyb.bzsm,
+			cgfyb.hxbj,
+			cgfyb.fplb,
+			cgfyb.fphm,
+			cgfyb.sdbj,
+			cgfyb.sdrm,
+			cgfyb.sdsj,
+			cgfyb.czym,
+			cgfyb.czsj,
+			cgfyb.tzdh,
+			cgfyb.hxrq,
+			cgfyb.fzhm,
+			cgfyb.cfxh,
+			cgfyb.spbj,
+			yfjzb.jzzt,
+			csxxb.csmc,
+			case when cgfyb.hxbj=1 then 1 else 0 end as xzbj,
+         0 as scbj,
+			cgfyb.cybh,
+			cgfyb.wbbh,
+			cgfyb.wbhl,
+		case when cgfyb.wbhl!=0 then
+			cgfyb.fydj/cgfyb.wbhl end as wbdj,
+			cgfyb.wbje,
+			cgfyb.fylx,
+			cgfyb.fyxz,
+			cgfyb.ftms,
+			cgfyb.ftxs,
+			cgfyb.xslb,
+			cgfyb.dybj,
+			cgfyb.dysj,
+			cgfyb.sprm,
+			cgfyb.spyj,
+			cgfyb.spsj,
+			cgfyb.tjbj,
+			cgfyb.tjrm,
+			cgfyb.tjsj,
+			cgfyb.gxbh,
+			cgfyb.wxdh,
+			cgfyb.wxxh,
+			cgfyb.fsbm,
+			hsbmb.bmmc,
+			wbmcb.wbdh 
+    FROM cgfyb  
+left outer join csxxb  with (nolock) on csxxb.csbh=cgfyb.csbh
+left outer join yfjzb  with (nolock) on year(cgfyb.fyrq) = yfjzb.nd and month(cgfyb.fyrq) = yfjzb.yf
+left outer join hsbmb  with (nolock) on hsbmb.bmbh=cgfyb.hsbm
+left outer join wbmcb  with (nolock) on wbmcb.wbbh=cgfyb.wbbh
+where (cgfyb.hxbj=0 and cgfyb.csbh=#{csbh}) and isnull(cgfyb.tzdh,0)=0
+    <if test="tbname!=null">
+    	and not exists(select * from  ${tbname} a  where a.fydh = cgfyb.fydh and a.fyxh = cgfyb.fyxh)
+    </if>
+   <if test="bmqx!=null">
+	 ${bmqx}	
+	</if>
+   ) aa
+     where
+        1=1 
+    <if test="filterSearch!=null">
+	  ${filterSearch}
+     </if>
+     <if test="sort==null">
+	    order by fyrq ASC
+	 </if>
+     <if test="sort!=null">
+	  order by  ${sort}
+     </if>
+   <!-- <if test="sort!=null">
+	order by  ${sort}
+   </if> -->
+</select>
+
+<select id="getFzzbj"  parameterType="map" resultType="map">
+	select fzzbj,jldw,fzdw  from clbmb where clhh=#{clhh};
+</select>
+
+<select id="getGjjs" parameterType="erp.erp.PurchaseClearing.model.JsRkdbImp" resultType="erp.erp.PurchaseClearing.model.JsRkdbImp">
+	  SELECT rkdb_yl.ckbh,   
+         rkdb_yl.rkdh,   
+         rkdb_yl.rkxh,   
+         rkdb_yl.rkrq,   
+         rkdb_yl.csbh,   
+         rkdb_yl.clhh,    
+         rkdb_yl.cltx1,   
+         rkdb_yl.cltx2,        
+         rkdb_yl.cltx3,   
+         rkdb_yl.jldw,   
+         htmxb.cgsl,   
+         dhdjb_yl.dhsl,   
+         rkdb_yl.rksl,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thdj else rkdb_yl.rkdj end as rkdj,
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.thje else rkdb_yl.rkje end as rkje,
+			rkdb_yl.wbbh,     
+         rkdb_yl.wbhl,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbdj else rkdb_yl.wbdj end as wbdj,   
+         case when rkdb_yl.hxbj=0 and cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then cgjgtzmxb.wbje else rkdb_yl.wbje end as wbje, 
+         rkdb_yl.rklb,
+         case when rkdb_yl.HTBH!=0 then ltrim(rtrim(str(rkdb_yl.HTBH)))+'-'+ltrim(rtrim(str(rkdb_yl.HTXH))) else null end as hth,   
+         rkdb_yl.HTBH,
+			rkdb_yl.HTXH,
+			rkdb_yl.hcdh,   
+         rkdb_yl.hcxh,   
+         rkdb_yl.czym,   
+         rkdb_yl.czsj,   
+         rkdb_yl.bzsm,
+			clbmb.clmc, 
+			csxxb.yhbh, 
+			csxxb.cglb,
+			csxxb.csmc,
+			dhdjb_yl.dhrq,
+			rkdb_yl.fzdw,
+			rkdb_yl.fzsl,
+			rkdb_yl.shdh,
+			rkdb_yl.shsj,
+			rkdb_yl.tzdh,
+			isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.clmc = '外协加工费'),0) as jgdj,
+			round(isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.clmc = '外协加工费')*rkdb_yl.rksl,0),2) as jgje,
+
+			isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 1),0) as wjdj,
+			round(isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 1)*rkdb_yl.rksl,0),2) as wjje,
+
+			isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 2),0) as gcdj,
+			round(isnull((select sum(clje) from gjjjbomb a where a.htbh=rkdb_yl.HTBH and a.htxh=rkdb_yl.HTXH and a.cllx = 2)*rkdb_yl.rksl,0),2) as gcje,
+
+			case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 then 1 else 0 end as tjbj,
+            clbmb.plmth,
+	 		clbmb.plmtx
+    from rkdb_yl
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join csxxb with (nolock) on csxxb.csbh=rkdb_yl.csbh
+	 left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh
+	 left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh
+	 left outer join cgjgtzmxb with (nolock) on cgjgtzmxb.ckbh=rkdb_yl.ckbh and cgjgtzmxb.rkdh=rkdb_yl.rkdh and cgjgtzmxb.rkxh=rkdb_yl.rkxh and (select qfbj from cgjgtzb where cgjgtzb.tjdh=cgjgtzmxb.tjdh)=1
+    where  ckbh = #{ckbh} and rkdh=#{rkdh} and rkxh=#{rkxh} 
+</select>
+
+<select id = "getLlcount" parameterType="map" resultType="int">
+	select count(*)  from cgjgtzmxb where cgjgtzmxb.ckbh=#{cfxx_ckbh}
+	and cgjgtzmxb.rkdh=#{cfxx_rkdh} and cgjgtzmxb.rkxh=#{cfxx_rkxh_yd} and cgjgtzmxb.qfbj=1;
+</select>
+
+<select id= "getRkxhcf"  parameterType="map" resultType="float">
+	select isnull(max(rkxh),0)+1  from rkdb_yl where ckbh = #{cfxx_ckbh} and rkdh=#{cfxx_rkdh};
+</select>
+
+
+<insert id= 'addJsRkdbImp' parameterType="erp.erp.PurchaseClearing.model.JsRkdbImp">
+	insert into rkdb_yl
+	   (
+	      ckbh,   
+          rkdh,   
+          rkxh,   
+          rkrq,   
+          pjrq,   
+          csbh,   
+          clhh,      
+          cltx1,   
+          cltx2,    
+          cltx3,   
+          jldw,    
+          hwbh,   
+          pcbh,   
+          ghpc,   
+          rksl,   
+          rkdj,   
+          rkje,   
+          zzsl,   
+          csdj,
+		  csje,    
+          wbbh,   
+          wbhl,
+		  wbdj,
+		  wbje, 
+		  jhbh,   
+          jhxh,   
+          htbh,   
+          htxh,   
+          dhdh,   
+          dhxh,
+		  wxdh,
+		  sdbj,   
+          sdsj,   
+          sdrm,   
+          czym,   
+          czsj,   
+          dybj,   
+          dysj,   
+          jkrm,   
+          zzrq,   
+          bzsm,   
+          hcbj,   
+          hcdh,   
+          hcxh,   
+          hxbj, 
+		  wgbj,  
+          fzhm,   
+          wxbj, 
+          wxxh,   
+          fplb,   
+          fphm,   
+          hxrq,   
+          hxrm,   
+          hxsj,   
+          cfxh,  
+          tzdh,
+	      shdh,  
+		  shsj,
+		  zsbj,
+		  cgbh,
+		  cgxh,
+		  glht,
+		  fzdw,
+		  fzsl,
+		  sxdy09,
+		  rklb
+	   )
+	   values (
+	      #{ckbh},   
+          #{rkdh},   
+          #{rkxh},   
+          #{rkrq},   
+          #{pjrq},   
+          #{csbh},   
+          #{clhh},      
+          #{cltx1},   
+          #{cltx2},    
+          #{cltx3},   
+          #{jldw},    
+          #{hwbh},   
+          #{pcbh},   
+          #{ghpc},   
+          #{rksl},   
+          #{rkdj_hx},   
+          #{rkje_hx},   
+          #{zzsl_hx},   
+          #{csdj_hx},
+		  #{csje_hx},    
+          #{wbbh},   
+          #{wbhl_hx},
+		  #{wbdj_hx},
+		  #{wbje_hx}, 
+		  #{jhbh},   
+          #{jhxh},   
+          #{htbh},   
+          #{htxh},   
+          #{dhdh},   
+          #{dhxh},
+		  #{wxdh},
+		  #{sdbj},   
+          #{sdsj},   
+          #{sdrm},   
+          #{czym},   
+          #{czsj},   
+          #{dybj},   
+          #{dysj},   
+          #{jkrm},   
+          #{zzrq},   
+          #{bzsm},   
+          #{hcbj},   
+          #{hcdh},   
+          #{hcxh},   
+          #{hxbj}, 
+		  #{wgbj},  
+          #{fzhm},   
+          #{wxbj}, 
+          #{wxxh},   
+          #{fplb},   
+          #{fphm},   
+          #{hxrq},   
+          #{hxrm},   
+          #{hxsj},   
+          #{cfxh},  
+          #{tzdh},
+	      #{shdh},  
+		  #{shsj},
+		  #{zsbj},
+		  #{cgbh},
+		  #{cgxh},
+		  #{glht},
+		  #{fzdw},
+		  #{fzsl},
+		  #{sxdy09},
+		  #{rklb}
+	   )
+</insert>
+<delete id = "deleteJsRkdbImp" parameterType="erp.erp.PurchaseClearing.model.JsRkdbImp">
+	delete from rkdb_yl
+	where 
+	   ckbh = #{ckbh} and
+	   rkdh = #{rkdh} and
+	   rkxh = #{rkxh} 
+</delete>
+<update id="updateJsRkdbImp" parameterType="erp.erp.PurchaseClearing.model.JsRkdbImp">
+	update rkdb_yl set
+	    ckbh = #{ckbh},
+	    rkdh = #{rkdh},
+	    rkxh = #{rkxh},
+	    rkrq = #{rkrq},
+	    pjrq = #{pjrq},
+	    csbh = #{csbh},
+	    clhh = #{clhh},
+        cltx1 =#{cltx1},  
+	    cltx2=#{cltx2},  
+	    cltx3=#{cltx3},  
+	    jldw=#{jldw},  
+	    hwbh=#{hwbh},  
+	    pcbh=#{pcbh},  
+	    ghpc=#{ghpc},  
+	    rksl=#{rksl},  
+	    rkdj=#{rkdj},  
+	    rkje=#{rkje},  
+	    zzsl=#{zzsl},  
+	    csdj=#{csdj},  
+	    csje=#{csje},  
+	    wbbh=#{wbbh},  
+	    wbhl=#{wbhl},  
+	    wbdj=#{wbdj},  
+	    wbje=#{wbje},  
+	    rklb=#{rklb},  
+	    jhbh=#{jhbh},  
+	    jhxh=#{jhxh},  
+	    htbh=#{htbh},  
+	    htxh=#{htxh},  
+	    dhdh=#{dhdh},  
+	    dhxh=#{dhxh},  
+	    sdbj=#{sdbj},  
+	    sdsj=#{sdsj},  
+	    sdrm=#{sdrm},  
+	    czym=#{czym},  
+	    czsj=#{czsj},  
+	    dybj=#{dybj},  
+	    dysj=#{dysj},  
+	    jkrm=#{jkrm},  
+	    zzrq=#{zzrq},  
+	    bzsm=#{bzsm},  
+	    hcbj=#{hcbj},  
+	    hcdh=#{hcdh},  
+	    hcxh=#{hcxh},  
+	    hxbj=#{hxbj},  
+	    wgbj=#{wgbj},  
+	    fzhm=#{fzhm},  
+	    wxbj=#{wxbj},  
+	    wxdh=#{wxdh},  
+	    wxxh=#{wxxh},  
+	    fplb=#{fplb},  
+	    fphm=#{fphm},  
+	    hxrq=#{hxrq},  
+	    hxrm=#{hxrm},  
+	    hxsj=#{hxsj},  
+	    cfxh=#{cfxh},  
+	    tzdh=#{tzdh},  
+	    shdh=#{shdh},  
+	    shsj=#{shsj},  
+	    zsbj=#{zsbj},  
+	    cgbh=#{cgbh},  
+	    cgxh=#{cgxh},  
+	    glht=#{glht},  
+	    fzdw=#{fzdw},  
+	    fzsl=#{fzsl},  
+	    sxdy09=#{sxdy09} 
+	    where 
+	     rkdb_yl.ckbh = #{ckbh} and rkdb_yl.rkdh = #{rkdh} and rkdb_yl.rkxh = #{rkxh}
+</update>
+
+<select id= "getTjdh"  parameterType="map" resultType="map">
+	select tjdh as tjdh,tjxh as tjxh from cgjgtzmxb where cgjgtzmxb.ckbh=#{cfxx_ckbh}
+				and cgjgtzmxb.rkdh=#{cfxx_rkdh} and cgjgtzmxb.rkxh=#{rkxh_yd};
+</select>
+
+<select id = "getTjdhnew"  parameterType="map"  resultType="float">
+	select max(isnull(tjxh,0))+1 from cgjgtzmxb where cgjgtzmxb.tjdh=#{tjdh};
+</select>
+
+<insert id = "addcgjgtzmxb" parameterType="map" keyProperty="" useGeneratedKeys="true">
+	insert into cgjgtzmxb(tjdh,tjxh,ckbh,rkdh,rkxh,thdj,thje,bzsm,qfbj,qfrm,qfsj,sdbj,sdsj,sdrm) select 
+	tjdh,#{tjxh_new},ckbh,rkdh,#{rkxh_cf},thdj,thje,'拆分单',qfbj,qfrm,getdate(),sdbj,getdate(),sdrm from cgjgtzmxb
+	where cgjgtzmxb.tjdh=#{tjdh} and cgjgtzmxb.tjxh=#{tjxh} and cgjgtzmxb.qfbj=1;
+</insert>
+
+<update id="updatecgjgtzmxb" parameterType="map">
+	update cgjgtzmxb set thje=#{ss_rkje},csdj=#{ss_csdj},csje=#{ss_csje},wbdj=#{ss_wbdj},wbje=#{ss_wbje}
+	where cgjgtzmxb.tjdh=#{tjdh} and cgjgtzmxb.tjxh=#{tjxh};	
+</update>
+
+<update id= "updateCfcgjgtzmxb" parameterType="map">
+	update cgjgtzmxb set thje=#{ss_rkje_cf},csdj=#{ss_csdj_cf},csje=#{ss_csje_cf},wbdj=#{ss_wbdj_cf},wbje=#{ss_wbje_cf}
+	where cgjgtzmxb.tjdh=#{tjdh} and cgjgtzmxb.tjxh=#{s_tjxh_new};
+</update>
+    
+<select id = "getThjeOne" parameterType="map" resultType="map">
+	select isnull(thje,0) as ss_rkje,isnull(csje,0) as ss_csje,isnull(wbje,0) as ss_wbje  from cgjgtzmxb where cgjgtzmxb.ckbh=#{ckbh1} and cgjgtzmxb.rkdh=#{rkdh1} and cgjgtzmxb.rkxh=#{rkxh};
+</select>
+    
+<select id = "getThjeTwo" parameterType="map" resultType="map">
+    select isnull(thje,0) as ss_rkje_cf,isnull(csje,0) as ss_csje_cf,isnull(wbje,0) as ss_wbje_cf from cgjgtzmxb where cgjgtzmxb.ckbh=#{ckbh1} and cgjgtzmxb.rkdh=#{rkdh1} and cgjgtzmxb.rkxh=#{rkxh2};
+</select>
+
+<update id="updateThje" parameterType="map">
+	update cgjgtzmxb set thje=#{ss_rkje},csje=#{ss_csje},wbje=#{ss_wbje}  where cgjgtzmxb.ckbh=#{ckbh1} and cgjgtzmxb.rkdh=#{rkdh1} and cgjgtzmxb.rkxh=#{rkxh};
+</update>
+
+<delete id = "delRkjgmx" parameterType="map">
+	delete from cgjgtzmxb where cgjgtzmxb.ckbh=#{ckbh1} and cgjgtzmxb.rkdh=#{rkdh1} and cgjgtzmxb.rkxh=#{rkxh2};
+</delete>
+
+<select id="getMaxfyxh" parameterType="map" resultType="float">
+	select isnull(max(fyxh),0)+1 from cgfyb with (nolock) where fydh=#{fydh};
+</select>
+
+<select id="getKzdj" parameterType="map" resultType="Float">
+    select top 1 kzdj from csjjxxb where csbh=#{csbh} and clhh=#{clhh} and xgsj&lt;=#{pjrq} order by xgsj DESC;
+</select>
+<select id="getKzdjTwo" parameterType="map" resultType="Float">
+	select top 1 kzdj from clkzdjjlb where clhh=#{clhh} and jlrq&lt;=#{pjrq} order by jlrq DESC;
+</select>
+<resultMap type="HashMap" id="cpdjMap">  
+    <result column="cgkj" property="cgkj" />  
+    <result column="cgdj" property="cgdj" />  
+</resultMap> 
+
+<select id="getCpdj" parameterType="map" resultMap="cpdjMap">
+	select isnull(kzdj,0) as cgkj,isnull(wbdj,0) as cgdj from htmxb with (nolock) where htbh=#{htbh} and htxh=#{htxh};
+</select>
+<select id="getCpdjTwo" parameterType="map" resultMap="cpdjMap">
+	select isnull(kzdj,0) as cgkj,isnull(cgdj,0) as cgdj from htmxb with (nolock) where htbh=#{htbh} and htxh=#{htxh};
+</select>
+<!-- 核算部门权限-->
+<select id="getBmqx" parameterType="map" resultType="String">
+	select bmbh
+	    From  hsbm_qxb
+	    where czy_gh=#{czy_gh};
+</select>
+<select id = "getRkImpSum" parameterType="map" >
+	select 
+	       rkdb_yl.ckbh,
+	       SUM(htmxb.cgsl) as cgsl,
+	       SUM(rkdb_yl.rksl) as rksl,
+	       SUM(rkdb_yl.rkje) as rkje,
+	       SUM(dhdjb_yl.dhsl) as dhsl,
+	       SUM(rkdb_yl.wbje) as wbje,
+	       SUM(rkdb_yl.fzsl) as fzsl,
+	       case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then SUM(cgjgtzmxb.thje) else SUM(rkdb_yl.rkje) end as rkje_hx,
+	       SUM(round(rkdb_yl.rksl*view_wxjght.clje,2)) as wxjgje,
+	       case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then SUM(cgjgtzmxb.csje) else SUM(rkdb_yl.csje) end as csje_hx,
+	       (case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then SUM(cgjgtzmxb.thje) else SUM(rkdb_yl.rkje) end)
+			 -  (case when cgjgtzmxb.tjdh is not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then SUM(cgjgtzmxb.csje) else SUM(rkdb_yl.csje) end) as zzse_hx,
+	       case when cgjgtzmxb.tjdh is  not null and cgjgtzmxb.tjdh!=0 and (select count(*) from rkdb_yl b where b.ckbh=rkdb_yl.ckbh and b.hcdh=rkdb_yl.rkdh and b.hcxh=rkdb_yl.rkxh)=0 then SUM(cgjgtzmxb.wbje) else SUM(rkdb_yl.wbje) end as wbje_hx
+	    into ##rkimpsum
+	    FROM rkdb_yl  
+	 left outer join rklbb with (nolock) on rklbb.lbbh=rkdb_yl.rklb
+	 left outer join clbmb with (nolock) on clbmb.clhh=rkdb_yl.clhh
+	 left outer join csxxb b with (nolock) on b.csbh=rkdb_yl.csbh
+	 left outer join cglbb with (nolock) on cglbb.lbbh=b.cglb
+	 left outer join cghtb c with (nolock) on c.htbh=rkdb_yl.htbh
+	 left outer join cgyb  with (nolock) on cgyb.cgybh=c.cgym
+	 left outer join ckmcb_yl with (nolock) on ckmcb_yl.ckbh=rkdb_yl.ckbh
+	 left outer join htmxb with (nolock) on htmxb.htbh=rkdb_yl.htbh and htmxb.htxh=rkdb_yl.htxh
+	 left outer join jhmx_ddxxb with (nolock) on htmxb.jhbh=jhmx_ddxxb.ddbh and htmxb.jhxh=jhmx_ddxxb.jhxh
+    left outer join cpbmb with (nolock) on cpbmb.cpbh=jhmx_ddxxb.cpbh
+	 left outer join dhdjb_yl with (nolock) on dhdjb_yl.ckbh=rkdb_yl.ckbh and dhdjb_yl.dhdh=rkdb_yl.dhdh and dhdjb_yl.dhxh=rkdb_yl.dhxh
+    left outer join cgjgtzmxb with (nolock) on cgjgtzmxb.ckbh=rkdb_yl.ckbh and cgjgtzmxb.rkdh=rkdb_yl.rkdh and cgjgtzmxb.rkxh=rkdb_yl.rkxh and (select qfbj from cgjgtzb where cgjgtzmxb.tjdh=cgjgtzb.tjdh)=1
+  	 left outer join view_wxjght with (nolock) on view_wxjght.htbh=rkdb_yl.htbh and view_wxjght.htxh=rkdb_yl.htxh 
+	
+	 where 
+	 (hxbj=0 and rkdb_yl.rklb!=4 and rkdb_yl.csbh=#{csbh})  and isnull(rkdb_yl.tzdh,0)=0
+	  <if test="ckbh!=null">
+	  and rkdb_yl.ckbh in (#{ckbh})
+	  </if> 
+	  and left(ltrim(rtrim(ckmcb_yl.hsbm)),len(#{hsbm}))=#{hsbm}
+	  and not exists(select * from ##jsrkdb a  where a.rkdh = rkdb_yl.rkdh and a.rkxh = rkdb_yl.rkxh)       
+	  group by rkdb_yl.ckbh,
+	  rkdb_yl.rkdh,
+	  rkdb_yl.rkxh,
+	  cgjgtzmxb.tjdh,
+	  cgjgtzmxb.tjdh,
+	  cgjgtzmxb.thje,
+	  rkdb_yl.rkje
+</select>
+<select id="getSumRkd" parameterType="map" resultType="erp.erp.PurchaseClearing.model.JsRkdbImp">
+	select 
+   SUM(##rkimpsum.cgsl) as cgsl,
+   SUM(##rkimpsum.rksl) as rksl,
+   SUM(##rkimpsum.rkje) as rkje,
+   SUM(##rkimpsum.dhsl) as dhsl,
+   SUM(##rkimpsum.wbje) as wbje,
+   SUM(##rkimpsum.fzsl) as fzsl,
+   SUM(##rkimpsum.rkje_hx) as rkje_hx,
+   SUM(##rkimpsum.wxjgje) as wxjgje,
+   SUM(##rkimpsum.csje_hx) as csje_hx,
+   SUM(##rkimpsum.zzse_hx) as zzse_hx,
+   SUM(##rkimpsum.wbje_hx) as wbje_hx
+   from ##rkimpsum
+</select>
+<select id="getFydImpSum" parameterType="map" resultType="erp.erp.PurchaseClearing.model.JsFydbImp">
+	select
+	SUM(cgfyb.fysl) as fysl,
+	SUM(cgfyb.fyje) as fyje,
+	SUM(cgfyb.wbje) as wbje
+	from cgfyb  
+left outer join csxxb  with (nolock) on csxxb.csbh=cgfyb.csbh
+left outer join yfjzb  with (nolock) on year(cgfyb.fyrq) = yfjzb.nd and month(cgfyb.fyrq) = yfjzb.yf
+where (cgfyb.hxbj=0 and cgfyb.csbh=#{csbh}) and isnull(cgfyb.tzdh,0)=0
+and not exists(select * from ##jsfydb a  where a.fydh = cgfyb.fydh and a.fyxh = cgfyb.fyxh)
+</select>
+<select id="getArriveList" parameterType="map" resultType="erp.erp.arrivalRegister.model.ArrivalRegister">
+     SELECT 
+     dhdjb_yl.ckbh,   
+     dhdjb_yl.dhdh,
+     dhdjb_yl.dhxh, 
+     dhdjb_yl.dhrq,  
+     dhdjb_yl.csbh,  
+     dhdjb_yl.clhh,   
+     dhdjb_yl.cltx1,  
+     dhdjb_yl.dhsl,   
+     dhdjb_yl.yrsl,   
+     dhdjb_yl.jldw,
+     dhdjb_yl.htbh,
+			dhdjb_yl.htxh,   
+			case when dhdjb_yl.htbh&lt;&gt;0 then
+				ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh)))
+			else null end as hth,
+    dhdjb_yl.czym, 
+    dhdjb_yl.czsj,   
+    dhdjb_yl.ztbj,   
+    dhdjb_yl.jyjg, 	
+    dhdjb_yl.thdh,   
+    dhdjb_yl.thrq, 	
+    dhdjb_yl.thbj,
+    dhdjb_yl.shdh,	
+    clbmb.clmc,   
+    csxxb.csmc
+    FROM dhdjb_yl with (nolock)
+    left outer join clbmb with (nolock) on  dhdjb_yl.clhh=clbmb.clhh
+    left outer join csxxb with (nolock) on  dhdjb_yl.csbh=csxxb.csbh
+    where dhdjb_yl.shdh = #{shdh} and  dhdjb_yl.csbh = #{csbh}
+</select>
+<delete id = "deleteJsrkdb" parameterType="map">
+	delete from ${tablename};
+</delete>
+<delete id = "deleteJsfydb" parameterType="map">
+	delete from ${tbname};
+</delete>
+</mapper>

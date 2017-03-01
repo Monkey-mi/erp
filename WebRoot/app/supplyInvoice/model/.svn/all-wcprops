@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model
+END
+PrepayAdjustment.js
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/PrepayAdjustment.js
+END
+ApplyInvoice.js
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/ApplyInvoice.js
+END
+InvoiceDetail.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/InvoiceDetail.js
+END
+QueryParams.js
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/QueryParams.js
+END
+SupplyInvoice.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/SupplyInvoice.js
+END
+ApplyAgreement.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/ApplyAgreement.js
+END
+InventoryList.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/InventoryList.js
+END
+PayDetail.js
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/PayDetail.js
+END
+TimeChooseParam.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/TimeChooseParam.js
+END
+ApplyFee.js
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/erp/!svn/ver/2574/erpForOut62/WebRoot/app/supplyInvoice/model/ApplyFee.js
+END

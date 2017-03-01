@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.purchaseOrder.data.OrderDeliveryAttachedMapper">
+
+
+<select id="getOrderDeliveryAttachedList" parameterType="map" resultType="erp.erp.purchaseOrder.model.OrderDeliveryAttached">
+	select
+		t_order_delivery_attached.id,
+		t_order_delivery_attached.register_id,
+		t_order_delivery_attached.file_name,
+		t_order_delivery_attached.file_url,
+		t_order_delivery_attached.suffix_name,
+		t_order_delivery_attached.create_dt
+	from
+		t_order_delivery_attached
+		<where>
+			1=1
+			and register_id=#{register_id}
+		</where>
+</select>
+<insert id="addOrderDeliveryAttached" parameterType="erp.erp.purchaseOrder.model.OrderDeliveryAttached">
+	insert into t_order_delivery_attached
+	(
+		id,
+		register_id,
+		file_name,
+		file_url,
+		suffix_name,
+		create_dt
+	)
+	values
+	(
+		#{id},
+		#{register_id},
+		#{file_name},
+		#{file_url},
+		#{suffix_name},
+		#{create_dt}
+	)
+</insert>
+<update id="updateOrderDeliveryAttached" parameterType="erp.erp.purchaseOrder.model.OrderDeliveryAttached">
+	update t_order_delivery_attached
+		set
+			id = #{id},
+			register_id = #{register_id},
+			file_name = #{file_name},
+			file_url = #{file_url},
+			suffix_name = #{suffix_name},
+			create_dt = #{create_dt}
+		where id = #{id}
+</update>
+<delete id="deleteOrderDeliveryAttached" parameterType="erp.erp.purchaseOrder.model.OrderDeliveryAttached">
+	delete from t_order_delivery_attached
+	where id = #{id}
+</delete>
+</mapper>

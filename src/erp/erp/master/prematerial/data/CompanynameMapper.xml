@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.prematerial.data.CompanynameMapper">
+
+
+<select id="getCompanynameList" parameterType="map" resultType="erp.erp.master.prematerial.model.Companyname">
+	 SELECT 
+	     CSXXB.csbh,
+         CSXXB.yhbh,     
+         CSXXB.csmc,   
+         CSXXB.cglb,   
+         CSXXB.csdh,   
+         CSXXB.cscz,   
+         CSXXB.csdz,   
+         CSXXB.cssh,     
+         CSXXB.cszh,       
+         CSXXB.csyb,   
+         CSXXB.lxrm,          
+         CSXXB.fkts,   
+         CSXXB.bzsm,   
+         CSXXB.gdbj,   
+         CSXXB.wbbh,   
+         CSXXB.fzrq,
+         CSXXB.psbj,
+         CSXXB.khbh,
+         CSXXB.khbh as khmc,
+         wbmcb.wbdh as wbdh,
+         cglbb.lbmc as cglbmc,
+         wbhlb.wbhl
+	from
+		dbo.csxxb
+     left outer join wbhlb with (nolock) on wbhlb.wbbh = csxxb.wbbh	and wbhlb.nf = year(getdate()) and 	wbhlb.yf = month(getdate())
+	 left outer join wbmcb with (nolock) on wbmcb.wbbh = csxxb.wbbh	
+	 left outer join cglbb with (nolock) on cglbb.lbbh = csxxb.cglb
+	where 1= 1	
+	<if test="search!=null and search!=''">
+        and (csbh like '%${search}%' or csmc like '%${search}%' )
+   	</if>	
+   	<if test="csmc!=null and csmc!=''" >
+   		and csxxb.csmc = #{csmc}
+   	</if>
+   	<if test="csbh!=null and csbh!=''">
+   		and csxxb.csbh = #{csbh}
+   	</if>
+   	<if test="wbbh!=null and wbbh!=''">
+   		and csxxb.wbbh = #{wbbh}
+   	</if>
+   	<if test="psbj!=null and psbj!=''">
+   		and csxxb.psbj = #{psbj}
+   	</if>
+    <if test="cglb!=null and cglb!=''">
+   		and csxxb.cglb = #{cglb}
+   	</if>
+   	<if test="gdbj!=null and gdbj!=''">
+   	    and csxxb.gdbj = #{gdbj}
+   	</if>
+   	<if test="xsbjsearch!=null and xsbjsearch!=''">
+		and (csmc like '%${xsbjsearch}%' 
+ 		or csbh like '%${xsbjsearch}%' )
+	</if>
+    order by csbh desc		
+		
+		
+</select>
+<insert id="addCompanyname" parameterType="erp.erp.master.prematerial.model.Companyname" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.csxxb
+	(
+		csbh,
+		csjc,
+		csmc,
+		yhbh,
+		cglb,
+		hzcs,
+		psbj,
+		fzrq,
+		fkts,
+		khbh,
+		cslb,
+		wbbh,
+		xyed,
+		csdh,
+		cscz,
+		lxrm,
+		csdz,
+		csyb,
+		cssh,
+		cszh,
+		bzsm,
+		gdbj,
+		czrm,
+		czsj,
+		spbj,
+		sprm,
+		spsj,
+		cslx,
+		ywmc,
+		zgrd,
+		tdrd,
+		hdxz,
+		fktj,
+		scbj,
+		kpbj,
+		kpdj,
+		khyh,
+		xdbl,
+		hddw,
+		ztdw
+	)
+	values
+	(
+		#{csbh},
+		#{csjc},
+		#{csmc},
+		#{yhbh},
+		#{cglb},
+		#{hzcs},
+		#{psbj},
+		#{fzrq},
+		#{fkts},
+		#{khbh},
+		#{cslb},
+		#{wbbh},
+		#{xyed},
+		#{csdh},
+		#{cscz},
+		#{lxrm},
+		#{csdz},
+		#{csyb},
+		#{cssh},
+		#{cszh},
+		#{bzsm},
+		#{gdbj},
+		#{czrm},
+		#{czsj},
+		#{spbj},
+		#{sprm},
+		#{spsj},
+		#{cslx},
+		#{ywmc},
+		#{zgrd},
+		#{tdrd},
+		#{hdxz},
+		#{fktj},
+		#{scbj},
+		#{kpbj},
+		#{kpdj},
+		#{khyh},
+		#{xdbl},
+		#{hddw},
+		#{ztdw}
+	)
+</insert>
+<update id="updateCompanyname" parameterType="erp.erp.master.prematerial.model.Companyname">
+	update dbo.csxxb
+		set
+			csbh = #{csbh},
+			csjc = #{csjc},
+			csmc = #{csmc},
+			yhbh = #{yhbh},
+			cglb = #{cglb},
+			hzcs = #{hzcs},
+			psbj = #{psbj},
+			fzrq = #{fzrq},
+			fkts = #{fkts},
+			khbh = #{khbh},
+			cslb = #{cslb},
+			wbbh = #{wbbh},
+			xyed = #{xyed},
+			csdh = #{csdh},
+			cscz = #{cscz},
+			lxrm = #{lxrm},
+			csdz = #{csdz},
+			csyb = #{csyb},
+			cssh = #{cssh},
+			cszh = #{cszh},
+			bzsm = #{bzsm},
+			gdbj = #{gdbj},
+			czrm = #{czrm},
+			czsj = #{czsj},
+			spbj = #{spbj},
+			sprm = #{sprm},
+			spsj = #{spsj},
+			cslx = #{cslx},
+			ywmc = #{ywmc},
+			zgrd = #{zgrd},
+			tdrd = #{tdrd},
+			hdxz = #{hdxz},
+			fktj = #{fktj},
+			scbj = #{scbj},
+			kpbj = #{kpbj},
+			kpdj = #{kpdj},
+			khyh = #{khyh},
+			xdbl = #{xdbl},
+			hddw = #{hddw},
+			ztdw = #{ztdw}
+		where  = #{}
+</update>
+<delete id="deleteCompanyname" parameterType="erp.erp.master.prematerial.model.Companyname">
+	delete from dbo.csxxb
+	where  = #{}
+</delete>
+</mapper>

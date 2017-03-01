@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.bakTable.data.BakTableMapper">
+
+
+<select id="getBakTableList" parameterType="map" resultType="erp.erp.master.bakTable.model.BakTable">
+	select
+		t_sys_backup_log.log_id,
+		t_sys_backup_log.table_name,
+		t_sys_backup_log.bak_table_name,
+		t_sys_backup_log.bak_begin_dt,
+		t_sys_backup_log.begin_time,
+		t_sys_backup_log.end_time,
+		t_sys_backup_log.row_nums,
+		t_sys_backup_log.run_sts
+	from
+		t_sys_backup_log
+		<where>
+			run_sts='OK'
+			<if test="table_name!=null">
+				and table_name=#{table_name}
+			</if>
+		</where>
+</select>
+<insert id="addBakTable" parameterType="erp.erp.master.bakTable.model.BakTable" keyProperty="log_id" useGeneratedKeys="true">
+	insert into t_sys_backup_log
+	(
+		log_id,
+		table_name,
+		bak_table_name,
+		bak_begin_dt,
+		begin_time,
+		end_time,
+		row_nums,
+		run_sts
+	)
+	values
+	(
+		#{log_id},
+		#{table_name},
+		#{bak_table_name},
+		#{bak_begin_dt},
+		#{begin_time},
+		#{end_time},
+		#{row_nums},
+		#{run_sts}
+	)
+</insert>
+<update id="updateBakTable" parameterType="erp.erp.master.bakTable.model.BakTable">
+	update t_sys_backup_log
+		set
+			log_id = #{log_id},
+			table_name = #{table_name},
+			bak_table_name = #{bak_table_name},
+			bak_begin_dt = #{bak_begin_dt},
+			begin_time = #{begin_time},
+			end_time = #{end_time},
+			row_nums = #{row_nums},
+			run_sts = #{run_sts}
+		where log_id = #{log_id}
+</update>
+<delete id="deleteBakTable" parameterType="erp.erp.master.bakTable.model.BakTable">
+	delete from t_sys_backup_log
+	where log_id = #{log_id}
+</delete>
+</mapper>

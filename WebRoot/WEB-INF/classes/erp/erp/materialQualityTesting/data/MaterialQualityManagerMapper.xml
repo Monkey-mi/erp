@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.MaterialQualityManagerMapper">
+
+
+<select id="getMaterialQualityManagerList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.MaterialQualityManager">
+  select * from (
+  select dhdjb_yl.ckbh,
+         ckmcb_yl.ckmc,   
+         dhdjb_yl.dhdh,     
+         dhdjb_yl.dhxh,   
+         dhdjb_yl.dhrq,   
+         dhdjb_yl.pjrq,     
+         dhdjb_yl.csbh,
+         csxxb.csmc, 
+         zjjlb.jlmc,     
+         dhdjb_yl.clhh,    
+         dhdjb_yl.cltx1,   
+         dhdjb_yl.cltx2,   
+         dhdjb_yl.cltx3,   
+         dhdjb_yl.pcbh,   
+         dhdjb_yl.ghpc,   
+         dhdjb_yl.dhsl,
+		 dhdjb_yl.fzsl,   
+         dhdjb_yl.yrsl,   
+         dhdjb_yl.jldw,
+		 dhdjb_yl.fzdw,   
+         dhdjb_yl.htbh,   
+         dhdjb_yl.htxh,   
+         dhdjb_yl.wxdh,   
+         dhdjb_yl.wxxh,
+           case when dhdjb_yl.dhdh &lt;&gt; 0 then
+				ltrim(rtrim(str(dhdjb_yl.dhdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.dhxh)))
+			else null end as dhh,   
+			case when htmxb.jhbh &lt;&gt; 0 then
+				ltrim(rtrim(str(htmxb.jhbh)))+'-'+ltrim(rtrim(str(htmxb.jhxh)))
+			else null end as jhh,      
+			case when dhdjb_yl.htbh &lt;&gt; 0 then
+				ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh)))
+			else null end as hth,      
+         dhdjb_yl.wxbj,   
+			case when wxdh &lt;&gt; 0 then
+				ltrim(rtrim(str(dhdjb_yl.wxdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.wxxh)))
+			else null end as wxh,      
+         dhdjb_yl.jkrm,   
+         dhdjb_yl.bzsm,   
+         dhdjb_yl.czym,   
+         dhdjb_yl.czsj,   
+         dhdjb_yl.zjbj,   
+         dhdjb_yl.jjbj,   
+         dhdjb_yl.ztbj,   
+         dhztb.ztmc,
+         dhdjb_yl.jyjg,   
+         dhdjb_yl.zjdh,   
+         dhdjb_yl.zjrq,   
+         dhdjb_yl.zjbz,   
+         dhdjb_yl.dpyy,   
+         dhdjb_yl.dybj,   
+         dhdjb_yl.thdh,   
+         dhdjb_yl.thrq,   
+         dhdjb_yl.thbj,
+         g.lbbh, 
+         isnull(cllbb.lbmc,'') as lbmc,  
+         g.clmc,   
+         g.clth, 
+		scjhb.sxrq,
+		dhdjb_yl.zjrm,
+		dhdjb_yl.jhbh,
+		dhdjb_yl.jhxh,
+		dhdjb_yl.shdh,
+		dhdjb_yl.shbj,
+		dhdjb_yl.shrm,
+		dhdjb_yl.shsj,
+		dhdjb_yl.shjg,
+		dhdjb_yl.shsm,
+		dhdjb_yl.zzbj,
+		dhdjb_yl.zzrm,
+		dhdjb_yl.zzsj,
+		jhmxb.jhbz,
+		jhmxb.cpbh,
+		f.cpmc,
+		isnull(d.cpmc,'') as zcpmc,
+        dbo.f_dhh_sjh(dhdjb_yl.ckbh,dhdjb_yl.dhdh,dhdjb_yl.dhxh) as wtdh, 
+		case when isnull(c.khbh,'') != '' then c.khbh else jhmx_ddxxb.khbh end as khbh,
+		khxxb.khmc,
+		jhmx_ddxxb.khxh,
+		isnull(clrkzjd.zzjl,'') as zzjl,		 
+		0 as xzbj
+    FROM dhdjb_yl 
+     left outer join zjjlb on zjjlb.jlbh = dhdjb_yl.jyjg
+     left outer join dhztb on dhztb.ztbh=dhdjb_yl.ztbj    
+     left outer join ckmcb_yl on ckmcb_yl.ckbh =  dhdjb_yl.ckbh
+	 left outer join clbmb g with (nolock) on dhdjb_yl.clhh=g.clhh 
+	 left outer join cllbb on cllbb.lbbh = left(g.lbbh,2)
+ 	 left outer join csxxb with (nolock) on  dhdjb_yl.csbh=csxxb.csbh
+     left outer join htmxb with (nolock) on  htmxb.htbh=dhdjb_yl.htbh and htmxb.htxh=dhdjb_yl.htxh
+	 left outer join scjhb with (nolock) on  htmxb.jhbh=scjhb.jhbh
+	 left outer join jhmx_ddxxb with (nolock) on jhmx_ddxxb.jhbh=htmxb.jhbh and jhmx_ddxxb.jhxh=htmxb.jhxh
+	 left outer join jhmxb with (nolock) on jhmxb.jhbh=dhdjb_yl.jhbh and jhmxb.jhxh=dhdjb_yl.jhxh
+	 left outer join jhmxb a with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh
+	 left outer join cpbmb on cpbmb.cpbh=a.cpbh
+	 left outer join jhmx_ddxxb b with (nolock) on b.jhbh=a.jhbh and b.jhxh=a.jhxh
+	 left outer join cpbmb d with (nolock) on d.cpbh=a.cpbh 
+	 left outer join cpbmb f on jhmxb.cpbh = f.cpbh
+	 left outer join htmxb c with (nolock) on c.htbh=dhdjb_yl.htbh and c.htxh=dhdjb_yl.htxh
+	 left outer join khxxb on khxxb.khbh = c.khbh
+	 left outer join khxxb e on e.khbh = jhmx_ddxxb.khbh
+	 left outer join clrkzjd with (nolock) on clrkzjd.jydh=dhdjb_yl.zjdh
+ 	 where ((ztbj=1 and jyjg=1) or (ztbj=5 and jyjg=3))
+ 	 <if test="ckbh !=null and ckbh !=''">
+ 	   and dhdjb_yl.ckbh=#{ckbh} 
+ 	 </if>
+ 	 <if test="dhdh !=null and dhdh !=''">
+ 	 and dhdjb_yl.dhdh=#{dhdh} 
+ 	 </if>
+ 	 <if test="dhxh !=null and dhxh !=''">
+ 	 and dhdjb_yl.dhxh=#{dhxh} 
+ 	 </if>
+ 	 <if test="condition != null and condition !=''">
+ 	 ${condition}
+ 	 </if>
+ 	 ) sf
+ 	  <where>
+		1=1
+		<if test="filterSearch!=null">
+			${filterSearch}
+		</if>
+    </where>
+ 	 <if test="sort==null">
+		order by dhdh,dhxh asc 
+	</if>
+	<if test="sort!=null">
+		order by ${sort}
+	</if>
+</select>
+
+
+<select id="getCreateLeadList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.MaterialQualityManager">
+  SELECT dhdjb_yl.ckbh,   
+         dhdjb_yl.dhdh,   
+         dhdjb_yl.dhxh,
+         case when dhdh &lt;&gt; 0 then ltrim(rtrim(str(dhdjb_yl.dhdh)))+'-'+ltrim(rtrim(str(dhdjb_yl.dhxh))) else null end as dhh,   
+			case when dhdjb_yl.htbh &lt;&gt; 0 then ltrim(rtrim(str(dhdjb_yl.htbh)))+'-'+ltrim(rtrim(str(dhdjb_yl.htxh))) else null end as hth,   
+         dhdjb_yl.dhrq,   
+         dhdjb_yl.pjrq,     
+         dhdjb_yl.zzrq,   
+         dhdjb_yl.csbh,   
+         dhdjb_yl.clhh,   
+         dhdjb_yl.cltx1,    
+         dhdjb_yl.cltx2,   
+         dhdjb_yl.cltx3,    
+         dhdjb_yl.pcbh,   
+         dhdjb_yl.ghpc,   
+         dhdjb_yl.dhsl,   
+         dhdjb_yl.yrsl, 
+			isnull(dhdjb_yl.dhsl,0) - isnull(dhdjb_yl.yrsl,0)  as wrsl,
+         dhdjb_yl.jldw,   
+         dhdjb_yl.jkrm,   
+			dhdjb_yl.shdh,
+         dhdjb_yl.htbh,   
+         dhdjb_yl.htxh,   
+         dhdjb_yl.wxdh,   
+         dhdjb_yl.wxxh,   
+         dhdjb_yl.bzsm,   
+         dhdjb_yl.czym,    
+         dhdjb_yl.czsj,   
+         dhdjb_yl.zjbj,   
+         dhdjb_yl.jjbj,   
+         dhdjb_yl.ztbj,   
+         dhdjb_yl.jyjg,   
+         dhdjb_yl.zjdh,   
+         dhdjb_yl.zjrq,   
+         dhdjb_yl.zjbz,   
+         dhdjb_yl.dpyy,   
+         dhdjb_yl.dybj,  
+         dhdjb_yl.wxbj,  
+         dhdjb_yl.jhbh,   
+         dhdjb_yl.jhxh,   
+         case when dhdjb_yl.htbh&lt;&gt;0 and dhdjb_yl.htxh&lt;&gt;0 then (case when htmxb.cgdj&lt;&gt;0 then htmxb.cgdj else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end )
+              when dhdjb_yl.wxdh&lt;&gt;0 and dhdjb_yl.wxxh&lt;&gt;0 then (case when wxtzdmxb.jgdj&lt;&gt;0 then wxtzdmxb.jgdj else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end )
+              else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end as rkdj, 
+         case when dhdjb_yl.htbh&lt;&gt;0 and dhdjb_yl.htxh&lt;&gt;0 then (case when htmxb.wbdj&lt;&gt;0 then htmxb.wbdj else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end )
+				  when dhdjb_yl.wxdh&lt;&gt;0 and dhdjb_yl.wxxh&lt;&gt;0 then (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end)
+              else (case when csjjb.kzdj&lt;&gt;0 then csjjb.kzdj else clbmb.kzdj end) end as wbdj, 
+         clbmb.clth,   
+         clbmb.clmc,   
+         clbmb.fzzbj,
+			clbmb.txgz,   
+         csxxb.csmc,			
+	      jhmxb.jhbz,
+         case when jhmxb.zjbh&gt;0 and jhmxb.zjxh&gt;0 then a.cpbh else null end as zcpbh,
+			dhdjb_yl.fzsl,
+			dhdjb_yl.fzdw,
+			htmxb.kjlx,
+         0 as xzbj
+    FROM dhdjb_yl with (nolock)   
+	 left outer join clbmb  with (nolock)   on  dhdjb_yl.clhh=clbmb.clhh 
+ 	 left outer join csxxb  with (nolock)   on  dhdjb_yl.csbh=csxxb.csbh
+    left outer join csjjb   with (nolock)  on  csjjb.csbh=dhdjb_yl.csbh and csjjb.clhh=dhdjb_yl.clhh
+ 	 left outer join htmxb  with (nolock)	  on  dhdjb_yl.htbh=htmxb.htbh and dhdjb_yl.htxh=htmxb.htxh
+	 left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+    left outer join jhmxb a with (nolock) on a.jhbh=jhmxb.zjbh and a.jhxh=jhmxb.zjxh
+
+ 	 left outer join wxtzdmxb with (nolock) on  dhdjb_yl.wxdh=wxtzdmxb.wxdh and dhdjb_yl.wxxh=wxtzdmxb.wxxh
+	 WHERE  isnull(dhdjb_yl.dhsl,0)&gt;0  and dhdjb_yl.csbh=#{csbh} and ((dhdjb_yl.ckbh=#{ckbh} and #{ckbh}&lt;&gt;'')  or  #{ckbh}='') and ztbj&lt;&gt;2 and ztbj&lt;&gt;3	
+	 <if test="condition != null and condition !=''">
+ 	  and ${condition}
+ 	 </if>
+</select>
+
+<select id="getMaxDhxh" parameterType="map" resultType="int">
+ select isnull(max(dhdjb_yl.dhxh),0)+1 as dhxh from dhdjb_yl where dhdjb_yl.ckbh=#{ckbh} and dhdjb_yl.dhdh=#{dhdh}
+</select>
+
+<insert id="addMaterialQualityManager" parameterType="erp.erp.materialQualityTesting.model.MaterialQualityManager" >
+	insert into dhdjb_yl	
+	(   shdh,
+	    zjbj,
+	    czsj,
+	    czym,
+	    jhxh,
+	    jhbh,
+	    htxh,
+	    htbh,
+	    pjrq,
+		dybj,
+		wxbj,
+		jjbj,
+		shbj,
+		ckbh,
+		ztbj,
+		jyjg,
+		dhdh,
+		dhxh,
+		dhrq,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		jldw,
+		pcbh,
+		ghpc,
+		dhsl,
+		fzdw,
+		fzsl,
+		dpyy,
+		zjbz,
+		bzsm,
+		csbh,
+		zjdh,
+		zjrm,
+		zjrq,
+		shrm,
+		shsj,
+		shjg,
+		shsm,
+		jkrm
+	)
+	values
+	(   #{shdh},
+	    #{zjbj},
+	    #{czsj},
+	    #{czym},
+	    #{jhxh},
+	    #{jhbh},
+	    #{htxh},
+	    #{htbh},
+	    #{pjrq},
+		#{dybj},
+		#{wxbj},
+		#{jjbj},
+		#{shbj},
+		#{ckbh},
+		#{ztbj},
+		#{jyjg},
+		#{dhdh},
+		#{dhxh},
+		#{dhrq},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{jldw},
+		#{pcbh},
+		#{ghpc},
+		#{dhsl},
+		#{fzdw},
+		#{fzsl},
+		#{dpyy},
+		#{zjbz},
+		#{bzsm},
+		#{csbh},
+		#{zjdh},
+		#{zjrm},
+		#{zjrq},
+		#{shrm},
+		#{shsj},
+		#{shjg},
+		#{shsm},
+		#{jkrm}
+	) 
+</insert>
+<update id="updateMaterialQualityManager" parameterType="erp.erp.materialQualityTesting.model.MaterialQualityManager">
+	update dhdjb_yl
+		set dhdh = #{dhdh},
+		    dhxh = #{dhxh},
+			dpyy = #{dpyy},
+			jyjg = #{jyjg},
+			shsj = #{shsj},
+			zjrq = #{zjrq},
+			shsm = #{shsm},
+			zjrm = #{zjrm},
+			ztbj = #{ztbj},	
+			shbj = #{shbj},
+			zjbz = #{zjbz},
+			dhsl = #{dhsl}
+		where  dhdh= #{dhdh} and dhxh = #{dhxh}
+		<if test="ckbh !=null and ckbh !=''">
+		and ckbh = #{ckbh}
+		</if>
+</update>
+<delete id="deleteMaterialQualityManager" parameterType="erp.erp.materialQualityTesting.model.MaterialQualityManager">
+	delete from dhdjb_yl
+	where  = #{}
+</delete>
+</mapper>

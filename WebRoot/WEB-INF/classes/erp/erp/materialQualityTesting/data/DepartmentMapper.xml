@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.DepartmentMapper">
+
+
+<select id="getDepartment" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Cllb">
+	    SELECT wtsjlbb.lbmc,   
+               wtsjlbb.lbbh  
+         FROM  wtsjlbb
+	   <where>
+         <if test="search != null and search !=''">
+         and (wtsjlbb.lbmc like '%${search}%' or wtsjlbb.lbbh like '%${search}%')
+         </if>
+        </where>		
+</select>
+</mapper>

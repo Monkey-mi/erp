@@ -1,0 +1,46 @@
+10
+
+dir
+2600
+https://192.168.1.100/svn/erp/erpForOut62/WebRoot/app/view/master
+https://192.168.1.100/svn/erp
+
+
+
+2017-02-21T07:37:43.241576Z
+2589
+wuqia
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+70d35baf-c61e-d24d-b330-644048e49734
+
+category
+dir
+
+caterialPrice
+dir
+
+caterialPriceApproval
+dir
+
+company
+dir
+
+perchasepriceadjust
+dir
+
+purchaseDetail
+dir
+

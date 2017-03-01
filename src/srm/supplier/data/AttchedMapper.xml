@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="srm.supplier.data.AttchedMapper">
+
+
+<select id="getAttchedList" parameterType="map" resultType="srm.supplier.model.Attched">
+	select
+		t_app_register_attched.id,
+		t_app_register_attched.company_id,
+		t_app_register_attched.file_name,
+		t_app_register_attched.file_path,
+		t_app_register_attched.create_dt,
+		t_app_register_attched.file_format,
+		t_app_register_attched.type_name,
+		case when t_app_register_attched.ismust=1 then 'true' else 'false' END as ismust,
+		t_app_register_attched.remark,
+		case when t_app_register_attched.iscustom=1 then 'true' else 'false' END as iscustom
+	from
+		t_app_register_attched
+		where 1=1
+	<if test="company_id!=null">
+		and t_app_register_attched.company_id=#{company_id}
+	</if>
+	<if test="id!=null">
+		and t_app_register_attched.id=#{id}
+	</if>
+	<!-- 是否是自定义上传 -->
+	<if test="iscustom!=null">
+		and t_app_register_attched.iscustom=#{iscustom}
+	</if>	
+</select>
+<insert id="addAttched" parameterType="srm.supplier.model.Attched" keyProperty="id" useGeneratedKeys="true">
+	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+		select  isnull(max(id)+1,1) from t_app_register_attched 
+	</selectKey>
+	insert into t_app_register_attched
+	(
+		id,
+		company_id,
+		file_name,
+		file_path,
+		create_dt,
+		file_format,
+		type_name,
+		ismust,
+		remark,
+		iscustom
+	)
+	values
+	(
+		#{id},
+		#{company_id},
+		#{file_name},
+		#{file_path},
+		#{create_dt},
+		#{file_format},
+		#{type_name},
+		<if test="ismust==true">
+			1,
+		</if>
+		<if test="ismust==false">
+			0,
+		</if>
+		#{remark},
+		<if test="iscustom==true">
+			1
+		</if>
+		<if test="iscustom==false">
+			0
+		</if>
+		
+	)
+</insert>
+<update id="updateAttched" parameterType="srm.supplier.model.Attched">
+	update t_app_register_attched
+		set
+			id = #{id},
+			company_id = #{company_id},
+			file_name = #{file_name},
+			file_path = #{file_path},
+			create_dt = #{create_dt},
+			file_format = #{file_format},
+			<if test="ismust==true">
+				ismust=1,
+			</if>
+			<if test="ismust==false">
+				ismust=0,
+			</if>
+			remark = #{remark},
+			<if test="iscustom==true">
+				iscustom=1
+			</if>
+			<if test="iscustom==false">
+				iscustom=0
+			</if>
+		where id=#{id}
+</update>
+<delete id="deleteAttched" parameterType="srm.supplier.model.Attched">
+	delete from t_app_register_attched
+	where id= #{id}
+</delete>
+</mapper>

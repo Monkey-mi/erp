@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 您可以将不认同 "supcan(带注释).xml" 中的条项，添加到下面去修改 -->
+<root>
+<global>
+	<!-- 设置硕正套件内部发出的 http 请求的 S/R (发送/接收) 超时, 单位为秒, 默认是0，即采用操作系统默认的超时(通常是30秒)-->
+	<!-- 如果后端计算的时间较长，必须设置该项的值，让其大于计算时间 -->
+	<httpSRTimeOut>360</httpSRTimeOut>
+	<convertPicture>
+	</convertPicture>
+	
+	<RichText>
+	</RichText>
+</global>
+<Treelist>
+	<paste>
+	</paste>
+
+	<Properties>
+	</Properties>
+
+	<Fonts>
+	</Fonts>
+
+	<col>
+	</col>
+
+	<convertData>
+	</convertData>
+
+	<convertDataCopy>
+	</convertDataCopy>
+</Treelist>
+<Freeform>
+	<Properties>
+	</Properties>
+
+	<Fonts>
+	</Fonts>
+
+	<Objects>
+		<Input>
+		</Input>
+	</Objects>
+</Freeform>
+<Report>
+	<Paste>
+	</Paste>
+
+	<convertData>
+	</convertData>
+</Report>
+</root>

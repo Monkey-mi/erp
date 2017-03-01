@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.common.main.data.BusinessObjectMapper">
+
+
+<select id="getBusinessObjectList" parameterType="map" resultType="BusinessObject">
+	select
+		obj_id,
+		obj_name,
+		mod_id,
+		obj_desc,
+		status,
+		owner_only,
+		creator,
+		a.create_dt,
+		editor,
+		editor_dt,
+		c.name as create_name,
+		e.name as editor_name
+	from
+		t_sys_buzobj a
+	left outer join t_user_info	c on c.u_id=creator 
+	left outer join t_user_info	e on e.u_id=editor 
+	<where>
+		<if test="obj_id!=null">
+			obj_id=#{obj_id}		
+		</if>
+		
+	</where>	
+</select>
+<insert id="addBusinessObject" parameterType="BusinessObject" keyProperty="obj_id" useGeneratedKeys="true">
+	insert into t_sys_buzobj
+	(
+		obj_name,
+		mod_id,
+		obj_desc,
+		status,
+		owner_only,
+		creator,
+		create_dt,
+		editor,
+		editor_dt
+	)
+	values
+	(
+		#{obj_name},
+		#{mod_id},
+		#{obj_desc},
+		#{status},
+		#{owner_only},
+		#{creator},
+		#{create_dt},
+		#{editor},
+		#{editor_dt}
+	)
+</insert>
+<update id="updateBusinessObject" parameterType="BusinessObject">
+	update t_sys_buzobj
+		set
+			obj_name = #{obj_name},
+			mod_id = #{mod_id},
+			obj_desc = #{obj_desc},
+			status = #{status},
+			owner_only=#{owner_only},
+			creator = #{creator},
+			create_dt = #{create_dt},
+			editor = #{editor},
+			editor_dt = #{editor_dt}
+		where obj_id = #{obj_id}
+</update>
+<delete id="deleteBusinessObject" parameterType="BusinessObject">
+	delete from t_sys_buzobj
+	where obj_id = #{obj_id}
+</delete>
+
+<select id="getBusinessRefTableList" parameterType="map" resultType="BusinessRefTable">
+	select
+		id,
+		obj_id,
+		tbl_name,
+		sys_tbl_name,
+		flag
+	from
+		t_sys_buzobj_reftbl
+	<where>
+		<if test="obj_id!=null">
+			obj_id=#{obj_id}
+		</if>
+	</where>	
+</select>
+<insert id="addBusinessRefTable" parameterType="BusinessRefTable" keyProperty="id" useGeneratedKeys="true">
+	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+		select isnull(max(id),0)+1 from t_sys_buzobj_reftbl 
+	</selectKey>
+	insert into t_sys_buzobj_reftbl
+	(
+		id,
+		obj_id,
+		tbl_name,
+		sys_tbl_name,
+		flag
+	)
+	values
+	(
+		#{id},
+		#{obj_id},
+		#{tbl_name},
+		#{sys_tbl_name},
+		#{flag}
+	)
+</insert>
+<update id="updateBusinessRefTable" parameterType="BusinessRefTable">
+	update t_sys_buzobj_reftbl
+		set
+			obj_id = #{obj_id},
+			tbl_name = #{tbl_name},
+			sys_tbl_name=#{sys_tbl_name},
+			flag = #{flag}
+		where id = #{id}
+</update>
+<delete id="deleteBusinessRefTable" parameterType="BusinessRefTable">
+	delete from t_sys_buzobj_reftbl
+	where id = #{id}
+</delete>
+
+<select id="getBuzObjectAttrList" parameterType="map" resultType="BuzObjectAttr">
+	select
+		attr_id,
+		obj_id,
+		attr_name,
+		a.tbl_name,
+		fd_name,
+		fd_type,
+		ispk,
+		allow_blank,
+		default_value,
+		org_ff_id,
+		order_type,
+		creator,
+		c.name as create_name,
+		a.create_dt,
+		editor,
+		e.name as editor_name,
+		edit_dt
+	from
+		t_sys_buzobj_attr a
+	left outer join t_user_info	c on c.u_id=creator 
+	left outer join t_user_info	e on e.u_id=editor 
+	<where>
+		<if test="obj_id!=null">
+			obj_id=#{obj_id}
+		</if>
+	</where>
+</select>
+<insert id="addBuzObjectAttr" parameterType="BuzObjectAttr" keyProperty="attr_id" useGeneratedKeys="true">
+<selectKey keyProperty="attr_id" resultType="int" order="BEFORE">
+		select isnull(max(attr_id),0)+1 from t_sys_buzobj_attr 
+	</selectKey>
+	insert into t_sys_buzobj_attr
+	(
+		attr_id,
+		obj_id,
+		attr_name,
+		tbl_name,
+		fd_name,
+		fd_type,
+		ispk,
+		allow_blank,
+		default_value,
+		org_ff_id,
+		order_type,
+		creator,
+		create_dt,
+		editor,
+		edit_dt
+	)
+	values
+	(
+		#{attr_id},
+		#{obj_id},
+		#{attr_name},
+		#{tbl_name},
+		#{fd_name},
+		#{fd_type},
+		#{ispk},
+		#{allow_blank},
+		#{default_value},
+		#{org_ff_id},
+		#{order_type},
+		#{creator},
+		#{create_dt},
+		#{editor},
+		#{edit_dt}
+	)
+</insert>
+<update id="updateBuzObjectAttr" parameterType="BuzObjectAttr">
+	update t_sys_buzobj_attr
+		set
+			obj_id = #{obj_id},
+			tbl_name=#{tbl_name},
+			attr_name = #{attr_name},
+			fd_name = #{fd_name},
+			ispk = #{ispk},
+			fd_type=#{fd_type},
+			allow_blank = #{allow_blank},
+			default_value = #{default_value},
+			order_type = #{order_type},
+			org_ff_id=#{org_ff_id},
+			creator = #{creator},
+			create_dt = #{create_dt},
+			editor = #{editor},
+			edit_dt = #{edit_dt}
+		where attr_id = #{attr_id}
+</update>
+<delete id="deleteBuzObjectAttr" parameterType="BuzObjectAttr">
+	delete from t_sys_buzobj_attr
+	where attr_id = #{attr_id}
+</delete>
+
+<!-- 获取授权及未授权商业对象元数据清单 -->
+<select id="getBuzFieldsListByModId" parameterType="map" resultType="BuzObjectAttr">
+	select attr.*
+		from t_sys_buzobj obj
+		  inner join t_sys_buzobj_attr attr on obj.obj_id=attr.obj_id
+		  left outer join t_sys_buzobj_permit p on p.attr_id!=0 and p.attr_id=attr.attr_id 
+		where obj.status='ENABLED'
+		<!-- 超级用户所有字段可见 -->
+		  <if test="u_id==null">
+		  		and p.permit is null
+		  </if>
+		  <if test="modId!=null">
+		  	 and obj.mod_id=#{modId}
+		  </if> 
+		  <if test="tbl_name">
+		  	 and attr.tbl_name=#{tbl_name}
+		  </if>
+		  <!--其他用户获取可读、可写状态的字段 -->
+		  <if test="u_id!=null">
+		  		union 
+				 select  a.*
+				   from t_sys_buzobj_attr a 
+				   inner join t_sys_buzobj  obj on obj.obj_id=a.obj_id
+				 where exists (
+				 select * 
+				   from  t_sys_buzobj_permit p
+				   where p.permit!='-R'
+					and ((lower(p.p_type)='r' and p.p_obj in (select role_id from t_user_role_ref where u_id=#{u_id})) or (LOWER(p.p_type)='u' and p.p_obj=#{u_id}))
+					and p.attr_id=a.attr_id  
+				 )
+			     and obj.mod_id=#{modId}
+			     <if test="tbl_name">
+			  		 and a.tbl_name=#{tbl_name}
+			  	</if>
+		  </if>
+		 	 
+</select>
+
+
+
+<select id="getBuzObjectPermitList" parameterType="map" resultType="BuzObjectPermit">
+	select
+		p_id,
+		attr_id,
+		rule_id,
+		p_type,
+		p_obj,
+		case p_type when 'R' then (select role_name from t_user_role where role_id=p_obj)
+		when 'U' then (select name from t_user_info where u_id=p_obj) end
+		obj_name,
+		permit
+	from
+		t_sys_buzobj_permit
+	<where>
+		<if test="rule_id!=null">
+			rule_id=#{rule_id}
+		</if>
+		<if test="attr_id!=null">
+			and attr_id=#{attr_id}
+		</if>
+		<if test="p_type!=null">
+			and p_type=#{p_type}
+		</if>
+	</where>	
+</select>
+
+<select id="getUnPermitRoleList" parameterType="map" resultType="BuzObjectPermit" >
+	select role_id p_id,${attr_id} attr_id,${rule_id} rule_id,'R' p_type,role_id p_obj,role_name obj_name
+	from  [t_user_role] r
+	  where  not exists(
+		select *
+		 from [t_sys_buzobj_permit] p
+		 where p.p_obj=r.role_id
+		   and p.p_type='R'
+		   and p.rule_id=#{rule_id}
+		   and p.attr_id=#{attr_id}
+	  )
+
+</select>
+
+<select id="getUnPermitUserList" parameterType="map" resultType="BuzObjectPermit" >
+	select u_id p_id,${attr_id} attr_id,${rule_id} rule_id,'U' p_type,u_id p_obj,name obj_name
+	from  [t_user_info] u
+	  where  not exists(
+		select *
+		 from [t_sys_buzobj_permit] p
+		 where p.p_obj=u.u_id
+		   and p.p_type='U'
+		   and p.rule_id=#{rule_id}
+		   and p.attr_id=#{attr_id}
+	  )
+	  <if test="search!=null">
+	  	 and login_id like '%${search}%' or name like '%${search}%'
+	  </if>
+
+</select>
+
+
+<insert id="addBuzObjectPermit" parameterType="BuzObjectPermit" keyProperty="p_id" useGeneratedKeys="true">
+	insert into t_sys_buzobj_permit
+	(
+		attr_id,
+		rule_id,
+		p_type,
+		p_obj,
+		permit
+	)
+	values
+	(
+		#{attr_id},
+		#{rule_id},
+		#{p_type},
+		#{p_obj},
+		#{permit}
+	)
+</insert>
+<update id="updateBuzObjectPermit" parameterType="BuzObjectPermit">
+	update t_sys_buzobj_permit
+		set
+			attr_id = #{attr_id},
+			rule_id = #{rule_id},
+			p_type = #{p_type},
+			p_obj = #{p_obj},
+			permit=#{permit}
+		where p_id = #{p_id}
+</update>
+<delete id="deleteBuzObjectPermit" parameterType="BuzObjectPermit">
+	delete from t_sys_buzobj_permit
+	where p_id = #{p_id}
+</delete>
+
+<select id="getBuzObjRuleList" parameterType="map" resultType="BuzObjRule">
+	select
+		r.rule_id,
+		r.obj_id,
+		r.attr_id,
+		r.rule_type,
+		r.rule_name,
+		r.rule_desc,
+		r.creator,
+		r.create_dt,
+		r.editor,
+		r.edit_dt
+	from
+		t_sys_buzobj_rule r
+	<where>
+		<if test="obj_id!=null">
+			r.obj_id=#{obj_id}
+		</if>
+	</where>
+	
+</select>
+<insert id="addBuzObjRule" parameterType="BuzObjRule" keyProperty="rule_id" useGeneratedKeys="true">
+	insert into t_sys_buzobj_rule
+	(
+		obj_id,
+		attr_id,
+		rule_type,
+		rule_name,
+		rule_desc,
+		creator,
+		create_dt,
+		editor,
+		edit_dt
+	)
+	values
+	(
+		#{obj_id},
+		#{attr_id},
+		#{rule_type},
+		#{rule_name},
+		#{rule_desc},
+		#{creator},
+		#{create_dt},
+		#{editor},
+		#{edit_dt}
+	)
+</insert>
+<update id="updateBuzObjRule" parameterType="BuzObjRule">
+	update t_sys_buzobj_rule
+		set
+			obj_id = #{obj_id},
+			attr_id = #{attr_id},
+			rule_type = #{rule_type},
+			rule_name = #{rule_name},
+			rule_desc = #{rule_desc},
+			creator = #{creator},
+			create_dt = #{create_dt},
+			editor = #{editor},
+			edit_dt = #{edit_dt}
+		where rule_id = #{rule_id}
+</update>
+<delete id="deleteBuzObjRule" parameterType="BuzObjRule">
+	delete from t_sys_buzobj_rule
+	where rule_id = #{rule_id}
+</delete>
+
+<select id="getRuleDetailList" parameterType="map" resultType="RuleDetail">
+	select
+		id,
+		rule_id,
+		attr_id,
+		value,
+		op_flag,
+		log_flag
+	from
+		[t_sys_buzobj_rule_detail]
+	<where>
+		<if test="rule_id!=null">
+			rule_id=#{rule_id}
+		</if>
+	</where>	
+</select>
+<insert id="addRuleDetail" parameterType="RuleDetail" keyProperty="id" useGeneratedKeys="true">
+	insert into [t_sys_buzobj_rule_detail]
+	(
+		rule_id,
+		attr_id,
+		value,
+		op_flag,
+		log_flag
+	)
+	values
+	(
+		#{rule_id},
+		#{attr_id},
+		#{value},
+		#{op_flag},
+		#{log_flag}
+	)
+</insert>
+<update id="updateRuleDetail" parameterType="RuleDetail">
+	update [t_sys_buzobj_rule_detail]
+		set
+			rule_id = #{rule_id},
+			attr_id = #{attr_id},
+			value = #{value},
+			op_flag = #{op_flag},
+			log_flag = #{log_flag}
+		where id = #{id}
+</update>
+<delete id="deleteRuleDetail" parameterType="RuleDetail">
+	delete from [t_sys_buzobj_rule_detail]
+	where id = #{id}
+</delete>
+
+<!-- 商业对象服务方法CRUD -->
+<select id="getBuzObjectSvrList" parameterType="map" resultType="BuzObjectSvr">
+	select
+		svr_id,
+		obj_id,
+		service_name,
+		ref_method_code
+	from
+		t_sys_buzobj_service
+	<where>
+		<if test="obj_id!=null">
+			obj_id=#{obj_id}
+		</if>
+	</where>	
+		
+</select>
+<insert id="addBuzObjectSvr" parameterType="BuzObjectSvr" keyProperty="svr_id" useGeneratedKeys="true">
+	insert into t_sys_buzobj_service
+	(
+		obj_id,
+		service_name,
+		ref_method_code
+	)
+	values
+	(
+		#{obj_id},
+		#{service_name},
+		#{ref_method_code}
+	)
+</insert>
+<update id="updateBuzObjectSvr" parameterType="BuzObjectSvr">
+	update t_sys_buzobj_service
+		set
+			obj_id = #{obj_id},
+			service_name = #{service_name},
+			ref_method_code = #{ref_method_code}
+		where svr_id = #{svr_id}
+</update>
+<delete id="deleteBuzObjectSvr" parameterType="BuzObjectSvr">
+	delete from t_sys_buzobj_service
+	where svr_id = #{svr_id}
+</delete>
+</mapper>

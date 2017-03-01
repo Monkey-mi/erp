@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.TransportCostImpMapper">
+
+
+<select id="getTransportCostImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.TransportCostImp">
+  select aa.* from (SELECT 
+		0 as xzbj,
+		erp_ysfyb.jlrq,
+		erp_ysfyb.lxrm, 
+		erp_ysfyb.csbh,
+		ltrim(rtrim(erp_ysfymxb.jldh))+'-'+ltrim(rtrim(erp_ysfymxb.jlxh)) as jlh,
+		erp_ysfymxb.jldh,
+		erp_ysfymxb.jlxh,
+		erp_ysfymxb.ystj,
+		erp_ysfymxb.ysxs,
+		isnull((select sum(fysl) from cgfyb where ysjldh_wms=erp_ysfymxb.jldh and ysjlxh_wms=erp_ysfymxb.jlxh),0) as ydsl,
+		erp_ysfymxb.ystj - isnull((select sum(fysl) from cgfyb where ysjldh_wms=erp_ysfymxb.jldh and ysjlxh_wms=erp_ysfymxb.jlxh),0) as wdsl,
+		erp_ysfymxb.ysje,
+		isnull((select sum(fyje) from cgfyb where ysjldh_wms=erp_ysfymxb.jldh and ysjlxh_wms=erp_ysfymxb.jlxh),0) as ydje,
+		erp_ysfymxb.ysje - isnull((select sum(fyje) from cgfyb where ysjldh_wms=erp_ysfymxb.jldh and ysjlxh_wms=erp_ysfymxb.jlxh),0) as wdje,
+		erp_ysfymxb.zccq,
+		erp_ysfymxb.zrcq,
+		csxxb.csmc,
+		erp_ysfymxb.bzsm
+  FROM erp_ysfymxb
+	left outer join erp_ysfyb on erp_ysfyb.jldh=erp_ysfymxb.jldh
+	left outer join csxxb with (nolock) on csxxb.csbh = erp_ysfyb.csbh
+  where erp_ysfyb.sdbj=1
+  and erp_ysfymxb.ysje - isnull((select sum(fyje) from cgfyb where ysjldh_wms=erp_ysfymxb.jldh and ysjlxh_wms=erp_ysfymxb.jlxh),0)>0
+  <if test="s1!=null and s1!=''">
+ 	 ${s1}
+   </if>
+)aa
+</select>
+
+</mapper>

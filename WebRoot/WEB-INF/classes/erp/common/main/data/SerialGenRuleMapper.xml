@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.common.main.data.SerialGenRuleMapper">
+<select id="getSerialRuleList" parameterType="map" resultType="SerialGenRule">
+	select
+		sr_id,
+		code,
+		name,
+		len,
+		status_flg,
+		create_dt,
+		creator
+	from
+		t_sys_serialrule
+	<where>
+		<if test="sr_id!=null">
+			sr_id=#{sr_id}
+		</if>
+		<if test="code!=null">
+			and code=#{code}
+		</if>
+	</where>	
+</select>
+<insert id="addSerialRule" parameterType="SerialGenRule" keyProperty="sr_id" useGeneratedKeys="true">
+	insert into t_sys_serialrule
+	(
+		code,
+		name,
+		len,
+		status_flg,
+		create_dt,
+		creator
+	)
+	values
+	(
+		#{code},
+		#{name},
+		#{len},
+		#{status_flg},
+		#{create_dt},
+		#{creator}
+	)
+</insert>
+<update id="updateSerialRule" parameterType="SerialGenRule">
+	update t_sys_serialrule
+		set
+			code = #{code},
+			name = #{name},
+			len = #{len},
+			status_flg = #{status_flg},
+			create_dt = #{create_dt},
+			creator = #{creator}
+		where sr_id = #{sr_id}
+</update>
+<delete id="deleteSerialRule" parameterType="SerialGenRule">
+	delete from t_sys_serialrule
+	where sr_id = #{sr_id}
+</delete>
+
+<!-- 序列明细管理 -->
+
+
+<select id="getSerialRuleDetailList" parameterType="map" resultType="SerialRuleDetail">
+	select
+		t_sys_serial_detail.sd_id,
+		t_sys_serial_detail.sr_id,
+		t_sys_serial_detail.code,
+		t_sys_serial_detail.field_code,
+		t_sys_serial_detail.fixed_text,
+		t_sys_serial_detail.data_format,
+		t_sys_serial_detail.uparam_type,
+		t_sys_serial_detail.len,
+		t_sys_serial_detail.sub_start,
+		t_sys_serial_detail.sub_end,
+		t_sys_serial_detail.fill_char,
+		t_sys_serial_detail.is_fillafter,
+		t_sys_serial_detail.seed,
+		t_sys_serial_detail.step,
+		t_sys_serial_detail.step_jump,
+		t_sys_serial_detail.min_value,
+		t_sys_serial_detail.max_value,
+		t_sys_serial_detail.reset_mode,
+		t_sys_serial_detail.order_seq
+	from
+		t_sys_serial_detail
+	<where>
+		<if test="sr_id!=null">
+			sr_id=#{sr_id}
+		</if>
+	</where>	
+	
+</select>
+<insert id="addSerialRuleDetail" parameterType="SerialRuleDetail" keyProperty="sd_id" useGeneratedKeys="true">
+	insert into t_sys_serial_detail
+	(
+		sr_id,
+		code,
+		field_code,
+		fixed_text,
+		data_format,
+		uparam_type,
+		len,
+		sub_start,
+		sub_end,
+		fill_char,
+		is_fillafter,
+		seed,
+		step,
+		step_jump,
+		min_value,
+		max_value,
+		reset_mode,
+		order_seq
+	)
+	values
+	(
+		#{sr_id},
+		#{code},
+		#{field_code},
+		#{fixed_text},
+		#{data_format},
+		#{uparam_type},
+		#{len},
+		#{sub_start},
+		#{sub_end},
+		#{fill_char},
+		#{is_fillafter},
+		#{seed},
+		#{step},
+		#{step_jump},
+		#{min_value},
+		#{max_value},
+		#{reset_mode},
+		#{order_seq}
+	)
+</insert>
+<update id="updateSerialRuleDetail" parameterType="SerialRuleDetail">
+	update t_sys_serial_detail
+		set
+			sr_id = #{sr_id},
+			code = #{code},
+			field_code = #{field_code},
+			fixed_text = #{fixed_text},
+			data_format = #{data_format},
+			uparam_type = #{uparam_type},
+			len = #{len},
+			sub_start = #{sub_start},
+			sub_end = #{sub_end},
+			fill_char = #{fill_char},
+			is_fillafter = #{is_fillafter},
+			seed = #{seed},
+			step = #{step},
+			step_jump = #{step_jump},
+			min_value = #{min_value},
+			max_value = #{max_value},
+			reset_mode = #{reset_mode},
+			order_seq = #{order_seq}
+		where sd_id = #{sd_id}
+</update>
+<delete id="deleteSerialRuleDetail" parameterType="SerialRuleDetail">
+	delete from t_sys_serial_detail
+	where sd_id = #{sd_id}
+</delete>
+
+<delete id="deleteSerialRuleDetailByRuleId" parameterType="int">
+	delete from t_sys_serial_detail
+		where	sr_id = #{value}
+</delete>
+</mapper>

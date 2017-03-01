@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseDetail.data.OutSourceDetailMapper">
+
+
+ <select id="getOutSourceDetailList" parameterType="map" resultType="erp.erp.master.purchaseDetail.model.OutSourceDetail">
+	SELECT wxtzdmxb.wxdh,   
+         wxtzdmxb.wxxh,   
+         wxtzdmxb.jhbh,   
+         wxtzdmxb.jhxh,
+         case when wxtzdmxb.jhbh&lt;&gt;0 then ltrim(rtrim(wxtzdmxb.jhbh))+'-'+ltrim(rtrim(wxtzdmxb.jhxh)) else null end as jhh,
+         wxtzdmxb.cgbh,   
+         wxtzdmxb.cgxh,
+         case when wxtzdmxb.cgbh&lt;&gt;0 then ltrim(rtrim(wxtzdmxb.cgbh))+'-'+ltrim(rtrim(wxtzdmxb.cgxh)) else null end as cgh,
+         wxtzdmxb.cpbh,   
+         wxtzdmxb.jldw,   
+         wxtzdmxb.tcsl,    
+         wxtzdmxb.jsbl,   
+         wxtzdmxb.jgsl,   
+         wxtzdmxb.jgdj,
+         case when kjlx=1 then round(wxtzdmxb.fzsl*wxtzdmxb.jgdj,2) else round(wxtzdmxb.jgsl*wxtzdmxb.jgdj,2) end as jgje,
+         wxtzdmxb.clhh,
+		 wxtzdmxb.cltx1,
+		 wxtzdmxb.cltx2,
+		 wxtzdmxb.cltx3,
+         clbmb.clmc,
+		 wxtzdmxb.tcsl as ytcs,
+		 wxtzdmxb.sqbh,
+		 wxtzdmxb.sqxh,
+		 case when wxtzdmxb.sqbh&lt;&gt;0 then ltrim(rtrim(wxtzdmxb.sqbh))+'-'+ltrim(rtrim(wxtzdmxb.sqxh)) else null end as sqh,
+		 wxtzdmxb.kzdj,
+		wxtzdmxb.kjlx,
+		wxtzdmxb.fzdw,
+		wxtzdmxb.fzsl,
+		wxtzdmxb.hqbj,   
+         wxtzdmxb.hqrm,   
+         wxtzdmxb.hqsj,
+		 wxtzdmxb.wkjq,
+		 wxtzdmxb.gxsj,
+		 wxtzdmxb.dhrk,
+		wxtzdmxb.rksl
+    FROM wxtzdmxb 
+left outer join clbmb with (nolock) on clbmb.clhh= wxtzdmxb.clhh
+	<where>
+		<if test="wxdh!=null">
+			wxtzdmxb.wxdh=#{wxdh}
+		</if>
+	</where>
+</select> 
+<insert id="addOutSourceDetail" parameterType="erp.erp.master.purchaseDetail.model.OutSourceDetail" >
+	insert into dbo.wxtzdmxb
+	(
+		wxdh,
+		wxxh,
+		jhbh,
+		jhxh,
+		cgbh,
+		cgxh,
+		cpbh,
+		jldw,
+		tcsl,
+		jsbl,
+		jgsl,
+		jgdj,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		sqbh,
+		sqxh,
+		kzdj,
+		kjlx,
+		fzdw,
+		fzsl,
+		hqbj,
+		hqrm,
+		hqsj,
+		wkjq,
+		gxsj,
+		dhrk,
+		rksl
+	)
+	values
+	(
+		#{wxdh},
+		#{wxxh},
+		#{jhbh},
+		#{jhxh},
+		#{cgbh},
+		#{cgxh},
+		#{cpbh},
+		#{jldw},
+		#{tcsl},
+		#{jsbl},
+		#{jgsl},
+		#{jgdj},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{sqbh},
+		#{sqxh},
+		#{kzdj},
+		#{kjlx},
+		#{fzdw},
+		#{fzsl},
+		#{hqbj},
+		#{hqrm},
+		#{hqsj},
+		#{wkjq},
+		#{gxsj},
+		#{dhrk},
+		#{rksl}
+	)
+</insert>
+<!-- 同步更新主表 -->
+<update id="updateOutSourceSync" parameterType="erp.erp.master.purchaseDetail.model.OutSourceDetail">
+	update wxtzdb
+		set jgzs=isnull((select sum(jgsl) from wxtzdmxb where wxtzdmxb.wxdh=wxtzdb.wxdh),0),
+			jgze=isnull((select sum(round(jgsl*jgdj,2)) from wxtzdmxb where wxtzdmxb.wxdh=wxtzdb.wxdh),0) 
+		where wxtzdb.wxdh=#{wxdh};
+</update>
+<update id="updateOutSourceDetail" parameterType="erp.erp.master.purchaseDetail.model.OutSourceDetail">
+	update dbo.wxtzdmxb
+		set
+			wxdh = #{wxdh},
+			wxxh = #{wxxh},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			cgbh = #{cgbh},
+			cgxh = #{cgxh},
+			cpbh = #{cpbh},
+			jldw = #{jldw},
+			tcsl = #{tcsl},
+			jsbl = #{jsbl},
+			jgsl = #{jgsl},
+			jgdj = #{jgdj},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			sqbh = #{sqbh},
+			sqxh = #{sqxh},
+			kzdj = #{kzdj},
+			kjlx = #{kjlx},
+			fzdw = #{fzdw},
+			fzsl = #{fzsl},
+			hqbj = #{hqbj},
+			hqrm = #{hqrm},
+			hqsj = #{hqsj},
+			wkjq = #{wkjq},
+			gxsj = #{gxsj},
+			dhrk = #{dhrk},
+			rksl = #{rksl}
+		where wxdh = #{wxdh} and wxxh=#{wxxh}
+</update>
+<delete id="deleteOutSourceDetail" parameterType="erp.erp.master.purchaseDetail.model.OutSourceDetail">
+	delete from dbo.wxtzdmxb
+	where wxdh = #{wxdh} and wxxh=#{wxxh}
+</delete>
+</mapper>

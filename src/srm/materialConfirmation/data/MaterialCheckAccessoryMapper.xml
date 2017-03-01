@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="srm.materialConfirmation.data.MaterialCheckAccessoryMapper">
+<select id="getMaxWjbh" parameterType="map" resultType="int">
+    select isnull(max(wjbh)+1,1) from wlqrfjb where company_id = #{company_id}
+</select>
+<select id="getMaterialCheckAccessoryList" parameterType="map" resultType="srm.materialConfirmation.model.MaterialCheckAccessory">
+    select
+		dbo.wlqrfjb.company_id,
+		dbo.wlqrfjb.wjbh,
+		dbo.wlqrfjb.wjmc,
+		dbo.wlqrfjb.wjlj,
+		dbo.wlqrfjb.cjrm,
+		dbo.wlqrfjb.fjlx,
+		dbo.wlqrfjb.scrq,
+		dbo.wlqrfjb.ptsc,
+		dbo.wlqrfjb.fjzt,
+		dbo.wlqrfjb.bzsm
+	from
+		dbo.wlqrfjb
+		where dbo.wlqrfjb.company_id = #{company_id}
+</select>
+
+<update id="updateMaterialCheckAccessory" parameterType="srm.materialConfirmation.model.MaterialCheckAccessory">
+    update wlqrfjb 
+    set
+    wjbh = #{wjbh},
+    wjmc = #{wjmc},
+    wjlj = #{wjlj},
+    cjrm = #{cjrm},
+    fjlx = #{fjlx},
+    scrq = #{scrq},
+    ptsc = #{ptsc},
+    fjzt = #{fjzt},
+    bzsm = #{bzsm}
+    where company_id = #{company_id} and wjbh = #{wjbh}
+</update>
+<insert id="addMaterialCheckAccessory" parameterType="srm.materialConfirmation.model.MaterialCheckAccessory">
+   insert into wlqrfjb (company_id,wjbh,wjmc,wjlj,cjrm,fjlx,scrq,ptsc,fjzt,bzsm) values (#{company_id},#{wjbh},#{wjmc},#{wjlj},#{cjrm},#{fjlx},#{scrq},#{ptsc},#{fjzt},#{bzsm})
+</insert>
+<delete id="deleteMaterialCheckAccessory" parameterType="srm.materialConfirmation.model.MaterialCheckAccessory">
+    delete from wlqrfjb where company_id = #{company_id} and wjbh = #{wjbh}
+</delete>
+</mapper>

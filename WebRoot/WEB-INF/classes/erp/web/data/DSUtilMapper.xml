@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.web.data.DSUtilMapper">
+
+<!-- 操作外部数据源 -->
+<select id="getExtDataSourceList" parameterType="map" resultType="ExtDataSource">
+    select 
+        id      ,
+        dstype  ,
+        dscode  ,
+        dsname  ,
+        srvaddr ,
+        srvport ,
+        srvlogin,
+        srvpwd  ,
+        dbname  
+    from t_ext_datasource
+    <where>
+       <if test="id != null">id=#{id}</if>
+       <if test="dscode != null">and dscode=#{dscode}</if>
+    </where>
+</select>
+<insert id="addExtDataSource" parameterType="ExtDataSource">
+     insert into t_ext_datasource(
+        dstype  ,
+        dscode  ,
+        dsname  ,
+        srvaddr ,
+        srvport ,
+        srvlogin,
+        srvpwd  ,
+        dbname 
+     )
+     values(
+        #{dstype  },
+        #{dscode  },
+        #{dsname  },
+        #{srvaddr },
+        #{srvport },
+        #{srvlogin},
+        #{srvpwd  },
+        #{dbname  }
+     )
+</insert>
+
+<update id="updateExtDataSource" parameterType="ExtDataSource">
+    update t_ext_datasource set
+        dstype  =#{dstype  },
+        dscode  =#{dscode  },
+        dsname  =#{dsname  },
+        srvaddr =#{srvaddr },
+        srvport =#{srvport },
+        srvlogin=#{srvlogin},
+        srvpwd  =#{srvpwd  },
+        dbname  =#{dbname  }
+    where id=#{id}
+</update>
+
+<delete id="deleteExtDataSource" parameterType="ExtDataSource">
+    delete from t_ext_datasource where id=#{id}
+</delete>
+
+<select id="getDBVerList" parameterType="map" resultType="DBVerList">
+    select id,dbver,isactive,remark,createdtm
+    from dbver_list
+    <where>
+        <if test="id!=null">id=#{id}</if>
+        <if test="dbver!=null">and dbver=#{dbver}</if>
+        <if test="isactive!=null">and isactive=#{isactive}</if>
+    </where> 
+</select>
+</mapper>

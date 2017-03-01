@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+        
+       <context:property-placeholder location="classpath:sysconfig/jdbc.properties" />
+         <!-- enable autowire -->
+       <context:annotation-config /> 
+       
+       <task:annotation-driven/>
+       
+       <context:component-scan base-package="erp.util,erp.erp" /> 
+		<!-- Configures the @Controller programming model 必须加上这个，不然请求controller时会出现no mapping url错误-->
+   	   <mvc:annotation-driven />
+   		
+   <bean id="defaultDataSource"   class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+        p:driverClassName="${jdbc.driverClassName}"
+        p:url="${jdbc.erp.databaseurl}"
+        p:username="${jdbc.erp.username}"
+        p:password="${jdbc.erp.password}" >
+        <property name="maxActive"><value>${jdbc.maxActive}</value></property>  
+        <property name="initialSize"><value>${jdbc.initialSize}</value></property>  
+        <property name="maxWait"><value>${jdbc.maxWait}</value></property>  
+        <property name="maxIdle"><value>${jdbc.maxIdle}</value></property>
+        <property name="minIdle"><value>${jdbc.minIdle}</value></property>
+      <!-- 只要下面两个参数设置成小于8小时(MySql默认)，就能避免MySql的8小时自动断开连接问题 -->
+        <property name="timeBetweenEvictionRunsMillis"><value>18000000</value></property><!-- 5小时 -->
+        <property name="minEvictableIdleTimeMillis"><value>10800000</value></property><!-- 3小时 -->
+    </bean>
+       
+    <!-- define the SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="defaultDataSource" />
+        <property name="typeAliasesPackage" value="erp.erp" />
+         <!-- 可以单独指定mybatis的配置文件，或者写在本文件里面。 用下面的自动扫描装配(推荐)或者单独mapper --> 
+        <property name="configLocation" value="classpath:sysconfig/mybatis-config.xml" />
+    </bean>
+    
+    
+        <!-- 自动扫描并组装MyBatis的映射文件和接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="erp.erp.*.data,erp.erp.*.*.data" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+    
+    <!-- enable transaction demarcation with annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"  />
+    
+    <!-- transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="defaultDataSource" />
+    </bean>
+    
+    
+    <!-- AOP 相关 -->
+    <bean id="mapperInterceptor" class="erp.util.db.MapperInterceptor">
+        <property name="dataSource" ref="defaultDataSource" />
+    </bean>
+    <aop:config>
+    	<aop:aspect ref="mapperInterceptor">
+    		<aop:pointcut id="mapperPointcut" expression="execution(public * erp.*..data.*.*(..))" />
+    		<aop:around method="methodRound" pointcut-ref="mapperPointcut" />
+    	</aop:aspect>
+    </aop:config>  
+    
+    <!-- AOP order  by sql params -->
+    <bean id="myStringUtilsInterceptor" class="erp.util.MyStringUtils">
+    </bean>
+    <aop:config>
+    	<aop:aspect ref="myStringUtilsInterceptor">
+    		<aop:pointcut id="myStringUtilsPointcut" expression="execution(public * erp.*..data.*.*List(..)) and args(params)" />
+    		<aop:before method="addOrderBySQL2" pointcut-ref="myStringUtilsPointcut"/>
+    	</aop:aspect>
+    </aop:config> 
+    
+      <!-- Configure the multipart resolver -->
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes 1M
+        <property name="maxUploadSize" value="1000000" />-->
+        <property name="defaultEncoding" value="utf-8"></property>
+    </bean>
+    
+    <bean class="erp.util.UTF8StringBeanPostProcessor"></bean>	
+    
+    <!-- 服务层统一异常处理-->
+    <bean id="exceptionAdvisor" class="erp.util.web.ExceptionAdvisor">
+    </bean>
+    <aop:config>
+    	<aop:aspect ref="exceptionAdvisor">
+    		<aop:pointcut id="exceptionAdvisorPointcut" expression="execution(* *..*.service.*.*(..))" />
+    		<aop:after-throwing method="doAfterThrowing" pointcut-ref="exceptionAdvisorPointcut" throwing="ex"/>
+    	</aop:aspect>
+    </aop:config> 
+    
+    <!-- 全局统一异常处理 -->
+	<bean id="exceptionResolver" class="erp.util.web.CustomSimpleMappingExceptionResolver">  
+        <property name="defaultErrorView">  
+            <value>/error/500.html</value>  
+        </property>  
+    	<property name="exceptionMappings">  
+	        <props>  
+	            <prop key="java.lang.Exception">/error/500.html</prop>     
+	        </props>   
+	    </property>  
+	    <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->       
+         <property name="warnLogCategory" value="WARN"></property> 
+    </bean> 
+      
+    <!-- 设置指定 采购合同到货数量变更回传和质检信息回传 -->
+    <bean id="jobdetailbean" class="org.springframework.scheduling.quartz.JobDetailBean">  
+	    <property name="jobClass">  
+	        <value>erp.util.web.PoToPlatformTask</value>  
+	    </property>
+	    <!-- 需要注入的bean -->
+	    <!-- <property name="jobDataAsMap">
+	        <map>
+		        <entry key="TaskCommonService">
+		       		<ref bean="TaskCommonService" />
+		        </entry>
+	        </map>
+        </property>   -->
+	 </bean>
+	 <!-- 定时器注册 采购合同到货数量变更回传和质检信息回传 -->  
+	 <bean id="servicetrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+	    <!-- 任务的详细信息 -->  
+	    <property name="jobDetail">  
+	        <ref bean="jobdetailbean" />  
+	    </property>  
+	    <!-- 每天23点触发-->  
+	    <property name="cronExpression">  
+	        <value>0 0/5 * * * ?</value>  <!-- 0 0 23 * * ? 每天23点触发-->
+	    </property>  
+	 </bean>  
+	 <bean id="orderDeliveryRegisterService" class="erp.erp.purchaseOrder.service.OrderDeliveryRegisterService"/>
+	  <!-- 设置指定 平台送货登记回传 -->
+    <bean id="jobdetailbean1" class="org.springframework.scheduling.quartz.JobDetailBean">  
+	    <property name="jobClass">  
+	        <value>erp.util.web.PlatformToPoTask</value>  
+	    </property>
+	    <property name="jobDataAsMap">
+	        <map>
+		        <entry key="orderDeliveryRegisterService">
+		       		<ref bean="orderDeliveryRegisterService" />
+		        </entry>
+	        </map>
+        </property>
+	 </bean>
+	 <!-- 定时器注册 平台送货登记回传 -->  
+	 <bean id="servicetrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+	    <!-- 任务的详细信息 -->  
+	    <property name="jobDetail">  
+	        <ref bean="jobdetailbean1" />  
+	    </property>  
+	    <!-- 每5分钟触发-->  
+	    <property name="cronExpression">  
+	        <value>0 0/30 * * * ?</value> 
+	    </property>  
+	 </bean>  
+	 <!-- 定时任务工厂注册 -->  
+	 <bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	    <property name="triggers">  
+	        <list>
+	        	<ref bean="servicetrigger" />  
+	        	<ref bean="servicetrigger1" />
+	        </list>  
+	    </property>  
+	 </bean>   
+</beans>

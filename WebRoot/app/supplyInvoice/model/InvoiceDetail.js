@@ -1,0 +1,30 @@
+Ext.define('erp.supplyInvoice.model.InvoiceDetail', {
+	extend: 'Ext.data.Model',
+	idProperty: 'fplb'+'fphm',
+	fields: [
+		{ name: 'fplb'},
+		{ name: 'fphm'},
+		{ name: 'fpxh', type: 'float' },
+		{ name: 'spmc'},
+		{ name: 'jldw'},
+		{ name: 'rksl', type: 'float' },
+		{ name: 'rkdj', type: 'float' },
+		{ name: 'rkje', type: 'float' },
+		{ name: 'zzsl', type: 'float' },
+		{ name: 'csdj', type: 'float' },
+		{ name: 'csje', type: 'float' },
+		{ name: 'zzse', type: 'float' },
+		{ name: 'wbbh'},
+		{ name: 'wbhl', type: 'float' },
+		{ name: 'wbdj', type: 'float' },
+		{ name: 'wbje', type: 'float' },
+		{ name: 'htbh', type: 'float' },
+		{ name: 'hxlb', type: 'int'  },
+		{ name: 'hsbm'},
+		{ name: 'sjly', type: 'int'  },
+		{ name: 'ckbh'},
+		{ name: 'rkdh', type: 'int'  },
+		{ name: 'rkxh', type: 'int'  },
+		{ name: 'scbj', type: 'int'  }
+	]
+});

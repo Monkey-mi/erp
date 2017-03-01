@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="srm.supplier.data.AppSupplierAccessLoopMapper">
+
+
+<select id="getAppSupplierAccessLoopList" parameterType="map" resultType="srm.supplier.model.AppSupplierAccessLoop">
+	select
+		t_app_supplier_access_loop.loop_id,
+		t_app_supplier_access_loop.company_id,
+		t_app_supplier_access_loop.assess_dt,
+		t_app_supplier_access_loop.head_audit,
+		t_app_supplier_access_loop.operator,
+		t_app_supplier_access_loop.operator_dt,
+		t_app_supplier_access_loop.assess_sts,
+		t_app_supplier_access_loop.assess_sts_dt,
+		t_app_supplier_access_loop.assess_sts_op
+	from
+		t_app_supplier_access_loop
+		<where>
+			1=1
+			<if test="loop_id!=null">
+				and loop_id=#{loop_id}
+			</if>
+			<if test="company_id!=null">
+				and company_id=#{company_id}
+			</if>
+			<if test="assess_sts!=null">
+				and assess_sts=#{assess_sts}
+			</if>
+			<if test="assess_dt!=null">
+			    and assess_dt=#{assess_dt}
+			</if>
+		</where>
+		<if test="sort==null">
+			order by assess_dt desc
+		</if>
+		<if test="sort!=null">
+			order by ${sort}
+		</if>
+</select>
+<!-- 根据sql获取对应值 -->
+<select id="getStringFromSql" parameterType="map" resultType="String">
+	${sql}
+</select>
+<select id="getMaxDate" parameterType="map" resultType="String">
+    select MAX(assess_dt) from t_app_supplier_access_loop where company_id=#{company_id} and assess_sts = 1
+</select>
+<insert id="addAppSupplierAccessLoop" parameterType="srm.supplier.model.AppSupplierAccessLoop" keyProperty="loop_id" useGeneratedKeys="true">
+	<selectKey keyProperty="loop_id" resultType="int" order="BEFORE">
+		select  isnull(max(loop_id)+1,1) from t_app_supplier_access_loop 
+	</selectKey>
+	insert into t_app_supplier_access_loop
+	(
+		loop_id,
+		company_id,
+		assess_dt,
+		head_audit,
+		operator,
+		operator_dt,
+		assess_sts,
+		assess_sts_dt,
+		assess_sts_op
+	)
+	values
+	(
+		#{loop_id},
+		#{company_id},
+		#{assess_dt},
+		#{head_audit},
+		#{operator},
+		#{operator_dt},
+		#{assess_sts},
+		#{assess_sts_dt},
+		#{assess_sts_op}
+	)
+</insert>
+<update id="updateAppSupplierAccessLoop" parameterType="srm.supplier.model.AppSupplierAccessLoop">
+	update t_app_supplier_access_loop
+		set
+			loop_id = #{loop_id},
+			company_id = #{company_id},
+			assess_dt = #{assess_dt},
+			head_audit = #{head_audit},
+			operator = #{operator},
+			operator_dt = #{operator_dt},
+			assess_sts = #{assess_sts},
+			assess_sts_dt = #{assess_sts_dt},
+			assess_sts_op = #{assess_sts_op}
+		where loop_id = #{loop_id}
+</update>
+<delete id="deleteAppSupplierAccessLoop" parameterType="srm.supplier.model.AppSupplierAccessLoop">
+	delete from t_app_supplier_access_loop
+	where loop_id = #{loop_id}
+</delete>
+<select id="getAppSupplierAccessLoopOutList" parameterType="map" resultType="srm.supplier.model.AppSupplierAccessLoop">
+	select
+		t_app_supplier_access_loop.loop_id,
+		t_app_supplier_access_loop.company_id,
+		t_app_supplier_access_loop.assess_dt,
+		t_app_supplier_access_loop.head_audit,
+		t_app_supplier_access_loop.operator,
+		t_app_supplier_access_loop.operator_dt,
+		t_app_supplier_access_loop.assess_sts,
+		t_app_supplier_access_loop.assess_sts_dt,
+		t_app_supplier_access_loop.assess_sts_op
+	from
+		t_app_supplier_access_loop
+		where assess_sts=1 and company_id=#{company_id} and assess_dt=#{assess_dt}
+		</select>
+		
+</mapper>

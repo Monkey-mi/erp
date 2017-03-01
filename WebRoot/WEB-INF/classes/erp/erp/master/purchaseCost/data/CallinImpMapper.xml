@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.CallinImpMapper">
+
+
+<select id="getCallinImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.CallinImp">
+	  select aa.* from (SELECT dbdb_cp.dckh,   
+         dbdb_cp.dbdh,   
+         dbdb_cp.dbxh, 
+			ltrim(rtrim(dbdb_cp.dbdh))+'-'+ltrim(rtrim(dbdb_cp.dbxh)) as dbh,  
+         dbdb_cp.drkh,   
+         dbdb_cp.ddbh,   
+         dbdb_cp.ddxh,
+			ltrim(rtrim(dbdb_cp.ddbh))+'-'+ltrim(rtrim(dbdb_cp.ddxh)) as ddh,
+			case when dbdb_cp.tzbh&lt;&gt;0 then ltrim(rtrim(str(dbdb_cp.tzbh)))+'-'+ltrim(rtrim(str(dbdb_cp.tzxh))) else null end as tzh,
+         dbdb_cp.cpbh,   
+         dbdb_cp.cptx1,   
+         dbdb_cp.cptx2,   
+         dbdb_cp.cptx3,
+			dbdb_cp.dbsl,
+			dbdb_cp.dbxs,
+			dbdb_cp.zyrm,
+			dbdb_cp.ystj,
+         dbdb_cp.ystj - isnull((select sum(cgfyb.fysl) from cgfyb with (nolock) where cgfyb.ckbh=dbdb_cp.dckh and cgfyb.dbdh=dbdb_cp.dbdh and cgfyb.dbxh=dbdb_cp.dbxh),0) as wdtj,
+			dbdb_cp.ysdj,   
+         dbdb_cp.ysje - round(dbdb_cp.ysdj*isnull((select sum(cgfyb.fysl) from cgfyb with (nolock) where cgfyb.ckbh=dbdb_cp.dckh and cgfyb.dbdh=dbdb_cp.dbdh and cgfyb.dbxh=dbdb_cp.dbxh),0),2) as wdje,
+			xsddb.htbz,
+			cpbmb.cpmc,
+			dbdb_cp.dcrq,
+			dbdb_cp.bzsm,
+			dbdb_cp.sgtzh,
+			cpbmb.plmth,
+			cpbmb.plmtx ,
+			ckmcb_cp.ckmc as dcckmc,
+			a.ckmc as drckmc
+    FROM dbdb_cp with (nolock)  
+left outer join cpbmb with (nolock) on cpbmb.cpbh=dbdb_cp.cpbh
+left outer join xsddb with (nolock) on xsddb.ddbh=dbdb_cp.ddbh
+left outer join ckmcb_cp with (nolock) on ckmcb_cp.ckbh = dbdb_cp.dckh
+left outer join ckmcb_cp a with (nolock) on a.ckbh = dbdb_cp.drkh
+where dbdb_cp.qrbj=1 and dbdb_cp.ystj > isnull((select sum(cgfyb.fysl) from cgfyb with (nolock) where cgfyb.ckbh=dbdb_cp.dckh and cgfyb.dbdh=dbdb_cp.dbdh and cgfyb.dbxh=dbdb_cp.dbxh),0)
+    <if test = "dbdh!=null and dbdh!=''">
+         and dbdb_cp.dbdh = #{dbdh}
+    </if>
+    <if test = "sgtzh!=null and sgtzh!=''">
+         and dbdb_cp.sgtzh = #{sgtzh}
+    </if>
+    <if test="cpmc!=null and cpmc!=''">
+    	and cpbmb.cpmc like '%${cpmc}%'
+    </if>
+)aa
+</select>
+<insert id="addCallinImp" parameterType="erp.erp.master.purchaseCost.model.CallinImp" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.dbdb_cp
+	(
+		dbdh,
+		dbxh,
+		dckh,
+		dcrq,
+		drrq,
+		drkh,
+		cpbh,
+		cptx1,
+		cptx2,
+		cptx3,
+		jldw,
+		drhw,
+		dchw,
+		zcpc,
+		zrpc,
+		dblb,
+		dbsl,
+		dbdj,
+		nbdbdj,
+		dbxs,
+		ddbh,
+		ddxh,
+		tzbh,
+		tzxh,
+		bzsm,
+		czym,
+		czsj,
+		qrbj,
+		qrrm,
+		qrsj,
+		dybj,
+		dysj,
+		dbfs,
+		ysxs,
+		mxtj,
+		ystj,
+		ysdj,
+		ysje,
+		zyrm,
+		sgtzh,
+		dbdh_wms,
+		bddh_wms,
+		cqbh_wms
+	)
+	values
+	(
+		#{dbdh},
+		#{dbxh},
+		#{dckh},
+		#{dcrq},
+		#{drrq},
+		#{drkh},
+		#{cpbh},
+		#{cptx1},
+		#{cptx2},
+		#{cptx3},
+		#{jldw},
+		#{drhw},
+		#{dchw},
+		#{zcpc},
+		#{zrpc},
+		#{dblb},
+		#{dbsl},
+		#{dbdj},
+		#{nbdbdj},
+		#{dbxs},
+		#{ddbh},
+		#{ddxh},
+		#{tzbh},
+		#{tzxh},
+		#{bzsm},
+		#{czym},
+		#{czsj},
+		#{qrbj},
+		#{qrrm},
+		#{qrsj},
+		#{dybj},
+		#{dysj},
+		#{dbfs},
+		#{ysxs},
+		#{mxtj},
+		#{ystj},
+		#{ysdj},
+		#{ysje},
+		#{zyrm},
+		#{sgtzh},
+		#{dbdh_wms},
+		#{bddh_wms},
+		#{cqbh_wms}
+	)
+</insert>
+<update id="updateCallinImp" parameterType="erp.erp.master.purchaseCost.model.CallinImp">
+	update dbo.dbdb_cp
+		set
+			dbdh = #{dbdh},
+			dbxh = #{dbxh},
+			dckh = #{dckh},
+			dcrq = #{dcrq},
+			drrq = #{drrq},
+			drkh = #{drkh},
+			cpbh = #{cpbh},
+			cptx1 = #{cptx1},
+			cptx2 = #{cptx2},
+			cptx3 = #{cptx3},
+			jldw = #{jldw},
+			drhw = #{drhw},
+			dchw = #{dchw},
+			zcpc = #{zcpc},
+			zrpc = #{zrpc},
+			dblb = #{dblb},
+			dbsl = #{dbsl},
+			dbdj = #{dbdj},
+			nbdbdj = #{nbdbdj},
+			dbxs = #{dbxs},
+			ddbh = #{ddbh},
+			ddxh = #{ddxh},
+			tzbh = #{tzbh},
+			tzxh = #{tzxh},
+			bzsm = #{bzsm},
+			czym = #{czym},
+			czsj = #{czsj},
+			qrbj = #{qrbj},
+			qrrm = #{qrrm},
+			qrsj = #{qrsj},
+			dybj = #{dybj},
+			dysj = #{dysj},
+			dbfs = #{dbfs},
+			ysxs = #{ysxs},
+			mxtj = #{mxtj},
+			ystj = #{ystj},
+			ysdj = #{ysdj},
+			ysje = #{ysje},
+			zyrm = #{zyrm},
+			sgtzh = #{sgtzh},
+			dbdh_wms = #{dbdh_wms},
+			bddh_wms = #{bddh_wms},
+			cqbh_wms = #{cqbh_wms}
+		where  = #{}
+</update>
+<delete id="deleteCallinImp" parameterType="erp.erp.master.purchaseCost.model.CallinImp">
+	delete from dbo.dbdb_cp
+	where  = #{}
+</delete>
+</mapper>

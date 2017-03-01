@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.MaterialEntrustImpMapper">
+
+
+<select id="getMaterialEntrustImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.MaterialEntrustImp">
+     select aa.* from ( select 
+			wtjycssqb.wtdh,  		
+			wtjycssqb.wtlb,		
+			wtjycssqb.wtbm,		
+			wtjycssqb.wtrm,		
+			wtjycssqb.wtrq,	
+			wtjycssqb.csbh, 
+			wtjycssqb.cslx,
+			wtjycssqb.csjg,   		
+			wtjycssqb.sdbj,   
+			wtjycssqb.shbj,
+			wtjycssqb.bzsm, 
+			csxxb.csmc,
+			wtjycssqclmxb.wtxh,
+			case when wtjycssqclmxb.wtdh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.wtdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.wtxh))) else '' end as wth, 				
+			wtjycssqclmxb.clhh,		
+			wtjycssqclmxb.htbh,    
+			wtjycssqclmxb.htxh,
+			case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.htbh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.htxh))) else '' end as hth,   		
+			wtjycssqclmxb.sjsl,
+			isnull((select sum(csjg) from wtjycssqmxb where wtjycssqmxb.wtdh=wtjycssqclmxb.wtdh and wtjycssqmxb.wtxh=wtjycssqclmxb.wtxh),0) as wtdj,
+			round(wtjycssqclmxb.sjsl*isnull((select sum(csjg) from wtjycssqmxb where wtjycssqmxb.wtdh=wtjycssqclmxb.wtdh and wtjycssqmxb.wtxh=wtjycssqclmxb.wtxh),0),2) as wtje,
+			wtjycssqclmxb.dhdh,
+			wtjycssqclmxb.dhxh,
+			case when wtjycssqclmxb.htbh&lt;&gt;0 then ltrim(rtrim(str(wtjycssqclmxb.dhdh))) +'-'+ ltrim(rtrim(str(wtjycssqclmxb.dhxh))) else '' end as dhh, 
+			wtjycssqclmxb.jldw,
+			wtjycssqclmxb.llrq,
+			wtjycssqclmxb.ckbh,
+			clbmb.clmc,
+			case when htmxb.ddbh&lt;&gt;0 then ltrim(rtrim(str(htmxb.ddbh))) +'-'+ ltrim(rtrim(str(htmxb.ddxh))) else '' end as ddh,
+			htmxb.khbh,
+			0 as xzbj,
+         clbmb.plmth,
+	 		clbmb.plmtx,
+	 		a.csmc as csjgmc
+from wtjycssqclmxb
+left outer join wtjycssqb with(nolock) on wtjycssqb.wtdh=wtjycssqclmxb.wtdh
+left outer join clbmb with(nolock) on clbmb.clhh=wtjycssqclmxb.clhh 
+left outer join csxxb with(nolock) on csxxb.csbh=wtjycssqb.csbh
+left outer join csxxb a with (nolock) on a.csbh=wtjycssqb.csjg
+left outer join htmxb with(nolock) on htmxb.htbh=wtjycssqclmxb.htbh and htmxb.htxh=wtjycssqclmxb.htxh
+where wtjycssqb.qfbj=1 and wtjycssqb.cslx='委外测试' 
+<if test="qsrq!=null and qsrq!=''">
+and wtjycssqb.wtrq&gt;=#{qsrq}
+</if>
+<if test = "jzrq!=null and jzrq!=''">
+and wtjycssqb.wtrq&lt;=#{jzrq}
+</if> 
+and not exists (select clwtdh,clwtxh from cgfyb with (nolock) where cgfyb.clwtdh=wtjycssqclmxb.wtdh and cgfyb.clwtxh=wtjycssqclmxb.wtxh)
+ <if test="clmc!=null and clmc!=''">
+ 	and clbmb.clmc like '%${clmc}%'
+ </if>
+ <if test="s1!=null and s1!=''">
+ 	 ${s1}
+ </if>
+)aa
+</select>
+<insert id="addMaterialEntrustImp" parameterType="erp.erp.master.purchaseCost.model.MaterialEntrustImp" keyProperty="" useGeneratedKeys="true">
+	insert into dbo.wtjycssqb
+	(
+		wtdh,
+		wtbm,
+		wtlb,
+		wtrm,
+		wtrq,
+		clhh,
+		htbh,
+		htxh,
+		csbh,
+		llrq,
+		sjsl,
+		jldw,
+		sdbj,
+		sdrm,
+		sdsj,
+		jybj,
+		gdbj,
+		gdbj_pd,
+		czym,
+		czsj,
+		shbj,
+		ckbh,
+		dhdh,
+		dhxh,
+		bzsm,
+		jysj,
+		shsj,
+		csmd,
+		csjg,
+		cslx,
+		qfbj
+	)
+	values
+	(
+		#{wtdh},
+		#{wtbm},
+		#{wtlb},
+		#{wtrm},
+		#{wtrq},
+		#{clhh},
+		#{htbh},
+		#{htxh},
+		#{csbh},
+		#{llrq},
+		#{sjsl},
+		#{jldw},
+		#{sdbj},
+		#{sdrm},
+		#{sdsj},
+		#{jybj},
+		#{gdbj},
+		#{gdbj_pd},
+		#{czym},
+		#{czsj},
+		#{shbj},
+		#{ckbh},
+		#{dhdh},
+		#{dhxh},
+		#{bzsm},
+		#{jysj},
+		#{shsj},
+		#{csmd},
+		#{csjg},
+		#{cslx},
+		#{qfbj}
+	)
+</insert>
+<update id="updateMaterialEntrustImp" parameterType="erp.erp.master.purchaseCost.model.MaterialEntrustImp">
+	update dbo.wtjycssqb
+		set
+			wtdh = #{wtdh},
+			wtbm = #{wtbm},
+			wtlb = #{wtlb},
+			wtrm = #{wtrm},
+			wtrq = #{wtrq},
+			clhh = #{clhh},
+			htbh = #{htbh},
+			htxh = #{htxh},
+			csbh = #{csbh},
+			llrq = #{llrq},
+			sjsl = #{sjsl},
+			jldw = #{jldw},
+			sdbj = #{sdbj},
+			sdrm = #{sdrm},
+			sdsj = #{sdsj},
+			jybj = #{jybj},
+			gdbj = #{gdbj},
+			gdbj_pd = #{gdbj_pd},
+			czym = #{czym},
+			czsj = #{czsj},
+			shbj = #{shbj},
+			ckbh = #{ckbh},
+			dhdh = #{dhdh},
+			dhxh = #{dhxh},
+			bzsm = #{bzsm},
+			jysj = #{jysj},
+			shsj = #{shsj},
+			csmd = #{csmd},
+			csjg = #{csjg},
+			cslx = #{cslx},
+			qfbj = #{qfbj}
+		where  = #{}
+</update>
+<delete id="deleteMaterialEntrustImp" parameterType="erp.erp.master.purchaseCost.model.MaterialEntrustImp">
+	delete from dbo.wtjycssqb
+	where  = #{}
+</delete>
+</mapper>

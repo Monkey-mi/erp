@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.PayApply.data.HtmxMapper">
+
+
+<select id="getHtmxList" parameterType="map" resultType="erp.erp.PayApply.model.Htmx">
+	  SELECT htmxb.htbh,
+         htmxb.htxh,
+         case when htmxb.jhbh&lt;&gt;0 then ltrim(rtrim(htmxb.jhbh))+'-'+ltrim(rtrim(htmxb.jhxh)) else null end as jhh,
+         case when htmxb.htbh&lt;&gt;0 then ltrim(rtrim(htmxb.htbh))+'-'+ltrim(rtrim(htmxb.htxh)) else null end as hth,
+         htmxb.clhh,
+         htmxb.cltx1,
+         htmxb.cltx2, 
+         htmxb.cltx3,
+         htmxb.jldw,
+         cgjhmxb.cgsl as cjsl,
+			htmxb.cgsl,
+			htmxb.dhrk,
+         isnull(htmxb.cgsl,0) - isnull(htmxb.dhrk,0) as wrsl,
+			view_jhdhrkhz.jhyl,
+			view_jhdhrkhz.dhrk as jhdh,
+			isnull(view_jhdhrkhz.jhyl,0) - isnull(view_jhdhrkhz.dhrk,0) as jhwd,
+         htmxb.cgbh,
+         htmxb.cgxh,
+         htmxb.jhbh, 
+         htmxb.jhxh,
+         jhmxb.sxrq,
+			jhmxb.jhbz,
+         cghtb.csbh, 
+         clbmb.clth,
+         clbmb.clmc,
+         clbmb.zjbj,
+         clbmb.fzzbj,
+			clbmb.txgz,
+         cglbb.hsbm,
+			htmxb.fzdw,
+			htmxb.fzsl,
+			htmxb.kjlx,
+ 			htmxb.cgdj,  
+         htmxb.wbhl,
+         htmxb.wbbh,
+         htmxb.wbdj,  
+         case when kjlx=1 then
+			round(htmxb.fzsl*htmxb.cgdj,2) else
+         round(htmxb.cgsl*htmxb.cgdj,2) end as cgje, 
+			case when kjlx=1 then
+			round(htmxb.fzsl*htmxb.wbdj,2) else  
+         round(htmxb.cgsl*htmxb.wbdj,2) end as wbje
+    FROM fksqsphtb with (nolock)
+   left outer join htmxb with (nolock) on fksqsphtb.htbh=htmxb.htbh
+	left outer join cghtb with (nolock) on cghtb.htbh=htmxb.htbh
+	left outer join cglbb with (nolock) on cglbb.lbbh=cghtb.cglb
+	left outer join clbmb with (nolock) on clbmb.clhh=htmxb.clhh
+	left outer join jhmxb with (nolock) on jhmxb.jhbh=htmxb.jhbh and jhmxb.jhxh=htmxb.jhxh
+	left outer join cgjhmxb with (nolock) on cgjhmxb.cgbh=htmxb.cgbh and  cgjhmxb.cgxh=htmxb.cgxh
+	left outer join view_jhdhrkhz with (nolock) on view_jhdhrkhz.jhbh=htmxb.jhbh and view_jhdhrkhz.jhxh=htmxb.jhxh and view_jhdhrkhz.clhh=htmxb.clhh
+   where fksqsphtb.sqbh=#{sqbh}
+</select>
+<insert id="addHtmx" parameterType="erp.erp.PayApply.model.Htmx" keyProperty="" useGeneratedKeys="true">
+	insert into Htmx
+	(
+		htbh,
+		htxh,
+		jhh,
+		hth,
+		clhh,
+		cltx1,
+		cltx2,
+		cltx3,
+		jldw,
+		cjsl,
+		cgsl,
+		dhrk,
+		wrsl,
+		jhyl,
+		jhdh,
+		jhwd,
+		cgbh,
+		cgxh,
+		jhbh,
+		jhxh,
+		sxrq,
+		jhbz,
+		csbh,
+		clth,
+		clmc,
+		zjbj,
+		fzzbj,
+		txgz,
+		hsbm,
+		fzdw,
+		fzsl,
+		kjlx,
+		cgdj,
+		wbhl,
+		wbbh,
+		wbdj,
+		cgje,
+		wbje
+	)
+	values
+	(
+		#{htbh},
+		#{htxh},
+		#{jhh},
+		#{hth},
+		#{clhh},
+		#{cltx1},
+		#{cltx2},
+		#{cltx3},
+		#{jldw},
+		#{cjsl},
+		#{cgsl},
+		#{dhrk},
+		#{wrsl},
+		#{jhyl},
+		#{jhdh},
+		#{jhwd},
+		#{cgbh},
+		#{cgxh},
+		#{jhbh},
+		#{jhxh},
+		#{sxrq},
+		#{jhbz},
+		#{csbh},
+		#{clth},
+		#{clmc},
+		#{zjbj},
+		#{fzzbj},
+		#{txgz},
+		#{hsbm},
+		#{fzdw},
+		#{fzsl},
+		#{kjlx},
+		#{cgdj},
+		#{wbhl},
+		#{wbbh},
+		#{wbdj},
+		#{cgje},
+		#{wbje}
+	)
+</insert>
+<update id="updateHtmx" parameterType="erp.erp.PayApply.model.Htmx">
+	update Htmx
+		set
+			htbh = #{htbh},
+			htxh = #{htxh},
+			jhh = #{jhh},
+			hth = #{hth},
+			clhh = #{clhh},
+			cltx1 = #{cltx1},
+			cltx2 = #{cltx2},
+			cltx3 = #{cltx3},
+			jldw = #{jldw},
+			cjsl = #{cjsl},
+			cgsl = #{cgsl},
+			dhrk = #{dhrk},
+			wrsl = #{wrsl},
+			jhyl = #{jhyl},
+			jhdh = #{jhdh},
+			jhwd = #{jhwd},
+			cgbh = #{cgbh},
+			cgxh = #{cgxh},
+			jhbh = #{jhbh},
+			jhxh = #{jhxh},
+			sxrq = #{sxrq},
+			jhbz = #{jhbz},
+			csbh = #{csbh},
+			clth = #{clth},
+			clmc = #{clmc},
+			zjbj = #{zjbj},
+			fzzbj = #{fzzbj},
+			txgz = #{txgz},
+			hsbm = #{hsbm},
+			fzdw = #{fzdw},
+			fzsl = #{fzsl},
+			kjlx = #{kjlx},
+			cgdj = #{cgdj},
+			wbhl = #{wbhl},
+			wbbh = #{wbbh},
+			wbdj = #{wbdj},
+			cgje = #{cgje},
+			wbje = #{wbje}
+		where  = #{}
+</update>
+<delete id="deleteHtmx" parameterType="erp.erp.PayApply.model.Htmx">
+	delete from Htmx
+	where  = #{}
+</delete>
+</mapper>

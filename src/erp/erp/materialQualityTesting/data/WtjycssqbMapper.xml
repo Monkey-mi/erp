@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.materialQualityTesting.data.WtjycssqbMapper">
+
+
+<select id="getwtjycssqbList" parameterType="map" resultType="erp.erp.materialQualityTesting.model.Wtjycssqb">
+	select
+		wtjycssqb.wtdh,
+		wtjycssqb.wtlb,
+		wtjycssqb.wtbm,
+		wtjycssqb.wtrm,
+		wtjycssqb.wtrq,
+		wtjycssqb.csbh,
+		wtjycssqb.csjg,
+		wtjycssqb.cslx,
+		wtjycssqb.czym,
+		wtjycssqb.czsj,
+		wtjycssqb.sdbj,
+		wtjycssqb.qfbj,
+		wtjycssqb.qfrm,
+		wtjycssqb.qfsj,
+		wtjycssqb.csmd,
+		wtjycssqb.bzsm
+	from
+		wtjycssqb
+	where wtjycssqb.wtdh = #{wtdh}
+</select>
+<select id="getMaxwtdh" parameterType="map" resultType="int">
+ select isnull(max(wtjycssqb.wtdh),0)+1 as wtdh from wtjycssqb
+</select>
+<insert id="addwtjycssqb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqb" >
+	insert into wtjycssqb
+	(
+		wtdh,
+		wtlb,
+		wtbm,
+		wtrm,
+		wtrq,
+		csbh,
+		csjg,
+		cslx,
+		czym,
+		czsj,
+		sdbj,
+		qfbj,
+		qfrm,
+		qfsj,
+		csmd,
+		bzsm
+	)
+	values
+	(
+		#{wtdh},
+		#{wtlb},
+		#{wtbm},
+		#{wtrm},
+		#{wtrq},
+		#{csbh},
+		#{csjg},
+		#{cslx},
+		#{czym},
+		#{czsj},
+		#{sdbj},
+		#{qfbj},
+		#{qfrm},
+		#{qfsj},
+		#{csmd},
+		#{bzsm}
+	)
+</insert>
+<update id="updatewtjycssqb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqb">
+	update wtjycssqb
+		set
+			wtdh = #{wtdh},
+			wtlb = #{wtlb},
+			wtbm = #{wtbm},
+			wtrm = #{wtrm},
+			wtrq = #{wtrq},
+			csbh = #{csbh},
+			csjg = #{csjg},
+			cslx = #{cslx},
+			czym = #{czym},
+			czsj = #{czsj},
+			sdbj = #{sdbj},
+			qfbj = #{qfbj},
+			qfrm = #{qfrm},
+			qfsj = #{qfsj},
+			csmd = #{csmd},
+			bzsm = #{bzsm}
+		where wtdh = #{wtdh}
+</update>
+<delete id="deletewtjycssqb" parameterType="erp.erp.materialQualityTesting.model.Wtjycssqb">
+	delete from wtjycssqb
+	where  = #{}
+</delete>
+</mapper>

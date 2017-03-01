@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.web.data.JsLogMapper">
+
+
+<select id="getJsLogList" parameterType="map" resultType="erp.web.model.JsLog">
+	select
+		t_js_log.logid,
+		t_js_log.msg,
+		t_js_log.url,
+		t_js_log.lineNumber,
+		t_js_log.columnNumber,
+		t_js_log.errorObj,
+		t_js_log.ip,
+		t_js_log.loginId,
+		t_js_log.name,
+		t_js_log.n_date
+	from
+		t_js_log
+		where 1=1
+		<if test="condition !=null and condition !=''">
+		${condition}
+		</if>
+</select>
+<insert id="addJsLog" parameterType="erp.web.model.JsLog" keyProperty="logid" >
+	insert into t_js_log
+	(
+		msg,
+		url,
+		lineNumber,
+		columnNumber,
+		errorObj,
+		ip,
+		loginId,
+		name,
+		n_date
+	)
+	values
+	(
+		#{msg},
+		#{url},
+		#{lineNumber},
+		#{columnNumber},
+		#{errorObj},
+		#{ip},
+		#{loginId},
+		#{name},
+		getDate()
+	)
+</insert>
+<update id="updateJsLog" parameterType="erp.web.model.JsLog">
+	update t_js_log
+		set
+			
+			msg = #{msg},
+			url = #{url},
+			lineNumber = #{lineNumber},
+			columnNumber = #{columnNumber},
+			errorObj = #{errorObj},
+			ip = #{ip},
+			loginId = #{loginId},
+			name = #{name}
+		where logid = #{logid}
+</update>
+<delete id="deleteJsLog" parameterType="erp.web.model.JsLog">
+	delete from t_js_log
+	where logid = #{logid}
+</delete>
+</mapper>

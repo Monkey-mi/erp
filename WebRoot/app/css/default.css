@@ -1,0 +1,199 @@
+.x-selectable, .x-selectable * {         
+        -moz-user-select: text! important ;         
+        -khtml-user-select: text! important ;
+}
+.font_head{text-align:center;font-weight:bold;font-size:14px}
+.font_size{font-weight:bold;font-size:14px}
+.div_head{background-image:url(../images/main1.gif)!important;background-repeat: repeat-x;}
+.company { margin-right: 10px; font: bold 24px/1.5 'Microsoft Yahei'; text-shadow: 0 0 1px rgba(0,0,0,0.2); max-width:360px; float:left; overflow:hidden; }
+.frm-field {
+	float: right; 
+}
+
+#app-header {
+    color: #596F8F;
+    font-size: 22px;
+    font-weight: 200;
+    padding: 8px 15px;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.x-theme-neptune #app-header {
+    color: white;
+    text-shadow: none;
+}
+
+#app-msg {
+    background: #D1DDEF;
+    border: 1px solid #ACC3E4;
+    padding: 3px 15px;
+    font-weight: bold;
+    font-size: 13px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.x-panel-ghost {
+    z-index: 1;
+}
+.x-border-layout-ct {
+    background: #DFE8F6;
+}
+.x-portal-body {
+    padding: 0 0 0 8px;
+}
+.x-portal .x-portal-column {
+    /* columns must have vertical padding to avoid losing dimensions when empty */
+    padding: 8px 8px 0 0;
+}
+.x-portal .x-panel-dd-spacer {
+    border: 2px dashed #99bbe8;
+    background: #f6f6f6;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    margin-bottom: 10px;
+}
+.x-portlet {
+    margin-bottom:10px;
+    padding: 1px;
+}
+.x-portlet .x-panel-body {
+    background: #fff;
+}
+.portlet-content {
+    padding: 10px;
+    font-size: 11px;
+}
+
+#app-options .portlet-content {
+    padding: 5px;
+    font-size: 12px;
+}
+.settings {
+    background-image:url(../shared/icons/fam/folder_wrench.png);
+}
+.nav {
+    background-image:url(../shared/icons/fam/folder_go.png);
+}
+.info {
+    background-image:url(../shared/icons/fam/information.png);
+}
+
+.logo_hengfeng {
+    background-image:url(../images/logo/logo_000001.gif)!important;background-repeat:no-repeat;
+}
+
+.msg .x-box-mc {
+    font-size:14px;
+}
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:300px;
+    z-index:20000;
+}
+#msg-div .msg {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #F6F6F6;
+    border: 2px solid #ccc;
+    margin-top: 2px;
+    padding: 10px 15px;
+    color: #555;
+}
+#msg-div .msg h3 {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 15px;
+}
+#msg-div .msg p {
+    margin: 0;
+}
+ .x-grid-row-summary .x-grid-cell-inner {
+            font-weight      : bold;
+            color:blue;
+}
+
+.ext-ie .x-btn-text-icon .x-btn-center .x-btn-text { 
+    padding:3px 0px 0px 0px;
+}
+
+.no_border_form_textarea{
+	padding:2px 2px;   
+	font-size: 13px;
+	background:#fff url() repeat-x 0 0 !important;  
+    border:0 !important;   
+}
+.no_border_form_boldfont{
+	padding:0px 2px;   
+	font-size: 13px;
+	font-weight:bold;
+	background:#fff url() repeat-x 0 0 !important;  
+    border:0 !important ; 
+}
+.no_border_form_boldfontmargin{
+	padding:0px 2px;   
+	font-size: 13px;
+	font-weight:bold;
+	background:#fff url() repeat-x 0 0 !important;  
+    border:0 !important ; 
+    margin-top:-15px;
+}
+.no_border_form_normal{
+	margin:0px;
+	padding:0px 2px;   
+	font-size: 12px;
+/* 	border:solid 1px red; */
+    border:0 !important ; 
+}
+.no_border_form_normalbold{
+	margin:0px;
+	padding:0px 2px;   
+	font-size: 12px;
+	font-weight:bold;
+/* 	border:solid 1px red; */
+    border:0 !important ; 
+}
+.x-grid-record-gray{
+	color:#8C8C8C;
+}
+.x-grid-cell-red{
+   color:#FF0000;
+}
+/*rgb(255,0,0)*/
+.x-grid-record-red{
+   color:#FF0000;
+}
+/*rgb(20,155,155)*/
+.x-grid-record-149B9B{
+   color:#149B9B;
+}
+/*rgb(128,0,128)*/
+.x-grid-record-800080{
+   color:#800080;
+}
+/*rgb(128,128,0)*/
+.x-grid-record-808000{
+   color:#808000;
+}
+/*rgb(0,0,200)*/
+.x-grid-record-b000C8{
+   color:#0000C8;
+}
+.x-grid-record-yellow{
+   background: #F3FEC2;
+   color:#F3FEC2;
+}
+.x-grid-record-green{
+   color:#11EE3D;
+}
+.x-grid-record-gray{
+   color:#HC0C0C0;
+}
+.x-grid-record-blue{
+   color:#0000FF;
+}
+.x-form-helpsearch-trigger {
+	background-image: url(../images/icon/comment_reply.png)
+}

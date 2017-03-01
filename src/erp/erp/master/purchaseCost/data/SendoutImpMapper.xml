@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.purchaseCost.data.SendoutImpMapper">
+
+
+<select id="getSendoutImpList" parameterType="map" resultType="erp.erp.master.purchaseCost.model.SendoutImp">
+     select aa.* from ( SELECT fhdb_cp.ckbh,   
+         fhdb_cp.fhdh,   
+         fhdb_cp.fhxh,   
+         fhdb_cp.fhrq,   
+         fhdb_cp.pjrq,   
+         fhdb_cp.khbh,   
+         fhdb_cp.ywym,      
+         fhdb_cp.cpbh,    
+         fhdb_cp.cptx1,   
+         fhdb_cp.cptx2,   
+         fhdb_cp.cptx3,      
+         fhdb_cp.jldw,     
+         fhdb_cp.hwbh,   
+         fhdb_cp.pcbh,  
+			fhdb_cp.mxtj,
+         fhdb_cp.fhxs,   
+			fhdb_cp.hjtj,
+			fhdb_cp.hjtj - isnull((select sum(cgfyb.fysl) from cgfyb with (nolock) where cgfyb.fhck=fhdb_cp.ckbh and cgfyb.fhdh=fhdb_cp.fhdh and cgfyb.fhxh=fhdb_cp.fhxh),0) as wdtj,
+         fhdb_cp.fhlb,   
+         fhdb_cp.fhsl,
+         fhdb_cp.ddbh,   
+         fhdb_cp.ddxh,   
+         fhdb_cp.cybh,   
+         fhdb_cp.cyxh,   
+         fhdb_cp.tzbh,   
+         fhdb_cp.tzxh,   
+         fhdb_cp.bzsm,   
+         fhdb_cp.czym,   
+         fhdb_cp.czsj, 
+         cpbmb.cpmc,
+			0 as xzbj,
+			cpbmb.plmth,
+			cpbmb.plmtx,
+		 ckmcb_cp.ckmc	
+    FROM fhdb_cp
+	 left outer join cpbmb with (nolock) on cpbmb.cpbh=fhdb_cp.cpbh
+	 left outer join ckmcb_cp with (nolock) on ckmcb_cp.ckbh = fhdb_cp.ckbh
+    WHERE   fhdb_cp.hjtj - isnull((select sum(cgfyb.fysl) from cgfyb with (nolock) where cgfyb.fhck=fhdb_cp.ckbh and cgfyb.fhdh=fhdb_cp.fhdh and cgfyb.fhxh=fhdb_cp.fhxh),0)>0
+    <if test="qsrq!=null and qsrq!=''">
+    and fhdb_cp.fhrq&gt;=#{qsrq}
+    </if>
+    <if test = "jzrq!=null and jzrq!=''"> 
+    and fhdb_cp.fhrq&lt;=#{jzrq} 
+    </if> 
+    <if test="fhdh!=null and fhdh!=''" >
+    	and fhdb_cp.fhdh = #{fhdh}
+    </if>
+    <if test="cpmc!=null and cpmc!=''">
+    	and cpbmb.cpmc like '%${cpmc}%'
+    </if>
+    )aa
+</select>
+</mapper>

@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.erp.master.company.data.CompanyMapper">
+<select id="getCompanyShowAList" parameterType="map" resultType="erp.erp.master.company.model.CompanyShow">
+	SELECT CSXXB.CSBH,   
+         CSXXB.YHBH,   
+         CSXXB.CSJC,   
+         CSXXB.CSMC,                   
+         CSXXB.CSYB,            
+         CSXXB.LXRM,      
+         CSXXB.BZSM,   
+         CSXXB.FKTS,      
+         CSXXB.CSLB,   
+		 CSXXB.wbbh,
+		 CSXXB.cglb,
+		 CSXXB.ztdw
+    FROM   clbm_gscsb
+    left outer join csxxb on csxxb.csbh=clbm_gscsb.gycs
+    where  CSXXB.CSBH is not null and  clbm_gscsb.clhh=#{clhh}
+    <if test="condition!=null">
+	and (csxxb.csbh=#{condition} or csxxb.csmc like '%${condition}%' or csxxb.csjc like '%${condition}%')
+	</if>
+</select>
+<select id="getCompanyShowBList" parameterType="map" resultType="erp.erp.master.company.model.CompanyShow">
+	SELECT CSXXB.CSBH,   
+         CSXXB.YHBH,   
+         CSXXB.CSJC,   
+         CSXXB.CSMC,       
+         CSXXB.CSYB,            
+         CSXXB.LXRM,      
+         CSXXB.BZSM,   
+         CSXXB.FKTS,      
+         CSXXB.CSLB,   
+         CSXXB.GDBJ,
+		 CSXXB.wbbh,
+		 CSXXB.cglb,
+		 CSXXB.ztdw
+    FROM csjjb  
+left outer join csxxb on csxxb.csbh=csjjb.csbh
+where csjjb.clhh= #{clhh}
+<if test="condition!=null">
+	and (csxxb.csbh=#{condition} or csxxb.csmc like '%${condition}%' or csxxb.csjc like '%${condition}%')
+</if>
+</select>
+<select id="getCompanyShowList" parameterType="map" resultType="erp.erp.master.company.model.CompanyShow">
+	  SELECT csxxb.csbh,   
+         csxxb.csjc,   
+         csxxb.csmc,                     
+         csxxb.csyb,            
+         csxxb.lxrm,      
+         csxxb.bzsm,         
+         csxxb.cslb,   
+		 csxxb.wbbh,
+		 csxxb.cglb,
+		 cglbb.lbmc cglbmc,
+		 wbmcb.wbmc,
+		  csxxb.ztdw,
+		 <!-- 付款申请单中的厂商窗口需要字段 --> 
+		  csxxb.yhbh,
+		  wbhlb.wbhl,
+		  wbmcb.wbdh,
+		  csxxb.khyh,
+		  CSXXB.cszh,
+		  CSXXB.fktj, 
+		  CSXXB.FKTS, 
+		  ztdwb.ztmc 
+    FROM csxxb
+    left outer join cglbb on cglbb.lbbh =csxxb.cglb
+    left outer join wbmcb on wbmcb.wbbh=csxxb.wbbh
+    left  outer join wbhlb on csxxb.wbbh = wbhlb.wbbh and nf =(DATEPART(year,Getdate())) and yf=MONTH(GETDATE())
+    left  outer join ztdwb on CSXXB.ztdw = ztdwb.ztbh
+    <where>
+    	CSXXB.gdbj=0 and spbj=1
+    	<if test="csbh!=null">
+    		and csxxb.csbh=#{csbh}
+    	</if>
+    	<if test="query!=null">
+    		and (csxxb.csbh=#{query} or csxxb.csmc like '%${query}%' or csxxb.csjc like '%${query}%')
+    	</if>
+    	<if test="condition!=null">
+    		and (csxxb.csbh=#{condition} or csxxb.csmc like '%${condition}%' or csxxb.csjc like '%${condition}%')
+    	</if>
+    </where>
+    
+</select>
+<select id="getCompanyList" parameterType="map" resultType="erp.erp.master.company.model.Company">
+	select
+		dbo.csxxb.csbh,
+		dbo.csxxb.csjc,
+		dbo.csxxb.csmc,
+		dbo.csxxb.yhbh,
+		dbo.csxxb.cglb,
+		dbo.csxxb.hzcs,
+		dbo.csxxb.psbj,
+		dbo.csxxb.fzrq,
+		dbo.csxxb.fkts,
+		dbo.csxxb.khbh,
+		dbo.csxxb.cslb,
+		dbo.csxxb.wbbh,
+		dbo.csxxb.xyed,
+		dbo.csxxb.csdh,
+		dbo.csxxb.cscz,
+		dbo.csxxb.lxrm,
+		dbo.csxxb.csdz,
+		dbo.csxxb.csyb,
+		dbo.csxxb.cssh,
+		dbo.csxxb.cszh,
+		dbo.csxxb.bzsm,
+		dbo.csxxb.gdbj,
+		dbo.csxxb.czrm,
+		dbo.csxxb.czsj,
+		dbo.csxxb.spbj,
+		dbo.csxxb.sprm,
+		dbo.csxxb.spsj,
+		dbo.csxxb.cslx,
+		dbo.csxxb.ywmc,
+		dbo.csxxb.zgrd,
+		dbo.csxxb.tdrd,
+		dbo.csxxb.hdxz,
+		dbo.csxxb.fktj,
+		dbo.csxxb.scbj,
+		dbo.csxxb.kpbj,
+		dbo.csxxb.kpdj,
+		dbo.csxxb.khyh,
+		dbo.csxxb.xdbl,
+		dbo.csxxb.jybj,
+		dbo.csxxb.hddw
+	from
+		dbo.csxxb
+		<where>
+			<if test="csbh!=null">
+				csbh = #{csbh}
+			</if>
+		</where>
+</select>
+<insert id="addCompany" parameterType="erp.erp.master.company.model.Company" keyProperty="csbh" useGeneratedKeys="true">
+	insert into dbo.csxxb
+	(
+		csbh,
+		csjc,
+		csmc,
+		yhbh,
+		cglb,
+		hzcs,
+		psbj,
+		fzrq,
+		fkts,
+		khbh,
+		cslb,
+		wbbh,
+		xyed,
+		csdh,
+		cscz,
+		lxrm,
+		csdz,
+		csyb,
+		cssh,
+		cszh,
+		bzsm,
+		gdbj,
+		czrm,
+		czsj,
+		spbj,
+		sprm,
+		spsj,
+		cslx,
+		ywmc,
+		zgrd,
+		tdrd,
+		hdxz,
+		fktj,
+		scbj,
+		kpbj,
+		kpdj,
+		khyh,
+		xdbl,
+		jybj,
+		hddw
+	)
+	values
+	(
+		#{csbh},
+		#{csjc},
+		#{csmc},
+		#{yhbh},
+		#{cglb},
+		#{hzcs},
+		#{psbj},
+		#{fzrq},
+		#{fkts},
+		#{khbh},
+		#{cslb},
+		#{wbbh},
+		#{xyed},
+		#{csdh},
+		#{cscz},
+		#{lxrm},
+		#{csdz},
+		#{csyb},
+		#{cssh},
+		#{cszh},
+		#{bzsm},
+		#{gdbj},
+		#{czrm},
+		#{czsj},
+		#{spbj},
+		#{sprm},
+		#{spsj},
+		#{cslx},
+		#{ywmc},
+		#{zgrd},
+		#{tdrd},
+		#{hdxz},
+		#{fktj},
+		#{scbj},
+		#{kpbj},
+		#{kpdj},
+		#{khyh},
+		#{xdbl},
+		#{jybj},
+		#{hddw}
+	)
+</insert>
+<update id="updateCompany" parameterType="erp.erp.master.company.model.Company">
+	update dbo.csxxb
+		set
+			csbh = #{csbh},
+			csjc = #{csjc},
+			csmc = #{csmc},
+			yhbh = #{yhbh},
+			cglb = #{cglb},
+			hzcs = #{hzcs},
+			psbj = #{psbj},
+			fzrq = #{fzrq},
+			fkts = #{fkts},
+			khbh = #{khbh},
+			cslb = #{cslb},
+			wbbh = #{wbbh},
+			xyed = #{xyed},
+			csdh = #{csdh},
+			cscz = #{cscz},
+			lxrm = #{lxrm},
+			csdz = #{csdz},
+			csyb = #{csyb},
+			cssh = #{cssh},
+			cszh = #{cszh},
+			bzsm = #{bzsm},
+			gdbj = #{gdbj},
+			czrm = #{czrm},
+			czsj = #{czsj},
+			spbj = #{spbj},
+			sprm = #{sprm},
+			spsj = #{spsj},
+			cslx = #{cslx},
+			ywmc = #{ywmc},
+			zgrd = #{zgrd},
+			tdrd = #{tdrd},
+			hdxz = #{hdxz},
+			fktj = #{fktj},
+			scbj = #{scbj},
+			kpbj = #{kpbj},
+			kpdj = #{kpdj},
+			khyh = #{khyh},
+			xdbl = #{xdbl},
+			jybj = #{jybj},
+			hddw = #{hddw}
+		where csbh = #{csbh}
+</update>
+<delete id="deleteCompany" parameterType="erp.erp.master.company.model.Company">
+	delete from dbo.csxxb
+	where csbh = #{csbh}
+</delete>
+</mapper>
